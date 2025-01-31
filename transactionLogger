@@ -1,0 +1,5391 @@
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 256
+	Type: Withdrawal
+	Amount: 51
+	From: Account #254 [balance = 4875]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 257
+	Type: Withdrawal
+	Amount: 122
+	From: Account #996 [balance = 3230]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 258
+	Type: Withdrawal
+	Amount: 639
+	From: Account #773 [balance = 2347]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 250
+	Type: Withdrawal
+	Amount: 596
+	From: Account #323 [balance = 2286]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 259
+	Type: Withdrawal
+	Amount: 644
+	From: Account #29 [balance = 3189]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 249
+	Type: Withdrawal
+	Amount: 535
+	From: Account #195 [balance = 3138]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 252
+	Type: Withdrawal
+	Amount: 380
+	From: Account #873 [balance = 1317]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 261
+	Type: Withdrawal
+	Amount: 306
+	From: Account #160 [balance = 2583]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 241
+	Type: Withdrawal
+	Amount: 592
+	From: Account #537 [balance = 1968]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 248
+	Type: Withdrawal
+	Amount: 575
+	From: Account #979 [balance = 2750]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 260
+	Type: Withdrawal
+	Amount: 429
+	From: Account #491 [balance = 1501]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 247
+	Type: Withdrawal
+	Amount: 521
+	From: Account #997 [balance = 1153]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 265
+	Type: Withdrawal
+	Amount: 330
+	From: Account #185 [balance = 3746]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 255
+	Type: Withdrawal
+	Amount: 521
+	From: Account #188 [balance = 3992]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 7
+	Type: Transfer
+	Amount: 490
+	From: Account #928 [balance = 3720]
+	To: Account #402 [balance = 4448]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 262
+	Type: Withdrawal
+	Amount: 875
+	From: Account #367 [balance = 2806]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 246
+	Type: Withdrawal
+	Amount: 961
+	From: Account #124 [balance = 1436]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 264
+	Type: Withdrawal
+	Amount: 201
+	From: Account #841 [balance = 2443]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 244
+	Type: Withdrawal
+	Amount: 695
+	From: Account #453 [balance = 4484]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 263
+	Type: Withdrawal
+	Amount: 11
+	From: Account #88 [balance = 2860]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 266
+	Type: Withdrawal
+	Amount: 783
+	From: Account #786 [balance = 3771]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 242
+	Type: Withdrawal
+	Amount: 555
+	From: Account #165 [balance = 2932]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 243
+	Type: Withdrawal
+	Amount: 702
+	From: Account #82 [balance = 1529]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 267
+	Type: Withdrawal
+	Amount: 399
+	From: Account #908 [balance = 3023]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 240
+	Type: Withdrawal
+	Amount: 645
+	From: Account #468 [balance = 4222]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 269
+	Type: Withdrawal
+	Amount: 566
+	From: Account #832 [balance = 2224]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 239
+	Type: Withdrawal
+	Amount: 39
+	From: Account #339 [balance = 2557]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 238
+	Type: Withdrawal
+	Amount: 792
+	From: Account #189 [balance = 3226]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 237
+	Type: Withdrawal
+	Amount: 382
+	From: Account #104 [balance = 2661]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 268
+	Type: Withdrawal
+	Amount: 966
+	From: Account #504 [balance = 1874]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 270
+	Type: Withdrawal
+	Amount: 464
+	From: Account #929 [balance = 3737]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 236
+	Type: Withdrawal
+	Amount: 406
+	From: Account #752 [balance = 1941]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 271
+	Type: Withdrawal
+	Amount: 355
+	From: Account #939 [balance = 2178]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 273
+	Type: Withdrawal
+	Amount: 987
+	From: Account #178 [balance = 2093]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 212
+	Type: Withdrawal
+	Amount: 63
+	From: Account #727 [balance = 1531]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 272
+	Type: Withdrawal
+	Amount: 382
+	From: Account #134 [balance = 2437]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 234
+	Type: Withdrawal
+	Amount: 285
+	From: Account #278 [balance = 3058]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 274
+	Type: Withdrawal
+	Amount: 161
+	From: Account #362 [balance = 2860]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 232
+	Type: Withdrawal
+	Amount: 26
+	From: Account #235 [balance = 4654]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 275
+	Type: Withdrawal
+	Amount: 138
+	From: Account #121 [balance = 4281]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 209
+	Type: Withdrawal
+	Amount: 730
+	From: Account #345 [balance = 1054]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 277
+	Type: Withdrawal
+	Amount: 338
+	From: Account #240 [balance = 1924]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 231
+	Type: Withdrawal
+	Amount: 131
+	From: Account #67 [balance = 3444]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 230
+	Type: Withdrawal
+	Amount: 759
+	From: Account #870 [balance = 4293]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 276
+	Type: Withdrawal
+	Amount: 698
+	From: Account #42 [balance = 1048]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 229
+	Type: Withdrawal
+	Amount: 286
+	From: Account #520 [balance = 2781]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 278
+	Type: Withdrawal
+	Amount: 327
+	From: Account #906 [balance = 3268]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 245
+	Type: Withdrawal
+	Amount: 207
+	From: Account #26 [balance = 1262]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 279
+	Type: Withdrawal
+	Amount: 816
+	From: Account #47 [balance = 1822]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 280
+	Type: Withdrawal
+	Amount: 606
+	From: Account #260 [balance = 1282]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 202
+	Type: Withdrawal
+	Amount: 110
+	From: Account #891 [balance = 4431]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 281
+	Type: Withdrawal
+	Amount: 570
+	From: Account #737 [balance = 2575]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 224
+	Type: Withdrawal
+	Amount: 684
+	From: Account #946 [balance = 4293]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 223
+	Type: Withdrawal
+	Amount: 148
+	From: Account #969 [balance = 1055]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 219
+	Type: Withdrawal
+	Amount: 703
+	From: Account #372 [balance = 2872]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 282
+	Type: Withdrawal
+	Amount: 570
+	From: Account #990 [balance = 3928]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 283
+	Type: Withdrawal
+	Amount: 93
+	From: Account #270 [balance = 2991]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 194
+	Type: Deposit
+	Amount: 550
+	To: Account #689 [balance = 2073]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 218
+	Type: Withdrawal
+	Amount: 570
+	From: Account #650 [balance = 4776]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 285
+	Type: Withdrawal
+	Amount: 492
+	From: Account #347 [balance = 4886]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 217
+	Type: Withdrawal
+	Amount: 721
+	From: Account #64 [balance = 1111]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 284
+	Type: Withdrawal
+	Amount: 953
+	From: Account #35 [balance = 1810]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 216
+	Type: Withdrawal
+	Amount: 195
+	From: Account #732 [balance = 1627]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 287
+	Type: Withdrawal
+	Amount: 700
+	From: Account #393 [balance = 2385]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 288
+	Type: Withdrawal
+	Amount: 68
+	From: Account #10 [balance = 3248]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 187
+	Type: Deposit
+	Amount: 113
+	To: Account #400 [balance = 4894]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 289
+	Type: Withdrawal
+	Amount: 328
+	From: Account #80 [balance = 2776]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 214
+	Type: Withdrawal
+	Amount: 913
+	From: Account #682 [balance = 2762]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 290
+	Type: Withdrawal
+	Amount: 395
+	From: Account #421 [balance = 3830]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 235
+	Type: Withdrawal
+	Amount: 517
+	From: Account #808 [balance = 4251]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 291
+	Type: Withdrawal
+	Amount: 882
+	From: Account #76 [balance = 3371]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 183
+	Type: Deposit
+	Amount: 515
+	To: Account #105 [balance = 3881]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 211
+	Type: Withdrawal
+	Amount: 441
+	From: Account #625 [balance = 2652]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 210
+	Type: Withdrawal
+	Amount: 757
+	From: Account #829 [balance = 2208]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 233
+	Type: Withdrawal
+	Amount: 390
+	From: Account #769 [balance = 2985]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 208
+	Type: Withdrawal
+	Amount: 650
+	From: Account #688 [balance = 2960]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 292
+	Type: Withdrawal
+	Amount: 988
+	From: Account #488 [balance = 1301]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 207
+	Type: Withdrawal
+	Amount: 551
+	From: Account #61 [balance = 2804]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 294
+	Type: Withdrawal
+	Amount: 807
+	From: Account #703 [balance = 2799]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 227
+	Type: Withdrawal
+	Amount: 184
+	From: Account #550 [balance = 4823]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 293
+	Type: Withdrawal
+	Amount: 13
+	From: Account #21 [balance = 4966]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 295
+	Type: Withdrawal
+	Amount: 865
+	From: Account #353 [balance = 3582]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 204
+	Type: Withdrawal
+	Amount: 692
+	From: Account #450 [balance = 2000]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 296
+	Type: Withdrawal
+	Amount: 206
+	From: Account #130 [balance = 3147]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 203
+	Type: Withdrawal
+	Amount: 137
+	From: Account #431 [balance = 4975]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 297
+	Type: Withdrawal
+	Amount: 349
+	From: Account #830 [balance = 2601]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 298
+	Type: Withdrawal
+	Amount: 39
+	From: Account #602 [balance = 3434]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 299
+	Type: Withdrawal
+	Amount: 500
+	From: Account #209 [balance = 3557]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 300
+	Type: Withdrawal
+	Amount: 174
+	From: Account #511 [balance = 4925]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 199
+	Type: Deposit
+	Amount: 100
+	To: Account #662 [balance = 4042]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 201
+	Type: Withdrawal
+	Amount: 189
+	From: Account #443 [balance = 3214]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 220
+	Type: Withdrawal
+	Amount: 638
+	From: Account #581 [balance = 2370]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 3
+	Type: Transfer
+	Amount: 205
+	From: Account #543 [balance = 4718]
+	To: Account #486 [balance = 4391]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 196
+	Type: Deposit
+	Amount: 806
+	To: Account #803 [balance = 1021]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 301
+	Type: Fee
+	Amount: 742
+	From: Account #989 [balance = 3859]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 195
+	Type: Deposit
+	Amount: 40
+	To: Account #194 [balance = 4423]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 221
+	Type: Withdrawal
+	Amount: 459
+	From: Account #810 [balance = 4013]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 192
+	Type: Deposit
+	Amount: 82
+	To: Account #945 [balance = 2789]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 142
+	Type: Deposit
+	Amount: 741
+	To: Account #389 [balance = 3143]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 139
+	Type: Deposit
+	Amount: 980
+	To: Account #699 [balance = 1185]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 190
+	Type: Deposit
+	Amount: 538
+	To: Account #228 [balance = 1417]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 137
+	Type: Deposit
+	Amount: 893
+	To: Account #368 [balance = 3145]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 215
+	Type: Withdrawal
+	Amount: 302
+	From: Account #796 [balance = 4103]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 186
+	Type: Deposit
+	Amount: 888
+	To: Account #679 [balance = 3649]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 185
+	Type: Deposit
+	Amount: 149
+	To: Account #92 [balance = 3840]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 213
+	Type: Withdrawal
+	Amount: 305
+	From: Account #398 [balance = 4193]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 180
+	Type: Deposit
+	Amount: 267
+	To: Account #709 [balance = 1585]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 182
+	Type: Deposit
+	Amount: 724
+	To: Account #327 [balance = 1051]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 123
+	Type: Deposit
+	Amount: 161
+	To: Account #440 [balance = 2712]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 179
+	Type: Deposit
+	Amount: 695
+	To: Account #673 [balance = 3019]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 176
+	Type: Deposit
+	Amount: 315
+	To: Account #541 [balance = 3216]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 115
+	Type: Deposit
+	Amount: 661
+	To: Account #886 [balance = 3158]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 178
+	Type: Deposit
+	Amount: 27
+	To: Account #239 [balance = 1388]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 175
+	Type: Deposit
+	Amount: 133
+	To: Account #643 [balance = 2327]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 108
+	Type: Deposit
+	Amount: 520
+	To: Account #208 [balance = 3987]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 173
+	Type: Deposit
+	Amount: 100
+	To: Account #584 [balance = 4070]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 172
+	Type: Deposit
+	Amount: 322
+	To: Account #19 [balance = 1364]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 171
+	Type: Deposit
+	Amount: 71
+	To: Account #559 [balance = 3272]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 170
+	Type: Deposit
+	Amount: 797
+	To: Account #332 [balance = 4366]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 169
+	Type: Deposit
+	Amount: 195
+	To: Account #81 [balance = 3875]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 168
+	Type: Deposit
+	Amount: 655
+	To: Account #381 [balance = 2032]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 167
+	Type: Deposit
+	Amount: 939
+	To: Account #5 [balance = 1017]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 166
+	Type: Deposit
+	Amount: 814
+	To: Account #44 [balance = 4117]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 101
+	Type: Deposit
+	Amount: 703
+	To: Account #236 [balance = 2981]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 163
+	Type: Deposit
+	Amount: 123
+	To: Account #622 [balance = 4145]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 99
+	Type: Transfer
+	Amount: 851
+	From: Account #987 [balance = 1948]
+	To: Account #72 [balance = 4550]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 160
+	Type: Deposit
+	Amount: 449
+	To: Account #55 [balance = 3170]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 161
+	Type: Deposit
+	Amount: 813
+	To: Account #15 [balance = 1598]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 159
+	Type: Deposit
+	Amount: 431
+	To: Account #844 [balance = 1842]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 156
+	Type: Deposit
+	Amount: 373
+	To: Account #793 [balance = 1001]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 158
+	Type: Deposit
+	Amount: 339
+	To: Account #696 [balance = 3683]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 155
+	Type: Deposit
+	Amount: 843
+	To: Account #971 [balance = 2323]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 157
+	Type: Deposit
+	Amount: 671
+	To: Account #815 [balance = 3000]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 154
+	Type: Deposit
+	Amount: 595
+	To: Account #999 [balance = 1016]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 200
+	Type: Deposit
+	Amount: 69
+	To: Account #358 [balance = 3509]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 153
+	Type: Deposit
+	Amount: 85
+	To: Account #940 [balance = 1858]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 198
+	Type: Deposit
+	Amount: 287
+	To: Account #414 [balance = 3368]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 148
+	Type: Deposit
+	Amount: 866
+	To: Account #691 [balance = 3026]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 151
+	Type: Deposit
+	Amount: 76
+	To: Account #432 [balance = 4477]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 147
+	Type: Deposit
+	Amount: 4
+	To: Account #839 [balance = 4610]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 144
+	Type: Deposit
+	Amount: 435
+	To: Account #695 [balance = 2116]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 143
+	Type: Deposit
+	Amount: 974
+	To: Account #482 [balance = 4937]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 197
+	Type: Deposit
+	Amount: 364
+	To: Account #616 [balance = 1391]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 88
+	Type: Transfer
+	Amount: 632
+	From: Account #824 [balance = 4728]
+	To: Account #437 [balance = 3783]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 146
+	Type: Deposit
+	Amount: 376
+	To: Account #630 [balance = 2723]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 145
+	Type: Deposit
+	Amount: 530
+	To: Account #40 [balance = 3036]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 191
+	Type: Deposit
+	Amount: 607
+	To: Account #509 [balance = 2183]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 141
+	Type: Deposit
+	Amount: 178
+	To: Account #137 [balance = 4221]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 193
+	Type: Deposit
+	Amount: 436
+	To: Account #972 [balance = 3849]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 136
+	Type: Deposit
+	Amount: 722
+	To: Account #484 [balance = 1585]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 135
+	Type: Deposit
+	Amount: 244
+	To: Account #331 [balance = 2963]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 189
+	Type: Deposit
+	Amount: 366
+	To: Account #866 [balance = 3891]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 128
+	Type: Deposit
+	Amount: 301
+	To: Account #392 [balance = 3426]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 132
+	Type: Deposit
+	Amount: 310
+	To: Account #449 [balance = 4492]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 134
+	Type: Deposit
+	Amount: 178
+	To: Account #292 [balance = 4686]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 127
+	Type: Deposit
+	Amount: 376
+	To: Account #106 [balance = 1755]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 133
+	Type: Deposit
+	Amount: 193
+	To: Account #842 [balance = 4048]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 67
+	Type: Transfer
+	Amount: 313
+	From: Account #895 [balance = 2014]
+	To: Account #770 [balance = 3932]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 129
+	Type: Deposit
+	Amount: 327
+	To: Account #387 [balance = 3342]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 126
+	Type: Deposit
+	Amount: 938
+	To: Account #34 [balance = 1505]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 125
+	Type: Deposit
+	Amount: 266
+	To: Account #99 [balance = 3967]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 181
+	Type: Deposit
+	Amount: 19
+	To: Account #361 [balance = 3920]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 120
+	Type: Deposit
+	Amount: 458
+	To: Account #733 [balance = 1601]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 119
+	Type: Deposit
+	Amount: 956
+	To: Account #605 [balance = 2024]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 116
+	Type: Deposit
+	Amount: 526
+	To: Account #148 [balance = 3244]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 177
+	Type: Deposit
+	Amount: 716
+	To: Account #783 [balance = 1528]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 112
+	Type: Deposit
+	Amount: 558
+	To: Account #954 [balance = 2799]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 111
+	Type: Deposit
+	Amount: 414
+	To: Account #821 [balance = 4679]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 174
+	Type: Deposit
+	Amount: 894
+	To: Account #415 [balance = 3258]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 107
+	Type: Deposit
+	Amount: 178
+	To: Account #192 [balance = 3641]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 122
+	Type: Deposit
+	Amount: 335
+	To: Account #845 [balance = 4715]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 118
+	Type: Deposit
+	Amount: 62
+	To: Account #706 [balance = 1588]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 27
+	Type: Transfer
+	Amount: 205
+	From: Account #348 [balance = 1011]
+	To: Account #154 [balance = 1401]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 109
+	Type: Deposit
+	Amount: 144
+	To: Account #943 [balance = 1230]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 105
+	Type: Deposit
+	Amount: 765
+	To: Account #580 [balance = 1579]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 102
+	Type: Deposit
+	Amount: 285
+	To: Account #834 [balance = 2068]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 164
+	Type: Deposit
+	Amount: 126
+	To: Account #527 [balance = 4755]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 165
+	Type: Deposit
+	Amount: 258
+	To: Account #813 [balance = 4339]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 98
+	Type: Transfer
+	Amount: 381
+	From: Account #571 [balance = 2481]
+	To: Account #632 [balance = 3080]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 162
+	Type: Deposit
+	Amount: 18
+	To: Account #396 [balance = 2726]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 97
+	Type: Transfer
+	Amount: 351
+	From: Account #746 [balance = 4082]
+	To: Account #964 [balance = 3967]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 152
+	Type: Deposit
+	Amount: 217
+	To: Account #429 [balance = 1841]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 93
+	Type: Transfer
+	Amount: 762
+	From: Account #66 [balance = 4575]
+	To: Account #16 [balance = 3108]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 89
+	Type: Transfer
+	Amount: 396
+	From: Account #95 [balance = 3232]
+	To: Account #276 [balance = 1915]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 86
+	Type: Transfer
+	Amount: 862
+	From: Account #535 [balance = 2841]
+	To: Account #203 [balance = 4997]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 150
+	Type: Deposit
+	Amount: 924
+	To: Account #217 [balance = 4811]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 149
+	Type: Deposit
+	Amount: 82
+	To: Account #359 [balance = 1711]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 85
+	Type: Transfer
+	Amount: 69
+	From: Account #847 [balance = 2930]
+	To: Account #586 [balance = 4034]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 84
+	Type: Transfer
+	Amount: 259
+	From: Account #811 [balance = 3705]
+	To: Account #110 [balance = 4817]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 82
+	Type: Transfer
+	Amount: 328
+	From: Account #690 [balance = 2371]
+	To: Account #635 [balance = 1975]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 81
+	Type: Transfer
+	Amount: 474
+	From: Account #801 [balance = 3598]
+	To: Account #787 [balance = 1541]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 83
+	Type: Transfer
+	Amount: 916
+	From: Account #251 [balance = 3520]
+	To: Account #193 [balance = 4830]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 25
+	Type: Transfer
+	Amount: 872
+	From: Account #501 [balance = 2546]
+	To: Account #438 [balance = 3022]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 78
+	Type: Transfer
+	Amount: 236
+	From: Account #96 [balance = 3690]
+	To: Account #271 [balance = 1791]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 131
+	Type: Deposit
+	Amount: 514
+	To: Account #420 [balance = 4322]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 75
+	Type: Transfer
+	Amount: 520
+	From: Account #53 [balance = 1116]
+	To: Account #388 [balance = 3110]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 71
+	Type: Transfer
+	Amount: 492
+	From: Account #588 [balance = 3451]
+	To: Account #804 [balance = 4333]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 130
+	Type: Deposit
+	Amount: 699
+	To: Account #530 [balance = 3285]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 74
+	Type: Transfer
+	Amount: 610
+	From: Account #291 [balance = 1774]
+	To: Account #828 [balance = 3521]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 63
+	Type: Transfer
+	Amount: 260
+	From: Account #799 [balance = 4053]
+	To: Account #637 [balance = 1375]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 31
+	Type: Transfer
+	Amount: 775
+	From: Account #903 [balance = 2484]
+	To: Account #655 [balance = 3323]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 73
+	Type: Transfer
+	Amount: 952
+	From: Account #788 [balance = 3376]
+	To: Account #950 [balance = 1767]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 117
+	Type: Deposit
+	Amount: 594
+	To: Account #155 [balance = 2082]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 20
+	Type: Transfer
+	Amount: 492
+	From: Account #577 [balance = 3488]
+	To: Account #604 [balance = 1041]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 114
+	Type: Deposit
+	Amount: 40
+	To: Account #182 [balance = 4105]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 62
+	Type: Transfer
+	Amount: 493
+	From: Account #838 [balance = 2040]
+	To: Account #641 [balance = 2009]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 56
+	Type: Transfer
+	Amount: 341
+	From: Account #767 [balance = 4106]
+	To: Account #855 [balance = 3970]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 54
+	Type: Transfer
+	Amount: 991
+	From: Account #107 [balance = 3642]
+	To: Account #139 [balance = 3183]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 55
+	Type: Transfer
+	Amount: 308
+	From: Account #103 [balance = 1508]
+	To: Account #735 [balance = 4148]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 51
+	Type: Transfer
+	Amount: 600
+	From: Account #259 [balance = 3989]
+	To: Account #614 [balance = 3168]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 53
+	Type: Transfer
+	Amount: 170
+	From: Account #133 [balance = 2989]
+	To: Account #991 [balance = 2040]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 50
+	Type: Transfer
+	Amount: 19
+	From: Account #173 [balance = 2504]
+	To: Account #843 [balance = 1511]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 49
+	Type: Transfer
+	Amount: 132
+	From: Account #285 [balance = 4514]
+	To: Account #608 [balance = 3019]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 46
+	Type: Transfer
+	Amount: 277
+	From: Account #570 [balance = 4380]
+	To: Account #401 [balance = 2735]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 42
+	Type: Transfer
+	Amount: 354
+	From: Account #884 [balance = 1492]
+	To: Account #938 [balance = 4894]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 44
+	Type: Transfer
+	Amount: 816
+	From: Account #565 [balance = 4737]
+	To: Account #558 [balance = 2901]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 38
+	Type: Transfer
+	Amount: 956
+	From: Account #100 [balance = 1033]
+	To: Account #439 [balance = 4406]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 37
+	Type: Transfer
+	Amount: 839
+	From: Account #145 [balance = 3355]
+	To: Account #45 [balance = 3283]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 33
+	Type: Transfer
+	Amount: 866
+	From: Account #963 [balance = 2419]
+	To: Account #694 [balance = 1933]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 43
+	Type: Transfer
+	Amount: 239
+	From: Account #36 [balance = 3534]
+	To: Account #423 [balance = 3712]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 79
+	Type: Transfer
+	Amount: 792
+	From: Account #275 [balance = 2493]
+	To: Account #668 [balance = 3092]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 40
+	Type: Transfer
+	Amount: 914
+	From: Account #460 [balance = 2459]
+	To: Account #644 [balance = 4244]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 76
+	Type: Transfer
+	Amount: 560
+	From: Account #583 [balance = 1494]
+	To: Account #922 [balance = 3942]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 21
+	Type: Transfer
+	Amount: 619
+	From: Account #390 [balance = 1242]
+	To: Account #380 [balance = 4297]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 39
+	Type: Transfer
+	Amount: 578
+	From: Account #424 [balance = 1788]
+	To: Account #542 [balance = 1785]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 17
+	Type: Transfer
+	Amount: 818
+	From: Account #776 [balance = 2513]
+	To: Account #225 [balance = 2761]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 60
+	Type: Transfer
+	Amount: 501
+	From: Account #561 [balance = 1024]
+	To: Account #894 [balance = 4352]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 13
+	Type: Transfer
+	Amount: 447
+	From: Account #477 [balance = 1265]
+	To: Account #489 [balance = 3961]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 32
+	Type: Transfer
+	Amount: 903
+	From: Account #70 [balance = 4032]
+	To: Account #383 [balance = 4582]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 28
+	Type: Transfer
+	Amount: 931
+	From: Account #806 [balance = 4853]
+	To: Account #342 [balance = 3391]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 23
+	Type: Transfer
+	Amount: 636
+	From: Account #961 [balance = 3694]
+	To: Account #934 [balance = 1006]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 19
+	Type: Transfer
+	Amount: 498
+	From: Account #547 [balance = 4605]
+	To: Account #840 [balance = 2917]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 9
+	Type: Transfer
+	Amount: 392
+	From: Account #816 [balance = 1553]
+	To: Account #748 [balance = 4113]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 6
+	Type: Transfer
+	Amount: 471
+	From: Account #970 [balance = 3420]
+	To: Account #179 [balance = 2591]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 5
+	Type: Transfer
+	Amount: 569
+	From: Account #143 [balance = 4980]
+	To: Account #777 [balance = 3750]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 2
+	Type: Transfer
+	Amount: 957
+	From: Account #24 [balance = 1722]
+	To: Account #759 [balance = 2242]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 1
+	Type: Transfer
+	Amount: 93
+	From: Account #904 [balance = 3435]
+	To: Account #933 [balance = 2594]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 254
+	Type: Withdrawal
+	Amount: 838
+	From: Account #914 [balance = 2316]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 4
+	Type: Transfer
+	Amount: 745
+	From: Account #350 [balance = 3415]
+	To: Account #318 [balance = 4927]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 256	
+	Withdrawn: 51	 
+	From: Account #254 [balance = 4824]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 257	
+	Withdrawn: 122	 
+	From: Account #996 [balance = 3108]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 140
+	Type: Deposit
+	Amount: 628
+	To: Account #254 [balance = 4824]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 258	
+	Withdrawn: 639	 
+	From: Account #773 [balance = 1708]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 250	
+	Withdrawn: 596	 
+	From: Account #323 [balance = 1690]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 96
+	Type: Transfer
+	Amount: 946
+	From: Account #323 [balance = 1690]
+	To: Account #161 [balance = 4949]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 259	
+	Withdrawn: 644	 
+	From: Account #29 [balance = 2545]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 249	
+	Withdrawn: 535	 
+	From: Account #195 [balance = 2603]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 252	
+	Withdrawn: 380	 
+	From: Account #873 [balance = 937]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 261	
+	Withdrawn: 306	 
+	From: Account #160 [balance = 2277]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 262	
+	Withdrawn: 875	 
+	From: Account #367 [balance = 1931]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 241	
+	Withdrawn: 592	 
+	From: Account #537 [balance = 1376]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 265	
+	Withdrawn: 330	 
+	From: Account #185 [balance = 3416]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 248	
+	Withdrawn: 575	 
+	From: Account #979 [balance = 2175]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 247	
+	Withdrawn: 521	 
+	From: Account #997 [balance = 632]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 184
+	Type: Deposit
+	Amount: 368
+	To: Account #979 [balance = 2175]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 260	
+	Withdrawn: 429	 
+	From: Account #491 [balance = 1072]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 255	
+	Withdrawn: 521	 
+	From: Account #188 [balance = 3471]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 7	
+	Amount Sent: 490	 
+	From: Account #928 [balance = 3230] 
+	To: Account #402 [balance = 4938]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 77
+	Type: Transfer
+	Amount: 850
+	From: Account #367 [balance = 1931]
+	To: Account #461 [balance = 4145]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 269	
+	Withdrawn: 566	 
+	From: Account #832 [balance = 1658]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 246	
+	Withdrawn: 961	 
+	From: Account #124 [balance = 475]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 266	
+	Withdrawn: 783	 
+	From: Account #786 [balance = 2988]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 242	
+	Withdrawn: 555	 
+	From: Account #165 [balance = 2377]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 264	
+	Withdrawn: 201	 
+	From: Account #841 [balance = 2242]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 244	
+	Withdrawn: 695	 
+	From: Account #453 [balance = 3789]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 243	
+	Withdrawn: 702	 
+	From: Account #82 [balance = 827]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 263	
+	Withdrawn: 11	 
+	From: Account #88 [balance = 2849]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 267	
+	Withdrawn: 399	 
+	From: Account #908 [balance = 2624]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 240	
+	Withdrawn: 645	 
+	From: Account #468 [balance = 3577]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 239	
+	Withdrawn: 39	 
+	From: Account #339 [balance = 2518]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 103
+	Type: Deposit
+	Amount: 979
+	To: Account #165 [balance = 2377]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 222
+	Type: Withdrawal
+	Amount: 340
+	From: Account #832 [balance = 1658]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 106
+	Type: Deposit
+	Amount: 759
+	To: Account #339 [balance = 2518]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 273	
+	Withdrawn: 987	 
+	From: Account #178 [balance = 1106]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 238	
+	Withdrawn: 792	 
+	From: Account #189 [balance = 2434]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 268	
+	Withdrawn: 966	 
+	From: Account #504 [balance = 908]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 237	
+	Withdrawn: 382	 
+	From: Account #104 [balance = 2279]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 236	
+	Withdrawn: 406	 
+	From: Account #752 [balance = 1535]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 270	
+	Withdrawn: 464	 
+	From: Account #929 [balance = 3273]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 271	
+	Withdrawn: 355	 
+	From: Account #939 [balance = 1823]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 274	
+	Withdrawn: 161	 
+	From: Account #362 [balance = 2699]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 212	
+	Withdrawn: 63	 
+	From: Account #727 [balance = 1468]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 272	
+	Withdrawn: 382	 
+	From: Account #134 [balance = 2055]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 234	
+	Withdrawn: 285	 
+	From: Account #278 [balance = 2773]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 232	
+	Withdrawn: 26	 
+	From: Account #235 [balance = 4628]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 52
+	Type: Transfer
+	Amount: 743
+	From: Account #287 [balance = 2714]
+	To: Account #362 [balance = 2699]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 253
+	Type: Withdrawal
+	Amount: 585
+	From: Account #504 [balance = 908]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 224	
+	Withdrawn: 684	 
+	From: Account #946 [balance = 3609]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 209	
+	Withdrawn: 730	 
+	From: Account #345 [balance = 324]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 277	
+	Withdrawn: 338	 
+	From: Account #240 [balance = 1586]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 230	
+	Withdrawn: 759	 
+	From: Account #870 [balance = 3534]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 219	
+	Withdrawn: 703	 
+	From: Account #372 [balance = 2169]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 231	
+	Withdrawn: 131	 
+	From: Account #67 [balance = 3313]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 64
+	Type: Transfer
+	Amount: 380
+	From: Account #372 [balance = 2169]
+	To: Account #651 [balance = 2136]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 275	
+	Withdrawn: 138	 
+	From: Account #121 [balance = 4143]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 276	
+	Withdrawn: 698	 
+	From: Account #42 [balance = 350]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 279	
+	Withdrawn: 816	 
+	From: Account #47 [balance = 1006]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 48
+	Type: Transfer
+	Amount: 70
+	From: Account #42 [balance = 350]
+	To: Account #599 [balance = 1081]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 229	
+	Withdrawn: 286	 
+	From: Account #520 [balance = 2495]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 278	
+	Withdrawn: 327	 
+	From: Account #906 [balance = 2941]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 245	
+	Withdrawn: 207	 
+	From: Account #26 [balance = 1055]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 280	
+	Withdrawn: 606	 
+	From: Account #260 [balance = 676]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 281	
+	Withdrawn: 570	 
+	From: Account #737 [balance = 2005]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 202	
+	Withdrawn: 110	 
+	From: Account #891 [balance = 4321]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 223	
+	Withdrawn: 148	 
+	From: Account #969 [balance = 907]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 225
+	Type: Withdrawal
+	Amount: 74
+	From: Account #260 [balance = 676]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 228
+	Type: Withdrawal
+	Amount: 178
+	From: Account #240 [balance = 1586]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 205
+	Type: Withdrawal
+	Amount: 721
+	From: Account #345 [balance = 324]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 90
+	Type: Transfer
+	Amount: 182
+	From: Account #754 [balance = 3256]
+	To: Account #946 [balance = 3609]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logFailedTransactionDueToInsufficientFunds
+WARNING: Transaction ID: 205 can't be done. Not enough funds to make transaction.
+
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 188
+	Type: Deposit
+	Amount: 258
+	To: Account #969 [balance = 907]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 291	
+	Withdrawn: 882	 
+	From: Account #76 [balance = 2489]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 282	
+	Withdrawn: 570	 
+	From: Account #990 [balance = 3358]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 283	
+	Withdrawn: 93	 
+	From: Account #270 [balance = 2898]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 284	
+	Withdrawn: 953	 
+	From: Account #35 [balance = 857]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 216	
+	Withdrawn: 195	 
+	From: Account #732 [balance = 1432]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 287	
+	Withdrawn: 700	 
+	From: Account #393 [balance = 1685]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 288	
+	Withdrawn: 68	 
+	From: Account #10 [balance = 3180]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 187	
+	Deposited: 113	 
+	To: Account #400 [balance = 5007]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 235	
+	Withdrawn: 517	 
+	From: Account #808 [balance = 3734]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 194	
+	Deposited: 550	 
+	To: Account #689 [balance = 2623]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 218	
+	Withdrawn: 570	 
+	From: Account #650 [balance = 4206]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 217	
+	Withdrawn: 721	 
+	From: Account #64 [balance = 390]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 285	
+	Withdrawn: 492	 
+	From: Account #347 [balance = 4394]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 289	
+	Withdrawn: 328	 
+	From: Account #80 [balance = 2448]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 183	
+	Deposited: 515	 
+	To: Account #105 [balance = 4396]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 214	
+	Withdrawn: 913	 
+	From: Account #682 [balance = 1849]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 290	
+	Withdrawn: 395	 
+	From: Account #421 [balance = 3435]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 104
+	Type: Deposit
+	Amount: 324
+	To: Account #808 [balance = 3734]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 211	
+	Withdrawn: 441	 
+	From: Account #625 [balance = 2211]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 286
+	Type: Withdrawal
+	Amount: 874
+	From: Account #76 [balance = 2489]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 210	
+	Withdrawn: 757	 
+	From: Account #829 [balance = 1451]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 208	
+	Withdrawn: 650	 
+	From: Account #688 [balance = 2310]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 292	
+	Withdrawn: 988	 
+	From: Account #488 [balance = 313]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 207	
+	Withdrawn: 551	 
+	From: Account #61 [balance = 2253]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 227	
+	Withdrawn: 184	 
+	From: Account #550 [balance = 4639]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 295	
+	Withdrawn: 865	 
+	From: Account #353 [balance = 2717]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 204	
+	Withdrawn: 692	 
+	From: Account #450 [balance = 1308]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 296	
+	Withdrawn: 206	 
+	From: Account #130 [balance = 2941]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 203	
+	Withdrawn: 137	 
+	From: Account #431 [balance = 4838]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 299	
+	Withdrawn: 500	 
+	From: Account #209 [balance = 3057]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 300	
+	Withdrawn: 174	 
+	From: Account #511 [balance = 4751]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 199	
+	Deposited: 100	 
+	To: Account #662 [balance = 4142]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 233	
+	Withdrawn: 390	 
+	From: Account #769 [balance = 2595]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 220	
+	Withdrawn: 638	 
+	From: Account #581 [balance = 1732]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 294	
+	Withdrawn: 807	 
+	From: Account #703 [balance = 1992]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 293	
+	Withdrawn: 13	 
+	From: Account #21 [balance = 4953]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 297	
+	Withdrawn: 349	 
+	From: Account #830 [balance = 2252]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 201	
+	Withdrawn: 189	 
+	From: Account #443 [balance = 3025]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 298	
+	Withdrawn: 39	 
+	From: Account #602 [balance = 3395]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 226
+	Type: Withdrawal
+	Amount: 716
+	From: Account #21 [balance = 4953]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 45
+	Type: Transfer
+	Amount: 451
+	From: Account #581 [balance = 1732]
+	To: Account #215 [balance = 3756]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 113
+	Type: Deposit
+	Amount: 464
+	To: Account #662 [balance = 4142]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 3	
+	Amount Sent: 205	 
+	From: Account #543 [balance = 4513] 
+	To: Account #486 [balance = 4596]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 41
+	Type: Transfer
+	Amount: 978
+	From: Account #431 [balance = 4838]
+	To: Account #739 [balance = 4786]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 251
+	Type: Withdrawal
+	Amount: 146
+	From: Account #130 [balance = 2941]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 206
+	Type: Withdrawal
+	Amount: 201
+	From: Account #353 [balance = 2717]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 138
+	Type: Deposit
+	Amount: 567
+	To: Account #61 [balance = 2253]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 121
+	Type: Deposit
+	Amount: 286
+	To: Account #602 [balance = 3395]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 186	
+	Deposited: 888	 
+	To: Account #679 [balance = 4537]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 196	
+	Deposited: 806	 
+	To: Account #803 [balance = 1827]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 195	
+	Deposited: 40	 
+	To: Account #194 [balance = 4463]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 192	
+	Deposited: 82	 
+	To: Account #945 [balance = 2871]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 139	
+	Deposited: 980	 
+	To: Account #699 [balance = 2165]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 215	
+	Withdrawn: 302	 
+	From: Account #796 [balance = 3801]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 301	
+	Fee 742 
+	From: Account #989 [balance = 3117]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 221	
+	Withdrawn: 459	 
+	From: Account #810 [balance = 3554]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 142	
+	Deposited: 741	 
+	To: Account #389 [balance = 3884]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 190	
+	Deposited: 538	 
+	To: Account #228 [balance = 1955]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 137	
+	Deposited: 893	 
+	To: Account #368 [balance = 4038]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 185	
+	Deposited: 149	 
+	To: Account #92 [balance = 3989]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 213	
+	Withdrawn: 305	 
+	From: Account #398 [balance = 3888]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 302
+	Type: Fee
+	Amount: 205
+	From: Account #319 [balance = 2986]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 124
+	Type: Deposit
+	Amount: 890
+	To: Account #699 [balance = 2165]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 161	
+	Deposited: 813	 
+	To: Account #15 [balance = 2411]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 180	
+	Deposited: 267	 
+	To: Account #709 [balance = 1852]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 101	
+	Deposited: 703	 
+	To: Account #236 [balance = 3684]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 123	
+	Deposited: 161	 
+	To: Account #440 [balance = 2873]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 179	
+	Deposited: 695	 
+	To: Account #673 [balance = 3714]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 176	
+	Deposited: 315	 
+	To: Account #541 [balance = 3531]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 115	
+	Deposited: 661	 
+	To: Account #886 [balance = 3819]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 175	
+	Deposited: 133	 
+	To: Account #643 [balance = 2460]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 171	
+	Deposited: 71	 
+	To: Account #559 [balance = 3343]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 108	
+	Deposited: 520	 
+	To: Account #208 [balance = 4507]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 172	
+	Deposited: 322	 
+	To: Account #19 [balance = 1686]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 168	
+	Deposited: 655	 
+	To: Account #381 [balance = 2687]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 182	
+	Deposited: 724	 
+	To: Account #327 [balance = 1775]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 167	
+	Deposited: 939	 
+	To: Account #5 [balance = 1956]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 178	
+	Deposited: 27	 
+	To: Account #239 [balance = 1415]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 163	
+	Deposited: 123	 
+	To: Account #622 [balance = 4268]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 99	
+	Amount Sent: 851	 
+	From: Account #987 [balance = 1097] 
+	To: Account #72 [balance = 5401]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 159	
+	Deposited: 431	 
+	To: Account #844 [balance = 2273]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 173	
+	Deposited: 100	 
+	To: Account #584 [balance = 4170]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 160	
+	Deposited: 449	 
+	To: Account #55 [balance = 3619]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 170	
+	Deposited: 797	 
+	To: Account #332 [balance = 5163]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 169	
+	Deposited: 195	 
+	To: Account #81 [balance = 4070]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 166	
+	Deposited: 814	 
+	To: Account #44 [balance = 4931]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 15
+	Type: Transfer
+	Amount: 574
+	From: Account #627 [balance = 3491]
+	To: Account #72 [balance = 5401]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 10
+	Type: Transfer
+	Amount: 430
+	From: Account #711 [balance = 2762]
+	To: Account #541 [balance = 3531]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 35
+	Type: Transfer
+	Amount: 760
+	From: Account #539 [balance = 2933]
+	To: Account #673 [balance = 3714]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 156	
+	Deposited: 373	 
+	To: Account #793 [balance = 1374]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 193	
+	Deposited: 436	 
+	To: Account #972 [balance = 4285]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 158	
+	Deposited: 339	 
+	To: Account #696 [balance = 4022]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 157	
+	Deposited: 671	 
+	To: Account #815 [balance = 3671]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 154	
+	Deposited: 595	 
+	To: Account #999 [balance = 1611]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 153	
+	Deposited: 85	 
+	To: Account #940 [balance = 1943]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 198	
+	Deposited: 287	 
+	To: Account #414 [balance = 3655]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 197	
+	Deposited: 364	 
+	To: Account #616 [balance = 1755]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 155	
+	Deposited: 843	 
+	To: Account #971 [balance = 3166]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 148	
+	Deposited: 866	 
+	To: Account #691 [balance = 3892]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 200	
+	Deposited: 69	 
+	To: Account #358 [balance = 3578]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 151	
+	Deposited: 76	 
+	To: Account #432 [balance = 4553]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 147	
+	Deposited: 4	 
+	To: Account #839 [balance = 4614]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 144	
+	Deposited: 435	 
+	To: Account #695 [balance = 2551]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 143	
+	Deposited: 974	 
+	To: Account #482 [balance = 5911]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 146	
+	Deposited: 376	 
+	To: Account #630 [balance = 3099]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 88	
+	Amount Sent: 632	 
+	From: Account #824 [balance = 4096] 
+	To: Account #437 [balance = 4415]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 145	
+	Deposited: 530	 
+	To: Account #40 [balance = 3566]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 191	
+	Deposited: 607	 
+	To: Account #509 [balance = 2790]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 141	
+	Deposited: 178	 
+	To: Account #137 [balance = 4399]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 135	
+	Deposited: 244	 
+	To: Account #331 [balance = 3207]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 136	
+	Deposited: 722	 
+	To: Account #484 [balance = 2307]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 18
+	Type: Transfer
+	Amount: 254
+	From: Account #331 [balance = 3207]
+	To: Account #88 [balance = 2849]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 110
+	Type: Deposit
+	Amount: 536
+	To: Account #509 [balance = 2790]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 94
+	Type: Transfer
+	Amount: 236
+	From: Account #44 [balance = 4931]
+	To: Account #839 [balance = 4614]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 189	
+	Deposited: 366	 
+	To: Account #866 [balance = 4257]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 66
+	Type: Transfer
+	Amount: 29
+	From: Account #212 [balance = 4443]
+	To: Account #414 [balance = 3655]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 80
+	Type: Transfer
+	Amount: 960
+	From: Account #696 [balance = 4022]
+	To: Account #999 [balance = 1611]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 36
+	Type: Transfer
+	Amount: 299
+	From: Account #866 [balance = 4257]
+	To: Account #716 [balance = 3629]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 105	
+	Deposited: 765	 
+	To: Account #580 [balance = 2344]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 132	
+	Deposited: 310	 
+	To: Account #449 [balance = 4802]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 128	
+	Deposited: 301	 
+	To: Account #392 [balance = 3727]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 127	
+	Deposited: 376	 
+	To: Account #106 [balance = 2131]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 120	
+	Deposited: 458	 
+	To: Account #733 [balance = 2059]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 67	
+	Amount Sent: 313	 
+	From: Account #895 [balance = 1701] 
+	To: Account #770 [balance = 4245]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 119	
+	Deposited: 956	 
+	To: Account #605 [balance = 2980]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 112	
+	Deposited: 558	 
+	To: Account #954 [balance = 3357]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 116	
+	Deposited: 526	 
+	To: Account #148 [balance = 3770]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 111	
+	Deposited: 414	 
+	To: Account #821 [balance = 5093]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 107	
+	Deposited: 178	 
+	To: Account #192 [balance = 3819]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 134	
+	Deposited: 178	 
+	To: Account #292 [balance = 4864]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 133	
+	Deposited: 193	 
+	To: Account #842 [balance = 4241]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 129	
+	Deposited: 327	 
+	To: Account #387 [balance = 3669]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 126	
+	Deposited: 938	 
+	To: Account #34 [balance = 2443]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 125	
+	Deposited: 266	 
+	To: Account #99 [balance = 4233]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 181	
+	Deposited: 19	 
+	To: Account #361 [balance = 3939]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 177	
+	Deposited: 716	 
+	To: Account #783 [balance = 2244]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 174	
+	Deposited: 894	 
+	To: Account #415 [balance = 4152]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 122	
+	Deposited: 335	 
+	To: Account #845 [balance = 5050]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 27	
+	Amount Sent: 205	 
+	From: Account #348 [balance = 806] 
+	To: Account #154 [balance = 1606]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 109	
+	Deposited: 144	 
+	To: Account #943 [balance = 1374]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 118	
+	Deposited: 62	 
+	To: Account #706 [balance = 1650]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 164	
+	Deposited: 126	 
+	To: Account #527 [balance = 4881]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 102	
+	Deposited: 285	 
+	To: Account #834 [balance = 2353]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 57
+	Type: Transfer
+	Amount: 868
+	From: Account #523 [balance = 2459]
+	To: Account #415 [balance = 4152]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 47
+	Type: Transfer
+	Amount: 153
+	From: Account #449 [balance = 4802]
+	To: Account #613 [balance = 1224]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 81	
+	Amount Sent: 474	 
+	From: Account #801 [balance = 3124] 
+	To: Account #787 [balance = 2015]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 165	
+	Deposited: 258	 
+	To: Account #813 [balance = 4597]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 98	
+	Amount Sent: 381	 
+	From: Account #571 [balance = 2100] 
+	To: Account #632 [balance = 3461]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 162	
+	Deposited: 18	 
+	To: Account #396 [balance = 2744]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 97	
+	Amount Sent: 351	 
+	From: Account #746 [balance = 3731] 
+	To: Account #964 [balance = 4318]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 93	
+	Amount Sent: 762	 
+	From: Account #66 [balance = 3813] 
+	To: Account #16 [balance = 3870]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 89	
+	Amount Sent: 396	 
+	From: Account #95 [balance = 2836] 
+	To: Account #276 [balance = 2311]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 86	
+	Amount Sent: 862	 
+	From: Account #535 [balance = 1979] 
+	To: Account #203 [balance = 5859]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 150	
+	Deposited: 924	 
+	To: Account #217 [balance = 5735]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 149	
+	Deposited: 82	 
+	To: Account #359 [balance = 1793]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 85	
+	Amount Sent: 69	 
+	From: Account #847 [balance = 2861] 
+	To: Account #586 [balance = 4103]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 82	
+	Amount Sent: 328	 
+	From: Account #690 [balance = 2043] 
+	To: Account #635 [balance = 2303]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 78	
+	Amount Sent: 236	 
+	From: Account #96 [balance = 3454] 
+	To: Account #271 [balance = 2027]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 152	
+	Deposited: 217	 
+	To: Account #429 [balance = 2058]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 25	
+	Amount Sent: 872	 
+	From: Account #501 [balance = 1674] 
+	To: Account #438 [balance = 3894]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 83	
+	Amount Sent: 916	 
+	From: Account #251 [balance = 2604] 
+	To: Account #193 [balance = 5746]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 84	
+	Amount Sent: 259	 
+	From: Account #811 [balance = 3446] 
+	To: Account #110 [balance = 5076]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 95
+	Type: Transfer
+	Amount: 678
+	From: Account #507 [balance = 3470]
+	To: Account #429 [balance = 2058]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 65
+	Type: Transfer
+	Amount: 506
+	From: Account #635 [balance = 2303]
+	To: Account #51 [balance = 4978]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 58
+	Type: Transfer
+	Amount: 198
+	From: Account #853 [balance = 1318]
+	To: Account #586 [balance = 4103]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 30
+	Type: Transfer
+	Amount: 34
+	From: Account #16 [balance = 3870]
+	To: Account #812 [balance = 3360]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 91
+	Type: Transfer
+	Amount: 559
+	From: Account #814 [balance = 2133]
+	To: Account #964 [balance = 4318]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 14
+	Type: Transfer
+	Amount: 807
+	From: Account #571 [balance = 2100]
+	To: Account #332 [balance = 5163]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 40	
+	Amount Sent: 914	 
+	From: Account #460 [balance = 1545] 
+	To: Account #644 [balance = 5158]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 131	
+	Deposited: 514	 
+	To: Account #420 [balance = 4836]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 75	
+	Amount Sent: 520	 
+	From: Account #53 [balance = 596] 
+	To: Account #388 [balance = 3630]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 71	
+	Amount Sent: 492	 
+	From: Account #588 [balance = 2959] 
+	To: Account #804 [balance = 4825]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 130	
+	Deposited: 699	 
+	To: Account #530 [balance = 3984]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 63	
+	Amount Sent: 260	 
+	From: Account #799 [balance = 3793] 
+	To: Account #637 [balance = 1635]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 31	
+	Amount Sent: 775	 
+	From: Account #903 [balance = 1709] 
+	To: Account #655 [balance = 4098]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 20	
+	Amount Sent: 492	 
+	From: Account #577 [balance = 2996] 
+	To: Account #604 [balance = 1533]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 56	
+	Amount Sent: 341	 
+	From: Account #767 [balance = 3765] 
+	To: Account #855 [balance = 4311]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 55	
+	Amount Sent: 308	 
+	From: Account #103 [balance = 1200] 
+	To: Account #735 [balance = 4456]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 51	
+	Amount Sent: 600	 
+	From: Account #259 [balance = 3389] 
+	To: Account #614 [balance = 3768]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 44	
+	Amount Sent: 816	 
+	From: Account #565 [balance = 3921] 
+	To: Account #558 [balance = 3717]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 43	
+	Amount Sent: 239	 
+	From: Account #36 [balance = 3295] 
+	To: Account #423 [balance = 3951]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 79	
+	Amount Sent: 792	 
+	From: Account #275 [balance = 1701] 
+	To: Account #668 [balance = 3884]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 76	
+	Amount Sent: 560	 
+	From: Account #583 [balance = 934] 
+	To: Account #922 [balance = 4502]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 22
+	Type: Transfer
+	Amount: 135
+	From: Account #565 [balance = 3921]
+	To: Account #947 [balance = 4038]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 24
+	Type: Transfer
+	Amount: 471
+	From: Account #558 [balance = 3717]
+	To: Account #827 [balance = 1789]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 61
+	Type: Transfer
+	Amount: 339
+	From: Account #110 [balance = 5076]
+	To: Account #614 [balance = 3768]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 11
+	Type: Transfer
+	Amount: 805
+	From: Account #75 [balance = 2884]
+	To: Account #103 [balance = 1200]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 26
+	Type: Transfer
+	Amount: 43
+	From: Account #123 [balance = 3292]
+	To: Account #655 [balance = 4098]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 74	
+	Amount Sent: 610	 
+	From: Account #291 [balance = 1164] 
+	To: Account #828 [balance = 4131]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 73	
+	Amount Sent: 952	 
+	From: Account #788 [balance = 2424] 
+	To: Account #950 [balance = 2719]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 117	
+	Deposited: 594	 
+	To: Account #155 [balance = 2676]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 114	
+	Deposited: 40	 
+	To: Account #182 [balance = 4145]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 62	
+	Amount Sent: 493	 
+	From: Account #838 [balance = 1547] 
+	To: Account #641 [balance = 2502]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 54	
+	Amount Sent: 991	 
+	From: Account #107 [balance = 2651] 
+	To: Account #139 [balance = 4174]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 53	
+	Amount Sent: 170	 
+	From: Account #133 [balance = 2819] 
+	To: Account #991 [balance = 2210]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 50	
+	Amount Sent: 19	 
+	From: Account #173 [balance = 2485] 
+	To: Account #843 [balance = 1530]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 49	
+	Amount Sent: 132	 
+	From: Account #285 [balance = 4382] 
+	To: Account #608 [balance = 3151]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 46	
+	Amount Sent: 277	 
+	From: Account #570 [balance = 4103] 
+	To: Account #401 [balance = 3012]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 42	
+	Amount Sent: 354	 
+	From: Account #884 [balance = 1138] 
+	To: Account #938 [balance = 5248]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 38	
+	Amount Sent: 956	 
+	From: Account #100 [balance = 77] 
+	To: Account #439 [balance = 5362]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 37	
+	Amount Sent: 839	 
+	From: Account #145 [balance = 2516] 
+	To: Account #45 [balance = 4122]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 33	
+	Amount Sent: 866	 
+	From: Account #963 [balance = 1553] 
+	To: Account #694 [balance = 2799]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 21	
+	Amount Sent: 619	 
+	From: Account #390 [balance = 623] 
+	To: Account #380 [balance = 4916]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 4	
+	Amount Sent: 745	 
+	From: Account #350 [balance = 2670] 
+	To: Account #318 [balance = 5672]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 19	
+	Amount Sent: 498	 
+	From: Account #547 [balance = 4107] 
+	To: Account #840 [balance = 3415]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 16
+	Type: Transfer
+	Amount: 698
+	From: Account #844 [balance = 2273]
+	To: Account #840 [balance = 3415]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 23	
+	Amount Sent: 636	 
+	From: Account #961 [balance = 3058] 
+	To: Account #934 [balance = 1642]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 28	
+	Amount Sent: 931	 
+	From: Account #806 [balance = 3922] 
+	To: Account #342 [balance = 4322]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 32	
+	Amount Sent: 903	 
+	From: Account #70 [balance = 3129] 
+	To: Account #383 [balance = 5485]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 69
+	Type: Transfer
+	Amount: 768
+	From: Account #390 [balance = 623]
+	To: Account #383 [balance = 5485]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logFailedTransactionDueToInsufficientFunds
+WARNING: Transaction ID: 69 can't be done. Not enough funds to make transaction.
+
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 39	
+	Amount Sent: 578	 
+	From: Account #424 [balance = 1210] 
+	To: Account #542 [balance = 2363]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 60	
+	Amount Sent: 501	 
+	From: Account #561 [balance = 523] 
+	To: Account #894 [balance = 4853]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 1	
+	Amount Sent: 93	 
+	From: Account #904 [balance = 3342] 
+	To: Account #933 [balance = 2687]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 254	
+	Withdrawn: 838	 
+	From: Account #914 [balance = 1478]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 2	
+	Amount Sent: 957	 
+	From: Account #24 [balance = 765] 
+	To: Account #759 [balance = 3199]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 13	
+	Amount Sent: 447	 
+	From: Account #477 [balance = 818] 
+	To: Account #489 [balance = 4408]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 9	
+	Amount Sent: 392	 
+	From: Account #816 [balance = 1161] 
+	To: Account #748 [balance = 4505]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 6	
+	Amount Sent: 471	 
+	From: Account #970 [balance = 2949] 
+	To: Account #179 [balance = 3062]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 5	
+	Amount Sent: 569	 
+	From: Account #143 [balance = 4411] 
+	To: Account #777 [balance = 4319]
+
+sty 31, 2025 9:36:24 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 17	
+	Amount Sent: 818	 
+	From: Account #776 [balance = 1695] 
+	To: Account #225 [balance = 3579]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 140	
+	Deposited: 628	 
+	To: Account #254 [balance = 5452]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 96	
+	Amount Sent: 946	 
+	From: Account #323 [balance = 744] 
+	To: Account #161 [balance = 5895]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 184	
+	Deposited: 368	 
+	To: Account #979 [balance = 2543]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 77	
+	Amount Sent: 850	 
+	From: Account #367 [balance = 1081] 
+	To: Account #461 [balance = 4995]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 222	
+	Withdrawn: 340	 
+	From: Account #832 [balance = 1318]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 106	
+	Deposited: 759	 
+	To: Account #339 [balance = 3277]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 103	
+	Deposited: 979	 
+	To: Account #165 [balance = 3356]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 253	
+	Withdrawn: 585	 
+	From: Account #504 [balance = 323]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 52	
+	Amount Sent: 743	 
+	From: Account #287 [balance = 1971] 
+	To: Account #362 [balance = 3442]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 64	
+	Amount Sent: 380	 
+	From: Account #372 [balance = 1789] 
+	To: Account #651 [balance = 2516]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 48	
+	Amount Sent: 70	 
+	From: Account #42 [balance = 280] 
+	To: Account #599 [balance = 1151]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 225	
+	Withdrawn: 74	 
+	From: Account #260 [balance = 602]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 228	
+	Withdrawn: 178	 
+	From: Account #240 [balance = 1408]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 188	
+	Deposited: 258	 
+	To: Account #969 [balance = 1165]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 90	
+	Amount Sent: 182	 
+	From: Account #754 [balance = 3074] 
+	To: Account #946 [balance = 3791]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 68
+	Type: Transfer
+	Amount: 52
+	From: Account #972 [balance = 4285]
+	To: Account #969 [balance = 1165]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 34
+	Type: Transfer
+	Amount: 687
+	From: Account #32 [balance = 2667]
+	To: Account #240 [balance = 1408]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 87
+	Type: Transfer
+	Amount: 392
+	From: Account #946 [balance = 3791]
+	To: Account #329 [balance = 3663]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 286	
+	Withdrawn: 874	 
+	From: Account #76 [balance = 1615]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 104	
+	Deposited: 324	 
+	To: Account #808 [balance = 4058]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 138	
+	Deposited: 567	 
+	To: Account #61 [balance = 2820]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 41	
+	Amount Sent: 978	 
+	From: Account #431 [balance = 3860] 
+	To: Account #739 [balance = 5764]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 226	
+	Withdrawn: 716	 
+	From: Account #21 [balance = 4237]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 113	
+	Deposited: 464	 
+	To: Account #662 [balance = 4606]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 121	
+	Deposited: 286	 
+	To: Account #602 [balance = 3681]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 45	
+	Amount Sent: 451	 
+	From: Account #581 [balance = 1281] 
+	To: Account #215 [balance = 4207]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 206	
+	Withdrawn: 201	 
+	From: Account #353 [balance = 2516]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 251	
+	Withdrawn: 146	 
+	From: Account #130 [balance = 2795]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 12
+	Type: Transfer
+	Amount: 622
+	From: Account #353 [balance = 2516]
+	To: Account #105 [balance = 4396]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 29
+	Type: Transfer
+	Amount: 907
+	From: Account #581 [balance = 1281]
+	To: Account #476 [balance = 3449]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 100
+	Type: Transfer
+	Amount: 889
+	From: Account #514 [balance = 4890]
+	To: Account #21 [balance = 4237]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 302	
+	Fee 205 
+	From: Account #319 [balance = 2781]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 124	
+	Deposited: 890	 
+	To: Account #699 [balance = 3055]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 303
+	Type: Fee
+	Amount: 13
+	From: Account #367 [balance = 1081]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 10	
+	Amount Sent: 430	 
+	From: Account #711 [balance = 2332] 
+	To: Account #541 [balance = 3961]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 15	
+	Amount Sent: 574	 
+	From: Account #627 [balance = 2917] 
+	To: Account #72 [balance = 5975]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 35	
+	Amount Sent: 760	 
+	From: Account #539 [balance = 2173] 
+	To: Account #673 [balance = 4474]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 70
+	Type: Transfer
+	Amount: 157
+	From: Account #381 [balance = 2687]
+	To: Account #539 [balance = 2173]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 8
+	Type: Transfer
+	Amount: 982
+	From: Account #384 [balance = 1938]
+	To: Account #673 [balance = 4474]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 66	
+	Amount Sent: 29	 
+	From: Account #212 [balance = 4414] 
+	To: Account #414 [balance = 3684]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 36	
+	Amount Sent: 299	 
+	From: Account #866 [balance = 3958] 
+	To: Account #716 [balance = 3928]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 94	
+	Amount Sent: 236	 
+	From: Account #44 [balance = 4695] 
+	To: Account #839 [balance = 4850]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 110	
+	Deposited: 536	 
+	To: Account #509 [balance = 3326]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 80	
+	Amount Sent: 960	 
+	From: Account #696 [balance = 3062] 
+	To: Account #999 [balance = 2571]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 18	
+	Amount Sent: 254	 
+	From: Account #331 [balance = 2953] 
+	To: Account #88 [balance = 3103]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 92
+	Type: Transfer
+	Amount: 822
+	From: Account #866 [balance = 3958]
+	To: Account #773 [balance = 1708]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 47	
+	Amount Sent: 153	 
+	From: Account #449 [balance = 4649] 
+	To: Account #613 [balance = 1377]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 57	
+	Amount Sent: 868	 
+	From: Account #523 [balance = 1591] 
+	To: Account #415 [balance = 5020]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 91	
+	Amount Sent: 559	 
+	From: Account #814 [balance = 1574] 
+	To: Account #964 [balance = 4877]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 95	
+	Amount Sent: 678	 
+	From: Account #507 [balance = 2792] 
+	To: Account #429 [balance = 2736]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 65	
+	Amount Sent: 506	 
+	From: Account #635 [balance = 1797] 
+	To: Account #51 [balance = 5484]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 14	
+	Amount Sent: 807	 
+	From: Account #571 [balance = 1293] 
+	To: Account #332 [balance = 5970]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 30	
+	Amount Sent: 34	 
+	From: Account #16 [balance = 3836] 
+	To: Account #812 [balance = 3394]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 58	
+	Amount Sent: 198	 
+	From: Account #853 [balance = 1120] 
+	To: Account #586 [balance = 4301]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 59
+	Type: Transfer
+	Amount: 578
+	From: Account #5 [balance = 1956]
+	To: Account #16 [balance = 3836]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 22	
+	Amount Sent: 135	 
+	From: Account #565 [balance = 3786] 
+	To: Account #947 [balance = 4173]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 11	
+	Amount Sent: 805	 
+	From: Account #75 [balance = 2079] 
+	To: Account #103 [balance = 2005]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 24	
+	Amount Sent: 471	 
+	From: Account #558 [balance = 3246] 
+	To: Account #827 [balance = 2260]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 26	
+	Amount Sent: 43	 
+	From: Account #123 [balance = 3249] 
+	To: Account #655 [balance = 4141]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 16	
+	Amount Sent: 698	 
+	From: Account #844 [balance = 1575] 
+	To: Account #840 [balance = 4113]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 61	
+	Amount Sent: 339	 
+	From: Account #110 [balance = 4737] 
+	To: Account #614 [balance = 4107]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 87	
+	Amount Sent: 392	 
+	From: Account #946 [balance = 3399] 
+	To: Account #329 [balance = 4055]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 34	
+	Amount Sent: 687	 
+	From: Account #32 [balance = 1980] 
+	To: Account #240 [balance = 2095]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 68	
+	Amount Sent: 52	 
+	From: Account #972 [balance = 4233] 
+	To: Account #969 [balance = 1217]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 72
+	Type: Transfer
+	Amount: 0
+	From: Account #617 [balance = 1466]
+	To: Account #329 [balance = 4055]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 29	
+	Amount Sent: 907	 
+	From: Account #581 [balance = 374] 
+	To: Account #476 [balance = 4356]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 12	
+	Amount Sent: 622	 
+	From: Account #353 [balance = 1894] 
+	To: Account #105 [balance = 5018]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 100	
+	Amount Sent: 889	 
+	From: Account #514 [balance = 4001] 
+	To: Account #21 [balance = 5126]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 303	
+	Fee 13 
+	From: Account #367 [balance = 1068]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 304
+	Type: Fee
+	Amount: 755
+	From: Account #657 [balance = 3364]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 70	
+	Amount Sent: 157	 
+	From: Account #381 [balance = 2530] 
+	To: Account #539 [balance = 2330]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 8	
+	Amount Sent: 982	 
+	From: Account #384 [balance = 956] 
+	To: Account #673 [balance = 5456]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 92	
+	Amount Sent: 822	 
+	From: Account #866 [balance = 3136] 
+	To: Account #773 [balance = 2530]
+
+sty 31, 2025 9:36:25 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 59	
+	Amount Sent: 578	 
+	From: Account #5 [balance = 1378] 
+	To: Account #16 [balance = 4414]
+
+sty 31, 2025 9:36:26 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 72	
+	Amount Sent: 0	 
+	From: Account #617 [balance = 1466] 
+	To: Account #329 [balance = 4055]
+
+sty 31, 2025 9:36:26 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 304	
+	Fee 755 
+	From: Account #657 [balance = 2609]
+
+sty 31, 2025 9:36:26 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 305
+	Type: Fee
+	Amount: 29
+	From: Account #434 [balance = 4347]
+
+sty 31, 2025 9:36:26 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 305	
+	Fee 29 
+	From: Account #434 [balance = 4318]
+
+sty 31, 2025 9:36:26 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 306
+	Type: Fee
+	Amount: 497
+	From: Account #936 [balance = 3055]
+
+sty 31, 2025 9:36:27 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 306	
+	Fee 497 
+	From: Account #936 [balance = 2558]
+
+sty 31, 2025 9:36:27 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 307
+	Type: Fee
+	Amount: 114
+	From: Account #664 [balance = 1082]
+
+sty 31, 2025 9:36:27 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 307	
+	Fee 114 
+	From: Account #664 [balance = 968]
+
+sty 31, 2025 9:36:27 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 313
+	Type: Fee
+	Amount: 702
+	From: Account #910 [balance = 2028]
+
+sty 31, 2025 9:36:28 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 313	
+	Fee 702 
+	From: Account #910 [balance = 1326]
+
+sty 31, 2025 9:36:28 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 321
+	Type: Fee
+	Amount: 135
+	From: Account #61 [balance = 2820]
+
+sty 31, 2025 9:36:28 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 321	
+	Fee 135 
+	From: Account #61 [balance = 2685]
+
+sty 31, 2025 9:36:28 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 308
+	Type: Fee
+	Amount: 826
+	From: Account #835 [balance = 2713]
+
+sty 31, 2025 9:36:29 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 308	
+	Fee 826 
+	From: Account #835 [balance = 1887]
+
+sty 31, 2025 9:36:29 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 309
+	Type: Fee
+	Amount: 310
+	From: Account #476 [balance = 4356]
+
+sty 31, 2025 9:36:29 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 309	
+	Fee 310 
+	From: Account #476 [balance = 4046]
+
+sty 31, 2025 9:36:29 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 310
+	Type: Fee
+	Amount: 86
+	From: Account #56 [balance = 2037]
+
+sty 31, 2025 9:36:30 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 310	
+	Fee 86 
+	From: Account #56 [balance = 1951]
+
+sty 31, 2025 9:36:30 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 314
+	Type: Fee
+	Amount: 457
+	From: Account #32 [balance = 1980]
+
+sty 31, 2025 9:36:30 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 314	
+	Fee 457 
+	From: Account #32 [balance = 1523]
+
+sty 31, 2025 9:36:30 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 317
+	Type: Fee
+	Amount: 521
+	From: Account #133 [balance = 2819]
+
+sty 31, 2025 9:36:31 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 317	
+	Fee 521 
+	From: Account #133 [balance = 2298]
+
+sty 31, 2025 9:36:31 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 315
+	Type: Fee
+	Amount: 868
+	From: Account #37 [balance = 2059]
+
+sty 31, 2025 9:36:31 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 315	
+	Fee 868 
+	From: Account #37 [balance = 1191]
+
+sty 31, 2025 9:36:31 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 318
+	Type: Fee
+	Amount: 397
+	From: Account #859 [balance = 2120]
+
+sty 31, 2025 9:36:32 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 318	
+	Fee 397 
+	From: Account #859 [balance = 1723]
+
+sty 31, 2025 9:36:32 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 319
+	Type: Fee
+	Amount: 799
+	From: Account #693 [balance = 1868]
+
+sty 31, 2025 9:36:32 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 319	
+	Fee 799 
+	From: Account #693 [balance = 1069]
+
+sty 31, 2025 9:36:32 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 316
+	Type: Fee
+	Amount: 489
+	From: Account #877 [balance = 1135]
+
+sty 31, 2025 9:36:33 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 316	
+	Fee 489 
+	From: Account #877 [balance = 646]
+
+sty 31, 2025 9:36:33 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 320
+	Type: Fee
+	Amount: 714
+	From: Account #785 [balance = 2636]
+
+sty 31, 2025 9:36:33 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 320	
+	Fee 714 
+	From: Account #785 [balance = 1922]
+
+sty 31, 2025 9:36:33 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 323
+	Type: Fee
+	Amount: 236
+	From: Account #190 [balance = 4685]
+
+sty 31, 2025 9:36:34 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 323	
+	Fee 236 
+	From: Account #190 [balance = 4449]
+
+sty 31, 2025 9:36:34 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 322
+	Type: Fee
+	Amount: 965
+	From: Account #343 [balance = 3681]
+
+sty 31, 2025 9:36:34 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 322	
+	Fee 965 
+	From: Account #343 [balance = 2716]
+
+sty 31, 2025 9:36:34 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 311
+	Type: Fee
+	Amount: 870
+	From: Account #23 [balance = 1509]
+
+sty 31, 2025 9:36:35 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 311	
+	Fee 870 
+	From: Account #23 [balance = 639]
+
+sty 31, 2025 9:36:35 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 312
+	Type: Fee
+	Amount: 142
+	From: Account #3 [balance = 4215]
+
+sty 31, 2025 9:36:35 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 312	
+	Fee 142 
+	From: Account #3 [balance = 4073]
+
+sty 31, 2025 9:36:35 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 326
+	Type: Fee
+	Amount: 399
+	From: Account #585 [balance = 3020]
+
+sty 31, 2025 9:36:36 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 326	
+	Fee 399 
+	From: Account #585 [balance = 2621]
+
+sty 31, 2025 9:36:36 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 324
+	Type: Fee
+	Amount: 123
+	From: Account #842 [balance = 4241]
+
+sty 31, 2025 9:36:36 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 324	
+	Fee 123 
+	From: Account #842 [balance = 4118]
+
+sty 31, 2025 9:36:36 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 343
+	Type: Fee
+	Amount: 25
+	From: Account #497 [balance = 2439]
+
+sty 31, 2025 9:36:37 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 343	
+	Fee 25 
+	From: Account #497 [balance = 2414]
+
+sty 31, 2025 9:36:37 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 328
+	Type: Fee
+	Amount: 733
+	From: Account #460 [balance = 1545]
+
+sty 31, 2025 9:36:37 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 328	
+	Fee 733 
+	From: Account #460 [balance = 812]
+
+sty 31, 2025 9:36:37 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 327
+	Type: Fee
+	Amount: 625
+	From: Account #345 [balance = 324]
+
+sty 31, 2025 9:36:37 PM BankApp.utils.LoggingService logFailedTransactionDueToInsufficientFunds
+WARNING: Transaction ID: 327 can't be done. Not enough funds to make transaction.
+
+
+sty 31, 2025 9:36:37 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 329
+	Type: Fee
+	Amount: 947
+	From: Account #52 [balance = 4870]
+
+sty 31, 2025 9:36:38 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 329	
+	Fee 947 
+	From: Account #52 [balance = 3923]
+
+sty 31, 2025 9:36:38 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 330
+	Type: Fee
+	Amount: 449
+	From: Account #843 [balance = 1530]
+
+sty 31, 2025 9:36:39 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 330	
+	Fee 449 
+	From: Account #843 [balance = 1081]
+
+sty 31, 2025 9:36:39 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 332
+	Type: Fee
+	Amount: 146
+	From: Account #73 [balance = 4980]
+
+sty 31, 2025 9:36:39 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 332	
+	Fee 146 
+	From: Account #73 [balance = 4834]
+
+sty 31, 2025 9:36:39 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 386
+	Type: Fee
+	Amount: 801
+	From: Account #279 [balance = 2982]
+
+sty 31, 2025 9:36:40 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 386	
+	Fee 801 
+	From: Account #279 [balance = 2181]
+
+sty 31, 2025 9:36:40 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 336
+	Type: Fee
+	Amount: 903
+	From: Account #72 [balance = 5975]
+
+sty 31, 2025 9:36:40 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 336	
+	Fee 903 
+	From: Account #72 [balance = 5072]
+
+sty 31, 2025 9:36:40 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 331
+	Type: Fee
+	Amount: 815
+	From: Account #554 [balance = 4438]
+
+sty 31, 2025 9:36:41 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 331	
+	Fee 815 
+	From: Account #554 [balance = 3623]
+
+sty 31, 2025 9:36:41 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 337
+	Type: Fee
+	Amount: 51
+	From: Account #772 [balance = 2494]
+
+sty 31, 2025 9:36:41 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 337	
+	Fee 51 
+	From: Account #772 [balance = 2443]
+
+sty 31, 2025 9:36:41 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 340
+	Type: Fee
+	Amount: 628
+	From: Account #627 [balance = 2917]
+
+sty 31, 2025 9:36:42 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 340	
+	Fee 628 
+	From: Account #627 [balance = 2289]
+
+sty 31, 2025 9:36:42 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 334
+	Type: Fee
+	Amount: 764
+	From: Account #524 [balance = 1965]
+
+sty 31, 2025 9:36:42 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 334	
+	Fee 764 
+	From: Account #524 [balance = 1201]
+
+sty 31, 2025 9:36:42 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 341
+	Type: Fee
+	Amount: 877
+	From: Account #131 [balance = 2711]
+
+sty 31, 2025 9:36:43 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 341	
+	Fee 877 
+	From: Account #131 [balance = 1834]
+
+sty 31, 2025 9:36:43 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 338
+	Type: Fee
+	Amount: 537
+	From: Account #484 [balance = 2307]
+
+sty 31, 2025 9:36:43 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 338	
+	Fee 537 
+	From: Account #484 [balance = 1770]
+
+sty 31, 2025 9:36:43 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 335
+	Type: Fee
+	Amount: 914
+	From: Account #380 [balance = 4916]
+
+sty 31, 2025 9:36:44 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 335	
+	Fee 914 
+	From: Account #380 [balance = 4002]
+
+sty 31, 2025 9:36:44 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 339
+	Type: Fee
+	Amount: 729
+	From: Account #909 [balance = 1635]
+
+sty 31, 2025 9:36:44 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 339	
+	Fee 729 
+	From: Account #909 [balance = 906]
+
+sty 31, 2025 9:36:44 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 342
+	Type: Fee
+	Amount: 876
+	From: Account #786 [balance = 2988]
+
+sty 31, 2025 9:36:45 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 342	
+	Fee 876 
+	From: Account #786 [balance = 2112]
+
+sty 31, 2025 9:36:45 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 346
+	Type: Fee
+	Amount: 172
+	From: Account #461 [balance = 4995]
+
+sty 31, 2025 9:36:45 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 346	
+	Fee 172 
+	From: Account #461 [balance = 4823]
+
+sty 31, 2025 9:36:45 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 392
+	Type: Fee
+	Amount: 218
+	From: Account #799 [balance = 3793]
+
+sty 31, 2025 9:36:46 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 392	
+	Fee 218 
+	From: Account #799 [balance = 3575]
+
+sty 31, 2025 9:36:46 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 347
+	Type: Fee
+	Amount: 468
+	From: Account #986 [balance = 1064]
+
+sty 31, 2025 9:36:46 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 347	
+	Fee 468 
+	From: Account #986 [balance = 596]
+
+sty 31, 2025 9:36:46 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 350
+	Type: Fee
+	Amount: 915
+	From: Account #739 [balance = 5764]
+
+sty 31, 2025 9:36:47 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 350	
+	Fee 915 
+	From: Account #739 [balance = 4849]
+
+sty 31, 2025 9:36:47 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 351
+	Type: Fee
+	Amount: 735
+	From: Account #668 [balance = 3884]
+
+sty 31, 2025 9:36:47 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 351	
+	Fee 735 
+	From: Account #668 [balance = 3149]
+
+sty 31, 2025 9:36:47 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 344
+	Type: Fee
+	Amount: 234
+	From: Account #932 [balance = 3850]
+
+sty 31, 2025 9:36:48 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 344	
+	Fee 234 
+	From: Account #932 [balance = 3616]
+
+sty 31, 2025 9:36:48 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 345
+	Type: Fee
+	Amount: 143
+	From: Account #870 [balance = 3534]
+
+sty 31, 2025 9:36:48 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 345	
+	Fee 143 
+	From: Account #870 [balance = 3391]
+
+sty 31, 2025 9:36:48 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 354
+	Type: Fee
+	Amount: 880
+	From: Account #193 [balance = 5746]
+
+sty 31, 2025 9:36:49 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 354	
+	Fee 880 
+	From: Account #193 [balance = 4866]
+
+sty 31, 2025 9:36:49 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 348
+	Type: Fee
+	Amount: 816
+	From: Account #923 [balance = 1688]
+
+sty 31, 2025 9:36:49 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 348	
+	Fee 816 
+	From: Account #923 [balance = 872]
+
+sty 31, 2025 9:36:49 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 349
+	Type: Fee
+	Amount: 748
+	From: Account #378 [balance = 2712]
+
+sty 31, 2025 9:36:50 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 349	
+	Fee 748 
+	From: Account #378 [balance = 1964]
+
+sty 31, 2025 9:36:50 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 352
+	Type: Fee
+	Amount: 513
+	From: Account #398 [balance = 3888]
+
+sty 31, 2025 9:36:50 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 352	
+	Fee 513 
+	From: Account #398 [balance = 3375]
+
+sty 31, 2025 9:36:50 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 353
+	Type: Fee
+	Amount: 293
+	From: Account #349 [balance = 2713]
+
+sty 31, 2025 9:36:51 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 353	
+	Fee 293 
+	From: Account #349 [balance = 2420]
+
+sty 31, 2025 9:36:51 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 356
+	Type: Fee
+	Amount: 829
+	From: Account #678 [balance = 3043]
+
+sty 31, 2025 9:36:51 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 356	
+	Fee 829 
+	From: Account #678 [balance = 2214]
+
+sty 31, 2025 9:36:51 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 357
+	Type: Fee
+	Amount: 805
+	From: Account #108 [balance = 1241]
+
+sty 31, 2025 9:36:52 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 357	
+	Fee 805 
+	From: Account #108 [balance = 436]
+
+sty 31, 2025 9:36:52 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 360
+	Type: Fee
+	Amount: 866
+	From: Account #114 [balance = 2524]
+
+sty 31, 2025 9:36:52 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 360	
+	Fee 866 
+	From: Account #114 [balance = 1658]
+
+sty 31, 2025 9:36:52 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 355
+	Type: Fee
+	Amount: 585
+	From: Account #279 [balance = 2181]
+
+sty 31, 2025 9:36:53 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 355	
+	Fee 585 
+	From: Account #279 [balance = 1596]
+
+sty 31, 2025 9:36:53 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 358
+	Type: Fee
+	Amount: 63
+	From: Account #896 [balance = 2850]
+
+sty 31, 2025 9:36:53 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 358	
+	Fee 63 
+	From: Account #896 [balance = 2787]
+
+sty 31, 2025 9:36:53 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 359
+	Type: Fee
+	Amount: 647
+	From: Account #582 [balance = 2166]
+
+sty 31, 2025 9:36:54 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 359	
+	Fee 647 
+	From: Account #582 [balance = 1519]
+
+sty 31, 2025 9:36:54 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 362
+	Type: Fee
+	Amount: 330
+	From: Account #760 [balance = 3080]
+
+sty 31, 2025 9:36:54 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 362	
+	Fee 330 
+	From: Account #760 [balance = 2750]
+
+sty 31, 2025 9:36:54 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 363
+	Type: Fee
+	Amount: 564
+	From: Account #124 [balance = 475]
+
+sty 31, 2025 9:36:54 PM BankApp.utils.LoggingService logFailedTransactionDueToInsufficientFunds
+WARNING: Transaction ID: 363 can't be done. Not enough funds to make transaction.
+
+
+sty 31, 2025 9:36:54 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 366
+	Type: Fee
+	Amount: 638
+	From: Account #380 [balance = 4002]
+
+sty 31, 2025 9:36:55 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 366	
+	Fee 638 
+	From: Account #380 [balance = 3364]
+
+sty 31, 2025 9:36:55 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 367
+	Type: Fee
+	Amount: 246
+	From: Account #606 [balance = 3195]
+
+sty 31, 2025 9:36:55 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 367	
+	Fee 246 
+	From: Account #606 [balance = 2949]
+
+sty 31, 2025 9:36:55 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 370
+	Type: Fee
+	Amount: 421
+	From: Account #537 [balance = 1376]
+
+sty 31, 2025 9:36:56 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 370	
+	Fee 421 
+	From: Account #537 [balance = 955]
+
+sty 31, 2025 9:36:56 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 371
+	Type: Fee
+	Amount: 684
+	From: Account #835 [balance = 1887]
+
+sty 31, 2025 9:36:56 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 371	
+	Fee 684 
+	From: Account #835 [balance = 1203]
+
+sty 31, 2025 9:36:56 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 361
+	Type: Fee
+	Amount: 208
+	From: Account #367 [balance = 1068]
+
+sty 31, 2025 9:36:57 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 361	
+	Fee 208 
+	From: Account #367 [balance = 860]
+
+sty 31, 2025 9:36:57 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 364
+	Type: Fee
+	Amount: 112
+	From: Account #634 [balance = 3018]
+
+sty 31, 2025 9:36:57 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 364	
+	Fee 112 
+	From: Account #634 [balance = 2906]
+
+sty 31, 2025 9:36:57 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 365
+	Type: Fee
+	Amount: 836
+	From: Account #721 [balance = 4383]
+
+sty 31, 2025 9:36:58 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 365	
+	Fee 836 
+	From: Account #721 [balance = 3547]
+
+sty 31, 2025 9:36:58 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 368
+	Type: Fee
+	Amount: 694
+	From: Account #473 [balance = 1737]
+
+sty 31, 2025 9:36:58 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 368	
+	Fee 694 
+	From: Account #473 [balance = 1043]
+
+sty 31, 2025 9:36:58 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 369
+	Type: Fee
+	Amount: 82
+	From: Account #836 [balance = 3681]
+
+sty 31, 2025 9:36:59 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 369	
+	Fee 82 
+	From: Account #836 [balance = 3599]
+
+sty 31, 2025 9:36:59 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 372
+	Type: Fee
+	Amount: 932
+	From: Account #416 [balance = 4285]
+
+sty 31, 2025 9:36:59 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 372	
+	Fee 932 
+	From: Account #416 [balance = 3353]
+
+sty 31, 2025 9:36:59 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 376
+	Type: Fee
+	Amount: 534
+	From: Account #531 [balance = 3224]
+
+sty 31, 2025 9:37:00 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 376	
+	Fee 534 
+	From: Account #531 [balance = 2690]
+
+sty 31, 2025 9:37:00 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 373
+	Type: Fee
+	Amount: 6
+	From: Account #385 [balance = 3569]
+
+sty 31, 2025 9:37:00 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 373	
+	Fee 6 
+	From: Account #385 [balance = 3563]
+
+sty 31, 2025 9:37:00 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 377
+	Type: Fee
+	Amount: 249
+	From: Account #693 [balance = 1069]
+
+sty 31, 2025 9:37:01 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 377	
+	Fee 249 
+	From: Account #693 [balance = 820]
+
+sty 31, 2025 9:37:01 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 380
+	Type: Fee
+	Amount: 617
+	From: Account #955 [balance = 3589]
+
+sty 31, 2025 9:37:01 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 380	
+	Fee 617 
+	From: Account #955 [balance = 2972]
+
+sty 31, 2025 9:37:01 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 381
+	Type: Fee
+	Amount: 896
+	From: Account #383 [balance = 5485]
+
+sty 31, 2025 9:37:02 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 381	
+	Fee 896 
+	From: Account #383 [balance = 4589]
+
+sty 31, 2025 9:37:02 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 374
+	Type: Fee
+	Amount: 907
+	From: Account #540 [balance = 4562]
+
+sty 31, 2025 9:37:02 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 374	
+	Fee 907 
+	From: Account #540 [balance = 3655]
+
+sty 31, 2025 9:37:02 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 375
+	Type: Fee
+	Amount: 979
+	From: Account #881 [balance = 2527]
+
+sty 31, 2025 9:37:03 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 375	
+	Fee 979 
+	From: Account #881 [balance = 1548]
+
+sty 31, 2025 9:37:03 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 378
+	Type: Fee
+	Amount: 951
+	From: Account #440 [balance = 2873]
+
+sty 31, 2025 9:37:03 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 378	
+	Fee 951 
+	From: Account #440 [balance = 1922]
+
+sty 31, 2025 9:37:03 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 379
+	Type: Fee
+	Amount: 496
+	From: Account #81 [balance = 4070]
+
+sty 31, 2025 9:37:04 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 379	
+	Fee 496 
+	From: Account #81 [balance = 3574]
+
+sty 31, 2025 9:37:04 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 382
+	Type: Fee
+	Amount: 672
+	From: Account #752 [balance = 1535]
+
+sty 31, 2025 9:37:05 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 382	
+	Fee 672 
+	From: Account #752 [balance = 863]
+
+sty 31, 2025 9:37:05 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 383
+	Type: Fee
+	Amount: 703
+	From: Account #242 [balance = 3493]
+
+sty 31, 2025 9:37:05 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 383	
+	Fee 703 
+	From: Account #242 [balance = 2790]
+
+sty 31, 2025 9:37:05 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 387
+	Type: Fee
+	Amount: 682
+	From: Account #787 [balance = 2015]
+
+sty 31, 2025 9:37:06 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 387	
+	Fee 682 
+	From: Account #787 [balance = 1333]
+
+sty 31, 2025 9:37:06 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 333
+	Type: Fee
+	Amount: 938
+	From: Account #860 [balance = 2328]
+
+sty 31, 2025 9:37:06 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 333	
+	Fee 938 
+	From: Account #860 [balance = 1390]
+
+sty 31, 2025 9:37:06 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 390
+	Type: Fee
+	Amount: 307
+	From: Account #329 [balance = 4055]
+
+sty 31, 2025 9:37:07 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 390	
+	Fee 307 
+	From: Account #329 [balance = 3748]
+
+sty 31, 2025 9:37:07 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 391
+	Type: Fee
+	Amount: 422
+	From: Account #338 [balance = 4137]
+
+sty 31, 2025 9:37:07 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 391	
+	Fee 422 
+	From: Account #338 [balance = 3715]
+
+sty 31, 2025 9:37:07 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 394
+	Type: Fee
+	Amount: 677
+	From: Account #206 [balance = 4242]
+
+sty 31, 2025 9:37:08 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 394	
+	Fee 677 
+	From: Account #206 [balance = 3565]
+
+sty 31, 2025 9:37:08 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 395
+	Type: Fee
+	Amount: 983
+	From: Account #578 [balance = 4691]
+
+sty 31, 2025 9:37:08 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 395	
+	Fee 983 
+	From: Account #578 [balance = 3708]
+
+sty 31, 2025 9:37:08 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 398
+	Type: Fee
+	Amount: 58
+	From: Account #539 [balance = 2330]
+
+sty 31, 2025 9:37:09 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 398	
+	Fee 58 
+	From: Account #539 [balance = 2272]
+
+sty 31, 2025 9:37:09 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 399
+	Type: Fee
+	Amount: 588
+	From: Account #289 [balance = 1270]
+
+sty 31, 2025 9:37:09 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 399	
+	Fee 588 
+	From: Account #289 [balance = 682]
+
+sty 31, 2025 9:37:09 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 384
+	Type: Fee
+	Amount: 973
+	From: Account #143 [balance = 4411]
+
+sty 31, 2025 9:37:10 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 384	
+	Fee 973 
+	From: Account #143 [balance = 3438]
+
+sty 31, 2025 9:37:10 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 385
+	Type: Fee
+	Amount: 141
+	From: Account #501 [balance = 1674]
+
+sty 31, 2025 9:37:10 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 385	
+	Fee 141 
+	From: Account #501 [balance = 1533]
+
+sty 31, 2025 9:37:10 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 388
+	Type: Fee
+	Amount: 959
+	From: Account #975 [balance = 4894]
+
+sty 31, 2025 9:37:11 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 388	
+	Fee 959 
+	From: Account #975 [balance = 3935]
+
+sty 31, 2025 9:37:11 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 389
+	Type: Fee
+	Amount: 923
+	From: Account #863 [balance = 1563]
+
+sty 31, 2025 9:37:11 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 389	
+	Fee 923 
+	From: Account #863 [balance = 640]
+
+sty 31, 2025 9:37:11 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 325
+	Type: Fee
+	Amount: 442
+	From: Account #58 [balance = 3087]
+
+sty 31, 2025 9:37:12 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 325	
+	Fee 442 
+	From: Account #58 [balance = 2645]
+
+sty 31, 2025 9:37:12 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 393
+	Type: Fee
+	Amount: 712
+	From: Account #219 [balance = 1952]
+
+sty 31, 2025 9:37:12 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 393	
+	Fee 712 
+	From: Account #219 [balance = 1240]
+
+sty 31, 2025 9:37:12 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 396
+	Type: Fee
+	Amount: 153
+	From: Account #149 [balance = 1043]
+
+sty 31, 2025 9:37:13 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 396	
+	Fee 153 
+	From: Account #149 [balance = 890]
+
+sty 31, 2025 9:37:13 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 397
+	Type: Fee
+	Amount: 979
+	From: Account #255 [balance = 2851]
+
+sty 31, 2025 9:37:13 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 397	
+	Fee 979 
+	From: Account #255 [balance = 1872]
+
+sty 31, 2025 9:37:13 PM BankApp.utils.LoggingService logTransactionAttempt
+INFO: Attempt Transaction
+	ID: 400
+	Type: Fee
+	Amount: 364
+	From: Account #487 [balance = 2075]
+
+sty 31, 2025 9:37:14 PM BankApp.utils.LoggingService logSuccessfulTransaction
+INFO: Successful Transaction 
+	ID: 400	
+	Fee 364 
+	From: Account #487 [balance = 1711]
+
