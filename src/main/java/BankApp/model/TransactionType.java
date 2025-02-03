@@ -1,19 +1,18 @@
 package BankApp.model;
 
+import lombok.Getter;
+
 public enum TransactionType {
     TRANSFER("Transfer"),
     DEPOSIT("Deposit"),
     WITHDRAWAL("Withdrawal"),
     FEE("Fee");
 
+    @Getter
     private final String displayName;
 
     TransactionType(String name) {
         this.displayName = name;
-    }
-
-    public String getDisplayName() {
-        return displayName;
     }
 
     public static TransactionType fromString(String text) {
