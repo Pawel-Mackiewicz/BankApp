@@ -15,8 +15,8 @@ public class AccountService {
 
     public void initializeAccountsRandomly(int count) {
         for (int i = 0; i < count; i++) {
-            int saldo = random.nextInt(1000, 5000);
-            accounts.add(new Account(saldo));
+            double saldo = random.nextInt(1000, 5000) * 1.0;
+            accounts.add(new BankApp.model.Account(saldo));
         }
     }
 
@@ -31,9 +31,9 @@ public class AccountService {
                 .orElse(null);
     }
 
-    public int getSumOfAllAccounts() {
+    public double getSumOfAllAccounts() {
         return accounts.stream()
-                .mapToInt(Account::getBalance)
+                .mapToDouble(BankApp.model.Account::getBalance)
                 .sum();
     }
 }

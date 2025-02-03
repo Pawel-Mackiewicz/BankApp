@@ -1,33 +1,43 @@
 package BankApp.controller;
 
 import BankApp.model.Account;
-import BankApp.utils.LoggerSetup;
+import lombok.Getter;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AccountLockManager {
+    @Getter
+    public static AtomicInteger accountLockCounter;
+    @Getter
+    public static AtomicInteger accountUnlockCounter;
 
-    public static final Logger logger = LoggerSetup.getLogger(AccountLockManager.class.getName());
+    static {
+        accountLockCounter = new AtomicInteger(0);
+        accountUnlockCounter = new AtomicInteger(0);
+    }
 
     public static void lockAccounts(Account from, Account to) {
         if (from != null && to != null) {
             lockTwoAccounts(from, to);
         } else if (from != null) {
-            from.lock();
+            lockAccount(from);
         } else if (to != null) {
-            to.lock();
+            lockAccount(to);
         }
     }
 
     private static void lockTwoAccounts(Account acc1, Account acc2) {
         if (acc1.getId() < acc2.getId()) {
-            acc1.lock();
-            acc2.lock();
+            lockAccount(acc1);
+            lockAccount(acc2);
         } else {
-            acc2.lock();
-            acc1.lock();
+            lockAccount(acc2);
+            lockAccount(acc1);
         }
+    }
+    private static void lockAccount(Account account) {
+        account.lock();
+        accountLockCounter.incrementAndGet();
     }
 
     public static void unlockAccounts(Account from, Account to) {
@@ -37,5 +47,6 @@ public class AccountLockManager {
 
     private static void unlockAccount(Account acc) {
             acc.unlock();
+            accountUnlockCounter.incrementAndGet();
     }
 }

@@ -1,6 +1,7 @@
 package BankApp.model;
 
 import BankApp.controller.TransactionExecutor;
+import BankApp.strategy.TransactionStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,21 +23,40 @@ public class TransactionService {
         this.random = new Random();
     }
 
-    public void generateRandomTransaction(TransactionType type, AccountService accountService, int count) {
+    public void generateRandomTransactions(TransactionType type, TransactionStrategy strategy, AccountService accountService, int count) {
         for (int i = 0; i < count; i++) {
-            Account acc1 = null;
-            Account acc2 = null;
-            do {
-                acc1 = accountService.getRandomAccount();
-                acc2 = type == TransactionType.TRANSFER ? accountService.getRandomAccount() : null;
-            } while (acc1 == acc2);
-
-            Transaction transaction = acc2 != null ? new Transaction(acc1, acc2, random.nextInt(1000))
-                    : new Transaction(type, acc1, random.nextInt(1000));
-
+            Transaction transaction = createRandomTransaction(type, strategy, accountService);
             futures.add(executor.submit(new TransactionExecutor(transaction)));
         }
     }
+
+    private Transaction createRandomTransaction(TransactionType type, TransactionStrategy strategy, AccountService accountService) {
+        Account acc1 = accountService.getRandomAccount();
+        double amount = getRandomTransactionAmount(1000);
+
+        if (type == TransactionType.TRANSFER) {
+            Account acc2 = getDifferentRandomAccount(acc1, accountService);
+            return new Transaction(acc1, acc2, amount, type, strategy);
+        } else {
+            return new Transaction(acc1, amount, type, strategy);
+        }
+    }
+
+    private double getRandomTransactionAmount(double max) {
+        double rawAmount = random.nextDouble(max);
+        return Math.round(rawAmount * 100.0) / 100.0;
+    }
+
+    private Account getDifferentRandomAccount(Account account, AccountService accountService) {
+        Account candidate = accountService.getRandomAccount();
+        while (account.equals(candidate)) {
+            candidate = accountService.getRandomAccount();
+        }
+        return candidate;
+    }
+
+
+
 
     public void waitForAllTransactions() {
         for (Future<?> future : futures) {
@@ -46,7 +66,7 @@ public class TransactionService {
             } catch (InterruptedException e) {
                 System.out.println("Interrupted while waiting for transactions");
             } catch (ExecutionException e) {
-                System.out.println("Execution exception while waiting for transactions");
+                System.out.println("Execution exception while waiting for transactions \n" + e.getMessage());
             }
         }
     }
