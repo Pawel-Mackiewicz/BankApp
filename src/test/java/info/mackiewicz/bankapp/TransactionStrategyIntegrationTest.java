@@ -64,8 +64,7 @@ public class TransactionStrategyIntegrationTest {
         Transaction depositTx = new Transaction(
                 account,                         // deposit target account
                 new BigDecimal("500.00"),        // amount
-                TransactionType.DEPOSIT,         // type is DEPOSIT
-                depositTransaction               // strategy to perform deposit
+                TransactionType.DEPOSIT       // type is DEPOSIT
         );
 
         // Execute the deposit strategy
@@ -101,8 +100,7 @@ public class TransactionStrategyIntegrationTest {
         Transaction withdrawalTx = new Transaction(
                 account,                           // withdrawal source account
                 new BigDecimal("300.00"),          // amount
-                TransactionType.WITHDRAWAL,        // type is WITHDRAWAL
-                withdrawalTransaction              // strategy to perform withdrawal
+                TransactionType.WITHDRAWAL        // type is WITHDRAWAL
         );
 
         // Execute the withdrawal strategy
@@ -146,8 +144,7 @@ public class TransactionStrategyIntegrationTest {
                 account1,                          // source account
                 account2,                          // destination account
                 new BigDecimal("200.00"),          // transfer amount
-                TransactionType.TRANSFER,          // type is TRANSFER
-                transferTransaction                // strategy to perform transfer
+                TransactionType.TRANSFER          // type is TRANSFER
         );
 
         // Execute the transfer strategy
@@ -187,8 +184,7 @@ public class TransactionStrategyIntegrationTest {
         Transaction feeTx = new Transaction(
                 account,                           // fee applies to this account
                 new BigDecimal("50.00"),           // fee amount
-                TransactionType.FEE,               // type is FEE
-                feeTransaction                     // strategy to perform fee deduction
+                TransactionType.FEE               // type is FEE
         );
 
         // Execute the fee transaction strategy

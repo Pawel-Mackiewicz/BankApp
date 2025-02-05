@@ -25,16 +25,16 @@ public class LoggingService {
     public static void logLockingAccounts(Transaction transaction) {
         Account from = transaction.getFromAccount();
         Account to = transaction.getToAccount();
-        String message = String.format("Transaction ID: %s, Locked accounts: %s, %s",
-                transaction.getId(), formatAccountInfo(from), formatAccountInfo(to));
+        String message = String.format("Transaction ID: %s, Locked accounts: %s, %s, Thread: %s",
+                transaction.getId(), formatAccountInfo(from), formatAccountInfo(to), Thread.currentThread().getName());
         LOCKS_LOGGER.info(message);
     }
 
     public static void logUnlockingAccounts(Transaction transaction) {
         Account from = transaction.getFromAccount();
         Account to = transaction.getToAccount();
-        String message = String.format("Transaction ID: %s, Unlocked accounts: %s, %s",
-                transaction.getId(), formatAccountInfo(from), formatAccountInfo(to));
+        String message = String.format("Transaction ID: %s, Unlocked accounts: %s, %s, Thread: %s",
+                transaction.getId(), formatAccountInfo(from), formatAccountInfo(to), Thread.currentThread().getName());
         LOCKS_LOGGER.info(message);
     }
 

@@ -8,10 +8,12 @@ import java.util.List;
 
 @Service
 public class TransactionService {
-    TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
+    private final TransactionProcessingService processingService;
 
-    TransactionService(TransactionRepository transactionRepository) {
+    TransactionService(TransactionRepository transactionRepository, TransactionProcessingService transactionProcessingService) {
         this.transactionRepository = transactionRepository;
+        this.processingService = transactionProcessingService;
     }
 
     public Transaction createTransaction(Transaction transaction) {
@@ -32,5 +34,20 @@ public class TransactionService {
                 .orElseThrow(() -> new RuntimeException("Account " + accountId + " didn't made any transactions or don't exist"));
     }
 
+    public void processTransactionById(int transactionId) {
+        Transaction transaction = getTransactionById(transactionId);
+        processTransaction(transaction);
+    }
+
+    public void processAllTransactions(List<Transaction> transactions) {
+        transactions.forEach(
+                this::processTransaction
+        );
+    }
+
+    public void processTransaction(Transaction transaction) {
+        //TODO: tu zrobić boolean tzn process() ma być boolean i na podstawie tego będziemy dalej działać z daną transakcją.
+        processingService.processTransaction(transaction);
+    }
 
 }

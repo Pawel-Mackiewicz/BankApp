@@ -5,10 +5,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
-@Data
+
 @NoArgsConstructor
+@Data
 @Entity
 @Table(name = "transactions")
 public class Transaction {
@@ -16,6 +16,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     private Integer id;
+
+    private TransactionStatus status;
 
     @ManyToOne
     @JoinColumn(name = "from_id")
@@ -29,22 +31,19 @@ public class Transaction {
 
     @Getter
     private BigDecimal amount;
+    @Getter
     private TransactionType type;
 
-    public boolean execute() {
-        return strategy.execute(this);
+    public Transaction(Account account, BigDecimal amount, TransactionType type) {
+        this(getFromAccount(account, type), getToAccount(account, type), amount, type);
     }
 
-    public Transaction(Account account, BigDecimal amount, TransactionType type, TransactionStrategy strategy) {
-        this(getFromAccount(account, type), getToAccount(account, type), amount, type, strategy);
-    }
-
-    public Transaction(Account from, Account to, BigDecimal amount, TransactionType type, TransactionStrategy strategy) {
+    public Transaction(Account from, Account to, BigDecimal amount, TransactionType type) {
         this.fromAccount = from;
         this.toAccount = to;
         this.amount = amount;
         this.type = type;
-        this.strategy = strategy;
+        this.status = TransactionStatus.NEW;
     }
 
     private static Account getToAccount(Account account, TransactionType type) {
@@ -53,6 +52,10 @@ public class Transaction {
 
     private static Account getFromAccount(Account account, TransactionType type) {
         return type == TransactionType.DEPOSIT ? null : account;
+    }
+
+    public boolean execute() {
+        return strategy.execute(this);
     }
 
     public boolean isTransactionPossible() {

@@ -1,0 +1,172 @@
+2025-02-05 14:39:02 INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [info.mackiewicz.bankapp.TransactionServiceIntegrationTest]: TransactionServiceIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-02-05 14:39:02 INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration info.mackiewicz.bankapp.BankAppApplication for test class info.mackiewicz.bankapp.TransactionServiceIntegrationTest
+2025-02-05 14:39:03 INFO  i.m.b.TransactionServiceIntegrationTest - Starting TransactionServiceIntegrationTest using Java 21.0.5 with PID 10168 (started by zizu4 in C:\Users\zizu4\IdeaProjects\BankApp)
+2025-02-05 14:39:03 INFO  i.m.b.TransactionServiceIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-02-05 14:39:03 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-02-05 14:39:03 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 72 ms. Found 3 JPA repository interfaces.
+2025-02-05 14:39:04 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-05 14:39:04 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-02-05 14:39:04 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-05 14:39:04 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-02-05 14:39:04 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-05 14:39:05 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:bankappdb user=SA
+2025-02-05 14:39:05 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-02-05 14:39:05 WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-05 14:39:05 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-05 14:39:06 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-05 14:39:06 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05 14:39:06 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-02-05 14:39:07 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-05 14:39:07 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:bankappdb'
+2025-02-05 14:39:07 INFO  i.m.b.TransactionServiceIntegrationTest - Started TransactionServiceIntegrationTest in 4.925 seconds (process running for 6.498)
+2025-02-05 14:39:08 INFO  BankApp.locks - Transaction ID: 2, Locked accounts: N/A, ID:2
+2025-02-05 14:39:08 INFO  BankApp.transaction - Attempt Transaction
+	ID: 2
+	Type: Deposit
+	Amount: 400.00
+	To: ID:2
+
+2025-02-05 14:39:08 INFO  BankApp.locks - Transaction ID: 2, Unlocked accounts: N/A, ID:2
+2025-02-05 14:39:08 INFO  BankApp.locks - Transaction ID: 3, Locked accounts: N/A, ID:3
+2025-02-05 14:39:08 INFO  BankApp.transaction - Attempt Transaction
+	ID: 3
+	Type: Deposit
+	Amount: 300.00
+	To: ID:3
+
+2025-02-05 14:39:08 INFO  BankApp.locks - Transaction ID: 3, Unlocked accounts: N/A, ID:3
+2025-02-05 14:39:08 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05 14:39:08 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-02-05 14:39:08 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-02-05 14:41:30 INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [info.mackiewicz.bankapp.TransactionServiceIntegrationTest]: TransactionServiceIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-02-05 14:41:30 INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration info.mackiewicz.bankapp.BankAppApplication for test class info.mackiewicz.bankapp.TransactionServiceIntegrationTest
+2025-02-05 14:41:30 INFO  i.m.b.TransactionServiceIntegrationTest - Starting TransactionServiceIntegrationTest using Java 21.0.5 with PID 23424 (started by zizu4 in C:\Users\zizu4\IdeaProjects\BankApp)
+2025-02-05 14:41:30 INFO  i.m.b.TransactionServiceIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-02-05 14:41:31 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-02-05 14:41:31 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 69 ms. Found 3 JPA repository interfaces.
+2025-02-05 14:41:32 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-05 14:41:32 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-02-05 14:41:32 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-05 14:41:32 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-02-05 14:41:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-05 14:41:32 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:bankappdb user=SA
+2025-02-05 14:41:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-02-05 14:41:32 WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-05 14:41:32 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-05 14:41:33 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-05 14:41:33 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05 14:41:34 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-02-05 14:41:34 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-05 14:41:35 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:bankappdb'
+2025-02-05 14:41:35 INFO  i.m.b.TransactionServiceIntegrationTest - Started TransactionServiceIntegrationTest in 4.581 seconds (process running for 5.882)
+2025-02-05 14:41:35 INFO  BankApp.locks - Transaction ID: 2, Locked accounts: N/A, ID:2
+2025-02-05 14:41:35 INFO  BankApp.transaction - Attempt Transaction
+	ID: 2
+	Type: Deposit
+	Amount: 400.00
+	To: ID:2
+
+2025-02-05 14:41:35 INFO  BankApp.locks - Transaction ID: 2, Unlocked accounts: N/A, ID:2
+2025-02-05 14:41:35 INFO  BankApp.locks - Transaction ID: 3, Locked accounts: N/A, ID:3
+2025-02-05 14:41:35 INFO  BankApp.transaction - Attempt Transaction
+	ID: 3
+	Type: Deposit
+	Amount: 300.00
+	To: ID:3
+
+2025-02-05 14:41:35 INFO  BankApp.locks - Transaction ID: 3, Unlocked accounts: N/A, ID:3
+2025-02-05 14:41:35 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05 14:41:35 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-02-05 14:41:35 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-02-05 14:41:52 INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [info.mackiewicz.bankapp.TransactionServiceIntegrationTest]: TransactionServiceIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-02-05 14:41:52 INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration info.mackiewicz.bankapp.BankAppApplication for test class info.mackiewicz.bankapp.TransactionServiceIntegrationTest
+2025-02-05 14:41:53 INFO  i.m.b.TransactionServiceIntegrationTest - Starting TransactionServiceIntegrationTest using Java 21.0.5 with PID 8264 (started by zizu4 in C:\Users\zizu4\IdeaProjects\BankApp)
+2025-02-05 14:41:53 INFO  i.m.b.TransactionServiceIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-02-05 14:41:53 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-02-05 14:41:53 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 72 ms. Found 3 JPA repository interfaces.
+2025-02-05 14:41:54 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-05 14:41:54 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-02-05 14:41:54 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-05 14:41:54 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-02-05 14:41:54 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-05 14:41:54 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:bankappdb user=SA
+2025-02-05 14:41:54 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-02-05 14:41:54 WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-05 14:41:54 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-05 14:41:55 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-05 14:41:55 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05 14:41:56 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-02-05 14:41:56 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-05 14:41:57 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:bankappdb'
+2025-02-05 14:41:57 INFO  i.m.b.TransactionServiceIntegrationTest - Started TransactionServiceIntegrationTest in 4.287 seconds (process running for 5.659)
+2025-02-05 14:41:57 INFO  BankApp.locks - Transaction ID: 2, Locked accounts: N/A, ID:2
+2025-02-05 14:41:57 INFO  BankApp.transaction - Attempt Transaction
+	ID: 2
+	Type: Deposit
+	Amount: 400.00
+	To: ID:2
+
+2025-02-05 14:41:57 INFO  BankApp.locks - Transaction ID: 2, Unlocked accounts: N/A, ID:2
+2025-02-05 14:41:57 INFO  BankApp.locks - Transaction ID: 3, Locked accounts: N/A, ID:3
+2025-02-05 14:41:57 INFO  BankApp.transaction - Attempt Transaction
+	ID: 3
+	Type: Deposit
+	Amount: 300.00
+	To: ID:3
+
+2025-02-05 14:41:57 INFO  BankApp.locks - Transaction ID: 3, Unlocked accounts: N/A, ID:3
+2025-02-05 14:41:57 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05 14:41:57 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-02-05 14:41:57 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-02-05 14:58:53 INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [info.mackiewicz.bankapp.TransactionServiceIntegrationTest]: TransactionServiceIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-02-05 14:58:54 INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration info.mackiewicz.bankapp.BankAppApplication for test class info.mackiewicz.bankapp.TransactionServiceIntegrationTest
+2025-02-05 14:58:54 INFO  i.m.b.TransactionServiceIntegrationTest - Starting TransactionServiceIntegrationTest using Java 21.0.5 with PID 11772 (started by zizu4 in C:\Users\zizu4\IdeaProjects\BankApp)
+2025-02-05 14:58:54 INFO  i.m.b.TransactionServiceIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-02-05 14:58:55 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-02-05 14:58:55 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 61 ms. Found 3 JPA repository interfaces.
+2025-02-05 14:58:55 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-05 14:58:55 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-02-05 14:58:55 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-05 14:58:56 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-02-05 14:58:56 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-05 14:58:56 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:bankappdb user=SA
+2025-02-05 14:58:56 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-02-05 14:58:56 WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-05 14:58:56 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-05 14:58:57 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-05 14:58:57 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05 14:58:57 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-02-05 14:58:58 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-05 14:58:58 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:bankappdb'
+2025-02-05 14:58:59 INFO  i.m.b.TransactionServiceIntegrationTest - Started TransactionServiceIntegrationTest in 4.785 seconds (process running for 6.213)
+2025-02-05 14:58:59 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05 14:58:59 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-02-05 14:58:59 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

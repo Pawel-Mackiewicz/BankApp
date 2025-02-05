@@ -4,17 +4,20 @@ import info.mackiewicz.bankapp.controller.AccountLockManager;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.utils.LoggingService;
 import info.mackiewicz.bankapp.utils.Util;
-import jakarta.transaction.Transactional;
-import lombok.NoArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-@NoArgsConstructor
+
 @Service
 public class TransactionProcessingService {
 
+    private final TransactionHydrator hydrator;
+
+    public TransactionProcessingService(TransactionHydrator hydrator) {
+        this.hydrator = hydrator;
+    }
+
     @Async
-    @Transactional
     public void processTransaction(Transaction transaction) {
         lockAndLogAccounts(transaction);
         try {
@@ -32,14 +35,18 @@ public class TransactionProcessingService {
     private void attemptTransaction(Transaction transaction) {
         LoggingService.logTransactionAttempt(transaction);
         if (transaction.isTransactionPossible()) {
-            executeTransaction(transaction);
+            executeTransaction(hydrateTransaction(transaction));
         } else {
             LoggingService.logFailedTransactionDueToInsufficientFunds(transaction);
         }
     }
 
+    private Transaction hydrateTransaction(Transaction transaction) {
+        return hydrator.hydrate(transaction);
+    }
+
     private void executeTransaction(Transaction transaction) {
-        Util.sleep(500);
+        Util.sleep(200);
         if (transaction.execute()) {
             LoggingService.logSuccessfulTransaction(transaction);
         } else {
