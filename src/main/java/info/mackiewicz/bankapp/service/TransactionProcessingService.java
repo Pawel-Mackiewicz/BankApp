@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.controller.AccountLockManager;
+import info.mackiewicz.bankapp.utils.AccountLockManager;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.utils.LoggingService;
 import info.mackiewicz.bankapp.utils.Util;

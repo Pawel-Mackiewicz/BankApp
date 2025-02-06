@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.model;
 
-import info.mackiewicz.bankapp.strategy.TransactionStrategy;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import info.mackiewicz.bankapp.service.strategy.TransactionStrategy;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
@@ -14,45 +14,20 @@ import java.math.BigDecimal;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Integer id;
-
-    private TransactionStatus status;
-
     @ManyToOne
     @JoinColumn(name = "from_id")
     private Account fromAccount;
     @ManyToOne
     @JoinColumn(name = "to_id")
     private Account toAccount;
-
+    @JsonIgnore
     @Transient
     private TransactionStrategy strategy;
-
-    @Getter
-    private BigDecimal amount;
-    @Getter
+    private TransactionStatus status;
     private TransactionType type;
+    private BigDecimal amount;
 
-    public Transaction(Account account, BigDecimal amount, TransactionType type) {
-        this(getFromAccount(account, type), getToAccount(account, type), amount, type);
-    }
-
-    public Transaction(Account from, Account to, BigDecimal amount, TransactionType type) {
-        this.fromAccount = from;
-        this.toAccount = to;
-        this.amount = amount;
-        this.type = type;
-        this.status = TransactionStatus.NEW;
-    }
-
-    private static Account getToAccount(Account account, TransactionType type) {
-        return type == TransactionType.DEPOSIT ? account : null;
-    }
-
-    private static Account getFromAccount(Account account, TransactionType type) {
-        return type == TransactionType.DEPOSIT ? null : account;
-    }
 
     public boolean execute() {
         return strategy.execute(this);

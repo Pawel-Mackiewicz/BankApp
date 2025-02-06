@@ -1,11 +1,13 @@
 package info.mackiewicz.bankapp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 @NoArgsConstructor
 @Entity
@@ -24,14 +26,15 @@ public class Account {
 
     @Getter
     @Setter
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner_id")
-    private Person owner;
+    private User owner;
 
     @Transient
     private final ReentrantLock lock = new ReentrantLock();
 
-    public Account(Person owner) {
+    public Account(User owner) {
         this.owner = owner;
         balance = BigDecimal.ZERO;
     }
@@ -61,7 +64,7 @@ public class Account {
         if (o == null || getClass() != o.getClass()) return false;
 
         Account account = (Account) o;
-        return id == account.id && balance.equals(account.balance);
+        return Objects.equals(id, account.id) && balance.equals(account.balance);
     }
 
     @Override

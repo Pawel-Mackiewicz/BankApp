@@ -1,42 +1,38 @@
 package info.mackiewicz.bankapp.service;
 
 import info.mackiewicz.bankapp.model.Account;
-import info.mackiewicz.bankapp.model.Person;
+import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.repository.AccountRepository;
-import info.mackiewicz.bankapp.repository.PersonRepository;
+import info.mackiewicz.bankapp.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final PersonRepository personRepository;
+    private final UserRepository userRepository;
 
     // Constructor injection of the repository
-    public AccountService(AccountRepository accountRepository, PersonRepository personRepository) {
+    public AccountService(AccountRepository accountRepository, UserRepository userRepository) {
         this.accountRepository = accountRepository;
-        this.personRepository = personRepository;
+        this.userRepository = userRepository;
     }
 
     // CREATE: Creates a new account with the given owner.
     @Transactional
-    public Account createAccount(Person owner) {
-        Person managedOwner = validateAndReattachOwner(owner);
-        Account account = new Account(managedOwner);
+    public Account createAccount(Integer userId) {
+        User user = validateAndReattachOwner(userId);
+        Account account = new Account(user);
         return accountRepository.save(account);
     }
 
-    private Person validateAndReattachOwner(Person owner) {
-        if (owner.getId() == null) {
-            throw new IllegalArgumentException("Owner must be saved before creating an account.");
-        }
-        return personRepository.findById(owner.getId())
-                .orElseThrow(() -> new RuntimeException("Person not found"));
+    private User validateAndReattachOwner(int userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     // READ: Retrieves an account by its ID. Throws an exception if not found.
@@ -46,10 +42,9 @@ public class AccountService {
     }
 
     // READ: Retrieves accounts by the owner's PESEL (unique identifier).
-    // If no accounts are found, returns an empty list.
     public List<Account> getAccountsByOwnersPESEL(String pesel) {
         return accountRepository.findAccountsByOwner_PESEL(pesel)
-                .orElseThrow(() -> new RuntimeException("Person with PESEL " + pesel + " does not have any account."));
+                .orElseThrow(() -> new RuntimeException("User with PESEL " + pesel + " does not have any account."));
     }
 
     // READ: Retrieves all accounts.
@@ -65,7 +60,7 @@ public class AccountService {
     }
 
     // UPDATE: Changes the owner of an account.
-    public Account changeAccountOwner(int id, Person owner) {
+    public Account changeAccountOwner(int id, User owner) {
         Account account = getAccountById(id);
         account.setOwner(owner);
         return accountRepository.save(account);

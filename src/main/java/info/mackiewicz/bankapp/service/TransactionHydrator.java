@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.service;
 
 import info.mackiewicz.bankapp.model.Transaction;
-import info.mackiewicz.bankapp.strategy.*;
+import info.mackiewicz.bankapp.service.strategy.*;
 import org.springframework.stereotype.Component;
 
 @Component

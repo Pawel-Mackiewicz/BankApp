@@ -1,11 +1,10 @@
 package info.mackiewicz.bankapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -13,8 +12,8 @@ import java.util.Collection;
 @Setter
 @Getter
 @Entity
-@Table(name = "People")
-public class Person {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,8 +21,10 @@ public class Person {
     private String name;
     private String lastname;
     private LocalDate dateOfBirth;
+    @Column(unique = true)
     private String PESEL;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "owner")
     private Collection<Account> accounts;
 

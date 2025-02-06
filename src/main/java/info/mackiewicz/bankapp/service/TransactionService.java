@@ -3,7 +3,6 @@ package info.mackiewicz.bankapp.service;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -45,7 +44,7 @@ public class TransactionService {
         );
     }
 
-    public void processTransaction(Transaction transaction) {
+    private void processTransaction(Transaction transaction) {
         //TODO: tu zrobić boolean tzn process() ma być boolean i na podstawie tego będziemy dalej działać z daną transakcją.
         processingService.processTransaction(transaction);
     }

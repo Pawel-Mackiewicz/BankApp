@@ -1,14 +1,14 @@
-package info.mackiewicz.bankapp.strategy;
+package info.mackiewicz.bankapp.service.strategy;
 
 import info.mackiewicz.bankapp.model.*;
 import info.mackiewicz.bankapp.utils.LoggingService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class WithdrawalTransaction implements TransactionStrategy {
+public class TransferTransaction implements TransactionStrategy {
     StrategyHelper strategyHelper;
 
-    public WithdrawalTransaction(StrategyHelper strategyHelper) {
+    public TransferTransaction(StrategyHelper strategyHelper) {
         this.strategyHelper = strategyHelper;
     }
 
@@ -16,7 +16,7 @@ public class WithdrawalTransaction implements TransactionStrategy {
     public boolean execute(Transaction currentTransaction) {
         try {
             strategyHelper.withdraw(currentTransaction);
-            //#FIXME Account.differenceFromWithdrawal(currentTransaction.getAmount());
+            strategyHelper.deposit(currentTransaction);
             return true;
         } catch (Exception e) {
             LoggingService.logErrorInMakingTransaction(currentTransaction, e.getMessage());

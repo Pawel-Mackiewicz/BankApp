@@ -3,10 +3,10 @@ package info.mackiewicz.bankapp.model;
 import lombok.Getter;
 
 public enum TransactionType {
-    TRANSFER("Transfer"),
-    DEPOSIT("Deposit"),
-    WITHDRAWAL("Withdrawal"),
-    FEE("Fee");
+    TRANSFER("TRANSFER"),
+    DEPOSIT("DEPOSIT"),
+    WITHDRAWAL("WITHDRAWAL"),
+    FEE("FEE");
 
     @Getter
     private final String displayName;

@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.strategy;
+package info.mackiewicz.bankapp.service.strategy;
 
 import info.mackiewicz.bankapp.model.Transaction;
 
