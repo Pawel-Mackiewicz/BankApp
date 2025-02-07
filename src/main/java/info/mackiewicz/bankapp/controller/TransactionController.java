@@ -90,16 +90,28 @@ public class TransactionController {
     // Process a specific transaction by its ID.
     // POST /api/transactions/{id}/process
     @PostMapping("/{id}/process")
-    public ResponseEntity<Transaction> processTransactionById(@PathVariable int id) {
-        transactionService.processTransactionById(id);
-        return ResponseEntity.ok(transactionService.getTransactionById(id));
+    public ResponseEntity<?> processTransactionById(@PathVariable int id) {
+        try {
+            transactionService.processTransactionById(id);
+            return ResponseEntity.ok(transactionService.getTransactionById(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("This transaction has already been processed. Can't do it again.");
+        }
     }
 
     // Process all transactions.
     // POST /api/transactions/process-all
     @PostMapping("/process-all")
-    public ResponseEntity<Void> processAllNewTransactions() {
-        transactionService.processAllNewTransactions();
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> processAllNewTransactions() {
+        try {
+            transactionService.processAllNewTransactions();
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("This transaction has already been processed. Can't do it again.");
+        }
     }
 }
