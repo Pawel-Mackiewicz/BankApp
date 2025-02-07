@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.controller;
 
 import info.mackiewicz.bankapp.model.Account;
-import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

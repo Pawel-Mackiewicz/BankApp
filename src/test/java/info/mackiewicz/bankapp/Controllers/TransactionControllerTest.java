@@ -28,7 +28,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SuppressWarnings("deprecation")
 @WebMvcTest(TransactionController.class)
 public class TransactionControllerTest {
 

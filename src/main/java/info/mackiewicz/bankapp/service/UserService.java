@@ -4,9 +4,8 @@ import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Optional;
+
 //BY chatGPT
 @Service
 public class UserService {

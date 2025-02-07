@@ -1,24 +1,27 @@
 package info.mackiewicz.bankapp.service;
 
 import info.mackiewicz.bankapp.model.TransactionStatus;
+import info.mackiewicz.bankapp.repository.TransactionRepository;
 import info.mackiewicz.bankapp.utils.AccountLockManager;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.utils.LoggingService;
 import info.mackiewicz.bankapp.utils.Util;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-public class TransactionProcessingService {
+public class TransactionProcessor {
 
     private final TransactionHydrator hydrator;
+    private final TransactionRepository repository;
 
-    public TransactionProcessingService(TransactionHydrator hydrator) {
+    public TransactionProcessor(TransactionHydrator hydrator, TransactionRepository repository) {
         this.hydrator = hydrator;
+        this.repository = repository;
     }
 
-    @Async
+    @Transactional
     public void processTransaction(Transaction transaction) {
         lockAndLogAccounts(transaction);
         try {
@@ -36,30 +39,39 @@ public class TransactionProcessingService {
     private void attemptTransaction(Transaction transaction) {
         LoggingService.logTransactionAttempt(transaction);
         if (transaction.isTransactionPossible()) {
+            changeTransactionStatus(transaction, TransactionStatus.IN_PROGRESS);
             executeTransaction(hydrateTransaction(transaction));
         } else {
             LoggingService.logFailedTransactionDueToInsufficientFunds(transaction);
+            changeTransactionStatus(transaction, TransactionStatus.FAULTY);
         }
     }
 
     private Transaction hydrateTransaction(Transaction transaction) {
+
         return hydrator.hydrate(transaction);
     }
 
     private void executeTransaction(Transaction transaction) {
-        transaction.setStatus(TransactionStatus.IN_PROGRESS);
         Util.sleep(200);
-        if (transaction.execute()) {
+
+        boolean success = transaction.execute();
+        if (success) {
             LoggingService.logSuccessfulTransaction(transaction);
-            transaction.setStatus(TransactionStatus.DONE);
+            changeTransactionStatus(transaction, TransactionStatus.DONE);
         } else {
             LoggingService.logErrorInMakingTransaction(transaction);
-            transaction.setStatus(TransactionStatus.FAULTY);
+            changeTransactionStatus(transaction, TransactionStatus.FAULTY);
         }
     }
 
     private void unlockAndLogAccounts(Transaction transaction) {
         AccountLockManager.unlockAccounts(transaction.getFromAccount(), transaction.getToAccount());
         LoggingService.logUnlockingAccounts(transaction);
+    }
+
+    public void changeTransactionStatus(Transaction transaction, TransactionStatus status) {
+        transaction.setStatus(status);
+        repository.save(transaction);
     }
 }

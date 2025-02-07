@@ -3,7 +3,6 @@ package info.mackiewicz.bankapp.service;
 import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.repository.AccountRepository;
-import info.mackiewicz.bankapp.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
