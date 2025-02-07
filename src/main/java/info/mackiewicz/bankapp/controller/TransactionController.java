@@ -51,6 +51,18 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
     }
 
+    //Delete transaction by its ID.
+    // DELETE /api/transactions/{id}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTransactionById(@PathVariable int id) {
+        try {
+            transactionService.deleteTransactionById(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     // Get a transaction by its ID.
     // GET /api/transactions/{id}
     @GetMapping("/{id}")
@@ -78,20 +90,16 @@ public class TransactionController {
     // Process a specific transaction by its ID.
     // POST /api/transactions/{id}/process
     @PostMapping("/{id}/process")
-    public ResponseEntity<Void> processTransactionById(@PathVariable int id) {
+    public ResponseEntity<Transaction> processTransactionById(@PathVariable int id) {
         transactionService.processTransactionById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(transactionService.getTransactionById(id));
     }
 
     // Process all transactions.
     // POST /api/transactions/process-all
     @PostMapping("/process-all")
-    public ResponseEntity<Void> processAllTransactions(@RequestBody List<Integer> transactionIds) {
-        // Retrieve transactions by their IDs.
-        List<Transaction> transactions = transactionIds.stream()
-                .map(transactionService::getTransactionById)
-                .toList();
-        transactionService.processAllTransactions(transactions);
+    public ResponseEntity<Void> processAllNewTransactions() {
+        transactionService.processAllNewTransactions();
         return ResponseEntity.ok().build();
     }
 }

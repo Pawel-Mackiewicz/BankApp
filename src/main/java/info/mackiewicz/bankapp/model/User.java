@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class User {
     @Column(unique = true)
     private String PESEL;
 
-    @JsonBackReference
+    @JsonManagedReference
     @OneToMany(mappedBy = "owner")
     private Collection<Account> accounts;
 

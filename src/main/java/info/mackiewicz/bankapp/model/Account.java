@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class Account {
 
     @Getter
     @Setter
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner_id")
     private User owner;
@@ -55,7 +56,9 @@ public class Account {
         balance = balance.subtract(amount);
     }
 
+    //There is two checks, one after another in every transaction. leave it?
     public boolean canWithdraw(BigDecimal amount) {
+
         return (balance.compareTo(amount) >= 0);
     }
 

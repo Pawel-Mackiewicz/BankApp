@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.service;
 
+import info.mackiewicz.bankapp.model.TransactionStatus;
 import info.mackiewicz.bankapp.utils.AccountLockManager;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.utils.LoggingService;
@@ -46,11 +47,14 @@ public class TransactionProcessingService {
     }
 
     private void executeTransaction(Transaction transaction) {
+        transaction.setStatus(TransactionStatus.IN_PROGRESS);
         Util.sleep(200);
         if (transaction.execute()) {
             LoggingService.logSuccessfulTransaction(transaction);
+            transaction.setStatus(TransactionStatus.DONE);
         } else {
             LoggingService.logErrorInMakingTransaction(transaction);
+            transaction.setStatus(TransactionStatus.FAULTY);
         }
     }
 

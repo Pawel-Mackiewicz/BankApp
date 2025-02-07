@@ -14,12 +14,12 @@ import java.util.List;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     // Constructor injection of the repository
-    public AccountService(AccountRepository accountRepository, UserRepository userRepository) {
+    public AccountService(AccountRepository accountRepository, UserService userService) {
         this.accountRepository = accountRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     // CREATE: Creates a new account with the given owner.
@@ -31,8 +31,7 @@ public class AccountService {
     }
 
     private User validateAndReattachOwner(int userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return userService.getUserById(userId);
     }
 
     // READ: Retrieves an account by its ID. Throws an exception if not found.
@@ -60,9 +59,9 @@ public class AccountService {
     }
 
     // UPDATE: Changes the owner of an account.
-    public Account changeAccountOwner(int id, User owner) {
+    public Account changeAccountOwner(int id, int newId) {
         Account account = getAccountById(id);
-        account.setOwner(owner);
+        account.setOwner(userService.getUserById(newId));
         return accountRepository.save(account);
     }
 

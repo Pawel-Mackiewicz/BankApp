@@ -37,8 +37,9 @@ public class UserService {
          * @param id the ID of the User
          * @return an Optional containing the User if found, otherwise empty
          */
-        public Optional<User> getUserById(Integer id) {
-            return userRepository.findById(id);
+        public User getUserById(Integer id) {
+            return userRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
         }
 
         /**
