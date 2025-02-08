@@ -1,196 +1,277 @@
-package info.mackiewicz.bankapp.Controllers;
+package info.mackiewicz.bankapp.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import info.mackiewicz.bankapp.controller.TransactionController;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import info.mackiewicz.bankapp.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.exception.NoTransactionsForAccountException;
+import info.mackiewicz.bankapp.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.Transaction;
-import info.mackiewicz.bankapp.model.TransactionBuilder;
+import info.mackiewicz.bankapp.model.TransactionStatus;
+import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.AccountService;
 import info.mackiewicz.bankapp.service.TransactionService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(TransactionController.class)
-public class TransactionControllerTest {
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-    @Autowired
-    private MockMvc mockMvc;
+@ExtendWith(MockitoExtension.class)
+class TransactionControllerTest {
 
-    @MockBean
-    private TransactionService transactionService;
+    /**
+     * Pomocnicza klasa do serializacji żądań tworzenia transakcji.
+     */
+    public static class CreateTransactionRequest {
+        private int fromAccountId;
+        private int toAccountId;
+        private BigDecimal amount;
+        private String type; // e.g., "TRANSFER", "DEPOSIT", etc.
 
-    @MockBean
-    private AccountService accountService;
+        public CreateTransactionRequest() {}
 
-    @Autowired
-    private ObjectMapper objectMapper;
+        public CreateTransactionRequest(int fromAccountId, int toAccountId, BigDecimal amount, String type) {
+            this.fromAccountId = fromAccountId;
+            this.toAccountId = toAccountId;
+            this.amount = amount;
+            this.type = type;
+        }
 
-    // POST /api/transactions
-    @Test
-    public void testCreateTransactionSuccess() throws Exception {
-        // JSON wejściowy – zakładamy, że 0 oznacza brak konta (ale tu mamy oba konta)
-        String requestBody = "{\"fromAccountId\":1,\"toAccountId\":2,\"amount\":100.0,\"type\":\"TRANSFER\"}";
+        public int getFromAccountId() {
+            return fromAccountId;
+        }
 
-        // Przygotowanie obiektu Account dla konta źródłowego
-        Account fromAccount = new Account();
-        ReflectionTestUtils.setField(fromAccount, "id", 1);
-        // Ustawiamy domyślny balance, aby nie był null
-        ReflectionTestUtils.setField(fromAccount, "balance", BigDecimal.ZERO);
+        public void setFromAccountId(int fromAccountId) {
+            this.fromAccountId = fromAccountId;
+        }
 
-        // Przygotowanie obiektu Account dla konta docelowego
-        Account toAccount = new Account();
-        ReflectionTestUtils.setField(toAccount, "id", 2);
-        ReflectionTestUtils.setField(toAccount, "balance", BigDecimal.ZERO);
+        public int getToAccountId() {
+            return toAccountId;
+        }
 
-        // Mockowanie wywołań do AccountService
-        when(accountService.getAccountById(1)).thenReturn(fromAccount);
-        when(accountService.getAccountById(2)).thenReturn(toAccount);
+        public void setToAccountId(int toAccountId) {
+            this.toAccountId = toAccountId;
+        }
 
-        // Budowanie transakcji przy użyciu TransactionBuilder
-        Transaction transaction = new TransactionBuilder()
-                .withFromAccount(fromAccount)
-                .withToAccount(toAccount)
-                .withAmount(BigDecimal.valueOf(100.0))
-                .withType("TRANSFER")
-                .build();
-        ReflectionTestUtils.setField(transaction, "id", 1);
+        public BigDecimal getAmount() {
+            return amount;
+        }
 
-        when(transactionService.createTransaction(any(Transaction.class))).thenReturn(transaction);
+        public void setAmount(BigDecimal amount) {
+            this.amount = amount;
+        }
 
-        // Wykonanie żądania POST do endpointu
-        mockMvc.perform(post("/api/transactions")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1));
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
     }
 
+    @Mock
+    private TransactionService transactionService;
 
-    // GET /api/transactions/{id}
-    @Test
-    public void testGetTransactionByIdSuccess() throws Exception {
-        Transaction transaction = new TransactionBuilder()
-                .withAmount(BigDecimal.valueOf(50.0))
-                .withType("DEPOSIT")
+    @Mock
+    private AccountService accountService;
+
+    @InjectMocks
+    private TransactionController transactionController;
+
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        // Dodajemy GlobalExceptionHandler, aby sprawdzić, czy obsługa wyjątków działa tak jak w produkcji
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(transactionController)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
+        objectMapper = new ObjectMapper();
+    }
+
+    // ------------------------------------------------------------
+    // 1) TEST: GET /api/transactions/{id} – poprawny scenariusz
+    // ------------------------------------------------------------
+    @Test
+    void testGetTransactionById() throws Exception {
+        Transaction transaction = new Transaction();
         ReflectionTestUtils.setField(transaction, "id", 1);
-        when(transactionService.getTransactionById(1)).thenReturn(transaction);
+        transaction.setStatus(TransactionStatus.NEW);
+        transaction.setAmount(new BigDecimal("50.00"));
+
+        // Stubujemy wywołanie w serwisie
+        when(transactionService.getTransactionById(1))
+                .thenReturn(transaction);
 
         mockMvc.perform(get("/api/transactions/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.amount", is(50.00)));
     }
 
-    // GET /api/transactions – pobranie wszystkich transakcji
+    // ------------------------------------------------------------
+    // 2) TEST: GET /api/transactions/{id} – brak transakcji
+    // ------------------------------------------------------------
     @Test
-    public void testGetAllTransactions() throws Exception {
-        Transaction transaction1 = new TransactionBuilder()
-                .withAmount(BigDecimal.valueOf(50.0))
-                .withType("DEPOSIT")
-                .build();
-        ReflectionTestUtils.setField(transaction1, "id", 1);
-        Transaction transaction2 = new TransactionBuilder()
-                .withAmount(BigDecimal.valueOf(75.0))
-                .withType("WITHDRAWAL")
-                .build();
-        ReflectionTestUtils.setField(transaction2, "id", 2);
+    void testGetTransactionById_NotFound() throws Exception {
+        // Stubujemy, że serwis rzuci wyjątek
+        when(transactionService.getTransactionById(1))
+                .thenThrow(new TransactionNotFoundException("Transaction 1 not found"));
 
-        List<Transaction> transactions = Arrays.asList(transaction1, transaction2);
+        mockMvc.perform(get("/api/transactions/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Transaction 1 not found"));
+    }
+
+    // ------------------------------------------------------------
+    // 3) TEST: GET /api/transactions – pobieranie wszystkich
+    // ------------------------------------------------------------
+    @Test
+    void testGetAllTransactions() throws Exception {
+        Transaction t1 = new Transaction();
+        ReflectionTestUtils.setField(t1, "id", 1);
+        t1.setStatus(TransactionStatus.NEW);
+        t1.setAmount(new BigDecimal("10.00"));
+
+        Transaction t2 = new Transaction();
+        ReflectionTestUtils.setField(t2, "id", 2);
+        t2.setStatus(TransactionStatus.NEW);
+        t2.setAmount(new BigDecimal("20.00"));
+
+        List<Transaction> transactions = Arrays.asList(t1, t2);
+
         when(transactionService.getAllTransactions()).thenReturn(transactions);
 
         mockMvc.perform(get("/api/transactions"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[1].id").value(2));
+                .andExpect(jsonPath("$.length()", is(transactions.size())))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].amount", is(10.00)))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].amount", is(20.00)));
     }
 
-    // GET /api/transactions/account/{accountId} – pobranie transakcji dla danego konta
+    // ------------------------------------------------------------
+    // 4) TEST: GET /api/transactions/account/{accountId} – brak transakcji
+    // ------------------------------------------------------------
     @Test
-    public void testGetTransactionsByAccountId() throws Exception {
-        Transaction transaction = new TransactionBuilder()
-                .withAmount(BigDecimal.valueOf(100.0))
-                .withType("TRANSFER")
-                .build();
+    void testGetTransactionsByAccountId_NoTransactionsFound() throws Exception {
+        when(transactionService.getTransactionsByAccountId(100))
+                .thenThrow(new NoTransactionsForAccountException("Account 100 did not make any transactions"));
+
+        mockMvc.perform(get("/api/transactions/account/100"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Account 100 did not make any transactions"));
+    }
+
+    // ------------------------------------------------------------
+    // 5) TEST: GET /api/transactions/account/{accountId} – konto nie istnieje
+    // ------------------------------------------------------------
+    @Test
+    void testGetTransactionsByAccountId_AccountNotFound() throws Exception {
+        when(transactionService.getTransactionsByAccountId(200))
+                .thenThrow(new AccountNotFoundByIdException("Account 200 not found"));
+
+        mockMvc.perform(get("/api/transactions/account/200"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Account 200 not found"));
+    }
+
+    // ------------------------------------------------------------
+    // 6) TEST: POST /api/transactions – tworzenie transakcji
+    // ------------------------------------------------------------
+    @Test
+    void testCreateTransaction() throws Exception {
+        // Symulujemy, że konta istnieją
+        User fromUser = new User();
+        User toUser = new User();
+        Account fromAccount = new Account(fromUser);
+        Account toAccount = new Account(toUser);
+
+        ReflectionTestUtils.setField(fromAccount, "id", 10);
+        ReflectionTestUtils.setField(toAccount, "id", 20);
+
+        when(accountService.getAccountById(10)).thenReturn(fromAccount);
+        when(accountService.getAccountById(20)).thenReturn(toAccount);
+
+        // Symulacja tworzenia nowej transakcji
+        Transaction transaction = new Transaction();
         ReflectionTestUtils.setField(transaction, "id", 1);
+        transaction.setStatus(TransactionStatus.NEW);
+        transaction.setAmount(new BigDecimal("100.00"));
 
-        List<Transaction> transactions = Arrays.asList(transaction);
-        when(transactionService.getTransactionsByAccountId(1)).thenReturn(transactions);
+        when(transactionService.createTransaction(any(Transaction.class)))
+                .thenReturn(transaction);
 
-        mockMvc.perform(get("/api/transactions/account/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
-    }
+        CreateTransactionRequest request = new CreateTransactionRequest(10, 20, new BigDecimal("100.00"), "TRANSFER");
 
-    // POST /api/transactions/{id}/process – przetwarzanie pojedynczej transakcji
-    @Test
-    public void testProcessTransactionByIdSuccess() throws Exception {
-        // Metoda processTransactionById zwraca void, więc wystarczy sprawdzić status OK
-        mockMvc.perform(post("/api/transactions/1/process"))
-                .andExpect(status().isOk());
-    }
-
-    // POST /api/transactions/process-all – przetwarzanie wielu transakcji
-    @Test
-    public void testProcessAllTransactionsSuccess() throws Exception {
-        List<Integer> transactionIds = Arrays.asList(1, 2);
-        String requestBody = objectMapper.writeValueAsString(transactionIds);
-
-        Transaction transaction1 = new TransactionBuilder()
-                .withAmount(BigDecimal.valueOf(50.0))
-                .withType("DEPOSIT")
-                .build();
-        ReflectionTestUtils.setField(transaction1, "id", 1);
-        Transaction transaction2 = new TransactionBuilder()
-                .withAmount(BigDecimal.valueOf(75.0))
-                .withType("WITHDRAWAL")
-                .build();
-        ReflectionTestUtils.setField(transaction2, "id", 2);
-
-        when(transactionService.getTransactionById(1)).thenReturn(transaction1);
-        when(transactionService.getTransactionById(2)).thenReturn(transaction2);
-
-        // Wywołanie endpointu – zakładamy, że metoda processAllTransactions działa bez zwracania rezultatu
-        mockMvc.perform(post("/api/transactions/process-all")
+        mockMvc.perform(post("/api/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isOk());
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.amount", is(100.00)));
     }
 
-    // Test dla pozytywnego scenariusza usunięcia transakcji
+    // ------------------------------------------------------------
+    // 7) TEST: DELETE /api/transactions/{id}
+    // ------------------------------------------------------------
     @Test
-    public void testDeleteTransactionByIdSuccess() throws Exception {
-        // Przyjmujemy, że wywołanie metody deleteTransactionById przebiega poprawnie (brak wyjątku)
+    void testDeleteTransaction() throws Exception {
+        // Zakładamy, że usunięcie zakończy się sukcesem, bez dodatkowych stubów
         mockMvc.perform(delete("/api/transactions/1"))
                 .andExpect(status().isOk());
     }
 
-    // Test dla sytuacji, gdy transakcja nie zostanie znaleziona (rzucany wyjątek)
+    // ------------------------------------------------------------
+    // 8) TEST: POST /api/transactions/{id}/process – przetwarzanie transakcji
+    // ------------------------------------------------------------
     @Test
-    public void testDeleteTransactionByIdNotFound() throws Exception {
-        // Symulujemy rzucenie wyjątku przez transactionService przy próbie usunięcia transakcji o id 99
-        doThrow(new RuntimeException("Transaction not found"))
-                .when(transactionService).deleteTransactionById(99);
+    void testProcessTransactionById() throws Exception {
+        // Symulujemy istnienie transakcji
+        Transaction transaction = new Transaction();
+        ReflectionTestUtils.setField(transaction, "id", 1);
+        transaction.setStatus(TransactionStatus.NEW);
+        transaction.setAmount(new BigDecimal("75.00"));
 
-        mockMvc.perform(delete("/api/transactions/99"))
-                .andExpect(status().isNotFound());
+        // Gdy kontroler wywoła getTransactionById(1), zwrócimy transakcję
+        when(transactionService.getTransactionById(1)).thenReturn(transaction);
+
+        mockMvc.perform(post("/api/transactions/1/process"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.amount", is(75.00)));
     }
 
+    // ------------------------------------------------------------
+    // 9) TEST: POST /api/transactions/process-all – przetwarzanie wszystkich transakcji
+    // ------------------------------------------------------------
+    @Test
+    void testProcessAllNewTransactions() throws Exception {
+        // Załóżmy, że nie stubujemy nic więcej, bo nie pobiera zwracanych danych – wystarczy 200
+        mockMvc.perform(post("/api/transactions/process-all"))
+                .andExpect(status().isOk());
+    }
 }

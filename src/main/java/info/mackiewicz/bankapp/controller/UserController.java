@@ -31,15 +31,9 @@ public class UserController {
     // GET /api/users/{id}
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        try {
             User userOpt = userService.getUserById(id);
             return ResponseEntity.ok(userOpt);
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
-                }
+    }
     // Retrieve all Users
     // GET /api/users
     @GetMapping
@@ -52,31 +46,19 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
         // Ensure the User has the correct ID
-        try {
             user.setId(id);
             User updated = userService.updateUser(user);
             return ResponseEntity
                     .ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
     }
 
     // Delete a User by ID
     // DELETE /api/users/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
-        try {
             userService.deleteUser(id);
             return ResponseEntity
                     .noContent()
                     .build();
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
     }
 }

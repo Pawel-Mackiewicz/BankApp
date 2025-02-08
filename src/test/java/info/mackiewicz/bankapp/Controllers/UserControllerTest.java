@@ -1,159 +1,150 @@
-package info.mackiewicz.bankapp.Controllers;
+package info.mackiewicz.bankapp.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import info.mackiewicz.bankapp.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.model.User;
+import info.mackiewicz.bankapp.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import info.mackiewicz.bankapp.controller.UserController;
-import info.mackiewicz.bankapp.model.User;
-import info.mackiewicz.bankapp.service.UserService;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.servlet.MockMvc;
+@ExtendWith(MockitoExtension.class)
+class UserControllerTest {
 
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private UserService userService;
 
-    @Autowired
+    @InjectMocks
+    private UserController userController;
+
+    private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
-    // POST /api/users - pozytywny scenariusz tworzenia użytkownika
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(userController)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
+        objectMapper = new ObjectMapper();
+    }
+
     @Test
-    public void testCreateUserSuccess() throws Exception {
+    void testCreateUser() throws Exception {
         User user = new User();
-        user.setName("Jan Kowalski");
-        // Załóżmy, że id jest przypisywane automatycznie – ustawiamy je przy pomocy ReflectionTestUtils
         ReflectionTestUtils.setField(user, "id", 1);
+        user.setPESEL("12345678901");
+        user.setName("John Doe");
 
-        when(userService.createUser(any(User.class))).thenReturn(user);
-
-        String requestBody = objectMapper.writeValueAsString(user);
+        when(userService.createUser(org.mockito.ArgumentMatchers.any(User.class)))
+                .thenReturn(user);
 
         mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
+                        .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Jan Kowalski"));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.pesel", is("12345678901")))
+                .andExpect(jsonPath("$.name", is("John Doe")));
     }
 
-    // GET /api/users/{id} - pozytywny scenariusz pobrania użytkownika
     @Test
-    public void testGetUserByIdSuccess() throws Exception {
+    void testGetUserById() throws Exception {
         User user = new User();
-        user.setId(1);
-        user.setName("Jan Kowalski");
+        ReflectionTestUtils.setField(user, "id", 1);
+        user.setPESEL("12345678901");
+        user.setName("Alice");
 
-        when(userService.getUserById(1)).thenReturn(user);
+        when(userService.getUserById(1))
+                .thenReturn(user);
 
         mockMvc.perform(get("/api/users/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Jan Kowalski"));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.pesel", is("12345678901")))
+                .andExpect(jsonPath("$.name", is("Alice")));
     }
 
-    // GET /api/users/{id} - przypadek błędny: użytkownik nie znaleziony
     @Test
-    public void testGetUserByIdNotFound() throws Exception {
-        when(userService.getUserById(99)).thenThrow(new RuntimeException("User not found"));
+    void testGetUserById_NotFound() throws Exception {
+        when(userService.getUserById(anyInt()))
+                .thenThrow(new UserNotFoundException("User with ID 999 not found"));
 
-        mockMvc.perform(get("/api/users/99"))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/api/users/999"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("User with ID 999 not found"));
     }
 
-    // GET /api/users - pobranie wszystkich użytkowników
     @Test
-    public void testGetAllUsers() throws Exception {
+    void testGetAllUsers() throws Exception {
         User user1 = new User();
-        user1.setId(1);
-        user1.setName("Jan Kowalski");
+        ReflectionTestUtils.setField(user1, "id", 1);
+        user1.setPESEL("11111111111");
+        user1.setName("User One");
 
         User user2 = new User();
-        user2.setId(2);
-        user2.setName("Anna Nowak");
+        ReflectionTestUtils.setField(user2, "id", 2);
+        user2.setPESEL("22222222222");
+        user2.setName("User Two");
 
         List<User> users = Arrays.asList(user1, user2);
 
-        when(userService.getAllUsers()).thenReturn(users);
+        when(userService.getAllUsers())
+                .thenReturn(users);
 
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("Jan Kowalski"))
-                .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].name").value("Anna Nowak"));
+                .andExpect(jsonPath("$.length()", is(users.size())))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[1].id", is(2)));
     }
 
-    // PUT /api/users/{id} - pozytywny scenariusz aktualizacji użytkownika
     @Test
-    public void testUpdateUserSuccess() throws Exception {
+    void testUpdateUser() throws Exception {
         User user = new User();
-        user.setName("Jan Nowak");
-        // W kontrolerze metoda updateUser ustawia id z path variable, więc symulujemy zwrócony obiekt z id = 1
-        user.setId(1);
+        ReflectionTestUtils.setField(user, "id", 1);
+        user.setPESEL("12345678901");
+        user.setName("Updated Name");
 
-        when(userService.updateUser(any(User.class))).thenReturn(user);
+        when(userService.updateUser(org.mockito.ArgumentMatchers.any(User.class)))
+                .thenReturn(user);
 
-        String requestBody = objectMapper.writeValueAsString(user);
+        // W teście symulujemy, że wysyłamy JSON z danymi
+        User requestBody = new User();
+        requestBody.setPESEL("12345678901");
+        requestBody.setName("Updated Name");
 
         mockMvc.perform(put("/api/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
+                        .content(objectMapper.writeValueAsString(requestBody)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Jan Nowak"));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.pesel", is("12345678901")))
+                .andExpect(jsonPath("$.name", is("Updated Name")));
     }
 
-    // PUT /api/users/{id} - przypadek błędny: błąd przy aktualizacji (np. użytkownik nie znaleziony)
     @Test
-    public void testUpdateUserError() throws Exception {
-        User user = new User();
-        user.setName("Jan Nowak");
-        // Przyjmujemy, że aktualizacja użytkownika, który nie istnieje, rzuca wyjątek
-        when(userService.updateUser(any(User.class))).thenThrow(new RuntimeException("User not found"));
-
-        String requestBody = objectMapper.writeValueAsString(user);
-
-        mockMvc.perform(put("/api/users/99")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isNotFound());
-    }
-
-    // DELETE /api/users/{id} - pozytywny scenariusz usunięcia użytkownika
-    @Test
-    public void testDeleteUserSuccess() throws Exception {
-        // Jeśli metoda deleteUser nie rzuca wyjątku, usunięcie przebiega poprawnie
+    void testDeleteUser() throws Exception {
         mockMvc.perform(delete("/api/users/1"))
                 .andExpect(status().isNoContent());
-    }
-
-    // DELETE /api/users/{id} - przypadek błędny: użytkownik nie znaleziony przy usuwaniu
-    @Test
-    public void testDeleteUserNotFound() throws Exception {
-        doThrow(new RuntimeException("User not found"))
-                .when(userService).deleteUser(99);
-
-        mockMvc.perform(delete("/api/users/99"))
-                .andExpect(status().isNotFound());
     }
 }

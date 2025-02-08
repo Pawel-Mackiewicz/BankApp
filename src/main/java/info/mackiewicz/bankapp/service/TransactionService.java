@@ -1,20 +1,25 @@
 package info.mackiewicz.bankapp.service;
 
+import info.mackiewicz.bankapp.exception.*;
+import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.model.TransactionStatus;
 import info.mackiewicz.bankapp.repository.TransactionRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class TransactionService {
     private final TransactionRepository repository;
     private final TransactionProcessor processor;
+    private final AccountService accountService;
 
-    TransactionService(TransactionRepository repository, TransactionProcessor processor) {
+    TransactionService(TransactionRepository repository, TransactionProcessor processor, AccountService accountService) {
         this.repository = repository;
         this.processor = processor;
+        this.accountService = accountService;
     }
 
     public Transaction createTransaction(Transaction transaction) {
@@ -28,7 +33,7 @@ public class TransactionService {
 
     public Transaction getTransactionById(int id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transaction " + id + " not found"));
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction " + id + " not found"));
     }
 
     public List<Transaction> getAllTransactions() {
@@ -40,11 +45,14 @@ public class TransactionService {
     }
 
     public List<Transaction> getTransactionsByAccountId(int accountId) {
-        return repository.findByAccountId(accountId)
-                .orElseThrow(() -> new RuntimeException("Account " + accountId + " didn't made any transactions or don't exist"));
+        //rzuci wyjątek, jeżeli konto nie istnieje.
+        Account account = accountService.getAccountById(accountId);
+
+            return repository.findByAccountId(accountId)
+                    .orElseThrow(() -> new NoTransactionsForAccountException("Account " + accountId + " did not make any transactions"));
     }
 
-    //***********TRANSACTION PROCESSING************
+    //*********** TRANSACTION PROCESSING ************
     @Async
     public void processTransactionById(int transactionId) {
         Transaction transaction = getTransactionById(transactionId);
@@ -54,15 +62,13 @@ public class TransactionService {
     @Async
     public void processAllNewTransactions() {
         List<Transaction> transactions = getAllNewTransactions();
-        transactions.forEach(
-                this::processTransaction
-        );
+        transactions.forEach(this::processTransaction);
     }
 
     private void processTransaction(Transaction transaction) {
         switch (transaction.getStatus()) {
-            case DONE -> throw new RuntimeException("Transaction " + transaction.getId() + " has already been processed");
-            case FAULTY -> throw new RuntimeException("Transaction " + transaction.getId() + " cannot be processed");
+            case DONE -> throw new TransactionAlreadyProcessedException("Transaction " + transaction.getId() + " has already been processed");
+            case FAULTY -> throw new TransactionCannotBeProcessedException("Transaction " + transaction.getId() + " cannot be processed");
             case NEW -> processor.processTransaction(transaction);
         }
     }

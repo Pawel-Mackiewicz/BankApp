@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,11 @@ public class Account {
     public Account(User owner) {
         this.owner = owner;
         balance = BigDecimal.ZERO;
+    }
+
+    @JsonProperty("owner_id")
+    public Integer getOwnerId() {
+        return owner != null ? owner.getId() : null;
     }
 
     public void lock() {

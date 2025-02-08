@@ -22,16 +22,9 @@ public class AccountController {
     // GET /api/accounts/{id} - Retrieve an account by its ID
     @GetMapping("/{id}")
     public ResponseEntity<Account> getAccountById(@PathVariable int id) {
-        try {
             Account account = accountService.getAccountById(id);
             return ResponseEntity
                     .ok(account);
-        } catch (RuntimeException e) {
-            return ResponseEntity.
-                    status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
-
     }
 
     // GET /api/accounts - Retrieve all accounts
@@ -50,14 +43,8 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<Account> createAccount(@RequestBody CreateAccountRequest request) {
-        try {
             Account account = accountService.createAccount(request.getUserId());
             return ResponseEntity.status(HttpStatus.CREATED).body(account);
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
     }
 
 
@@ -65,28 +52,15 @@ public class AccountController {
     // DELETE /api/accounts/{id} - Delete an account by its ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable int id) {
-        try {
             accountService.deleteAccountById(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
     }
 
     // PUT /api/accounts/{id}/change-owner - Change the owner of an account
     // The request body should contain a User object representing the new owner
     @PutMapping("/{id}/change-owner/{newOwnerId}")
     public ResponseEntity<Account> changeAccountOwner(@PathVariable int id, @PathVariable int newOwnerId) {
-
-        try {
             Account account = accountService.changeAccountOwner(id, newOwnerId);
             return ResponseEntity.ok(account);
-        } catch (RuntimeException e) {
-           return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
     }
 }

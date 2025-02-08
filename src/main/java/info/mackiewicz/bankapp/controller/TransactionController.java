@@ -55,12 +55,8 @@ public class TransactionController {
     // DELETE /api/transactions/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransactionById(@PathVariable int id) {
-        try {
             transactionService.deleteTransactionById(id);
             return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     // Get a transaction by its ID.
@@ -91,27 +87,15 @@ public class TransactionController {
     // POST /api/transactions/{id}/process
     @PostMapping("/{id}/process")
     public ResponseEntity<?> processTransactionById(@PathVariable int id) {
-        try {
             transactionService.processTransactionById(id);
             return ResponseEntity.ok(transactionService.getTransactionById(id));
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body("This transaction has already been processed. Can't do it again.");
-        }
     }
 
     // Process all transactions.
     // POST /api/transactions/process-all
     @PostMapping("/process-all")
     public ResponseEntity<String> processAllNewTransactions() {
-        try {
             transactionService.processAllNewTransactions();
             return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body("This transaction has already been processed. Can't do it again.");
-        }
     }
 }
