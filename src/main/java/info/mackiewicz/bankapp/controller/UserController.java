@@ -1,11 +1,17 @@
 package info.mackiewicz.bankapp.controller;
 
 import info.mackiewicz.bankapp.model.User;
+import info.mackiewicz.bankapp.service.UserRegistrationService;
 import info.mackiewicz.bankapp.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 //BY CHATGPT
 @RestController
@@ -13,19 +19,33 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserRegistrationService registrationService;
 
     // Constructor injection for UserService
-    public UserController(UserService userService) {
+    public UserController(UserService userService,
+                          UserRegistrationService registrationService) {
         this.userService = userService;
+        this.registrationService = registrationService;
     }
 
-    // Create a new User
-    // POST /api/users
+    // Endpoint rejestracji użytkownika przyjmujący DTO
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User created = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDto registrationDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
+        try {
+            User created = registrationService.registerUser(registrationDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
+
 
     // Retrieve a User by ID
     // GET /api/users/{id}
