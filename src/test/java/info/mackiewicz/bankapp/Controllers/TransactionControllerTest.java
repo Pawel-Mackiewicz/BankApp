@@ -1,6 +1,8 @@
-package info.mackiewicz.bankapp.controller;
+package info.mackiewicz.bankapp.Controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import info.mackiewicz.bankapp.controller.GlobalExceptionHandler;
+import info.mackiewicz.bankapp.controller.TransactionController;
 import info.mackiewicz.bankapp.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.exception.NoTransactionsForAccountException;
 import info.mackiewicz.bankapp.exception.TransactionNotFoundException;
@@ -15,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -28,11 +29,8 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,38 +51,6 @@ class TransactionControllerTest {
             this.fromAccountId = fromAccountId;
             this.toAccountId = toAccountId;
             this.amount = amount;
-            this.type = type;
-        }
-
-        public int getFromAccountId() {
-            return fromAccountId;
-        }
-
-        public void setFromAccountId(int fromAccountId) {
-            this.fromAccountId = fromAccountId;
-        }
-
-        public int getToAccountId() {
-            return toAccountId;
-        }
-
-        public void setToAccountId(int toAccountId) {
-            this.toAccountId = toAccountId;
-        }
-
-        public BigDecimal getAmount() {
-            return amount;
-        }
-
-        public void setAmount(BigDecimal amount) {
-            this.amount = amount;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
             this.type = type;
         }
     }

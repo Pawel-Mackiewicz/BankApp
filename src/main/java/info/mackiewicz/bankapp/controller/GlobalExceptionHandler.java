@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.controller;
 
 import info.mackiewicz.bankapp.exception.*;
-import info.mackiewicz.bankapp.exception.DuplicatedUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DuplicatedUserException.class)
-    public ResponseEntity<String> handleDuplicateUserException(DuplicatedUserException ex) {
+    public ResponseEntity<String> handleDuplicatedUserException(DuplicatedUserException ex) {
         logger.error("Duplicate user error: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
@@ -68,6 +67,30 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TransactionCannotBeProcessedException.class)
     public ResponseEntity<String> handleTransactionCannotBeProcessedException(TransactionCannotBeProcessedException ex) {
         logger.error("Transaction cannot be processed: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(TransactionAmountNotSpecifiedException.class)
+    public ResponseEntity<String> handleTransactionAmountNotSpecifiedException(TransactionAmountNotSpecifiedException ex) {
+        logger.error("Transaction amount not specified: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(TransactionTypeNotSpecifiedException.class)
+    public ResponseEntity<String> handleTransactionTypeNotSpecifiedException(TransactionTypeNotSpecifiedException ex) {
+        logger.error("Transaction type not specified: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(TransactionSourceAccountNotSpecifiedException.class)
+    public ResponseEntity<String> handleTransactionSourceAccountNotSpecifiedException(TransactionSourceAccountNotSpecifiedException ex) {
+        logger.error("Transaction source account not specified: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(TransactionDestinationAccountNotSpecifiedException.class)
+    public ResponseEntity<String> handleTransactionDestinationAccountNotSpecifiedException(TransactionDestinationAccountNotSpecifiedException ex) {
+        logger.error("Transaction destination account not specified: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 

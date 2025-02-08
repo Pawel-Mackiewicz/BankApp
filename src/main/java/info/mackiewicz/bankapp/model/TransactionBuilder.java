@@ -1,18 +1,21 @@
 package info.mackiewicz.bankapp.model;
 
+import info.mackiewicz.bankapp.exception.TransactionAmountNotSpecifiedException;
+import info.mackiewicz.bankapp.exception.TransactionDestinationAccountNotSpecifiedException;
+import info.mackiewicz.bankapp.exception.TransactionSourceAccountNotSpecifiedException;
+import info.mackiewicz.bankapp.exception.TransactionTypeNotSpecifiedException;
 import info.mackiewicz.bankapp.service.AccountService;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-@Scope("prototype")
 @Component
+@Scope("prototype")
 public class TransactionBuilder {
 
     private final AccountService accountService;
 
-    private static final Integer BANK_ACCOUNT_ID = -1;
     private Account sourceAccount;
     private Account destinationAccount;
     private TransactionType type;
@@ -21,7 +24,7 @@ public class TransactionBuilder {
 
     public TransactionBuilder(AccountService accountService) {
         this.accountService = accountService;
-        status = TransactionStatus.NEW;
+        this.status = TransactionStatus.NEW;
     }
 
     public TransactionBuilder withFromAccount(Integer accountId) {
@@ -61,11 +64,19 @@ public class TransactionBuilder {
     }
 
     private void validate() {
-        if (sourceAccount == null && !TransactionType.DEPOSIT.equals(type)) {
-            throw new IllegalArgumentException("You must specify a source account");
+        if (amount == null) {
+            throw new TransactionAmountNotSpecifiedException();
         }
-        if (destinationAccount == null && !TransactionType.WITHDRAWAL.equals(type)) {
-                throw new IllegalArgumentException("You must specify a destination account");
+        if (type == null) {
+            throw new TransactionTypeNotSpecifiedException();
+        }
+        // Dla transakcji innych niż DEPOSIT wymagana jest informacja o koncie źródłowym
+        if (sourceAccount == null && !TransactionType.DEPOSIT.equals(type)) {
+            throw new TransactionSourceAccountNotSpecifiedException();
+        }
+        // Dla DEPOSIT wymaga się ustawienia konta docelowego
+        if (destinationAccount == null && TransactionType.DEPOSIT.equals(type)) {
+            throw new TransactionDestinationAccountNotSpecifiedException();
         }
     }
 }

@@ -1,6 +1,8 @@
-package info.mackiewicz.bankapp.controller;
+package info.mackiewicz.bankapp.Controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import info.mackiewicz.bankapp.controller.GlobalExceptionHandler;
+import info.mackiewicz.bankapp.controller.UserController;
 import info.mackiewicz.bankapp.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.UserService;
