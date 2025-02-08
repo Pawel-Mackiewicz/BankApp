@@ -1,30 +1,46 @@
 package info.mackiewicz.bankapp.model;
 
+import info.mackiewicz.bankapp.service.AccountService;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Scope("prototype")
 @Component
 public class TransactionBuilder {
 
-    private Account fromAccount;
-    private Account toAccount;
+    private final AccountService accountService;
+
+    private static final Integer BANK_ACCOUNT_ID = -1;
+    private Account sourceAccount;
+    private Account destinationAccount;
     private TransactionType type;
-    private TransactionStatus status = TransactionStatus.NEW;
+    private TransactionStatus status;
     private BigDecimal amount;
 
-    public TransactionBuilder withFromAccount(Account account) {
-        this.fromAccount = account;
+    public TransactionBuilder(AccountService accountService) {
+        this.accountService = accountService;
+        status = TransactionStatus.NEW;
+    }
+
+    public TransactionBuilder withFromAccount(Integer accountId) {
+        this.sourceAccount = accountId == null ? null : accountService.getAccountById(accountId);
         return this;
     }
 
-    public TransactionBuilder withToAccount(Account account) {
-        this.toAccount = account;
+    public TransactionBuilder withToAccount(Integer accountId) {
+        this.destinationAccount = accountId == null ? null : accountService.getAccountById(accountId);
         return this;
     }
 
     public TransactionBuilder withType(String type) {
         this.type = TransactionType.valueOf(type.toUpperCase());
+        return this;
+    }
+
+    public TransactionBuilder withType(TransactionType type) {
+        this.type = type;
         return this;
     }
 
@@ -34,13 +50,22 @@ public class TransactionBuilder {
     }
 
     public Transaction build() {
+        validate();
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
         transaction.setType(type);
         transaction.setStatus(status);
-        transaction.setFromAccount(fromAccount);
-        transaction.setToAccount(toAccount);
+        transaction.setSourceAccount(sourceAccount);
+        transaction.setDestinationAccount(destinationAccount);
         return transaction;
     }
 
+    private void validate() {
+        if (sourceAccount == null && !TransactionType.DEPOSIT.equals(type)) {
+            throw new IllegalArgumentException("You must specify a source account");
+        }
+        if (destinationAccount == null && !TransactionType.WITHDRAWAL.equals(type)) {
+                throw new IllegalArgumentException("You must specify a destination account");
+        }
+    }
 }

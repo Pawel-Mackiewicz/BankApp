@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FeeTransaction implements TransactionStrategy {
-    StrategyHelper strategyHelper;
+
+    private final StrategyHelper strategyHelper;
 
     public FeeTransaction(StrategyHelper strategyHelper) {
         this.strategyHelper = strategyHelper;
@@ -16,8 +17,6 @@ public class FeeTransaction implements TransactionStrategy {
     public boolean execute(Transaction currentTransaction) {
         try {
             strategyHelper.withdraw(currentTransaction);
-//            TODO: Account.BANK.deposit(currentTransaction.getAmount());
-//            TODO: Account.differenceFromWithdrawal(currentTransaction.getAmount());
             return true;
         } catch (Exception e) {
             LoggingService.logErrorInMakingTransaction(currentTransaction, e.getMessage());

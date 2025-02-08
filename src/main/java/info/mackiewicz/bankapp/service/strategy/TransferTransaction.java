@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TransferTransaction implements TransactionStrategy {
-    StrategyHelper strategyHelper;
+
+    private final StrategyHelper strategyHelper;
 
     public TransferTransaction(StrategyHelper strategyHelper) {
         this.strategyHelper = strategyHelper;

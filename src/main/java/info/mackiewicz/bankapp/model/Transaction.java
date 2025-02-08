@@ -17,10 +17,10 @@ public class Transaction {
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "from_id")
-    private Account fromAccount;
+    private Account sourceAccount;
     @ManyToOne
     @JoinColumn(name = "to_id")
-    private Account toAccount;
+    private Account destinationAccount;
     @JsonIgnore
     @Transient
     private TransactionStrategy strategy;
@@ -35,9 +35,9 @@ public class Transaction {
 
     public boolean isTransactionPossible() {
         if (type == TransactionType.DEPOSIT) {
-            return toAccount != null;
+            return destinationAccount != null;
         }
-        return fromAccount != null && fromAccount.canWithdraw(amount);
+        return sourceAccount != null && sourceAccount.canWithdraw(amount);
     }
 
 }

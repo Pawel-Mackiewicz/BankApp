@@ -23,16 +23,16 @@ public class LoggingService {
     }
 
     public static void logLockingAccounts(Transaction transaction) {
-        Account from = transaction.getFromAccount();
-        Account to = transaction.getToAccount();
+        Account from = transaction.getSourceAccount();
+        Account to = transaction.getDestinationAccount();
         String message = String.format("Transaction ID: %s, Locked accounts: %s, %s, Thread: %s",
                 transaction.getId(), formatAccountInfo(from), formatAccountInfo(to), Thread.currentThread().getName());
         LOCKS_LOGGER.info(message);
     }
 
     public static void logUnlockingAccounts(Transaction transaction) {
-        Account from = transaction.getFromAccount();
-        Account to = transaction.getToAccount();
+        Account from = transaction.getSourceAccount();
+        Account to = transaction.getDestinationAccount();
         String message = String.format("Transaction ID: %s, Unlocked accounts: %s, %s, Thread: %s",
                 transaction.getId(), formatAccountInfo(from), formatAccountInfo(to), Thread.currentThread().getName());
         LOCKS_LOGGER.info(message);
@@ -46,10 +46,10 @@ public class LoggingService {
                 .append("\tAmount: ").append(transaction.getAmount()).append("\n");
 
         if (transaction.getType() != TransactionType.DEPOSIT) {
-            sb.append("\tFrom: ").append(formatAccountInfo(transaction.getFromAccount())).append("\n");
+            sb.append("\tFrom: ").append(formatAccountInfo(transaction.getSourceAccount())).append("\n");
         }
         if (transaction.getType() != TransactionType.FEE && transaction.getType() != TransactionType.WITHDRAWAL) {
-            sb.append("\tTo: ").append(formatAccountInfo(transaction.getToAccount())).append("\n");
+            sb.append("\tTo: ").append(formatAccountInfo(transaction.getDestinationAccount())).append("\n");
         }
         TRANSACTION_LOGGER.info(sb.toString());
     }
@@ -61,20 +61,20 @@ public class LoggingService {
             case TRANSFER -> sb.append(String.format(
                     "\n\tAmount Sent: %.2f\n\tFrom: %s\n\tTo: %s",
                     transaction.getAmount(),
-                    formatAccountInfo(transaction.getFromAccount()),
-                    formatAccountInfo(transaction.getToAccount())));
+                    formatAccountInfo(transaction.getSourceAccount()),
+                    formatAccountInfo(transaction.getDestinationAccount())));
             case DEPOSIT -> sb.append(String.format(
                     "\n\tDeposited: %.2f\n\tTo: %s",
                     transaction.getAmount(),
-                    formatAccountInfo(transaction.getToAccount())));
+                    formatAccountInfo(transaction.getDestinationAccount())));
             case WITHDRAWAL -> sb.append(String.format(
                     "\n\tWithdrawn: %.2f\n\tFrom: %s",
                     transaction.getAmount(),
-                    formatAccountInfo(transaction.getFromAccount())));
+                    formatAccountInfo(transaction.getSourceAccount())));
             case FEE -> sb.append(String.format(
                     "\n\tFee: %.2f\n\tFrom: %s",
                     transaction.getAmount(),
-                    formatAccountInfo(transaction.getFromAccount())));
+                    formatAccountInfo(transaction.getSourceAccount())));
         }
         TRANSACTION_LOGGER.info(sb.toString());
     }

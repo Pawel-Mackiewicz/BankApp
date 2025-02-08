@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WithdrawalTransaction implements TransactionStrategy {
-    StrategyHelper strategyHelper;
+
+    private final StrategyHelper strategyHelper;
 
     public WithdrawalTransaction(StrategyHelper strategyHelper) {
         this.strategyHelper = strategyHelper;

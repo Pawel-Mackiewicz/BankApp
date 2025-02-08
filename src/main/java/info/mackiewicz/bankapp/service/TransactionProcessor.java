@@ -32,12 +32,13 @@ public class TransactionProcessor {
     }
 
     private void lockAndLogAccounts(Transaction transaction) {
-        AccountLockManager.lockAccounts(transaction.getToAccount(), transaction.getFromAccount());
+        AccountLockManager.lockAccounts(transaction.getDestinationAccount(), transaction.getSourceAccount());
         LoggingService.logLockingAccounts(transaction);
     }
 
     private void attemptTransaction(Transaction transaction) {
         LoggingService.logTransactionAttempt(transaction);
+
         if (transaction.isTransactionPossible()) {
             changeTransactionStatus(transaction, TransactionStatus.IN_PROGRESS);
             executeTransaction(hydrateTransaction(transaction));
@@ -66,7 +67,7 @@ public class TransactionProcessor {
     }
 
     private void unlockAndLogAccounts(Transaction transaction) {
-        AccountLockManager.unlockAccounts(transaction.getFromAccount(), transaction.getToAccount());
+        AccountLockManager.unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
         LoggingService.logUnlockingAccounts(transaction);
     }
 

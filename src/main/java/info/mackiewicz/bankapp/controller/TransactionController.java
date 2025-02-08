@@ -1,9 +1,7 @@
 package info.mackiewicz.bankapp.controller;
 
-import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.model.TransactionBuilder;
-import info.mackiewicz.bankapp.service.AccountService;
 import info.mackiewicz.bankapp.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +15,13 @@ import java.util.List;
 public class TransactionController {
 
     private final TransactionService transactionService;
-    private final AccountService accountService;
+    private final TransactionBuilder transactionBuilder;
 
     // Constructor injection
-    public TransactionController(TransactionService transactionService, AccountService accountService) {
+    public TransactionController(TransactionService transactionService,
+                                 TransactionBuilder transactionBuilder) {
         this.transactionService = transactionService;
-        this.accountService = accountService;
+        this.transactionBuilder = transactionBuilder;
     }
 
     // Create a new transaction.
@@ -30,18 +29,9 @@ public class TransactionController {
     //TODO: REFACTOR
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody CreateTransactionRequest request) {
-
-        Account fromAccount;
-        Account toAccount;
-
-        if (request.getFromAccountId() == 0) fromAccount = null;
-        else fromAccount = accountService.getAccountById(request.getFromAccountId());
-        if (request.getToAccountId() == 0) toAccount = null;
-        else toAccount = accountService.getAccountById(request.getToAccountId());
-
-        Transaction transaction = new TransactionBuilder()
-                .withFromAccount(fromAccount) // could be null for DEPOSIT
-                .withToAccount(toAccount)  // could be null for WITHDRAW
+        Transaction transaction = transactionBuilder
+                .withFromAccount(request.getFromAccountId()) // could be null for DEPOSIT
+                .withToAccount(request.getToAccountId())  // could be null for WITHDRAW, FEE
                 .withAmount(request.getAmount())
                 .withType(request.getType())
                 .build();
