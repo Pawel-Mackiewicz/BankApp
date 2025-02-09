@@ -10,20 +10,20 @@ public class UserRegistrationService {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final AccountService accountService;
 
-    public UserRegistrationService(UserService userService, UserMapper userMapper) {
+    public UserRegistrationService(UserService userService, UserMapper userMapper, AccountService accountService) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.accountService = accountService;
     }
 
     public User registerUser(UserRegistrationDto registrationDto) {
-        // Walidacja zgodności hasła i potwierdzenia
-        if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
-            throw new IllegalArgumentException("Passwords do not match");
-        }
-        // Mapowanie DTO do encji (pole confirmPassword pomijamy)
         User user = userMapper.toUser(registrationDto);
-        // Delegujemy tworzenie użytkownika do warstwy serwisu
-        return userService.createUser(user);
+        User createdUser = userService.createUser(user);
+
+        accountService.createAccount(createdUser.getId());
+
+        return createdUser;
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
-    @Query("SELECT t FROM Transaction t WHERE t.fromAccount.id = :accountId OR t.toAccount.id = :accountId")
+    @Query("SELECT t FROM Transaction t WHERE t.sourceAccount.id = :accountId OR t.destinationAccount.id = :accountId")
     Optional<List<Transaction>> findByAccountId(@Param("accountId") int accountId);
 
     List<Transaction> findByStatus(TransactionStatus status);

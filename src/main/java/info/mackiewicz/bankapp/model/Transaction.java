@@ -16,10 +16,10 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "from_id")
+    @JoinColumn(name = "source_id")
     private Account sourceAccount;
     @ManyToOne
-    @JoinColumn(name = "to_id")
+    @JoinColumn(name = "destination_id")
     private Account destinationAccount;
     @JsonIgnore
     @Transient

@@ -27,12 +27,12 @@ public class TransactionBuilder {
         this.status = TransactionStatus.NEW;
     }
 
-    public TransactionBuilder withFromAccount(Integer accountId) {
+    public TransactionBuilder withSourceAccount(Integer accountId) {
         this.sourceAccount = accountId == null ? null : accountService.getAccountById(accountId);
         return this;
     }
 
-    public TransactionBuilder withToAccount(Integer accountId) {
+    public TransactionBuilder withDestinationAccount(Integer accountId) {
         this.destinationAccount = accountId == null ? null : accountService.getAccountById(accountId);
         return this;
     }

@@ -13,7 +13,7 @@ public class UserMapper {
         user.setDateOfBirth(dto.getDateOfBirth());
         user.setPESEL(dto.getPESEL());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword()); // hasło zostanie zakodowane w serwisie
+        user.setPassword(dto.getPassword()); // password will be encoded in service layer
         return user;
     }
 }

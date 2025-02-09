@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 @Component
 @Data
 public class CreateTransactionRequest {
-    private int fromAccountId;
-    private int toAccountId;
+    private Integer sourceAccountId;
+    private Integer destinationAccountId;
     private BigDecimal amount;
     private String type;
 }

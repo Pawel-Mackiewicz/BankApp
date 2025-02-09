@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.controller;
 
+import info.mackiewicz.bankapp.validation.Adult;
 import info.mackiewicz.bankapp.validation.PasswordMatches;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class UserRegistrationDto {
     @NotBlank(message = "Lastname is required")
     private String lastname;
     @NotNull(message = "Date Of Birth is required")
+    @Adult
     private LocalDate dateOfBirth;
     @NotBlank(message = "PESEL is required")
     private String PESEL;

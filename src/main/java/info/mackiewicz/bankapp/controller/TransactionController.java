@@ -30,8 +30,8 @@ public class TransactionController {
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody CreateTransactionRequest request) {
         Transaction transaction = transactionBuilder
-                .withFromAccount(request.getFromAccountId()) // could be null for DEPOSIT
-                .withToAccount(request.getToAccountId())  // could be null for WITHDRAW, FEE
+                .withSourceAccount(request.getSourceAccountId()) // could be null for DEPOSIT
+                .withDestinationAccount(request.getDestinationAccountId())  // could be null for WITHDRAW, FEE
                 .withAmount(request.getAmount())
                 .withType(request.getType())
                 .build();

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">BankApp Register</h1>
+    <form th:action="@{/public/register}" th:object="${userRegistrationDto}" method="post" class="needs-validation" novalidate>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Enter your name" required/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+        <div class="form-group">
+            <label for="lastname">Lastname:</label>
+            <input type="text" id="lastname" th:field="*{lastname}" class="form-control" placeholder="Enter your lastname" required/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></div>
+        </div>
+        <div class="form-group">
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" class="form-control" required/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></div>
+        </div>
+        <div class="form-group">
+            <label for="PESEL">PESEL:</label>
+            <input type="text" id="PESEL" th:field="*{PESEL}" class="form-control" placeholder="Enter your PESEL" required/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('PESEL')}" th:errors="*{PESEL}"></div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="Enter your email" required/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="Enter your password" required/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" th:field="*{confirmPassword}" class="form-control" placeholder="Confirm your password" required/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+        </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </form>
+    <div th:if="${error}" class="alert alert-danger mt-3">
+        <p th:text="${error}"></p>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+</body>
+</html>
