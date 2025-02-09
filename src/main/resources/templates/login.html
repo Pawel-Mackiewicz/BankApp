@@ -4,6 +4,37 @@
     <meta charset="UTF-8">
     <title>BankApp Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 400px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-group input {
+            border-radius: 5px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 5px;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .text-center {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-5">
@@ -24,6 +55,9 @@
             <button type="submit" class="btn btn-primary">Login</button>
         </div>
     </form>
+    <div th:if="${success}" class="alert alert-success mt-3">
+        <p th:text="${success}"></p>
+    </div>
     <div th:if="${error}" class="alert alert-danger mt-3">
         <p th:text="${error}"></p>
     </div>

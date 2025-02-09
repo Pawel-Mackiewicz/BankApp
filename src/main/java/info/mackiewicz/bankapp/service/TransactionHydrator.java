@@ -15,6 +15,7 @@ public class TransactionHydrator {
 
     private final DepositTransaction depositTransaction;
     private final WithdrawalTransaction withdrawalTransaction;
+    @SuppressWarnings("unused")
     private final FeeTransaction feeTransaction;
     private final TransferTransaction transferTransaction;
     private final AccountService accountService;

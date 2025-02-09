@@ -15,8 +15,6 @@ import java.util.concurrent.locks.ReentrantLock;
 @Table(name = "accounts")
 public class Account {
 
-    //TODO: private static Double differenceInAccounts;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter

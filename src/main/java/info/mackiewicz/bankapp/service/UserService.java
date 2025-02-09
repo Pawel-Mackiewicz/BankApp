@@ -16,7 +16,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Constructor injection of UserRepository
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -27,13 +26,12 @@ public class UserService {
             throw new DuplicatedUserException();
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         return userRepository.save(user);
     }
 
     public User getUserById(Integer id) {
         return userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
     }
 
     public List<User> getAllUsers() {
@@ -43,14 +41,23 @@ public class UserService {
     @Transactional
     public User updateUser(User user) {
         if (user.getId() == null) {
-            throw new InvalidUserException();
+            throw new InvalidUserException("Cannot update user without ID");
         }
+        // Check if user exists
+        userRepository.findById(user.getId())
+                .orElseThrow(() -> new UserNotFoundException("User with ID " + user.getId() + " not found"));
+                
+        // If password is provided, encode it
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        
         return userRepository.save(user);
     }
 
     public void deleteUser(Integer id) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("User not found for deletion");
+            throw new UserNotFoundException("User with ID " + id + " not found");
         }
         userRepository.deleteById(id);
     }

@@ -22,7 +22,6 @@ public class AccountService {
         this.userService = userService;
     }
 
-    // CREATE: Tworzy nowe konto dla danego użytkownika.
     @Transactional
     public Account createAccount(Integer userId) {
         User user = validateAndReattachOwner(userId);
@@ -34,30 +33,25 @@ public class AccountService {
         return userService.getUserById(userId);
     }
 
-    // READ: Pobiera konto po ID. Jeśli nie znaleziono, rzuca AccountNotFoundByIdException.
     public Account getAccountById(int id) {
         return accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundByIdException("Account with ID " + id + " does not exist."));
     }
 
-    // READ: Pobiera konta na podstawie numeru PESEL właściciela.
     public List<Account> getAccountsByOwnersPESEL(String pesel) {
         return accountRepository.findAccountsByOwner_PESEL(pesel)
                 .orElseThrow(() -> new OwnerAccountsNotFoundException("User with PESEL " + pesel + " does not have any account."));
     }
 
-    // READ: Pobiera wszystkie konta.
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }
 
-    // DELETE: Usuwa konto po ID. Jeśli konto nie istnieje – rzuca wyjątek.
     public void deleteAccountById(int id) {
         Account account = getAccountById(id);
         accountRepository.delete(account);
     }
 
-    // UPDATE: Zmienia właściciela konta.
     public Account changeAccountOwner(int id, int newId) {
         Account account = getAccountById(id);
         account.setOwner(userService.getUserById(newId));

@@ -45,7 +45,8 @@ public class TransactionService {
     }
 
     public List<Transaction> getTransactionsByAccountId(int accountId) {
-        //rzuci wyjątek, jeżeli konto nie istnieje.
+        //throws exception, if account does not exist
+        @SuppressWarnings("unused")
         Account account = accountService.getAccountById(accountId);
 
             return repository.findByAccountId(accountId)
@@ -67,9 +68,11 @@ public class TransactionService {
 
     private void processTransaction(Transaction transaction) {
         switch (transaction.getStatus()) {
-            case DONE -> throw new TransactionAlreadyProcessedException("Transaction " + transaction.getId() + " has already been processed");
-            case FAULTY -> throw new TransactionCannotBeProcessedException("Transaction " + transaction.getId() + " cannot be processed");
-            case NEW -> processor.processTransaction(transaction);
+                    case DONE -> throw new TransactionAlreadyProcessedException("Transaction " + transaction.getId() + " has already been processed");
+                    case FAULTY -> throw new TransactionCannotBeProcessedException("Transaction " + transaction.getId() + " cannot be processed");
+                    case NEW -> processor.processTransaction(transaction);
+                    case IN_PROGRESS -> throw new UnsupportedOperationException("Unimplemented case: " + transaction.getStatus());
+                    default -> throw new IllegalArgumentException("Unexpected value: " + transaction.getStatus());
         }
     }
 }

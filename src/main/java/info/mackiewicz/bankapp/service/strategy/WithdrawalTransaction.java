@@ -17,7 +17,6 @@ public class WithdrawalTransaction implements TransactionStrategy {
     public boolean execute(Transaction currentTransaction) {
         try {
             strategyHelper.withdraw(currentTransaction);
-            //#FIXME Account.differenceFromWithdrawal(currentTransaction.getAmount());
             return true;
         } catch (Exception e) {
             LoggingService.logErrorInMakingTransaction(currentTransaction, e.getMessage());
