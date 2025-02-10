@@ -26,7 +26,6 @@ public class TransactionController {
 
     // Create a new transaction.
     // POST /api/transactions
-    //TODO: REFACTOR
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody CreateTransactionRequest request) {
         Transaction transaction = transactionBuilder
@@ -34,6 +33,7 @@ public class TransactionController {
                 .withDestinationAccount(request.getDestinationAccountId())  // could be null for WITHDRAW, FEE
                 .withAmount(request.getAmount())
                 .withType(request.getType())
+                .withTransactionTitle(request.getTransactionTitle())
                 .build();
 
         // Save transaction via service layer

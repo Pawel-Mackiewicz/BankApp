@@ -10,4 +10,5 @@ public class CreateTransactionRequest {
     private Integer destinationAccountId;
     private BigDecimal amount;
     private String type;
+    private String transactionTitle;
 }

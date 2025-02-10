@@ -37,6 +37,10 @@ public class Transaction {
     
     private BigDecimal amount;
 
+    @Column(length = 100)
+    private String transactionTitle;
+
+
     @JsonProperty("sourceAccountId")
     public Integer getSourceAccountId() {
         return sourceAccount != null ? sourceAccount.getId() : null;

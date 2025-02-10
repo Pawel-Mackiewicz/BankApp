@@ -21,6 +21,7 @@ public class TransactionBuilder {
     private TransactionType type;
     private TransactionStatus status;
     private BigDecimal amount;
+    private String transactionTitle;
 
     public TransactionBuilder(AccountService accountService) {
         this.accountService = accountService;
@@ -52,6 +53,11 @@ public class TransactionBuilder {
         return this;
     }
 
+    public TransactionBuilder withTransactionTitle(String transactionTitle) {
+        this.transactionTitle = transactionTitle;
+        return this;
+    }
+
     public Transaction build() {
         validate();
         Transaction transaction = new Transaction();
@@ -60,6 +66,7 @@ public class TransactionBuilder {
         transaction.setStatus(status);
         transaction.setSourceAccount(sourceAccount);
         transaction.setDestinationAccount(destinationAccount);
+        transaction.setTransactionTitle(transactionTitle);
         return transaction;
     }
 
