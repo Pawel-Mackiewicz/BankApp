@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.controller;
 
+import info.mackiewicz.bankapp.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.UserRegistrationService;
 import info.mackiewicz.bankapp.service.UserService;

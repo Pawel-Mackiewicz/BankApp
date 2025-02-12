@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Application - Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #8c0032;
+            color: #fff;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-logout {
+            background-color: #d50032;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-logout:hover {
+            background-color: #b30029;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .column {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .account-card {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .account-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .statistics-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .transaction {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            transition: background-color 0.3s;
+        }
+
+        .transaction:hover {
+            background-color: #f8f9fa;
+        }
+
+        .transaction:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .transaction-party {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+
+        .transaction-date {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+
+        .amount {
+            font-weight: bold;
+            margin: 0 1rem;
+        }
+
+        .amount.positive {
+            color: #28a745;
+        }
+
+        .amount.negative {
+            color: #dc3545;
+        }
+
+        .transaction-status {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
+        .btn-transfer {
+            background-color: #8c0032;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-transfer:hover {
+            background-color: #b30029;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+            background-color: #fff;
+            border-top: 1px solid #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            nav ul li {
+                margin: 0;
+            }
+
+            .user-panel {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="logo">Bank Application</div>
+    <nav>
+        <ul>
+            <li><a th:href="@{/dashboard}" class="active">Dashboard</a></li>
+            <li><a th:href="@{/transactions}">History</a></li>
+            <li><a th:href="@{/settings}">Settings</a></li>
+        </ul>
+    </nav>
+    <div class="user-panel">
+        <span th:text="${userName}">User Name</span>
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+    </div>
+</header>
+
+<!-- Main section -->
+<main>
+    <!-- Column 1: Account Summary -->
+    <div class="column"></div>
+        <h2>My Accounts</h2>
+        <div class="account-card" th:if="${dashboard.accountNumber != null}">
+            <h3 th:text="${dashboard.accountName}">Account Name</h3>
+            <div class="details">
+                Number: <span th:text="${dashboard.accountNumber}">Account Number</span>
+            </div>
+            <div class="details">
+                Balance: <span th:text="${#numbers.formatDecimal(dashboard.balance, 1, 2) + ' ' + dashboard.currency}">0.00</span>
+            </div>
+            <div class="mt-3">
+                <button class="btn-transfer" onclick="location.href='/transfer'">New Transfer</button>
+            </div>
+        </div>
+
+        <!-- Account Statistics -->
+        <div class="statistics-card mt-4">
+            <h3>Account Statistics</h3>
+            <div class="details">
+                <div>Total Incoming: <span th:text="${#numbers.formatDecimal(dashboard.totalIncoming, 1, 2) + ' ' + dashboard.currency}">0.00</span></div>
+                <div>Total Outgoing: <span th:text="${#numbers.formatDecimal(dashboard.totalOutgoing, 1, 2) + ' ' + dashboard.currency}">0.00</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column 2: Transaction History -->
+    <div class="column">
+        <h2>Recent Transactions</h2>
+        <div th:if="${#lists.isEmpty(dashboard.recentTransactions)}" class="text-center mt-3">
+            <p>No recent transactions</p>
+        </div>
+        <div th:each="transaction : ${dashboard.recentTransactions}" class="transaction">
+            <div class="transaction-info">
+                <div class="transaction-title" th:text="${transaction.title}">Transaction Title</div>
+                <div class="transaction-party" th:text="${transaction.otherPartyName}">Other Party</div>
+                <div class="transaction-date" th:text="${#temporals.format(transaction.date, 'dd-MM-yyyy HH:mm')}">Date</div>
+            </div>
+            <div class="amount" th:classappend="${transaction.type == 'INCOMING'} ? 'positive' : 'negative'"
+                 th:text="${transaction.type == 'INCOMING' ? '+' : '-'} + ${#numbers.formatDecimal(transaction.amount, 1, 2)}">
+                Amount
+            </div>
+            <div class="transaction-status" th:text="${transaction.status}">Status</div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Bank Application. All rights reserved.</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

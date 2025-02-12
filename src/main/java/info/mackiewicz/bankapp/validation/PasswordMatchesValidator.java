@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.validation;
 
-import info.mackiewicz.bankapp.controller.UserRegistrationDto;
+import info.mackiewicz.bankapp.dto.UserRegistrationDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

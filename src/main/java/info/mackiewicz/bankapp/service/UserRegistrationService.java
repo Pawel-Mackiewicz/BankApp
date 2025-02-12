@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.controller.UserRegistrationDto;
+import info.mackiewicz.bankapp.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.mapper.UserMapper;
 import info.mackiewicz.bankapp.model.User;
 import org.springframework.stereotype.Service;

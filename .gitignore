@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 logs/
+.git/
+BankApp.git/
 
 ### STS ###
 .apt_generated
@@ -33,3 +35,4 @@ build/
 ### VS Code ###
 .vscode/
 .env
+.credentials

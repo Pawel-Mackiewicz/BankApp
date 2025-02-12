@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.controller;
 
+import info.mackiewicz.bankapp.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.UserRegistrationService;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class RegistrationController {
         this.registrationService = registrationService;
     }
 
-    @GetMapping("/public/register")
+    @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         if (!model.containsAttribute("userRegistrationDto")) {
             model.addAttribute("userRegistrationDto", new UserRegistrationDto());
@@ -31,7 +32,7 @@ public class RegistrationController {
         return "registration";
     }
 
-    @PostMapping("/public/register")
+    @PostMapping("/register")
     public String registerUser(
             @Valid @ModelAttribute("userRegistrationDto") UserRegistrationDto userRegistrationDto,
             BindingResult bindingResult,
@@ -44,6 +45,7 @@ public class RegistrationController {
         }
         
         try {
+            @SuppressWarnings("unused")
             User createdUser = registrationService.registerUser(userRegistrationDto);
             redirectAttributes.addFlashAttribute("success", "Registration successful! You can now log in.");
             return "redirect:/login";

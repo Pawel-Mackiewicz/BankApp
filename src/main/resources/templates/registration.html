@@ -50,7 +50,7 @@
         <p th:text="${error}"></p>
     </div>
 
-    <form th:action="@{/public/register}" th:object="${userRegistrationDto}" method="post">
+    <form th:action="@{/register}" th:object="${userRegistrationDto}" method="post">
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" 
@@ -204,6 +204,20 @@ $(document).ready(function() {
     function validateDateOfBirth() {
         const dateOfBirth = new Date($('#dateOfBirth').val());
         const today = new Date();
+        
+        // Check if date is in the future
+        if (dateOfBirth > today) {
+            return validateField($('#dateOfBirth'), false, 'Date of birth cannot be in the future');
+        }
+        
+        // Check if person is not older than 140 years
+        const maxAge = new Date();
+        maxAge.setFullYear(today.getFullYear() - 140);
+        if (dateOfBirth < maxAge) {
+            return validateField($('#dateOfBirth'), false, 'Age cannot exceed 140 years');
+        }
+        
+        // Check if person is at least 18 years old
         const age = today.getFullYear() - dateOfBirth.getFullYear();
         const monthDiff = today.getMonth() - dateOfBirth.getMonth();
         

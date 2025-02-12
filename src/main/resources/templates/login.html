@@ -23,16 +23,22 @@
             border-radius: 5px;
         }
         .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: #8c0032;
+            border-color: #8c0032;
             border-radius: 5px;
+            width: 100%;
+            padding: 10px;
         }
         .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
+            background-color: #b30029;
+            border-color: #b30029;
         }
         .text-center {
             margin-bottom: 20px;
+        }
+        .register-link {
+            margin-top: 15px;
+            text-align: center;
         }
     </style>
 </head>
@@ -40,11 +46,15 @@
 <div class="container mt-5">
     <h1 class="text-center">BankApp Login</h1>
     <p class="text-center">Welcome to BankApp. Please log in to access your account.</p>
+    <!-- Add success message block -->
+    <div th:if="${success}" class="alert alert-success mt-3">
+        <p th:text="${success}"></p>
+    </div>
     <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
         <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required/>
-            <div class="invalid-feedback">Username is required.</div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="username" class="form-control" placeholder="Enter your email" required/>
+            <div class="invalid-feedback">Valid email is required.</div>
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
@@ -55,14 +65,17 @@
             <button type="submit" class="btn btn-primary">Login</button>
         </div>
     </form>
-    <div th:if="${success}" class="alert alert-success mt-3">
-        <p th:text="${success}"></p>
+    <div th:if="${param.error}" class="alert alert-danger mt-3">
+        Invalid email or password.
     </div>
-    <div th:if="${error}" class="alert alert-danger mt-3">
-        <p th:text="${error}"></p>
+    <div th:if="${param.logout}" class="alert alert-success mt-3">
+        You have been logged out.
+    </div>
+    <div class="register-link">
+        <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
