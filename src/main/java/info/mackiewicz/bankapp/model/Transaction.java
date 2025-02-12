@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Data
@@ -40,25 +41,26 @@ public class Transaction {
     @Column(length = 100)
     private String transactionTitle;
 
-
-    @JsonProperty("sourceAccountId")
-    public Integer getSourceAccountId() {
-        return sourceAccount != null ? sourceAccount.getId() : null;
-    }
-
-    @JsonProperty("destinationAccountId")
-    public Integer getDestinationAccountId() {
-        return destinationAccount != null ? destinationAccount.getId() : null;
+        @Column(name = "transaction_date")
+    private LocalDateTime transactionDate;
+    
+    @PrePersist
+    public void prePersist() {
+        if (transactionDate == null) {
+            transactionDate = LocalDateTime.now();
+        }
     }
 
     public boolean execute() {
         return strategy.execute(this);
     }
 
+    @JsonIgnore
     public boolean isTransactionPossible() {
-        if (type == TransactionType.DEPOSIT) {
-            return destinationAccount != null;
+        if (this.type == TransactionType.DEPOSIT) {
+            return this.destinationAccount != null;
+        } else {
+            return this.sourceAccount != null && this.sourceAccount.canWithdraw(this.amount);
         }
-        return sourceAccount != null && sourceAccount.canWithdraw(amount);
     }
 }
