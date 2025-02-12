@@ -28,19 +28,28 @@ public class SecurityConfig {
                 .httpBasic(withDefaults())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/dashboard")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/dashboard", true)
+                        .failureUrl("/login?error")
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login?logout")
                         .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID", "BANKSESSION"))
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID"))
+                .securityContext(context -> context
+                        .requireExplicitSave(true))
+                .sessionManagement((sessions) -> sessions
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true))
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint((request, response, authException) -> {
                             if (request.getRequestURI().startsWith("/api/")) {
                                 response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
                             } else {
-                                // response.sendRedirect("/login");
+                                response.sendRedirect("/login");
                             }
                         }));
 
