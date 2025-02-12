@@ -14,6 +14,7 @@ BankApp.git/
 h2db/
 *.mv.db
 *.trace.db
+*.sql
 
 # H2 specific
 /db/
