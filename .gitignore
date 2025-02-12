@@ -7,6 +7,18 @@ logs/
 .git/
 BankApp.git/
 
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+h2db/
+*.mv.db
+*.trace.db
+
+# H2 specific
+/db/
+.h2/
+
 ### STS ###
 .apt_generated
 .classpath
