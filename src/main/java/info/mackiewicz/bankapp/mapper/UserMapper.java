@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
     public User toUser(UserRegistrationDto dto) {
         User user = new User();
-        user.setName(dto.getName());
+        user.setFirstname(dto.getName());
         user.setLastname(dto.getLastname());
         user.setDateOfBirth(dto.getDateOfBirth());
         user.setPESEL(dto.getPESEL());

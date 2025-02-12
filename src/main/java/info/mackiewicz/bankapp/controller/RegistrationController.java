@@ -45,9 +45,9 @@ public class RegistrationController {
         }
         
         try {
-            @SuppressWarnings("unused")
             User createdUser = registrationService.registerUser(userRegistrationDto);
-            redirectAttributes.addFlashAttribute("success", "Registration successful! You can now log in.");
+            redirectAttributes.addFlashAttribute("success", "Registration successful! You can now log in. ");
+            redirectAttributes.addFlashAttribute("username", String.format("Your username is: %s",createdUser.getUsername()));
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
             logger.error("Registration error: {}", e.getMessage());

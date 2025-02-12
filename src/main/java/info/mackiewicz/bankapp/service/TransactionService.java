@@ -53,6 +53,11 @@ public class TransactionService {
                     .orElseThrow(() -> new NoTransactionsForAccountException("Account " + accountId + " did not make any transactions"));
     }
 
+    public List<Transaction> getRecentTransactions(int accountId, int count) {
+        return repository.findTopNByAccountIdOrderByCreatedDesc(accountId, count)
+                .orElseThrow(() -> new NoTransactionsForAccountException("Account " + accountId + " did not make any transactions"));
+    }
+
     //*********** TRANSACTION PROCESSING ************
     @Async
     public void processTransactionById(int transactionId) {

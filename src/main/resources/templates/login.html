@@ -50,11 +50,15 @@
     <div th:if="${success}" class="alert alert-success mt-3">
         <p th:text="${success}"></p>
     </div>
+    <!-- Add flash username display -->
+    <div th:if="${username}" class="alert alert-info mt-3">
+        <p th:text="${username}"></p>
+    </div>
     <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="username" class="form-control" placeholder="Enter your email" required/>
-            <div class="invalid-feedback">Valid email is required.</div>
+            <label for="login">Login:</label>
+            <input type="text" id="login" name="username" class="form-control" placeholder="Enter your login" required/>
+            <div class="invalid-feedback">Login is required.</div>
         </div>
         <div class="form-group">
             <label for="password">Password:</label>

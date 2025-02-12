@@ -8,7 +8,10 @@ import info.mackiewicz.bankapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -25,13 +28,42 @@ public class UserService {
         if (userRepository.existsByPESEL(user.getPESEL())) {
             throw new DuplicatedUserException();
         }
+
+        user.setRoles(setDefaultRole());
+        user.setUsername(generateUsername(user));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    private Set<String> setDefaultRole() {
+        Set<String> roles = new HashSet<>();
+        roles.add("ROLE_USER");
+        return roles;
+    }
+
+    private String generateUsername(User user) {
+        String baseUsername = user.getFirstname().toLowerCase() + "." + user.getLastname().toLowerCase();
+        return baseUsername + generateUniqueID(user.getEmail());
+    }
+
+    private String generateUniqueID(String email) {
+        int hash = email.hashCode();
+
+        String sHash = Integer.toString(hash);
+        if (sHash.length() > 6) {
+            return sHash.substring(0, 6);
+        } else
+            return sHash;
     }
 
     public User getUserById(Integer id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
     }
 
     public List<User> getAllUsers() {
@@ -46,12 +78,12 @@ public class UserService {
         // Check if user exists
         userRepository.findById(user.getId())
                 .orElseThrow(() -> new UserNotFoundException("User with ID " + user.getId() + " not found"));
-                
+
         // If password is provided, encode it
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        
+
         return userRepository.save(user);
     }
 
