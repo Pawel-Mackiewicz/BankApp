@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.service;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +19,8 @@ public class DashboardService {
     private final TransactionBuilder transactionBuilder;
 
     public DashboardService(AccountService accountService,
-                          TransactionService transactionService,
-                          TransactionBuilder transactionBuilder) {
+            TransactionService transactionService,
+            TransactionBuilder transactionBuilder) {
         this.accountService = accountService;
         this.transactionService = transactionService;
         this.transactionBuilder = transactionBuilder;
@@ -36,12 +37,25 @@ public class DashboardService {
 
     private DashboardDTO buildDashboardDTO(List<Account> accounts, Integer userId) {
         DashboardDTO dashboard = new DashboardDTO();
+        dashboard.setUserId(userId);
         dashboard.setAccounts(accounts);
-        dashboard.setRecentTransactions(transactionService.getRecentTransactions(userId, 5));
+        dashboard.setRecentTransactions(getRecentTransactions(accounts));
         dashboard.setTotalBalance(calculateTotalBalance(accounts));
-        
+
         setPrimaryAccountInfo(dashboard, accounts);
         return dashboard;
+    }
+
+
+
+    private List<Transaction> getRecentTransactions(List<Account> accounts) {
+        return accounts.stream()
+                .map(Account::getId)
+                .flatMap(id -> transactionService.getRecentTransactions(id, 5).stream())
+                .distinct()
+                .sorted(Comparator.comparing(Transaction::getDate).reversed())
+                .limit(5)
+                .toList();
     }
 
     private BigDecimal calculateTotalBalance(List<Account> accounts) {

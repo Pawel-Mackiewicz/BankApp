@@ -1,14 +1,15 @@
 package info.mackiewicz.bankapp.model;
 
+import java.math.BigDecimal;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import info.mackiewicz.bankapp.exception.TransactionAmountNotSpecifiedException;
 import info.mackiewicz.bankapp.exception.TransactionDestinationAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.exception.TransactionSourceAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.exception.TransactionTypeNotSpecifiedException;
 import info.mackiewicz.bankapp.service.AccountService;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
 
 @Component
 @Scope("prototype")
@@ -21,7 +22,7 @@ public class TransactionBuilder {
     private TransactionType type;
     private TransactionStatus status;
     private BigDecimal amount;
-    private String transactionTitle;
+    private String title;
 
     public TransactionBuilder(AccountService accountService) {
         this.accountService = accountService;
@@ -53,8 +54,8 @@ public class TransactionBuilder {
         return this;
     }
 
-    public TransactionBuilder withTransactionTitle(String transactionTitle) {
-        this.transactionTitle = transactionTitle;
+    public TransactionBuilder withTransactionTitle(String title) {
+        this.title = title;
         return this;
     }
 
@@ -66,7 +67,7 @@ public class TransactionBuilder {
         transaction.setStatus(status);
         transaction.setSourceAccount(sourceAccount);
         transaction.setDestinationAccount(destinationAccount);
-        transaction.setTransactionTitle(transactionTitle);
+        transaction.setTitle(title);
         return transaction;
     }
 

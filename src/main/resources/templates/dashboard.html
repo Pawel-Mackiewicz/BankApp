@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Application - Dashboard</title>
+    <title>BankApp - Dashboard</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         * {
@@ -263,7 +263,7 @@
 <body>
 <!-- Header -->
 <header>
-    <div class="logo">Bank Application</div>
+    <div class="logo">BankApp</div>
     <nav>
         <ul>
             <li><a th:href="@{/dashboard}" class="active">Dashboard</a></li>
@@ -316,11 +316,11 @@
         <div th:each="transaction : ${dashboard.recentTransactions}" class="transaction">
             <div class="transaction-info">
                 <div class="transaction-title" th:text="${transaction.title}">Transaction Title</div>
-                <div class="transaction-party" th:text="${transaction.otherPartyName}">Other Party</div>
+                <div class="transaction-party" th:text="${dashboard.getOtherPartyName(transaction)}">Other Party</div>
                 <div class="transaction-date" th:text="${#temporals.format(transaction.date, 'dd-MM-yyyy HH:mm')}">Date</div>
             </div>
-            <div class="amount" th:classappend="${transaction.type == 'INCOMING'} ? 'positive' : 'negative'"
-                 th:text="${transaction.type == 'INCOMING' ? '+' : '-'} + ${#numbers.formatDecimal(transaction.amount, 1, 2)}">
+            <div class="amount" th:classappend="${dashboard.isRecipient(transaction) ? 'positive' : 'negative'}"
+                 th:text="${dashboard.isRecipient(transaction) ? '+' : '-'} + ${#numbers.formatDecimal(transaction.amount, 1, 2)}">
                 Amount
             </div>
             <div class="transaction-status" th:text="${transaction.status}">Status</div>
@@ -376,7 +376,7 @@
 
 <!-- Footer -->
 <footer>
-    <p>&copy; 2024 Bank Application. All rights reserved.</p>
+    <p>&copy; 2024 BankApp. All rights reserved.</p>
 </footer>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

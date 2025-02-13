@@ -154,17 +154,31 @@ $(document).ready(function() {
         }
     }
 
-    // Name validation
-    function validateName() {
-        const name = $('#name').val();
-        return validateField($('#name'), name.length >= 1, 'Name is required');
+// Validate name field: checks for non-empty and only allows Polish letters
+function validateName() {
+    const name = $('#name').val();
+    // Check if the field is not empty
+    if (!validateField($('#name'), name.length >= 1, 'Name is required')) {
+        return false;
     }
+    // Regular expression for letters in the Polish alphabet
+    const regex = /^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/;
+    // Validate that name contains only allowed characters
+    return validateField($('#name'), regex.test(name), 'Name must contain only Polish letters');
+}
 
-    // Lastname validation
-    function validateLastname() {
-        const lastname = $('#lastname').val();
-        return validateField($('#lastname'), lastname.length >= 1, 'Lastname is required');
+// Validate lastname field: checks for non-empty and only allows Polish letters
+function validateLastname() {
+    const lastname = $('#lastname').val();
+    // Check if the field is not empty
+    if (!validateField($('#lastname'), lastname.length >= 1, 'Lastname is required')) {
+        return false;
     }
+    // Regular expression for letters in the Polish alphabet
+    const regex = /^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/;
+    // Validate that lastname contains only allowed characters
+    return validateField($('#lastname'), regex.test(lastname), 'Lastname must contain only Polish letters');
+}
 
     // PESEL validation
     function validatePesel() {

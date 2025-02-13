@@ -1,12 +1,25 @@
 package info.mackiewicz.bankapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import info.mackiewicz.bankapp.service.strategy.TransactionStrategy;
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import info.mackiewicz.bankapp.service.strategy.TransactionStrategy;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
@@ -38,15 +51,15 @@ public class Transaction {
     private BigDecimal amount;
 
     @Column(length = 100)
-    private String transactionTitle;
+    private String title;
 
-        @Column(name = "transaction_date")
-    private LocalDateTime transactionDate;
+        @Column(name = "date")
+    private LocalDateTime date;
     
     @PrePersist
     public void prePersist() {
-        if (transactionDate == null) {
-            transactionDate = LocalDateTime.now();
+        if (date == null) {
+            date = LocalDateTime.now();
         }
     }
 
@@ -60,6 +73,20 @@ public class Transaction {
             return this.destinationAccount != null;
         } else {
             return this.sourceAccount != null && this.sourceAccount.canWithdraw(this.amount);
+        }
+    }
+
+    public String getOtherPartyName(Integer userId) {
+        if (this.type == TransactionType.TRANSFER && this.sourceAccount.getOwnerId().equals(userId)) {
+            return this.destinationAccount.getOwner().getUsername();
+        } else if (this.type == TransactionType.TRANSFER && this.destinationAccount.getOwnerId().equals(userId)) {
+            return this.sourceAccount.getOwner().getUsername();
+        } else if (this.type == TransactionType.DEPOSIT) {
+            return "Deposit";
+        } else if (this.type == TransactionType.WITHDRAWAL) {
+            return "Withdrawal";
+        } else {
+            return "Fees";
         }
     }
 }

@@ -141,7 +141,11 @@ public class User implements UserDetails {
                ", lastname=" + lastname +
                ", username=" + username +
                ", email=" + email +
-               ")";  // usunięcie accounts z toString()
+               ")";
+    }
+
+    public String getFullName() {   
+        return  firstname + " " + lastname;
     }
 }
 

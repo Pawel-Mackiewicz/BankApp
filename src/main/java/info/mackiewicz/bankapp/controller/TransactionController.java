@@ -33,7 +33,7 @@ public class TransactionController {
                 .withDestinationAccount(request.getDestinationAccountId())  // could be null for WITHDRAW, FEE
                 .withAmount(request.getAmount())
                 .withType(request.getType())
-                .withTransactionTitle(request.getTransactionTitle())
+                .withTransactionTitle(request.getTitle())
                 .build();
 
         // Save transaction via service layer

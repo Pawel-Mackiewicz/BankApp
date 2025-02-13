@@ -39,14 +39,28 @@ public class UserService {
         Set<String> roles = new HashSet<>();
         roles.add("ROLE_USER");
         return roles;
-    }
+        }
 
-    private String generateUsername(User user) {
-        String baseUsername = user.getFirstname().toLowerCase() + "." + user.getLastname().toLowerCase();
+        private String generateUsername(User user) {
+        String firstname = removeDiacritics(user.getFirstname().toLowerCase());
+        String lastname = removeDiacritics(user.getLastname().toLowerCase());
+        String baseUsername = firstname + "." + lastname;
         return baseUsername + generateUniqueID(user.getEmail());
-    }
+        }
 
-    private String generateUniqueID(String email) {
+        private String removeDiacritics(String text) {
+        return text.replace("ą", "a")
+              .replace("ć", "c")
+              .replace("ę", "e")
+              .replace("ł", "l")
+              .replace("ń", "n")
+              .replace("ó", "o")
+              .replace("ś", "s")
+              .replace("ź", "z")
+              .replace("ż", "z");
+        }
+
+        private String generateUniqueID(String email) {
         int hash = email.hashCode();
 
         String sHash = Integer.toString(hash);
