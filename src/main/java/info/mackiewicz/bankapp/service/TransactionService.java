@@ -76,7 +76,7 @@ public class TransactionService {
                     case DONE -> throw new TransactionAlreadyProcessedException("Transaction " + transaction.getId() + " has already been processed");
                     case FAULTY -> throw new TransactionCannotBeProcessedException("Transaction " + transaction.getId() + " cannot be processed");
                     case NEW -> processor.processTransaction(transaction);
-                    case IN_PROGRESS -> throw new UnsupportedOperationException("Unimplemented case: " + transaction.getStatus());
+                    case PENDING -> throw new UnsupportedOperationException("Unimplemented case: " + transaction.getStatus());
                     default -> throw new IllegalArgumentException("Unexpected value: " + transaction.getStatus());
         }
     }

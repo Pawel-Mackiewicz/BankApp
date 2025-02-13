@@ -76,7 +76,7 @@ public class Account {
     @Override
     public int hashCode() {
         int result = Long.hashCode(id);
-        result = 31 * result + balance.hashCode();
+        result = (31 * result) + (balance != null ? balance.hashCode() : 0);
         return result;
     }
 

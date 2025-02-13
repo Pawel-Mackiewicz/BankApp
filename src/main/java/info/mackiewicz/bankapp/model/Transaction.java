@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import info.mackiewicz.bankapp.service.strategy.TransactionStrategy;
 import jakarta.persistence.*;
 import lombok.Data;

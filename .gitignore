@@ -49,3 +49,4 @@ build/
 .vscode/
 .env
 .credentials
+src/main/resources/application.properties

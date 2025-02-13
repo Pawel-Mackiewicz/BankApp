@@ -1,0 +1,21 @@
+# MySQL configuration (credentials provided via environment variables or local override)
+spring.datasource.url=jdbc:mysql://localhost:3306/bankapp
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# Flyway configuration (uncomment and adjust if migrations are needed)
+# spring.flyway.enabled=false
+# spring.flyway.locations=classpath:db/migration
+
+# JPA / Hibernate settings (adjust as needed)
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format_sql=false
+
+# Logging (minimal config)
+logging.level.root=INFO
+
+# Spring Security (override in local configuration)
+spring.security.user.name= ???
+spring.security.user.password= ???

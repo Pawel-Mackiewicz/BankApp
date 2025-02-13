@@ -24,13 +24,9 @@ public class AccountService {
 
     @Transactional
     public Account createAccount(Integer userId) {
-        User user = validateAndReattachOwner(userId);
+        User user = userService.getUserById(userId);
         Account account = new Account(user);
         return accountRepository.save(account);
-    }
-
-    private User validateAndReattachOwner(int userId) {
-        return userService.getUserById(userId);
     }
 
     public Account getAccountById(int id) {
@@ -41,6 +37,16 @@ public class AccountService {
     public List<Account> getAccountsByOwnersPESEL(String pesel) {
         return accountRepository.findAccountsByOwner_PESEL(pesel)
                 .orElseThrow(() -> new OwnerAccountsNotFoundException("User with PESEL " + pesel + " does not have any account."));
+    }
+
+    public List<Account> getAccountsByOwnersUsername(String username) {
+        return accountRepository.findAccountsByOwner_username(username)
+                .orElseThrow(() -> new OwnerAccountsNotFoundException("User: " + username + " does not have any account."));
+    }
+
+    public List<Account> getAccountsByOwnersId(Integer id) {
+        return accountRepository.findAccountsByOwner_id(id)
+                .orElseThrow(() -> new OwnerAccountsNotFoundException("User with ID " + id  + " does not have any account."));
     }
 
     public List<Account> getAllAccounts() {

@@ -40,7 +40,7 @@ public class TransactionProcessor {
         LoggingService.logTransactionAttempt(transaction);
 
         if (transaction.isTransactionPossible()) {
-            changeTransactionStatus(transaction, TransactionStatus.IN_PROGRESS);
+            changeTransactionStatus(transaction, TransactionStatus.PENDING);
             executeTransaction(hydrateTransaction(transaction));
         } else {
             LoggingService.logFailedTransactionDueToInsufficientFunds(transaction);

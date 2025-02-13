@@ -1,41 +1,67 @@
 package info.mackiewicz.bankapp.controller;
 
-import info.mackiewicz.bankapp.model.Transaction;
-import info.mackiewicz.bankapp.model.User;
-import info.mackiewicz.bankapp.service.TransactionService;
-import info.mackiewicz.bankapp.service.UserService;
-
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import info.mackiewicz.bankapp.dto.DashboardDTO;
+import info.mackiewicz.bankapp.dto.TransferForm;
+import info.mackiewicz.bankapp.model.User;
+import info.mackiewicz.bankapp.service.DashboardService;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
+    private final DashboardService dashboardService;
 
-    private final UserService userService;
-    private final TransactionService transactionService;
-
-    public DashboardController(UserService userService, TransactionService transactionService) {
-        this.transactionService = transactionService;
-        this.userService = userService;
+    public DashboardController(DashboardService dashboardService) {
+        this.dashboardService = dashboardService;
     }
 
-    //TODO: Implement dashboardDTO dashboardService and dashboardView(?)
     @GetMapping
-    public String getDashboard(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        User user = userService.getUserByUsername(userDetails.getUsername());
-        List<Transaction> recentTransactions = transactionService.getRecentTransactions(user.getId(), 5);
-
-        model.addAttribute("account", user);
-        model.addAttribute("recentTransactions", recentTransactions);
-        model.addAttribute("userName", userDetails.getUsername());
-        
+    public String getDashboard(@AuthenticationPrincipal User user, Model model) {
+        DashboardDTO dashboard = dashboardService.getDashboardData(user.getId());
+        model.addAttribute("dashboard", dashboard);
+        model.addAttribute("transferForm", new TransferForm());  // To jest konieczne!
+        model.addAttribute("userName", user.getUsername());
         return "dashboard";
+    }
+
+    @PostMapping("/transfer")
+    public String makeTransfer(@Valid TransferForm transferForm, 
+                             BindingResult bindingResult,
+                             @AuthenticationPrincipal User user,
+                             RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "dashboard";
+        }
+
+        try {
+            dashboardService.processTransfer(transferForm, user.getId());
+            redirectAttributes.addFlashAttribute("successMessage", "Transfer successful!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/dashboard";
+    }
+
+    @PostMapping("/new-account")
+    public String createNewAccount(@AuthenticationPrincipal User user,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            dashboardService.createNewAccount(user.getId());
+            redirectAttributes.addFlashAttribute("successMessage", "New account created successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/dashboard";
     }
 }
