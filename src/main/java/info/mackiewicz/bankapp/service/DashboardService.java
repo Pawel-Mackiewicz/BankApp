@@ -75,12 +75,12 @@ public class DashboardService {
 
     @Transactional
     public void processTransfer(TransferForm transferForm, Integer userId) {
-        Account sourceAccount = accountService.getAccountById(transferForm.getSourceAccountId());
-        validateTransfer(sourceAccount, transferForm, userId);
-        executeTransfer(sourceAccount, transferForm);
+        validateTransfer(transferForm, userId);
+        executeTransfer(transferForm);
     }
 
-    private void validateTransfer(Account sourceAccount, TransferForm transferForm, Integer userId) {
+    private void validateTransfer(TransferForm transferForm, Integer userId) {
+        Account sourceAccount = accountService.getAccountById(transferForm.getSourceAccountId());
         validateAccountOwnership(sourceAccount, userId);
         validateSufficientFunds(sourceAccount, transferForm.getAmount());
     }
@@ -97,9 +97,9 @@ public class DashboardService {
         }
     }
 
-    private void executeTransfer(Account sourceAccount, TransferForm transferForm) {
+    private void executeTransfer(TransferForm transferForm) {
         Transaction transfer = transactionBuilder
-                .withSourceAccount(sourceAccount.getId())
+                .withSourceAccount(transferForm.getSourceAccountId())
                 .withDestinationAccount(transferForm.getRecipientAccountId())
                 .withAmount(transferForm.getAmount())
                 .withType(TransactionType.TRANSFER)
@@ -107,6 +107,7 @@ public class DashboardService {
                 .build();
 
         transactionService.createTransaction(transfer);
+
     }
 
     @Transactional

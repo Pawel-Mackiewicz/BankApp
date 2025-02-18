@@ -5,6 +5,8 @@ import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.model.TransactionStatus;
 import info.mackiewicz.bankapp.repository.TransactionRepository;
+import jakarta.transaction.Transactional;
+
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,14 @@ public class TransactionService {
         this.accountService = accountService;
     }
 
+    @Transactional
     public Transaction createTransaction(Transaction transaction) {
-        return repository.save(transaction);
+        Transaction savedTransaction = repository.save(transaction);
+        if (transaction.isInternalTransaction()) {
+            processTransaction(savedTransaction);
+        }
+
+        return savedTransaction;
     }
 
     public void deleteTransactionById(int id) {

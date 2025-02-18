@@ -68,7 +68,12 @@ public class TransactionBuilder {
         transaction.setSourceAccount(sourceAccount);
         transaction.setDestinationAccount(destinationAccount);
         transaction.setTitle(title);
+        transaction.setInternalTransaction(isInternalTransaction());
         return transaction;
+    }
+
+    private boolean isInternalTransaction() {
+        return this.sourceAccount.getOwnerId().equals(this.destinationAccount.getOwnerId());
     }
 
     private void validate() {

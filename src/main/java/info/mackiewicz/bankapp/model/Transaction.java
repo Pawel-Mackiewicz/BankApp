@@ -55,6 +55,12 @@ public class Transaction {
 
         @Column(name = "date")
     private LocalDateTime date;
+
+    private boolean internalTransaction;
+
+
+
+
     
     @PrePersist
     public void prePersist() {
