@@ -47,6 +47,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment Variables ###
 .env
 .credentials
-src/main/resources/application.properties

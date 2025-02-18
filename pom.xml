@@ -10,7 +10,7 @@
     </parent>
     <groupId>info.mackiewicz</groupId>
     <artifactId>BankApp</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
     <name>BankApp</name>
     <description>BankApp</description>
     <url/>

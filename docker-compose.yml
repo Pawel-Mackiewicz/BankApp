@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      SPRING_JPA_SHOW_SQL: "false"
+      SPRING_JPA_OPEN_IN_VIEW: "false"
+      LOGGING_LEVEL_ROOT: INFO
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: WARN
+
+networks:
+  default:
+    driver: bridge
