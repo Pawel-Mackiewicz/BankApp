@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.controller;
+package info.mackiewicz.bankapp.controller.web;
 
 import info.mackiewicz.bankapp.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.model.User;

@@ -1,15 +1,27 @@
 package info.mackiewicz.bankapp.model;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.concurrent.locks.ReentrantLock;
 @NoArgsConstructor
 @Entity
 @Table(name = "accounts")
@@ -21,7 +33,15 @@ public class Account {
     private Integer id;
 
     @Getter
+    @Column(name = "user_account_number")
+    private Integer userAccountNumber;
+
+    @Getter
     private BigDecimal balance;
+
+    @Getter
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
 
     @Getter
     @Setter
@@ -35,7 +55,9 @@ public class Account {
 
     public Account(User owner) {
         this.owner = owner;
-        balance = BigDecimal.ZERO;
+        this.balance = BigDecimal.ZERO;
+        this.creationDate = LocalDateTime.now();
+        this.userAccountNumber = owner.getNextAccountNumber();  
     }
 
     @JsonProperty("owner_id")
@@ -59,7 +81,7 @@ public class Account {
         balance = balance.subtract(amount);
     }
 
-    //There is two checks, one after another in every transaction. leave it?
+    // There is two checks, one after another in every transaction. leave it?
     public boolean canWithdraw(BigDecimal amount) {
 
         return (balance.compareTo(amount) >= 0);
@@ -67,7 +89,8 @@ public class Account {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         Account account = (Account) o;
         return Objects.equals(id, account.id) && balance.equals(account.balance);
@@ -81,6 +104,7 @@ public class Account {
     }
 
     @Override
-    public String toString() { return String.format("Account #%d [balance = %.2f]", id, balance);
+    public String toString() {
+        return String.format("Account #%d [balance = %.2f]", userAccountNumber, balance);
     }
 }

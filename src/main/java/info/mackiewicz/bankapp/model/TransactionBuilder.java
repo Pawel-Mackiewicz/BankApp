@@ -73,7 +73,9 @@ public class TransactionBuilder {
     }
 
     private boolean isInternalTransaction() {
-        return this.sourceAccount.getOwnerId().equals(this.destinationAccount.getOwnerId());
+        if (TransactionType.TRANSFER.equals(this.type)) {
+            return this.sourceAccount.getOwnerId().equals(this.destinationAccount.getOwnerId());
+        } else return false;
     }
 
     private void validate() {
@@ -83,11 +85,11 @@ public class TransactionBuilder {
         if (type == null) {
             throw new TransactionTypeNotSpecifiedException();
         }
-        // Dla transakcji innych niż DEPOSIT wymagana jest informacja o koncie źródłowym
+        // For transactions other than deposits, the source account must be specified
         if (sourceAccount == null && !TransactionType.DEPOSIT.equals(type)) {
             throw new TransactionSourceAccountNotSpecifiedException();
         }
-        // Dla DEPOSIT wymaga się ustawienia konta docelowego
+        // For deposit transactions, the destination account must be specified
         if (destinationAccount == null && TransactionType.DEPOSIT.equals(type)) {
             throw new TransactionDestinationAccountNotSpecifiedException();
         }

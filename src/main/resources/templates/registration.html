@@ -40,6 +40,28 @@
         .is-invalid {
             border-color: #dc3545 !important;
         }
+        .password-requirements {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            padding-left: 1.5rem;
+        }
+        .requirement-item {
+            margin: 0.2rem 0;
+            color: #dc3545;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 1;
+            max-height: 50px; /* Dostosuj do rzeczywistej wysokości elementu */
+            overflow: hidden;
+        }
+        .requirement-item.hidden {
+            opacity: 0;
+            max-height: 0;
+            margin: 0;
+        }
+        .requirement-item i {
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -52,24 +74,24 @@
 
     <form th:action="@{/register}" th:object="${userRegistrationDto}" method="post">
         <div class="form-group">
-            <label for="name">Name:</label>
+            <label for="firstname">First Name:</label>
             <input type="text" 
-                   id="name" 
-                   th:field="*{name}" 
+                   id="firstname" 
+                   th:field="*{firstname}" 
                    class="form-control" 
-                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'" 
-                   placeholder="Enter your name"/>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                   th:classappend="${#fields.hasErrors('firstname')} ? 'is-invalid'" 
+                   placeholder="Enter your first name"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></div>
         </div>
 
         <div class="form-group">
-            <label for="lastname">Lastname:</label>
+            <label for="lastname">Last Name:</label>
             <input type="text" 
                    id="lastname" 
                    th:field="*{lastname}" 
                    class="form-control"
                    th:classappend="${#fields.hasErrors('lastname')} ? 'is-invalid'"
-                   placeholder="Enter your lastname"/>
+                   placeholder="Enter your last name"/>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></div>
         </div>
 
@@ -84,13 +106,13 @@
         </div>
 
         <div class="form-group">
-            <label for="PESEL">PESEL:</label>
+            <label for="PESEL">PESEL Number:</label>
             <input type="text" 
                    id="PESEL" 
                    th:field="*{PESEL}" 
                    class="form-control"
                    th:classappend="${#fields.hasErrors('PESEL')} ? 'is-invalid'"
-                   placeholder="Enter your PESEL"/>
+                   placeholder="Enter your PESEL number"/>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('PESEL')}" th:errors="*{PESEL}"></div>
         </div>
 
@@ -114,6 +136,23 @@
                    th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
                    placeholder="Enter your password"/>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            <ul class="password-requirements list-unstyled">
+                <li class="requirement-item" id="length-check">
+                    <i class="fas fa-times"></i>Minimum 8 characters
+                </li>
+                <li class="requirement-item" id="uppercase-check">
+                    <i class="fas fa-times"></i>At least one uppercase letter
+                </li>
+                <li class="requirement-item" id="lowercase-check">
+                    <i class="fas fa-times"></i>At least one lowercase letter
+                </li>
+                <li class="requirement-item" id="number-check">
+                    <i class="fas fa-times"></i>At least one number
+                </li>
+                <li class="requirement-item" id="special-check">
+                    <i class="fas fa-times"></i>At least one special character (@$!%*?&)
+                </li>
+            </ul>
         </div>
 
         <div class="form-group">
@@ -154,30 +193,30 @@ $(document).ready(function() {
         }
     }
 
-// Validate name field: checks for non-empty and only allows Polish letters
+// Validate firstname field: checks for non-empty and only allows Polish letters
 function validateName() {
-    const name = $('#name').val();
+    const firstname = $('#firstname').val();
     // Check if the field is not empty
-    if (!validateField($('#name'), name.length >= 1, 'Name is required')) {
+    if (!validateField($('#firstname'), firstname.length >= 1, 'First name is required')) {
         return false;
     }
     // Regular expression for letters in the Polish alphabet
     const regex = /^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/;
-    // Validate that name contains only allowed characters
-    return validateField($('#name'), regex.test(name), 'Name must contain only Polish letters');
+    // Validate that firstname contains only allowed characters
+    return validateField($('#firstname'), regex.test(firstname), 'First name must contain only letters');
 }
 
 // Validate lastname field: checks for non-empty and only allows Polish letters
 function validateLastname() {
     const lastname = $('#lastname').val();
     // Check if the field is not empty
-    if (!validateField($('#lastname'), lastname.length >= 1, 'Lastname is required')) {
+    if (!validateField($('#lastname'), lastname.length >= 1, 'Last name is required')) {
         return false;
     }
     // Regular expression for letters in the Polish alphabet
     const regex = /^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/;
     // Validate that lastname contains only allowed characters
-    return validateField($('#lastname'), regex.test(lastname), 'Lastname must contain only Polish letters');
+    return validateField($('#lastname'), regex.test(lastname), 'Last name must contain only letters');
 }
 
     // PESEL validation
@@ -195,12 +234,32 @@ function validateLastname() {
     }
 
     // Password validation
+    function updatePasswordRequirements(password) {
+        const requirements = {
+            'length-check': password.length >= 8,
+            'uppercase-check': /[A-Z]/.test(password),
+            'lowercase-check': /[a-z]/.test(password),
+            'number-check': /[0-9]/.test(password),
+            'special-check': /[@$!%*?&]/.test(password)
+        };
+
+        Object.entries(requirements).forEach(([id, isMet]) => {
+            const element = $(`#${id}`);
+            if (isMet) {
+                element.addClass('hidden');
+            } else {
+                element.removeClass('hidden');
+            }
+        });
+
+        return Object.values(requirements).every(Boolean);
+    }
+
     function validatePassword() {
         const password = $('#password').val();
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         return validateField($('#password'), 
-            passwordRegex.test(password), 
-            'Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character'
+            updatePasswordRequirements(password),
+            'Please meet all password requirements'
         );
     }
 
@@ -224,22 +283,25 @@ function validateLastname() {
             return validateField($('#dateOfBirth'), false, 'Date of birth cannot be in the future');
         }
         
-        // Check if person is not older than 140 years
-        const maxAge = new Date();
-        maxAge.setFullYear(today.getFullYear() - 140);
-        if (dateOfBirth < maxAge) {
-            return validateField($('#dateOfBirth'), false, 'Age cannot exceed 140 years');
-        }
-        
-        // Check if person is at least 18 years old
-        const age = today.getFullYear() - dateOfBirth.getFullYear();
+        // Calculate age
+        let age = today.getFullYear() - dateOfBirth.getFullYear();
         const monthDiff = today.getMonth() - dateOfBirth.getMonth();
         
+        // Adjust age if birthday hasn't occurred this year
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dateOfBirth.getDate())) {
             age--;
         }
 
-        return validateField($('#dateOfBirth'), age >= 18, 'You must be at least 18 years old');
+        // Check if age is within valid range (18-120)
+        if (age > 120) {
+            return validateField($('#dateOfBirth'), false, 'Age cannot exceed 120 years');
+        }
+        
+        if (age < 18) {
+            return validateField($('#dateOfBirth'), false, 'You must be at least 18 years old');
+        }
+        
+        return validateField($('#dateOfBirth'), true, '');
     }
 
     // Reset validation state on page load
@@ -266,7 +328,7 @@ function validateLastname() {
             e.stopPropagation();
             
             // Mark all invalid fields
-            if (!isNameValid) $('#name').addClass('is-invalid');
+            if (!isNameValid) $('#firstname').addClass('is-invalid');
             if (!isLastnameValid) $('#lastname').addClass('is-invalid');
             if (!isPeselValid) $('#PESEL').addClass('is-invalid');
             if (!isEmailValid) $('#email').addClass('is-invalid');
@@ -277,13 +339,14 @@ function validateLastname() {
     });
 
     // Attach validation to input events
-    $('#name').on('input', validateName);
+    $('#firstname').on('input', validateName);
     $('#lastname').on('input', validateLastname);
     $('#PESEL').on('input', validatePesel);
     $('#email').on('input', validateEmail);
     $('#password').on('input', function() {
         validatePassword();
         validateConfirmPassword();
+        updatePasswordRequirements($(this).val());
     });
     $('#confirmPassword').on('input', validateConfirmPassword);
     $('#dateOfBirth').on('change', validateDateOfBirth);

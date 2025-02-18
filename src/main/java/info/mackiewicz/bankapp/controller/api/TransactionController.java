@@ -1,5 +1,6 @@
-package info.mackiewicz.bankapp.controller;
+package info.mackiewicz.bankapp.controller.api;
 
+import info.mackiewicz.bankapp.dto.CreateTransactionRequest;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.model.TransactionBuilder;
 import info.mackiewicz.bankapp.service.TransactionService;

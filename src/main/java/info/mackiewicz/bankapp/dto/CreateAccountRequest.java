@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.controller;
+package info.mackiewicz.bankapp.dto;
 
 import lombok.Getter;
 import lombok.Setter;

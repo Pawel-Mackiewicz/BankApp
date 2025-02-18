@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.controller;
+package info.mackiewicz.bankapp.controller.web;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

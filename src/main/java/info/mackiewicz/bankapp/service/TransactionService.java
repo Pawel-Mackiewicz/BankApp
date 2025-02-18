@@ -27,11 +27,15 @@ public class TransactionService {
     @Transactional
     public Transaction createTransaction(Transaction transaction) {
         Transaction savedTransaction = repository.save(transaction);
-        if (transaction.isInternalTransaction()) {
-            processTransaction(savedTransaction);
-        }
+        processInternalTransfer(savedTransaction);
 
         return savedTransaction;
+    }
+
+    private void processInternalTransfer(Transaction savedTransaction) {
+        if (savedTransaction.isInternalTransaction()) {
+            processTransaction(savedTransaction);
+        }
     }
 
     public void deleteTransactionById(int id) {

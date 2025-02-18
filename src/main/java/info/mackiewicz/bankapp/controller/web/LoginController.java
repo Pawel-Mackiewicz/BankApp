@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.controller;
+package info.mackiewicz.bankapp.controller.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

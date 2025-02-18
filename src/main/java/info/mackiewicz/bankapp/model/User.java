@@ -69,6 +69,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean enabled;
 
+    @Column(name = "account_counter")
+    private Integer accountCounter = 0;
+
     //TODO: Add roles in enum
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -88,6 +91,12 @@ public class User implements UserDetails {
         enabled = true;
         roles = new HashSet<>();
         accounts = new HashSet<>();
+        accountCounter = 0;
+    }
+
+    public synchronized Integer getNextAccountNumber() {
+        accountCounter++;
+        return accountCounter;
     }
 
     @JsonProperty

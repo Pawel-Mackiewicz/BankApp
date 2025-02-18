@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BankApp - Dashboard</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -148,9 +149,22 @@
             font-size: 0.875rem;
         }
 
+        .details {
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .details span {
+            font-weight: 500;
+            color: #2c3e50;
+            font-family: 'Roboto Mono', monospace;
+        }
+
         .amount {
-            font-weight: bold;
+            font-weight: 500;
             margin: 0 1rem;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95rem;
         }
 
         .amount.positive {
@@ -295,9 +309,9 @@
             <p>No accounts found. Create your first account!</p>
         </div>
         <div th:each="account : ${dashboard.accounts}" class="account-card">
-            <h3>Account #<span th:text="${account.id}">Number</span></h3>
+            <h3>Account #<span th:text="${account.userAccountNumber}">Number</span></h3>
             <div class="details">
-                Balance: <span th:text="${#numbers.formatDecimal(account.balance, 1, 2) + ' ' + dashboard.currency}">0.00 PLN</span>
+                Balance: <span th:text="${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT') + ' ' + dashboard.currency}">0.00 PLN</span>
             </div>
         </div>
 
@@ -320,7 +334,7 @@
                 <div class="transaction-date" th:text="${#temporals.format(transaction.date, 'dd-MM-yyyy HH:mm')}">Date</div>
             </div>
             <div class="amount" th:classappend="${dashboard.isRecipient(transaction) ? 'positive' : 'negative'}"
-                 th:text="${dashboard.isRecipient(transaction) ? '+' : '-'} + ${#numbers.formatDecimal(transaction.amount, 1, 2)}">
+                 th:text="${dashboard.isRecipient(transaction) ? '+' : '-'} + ${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 2, 'POINT')}">
                 Amount
             </div>
             <div class="transaction-status" th:text="${transaction.status}">Status</div>
@@ -344,7 +358,7 @@
                     <option value="">Select account</option>
                     <option th:each="account : ${dashboard.accounts}"
                             th:value="${account.id}"
-                            th:text="'Account ' + ${account.id} + ' (Balance: ' + ${#numbers.formatDecimal(account.balance, 1, 2)} + ' PLN)'">
+                            th:text="'Account ' + ${account.userAccountNumber} + ' (Balance: ' + ${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')} + ' PLN)'">
                     </option>
                 </select>
             </div>

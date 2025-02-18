@@ -1,19 +1,24 @@
 package info.mackiewicz.bankapp.dto;
 
-import info.mackiewicz.bankapp.validation.Adult;
-import info.mackiewicz.bankapp.validation.PasswordMatches;
-import jakarta.validation.constraints.*;
-import lombok.Data;
+import java.time.LocalDate;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
+import info.mackiewicz.bankapp.validation.Adult;
+import info.mackiewicz.bankapp.validation.PasswordMatches;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @Data
 @PasswordMatches
 public class UserRegistrationDto {
 
-    @NotBlank(message = "Name is required")
-    private String name;
+    @NotBlank(message = "Firstname is required")
+    private String firstname;
 
     @NotBlank(message = "Lastname is required")
     private String lastname;

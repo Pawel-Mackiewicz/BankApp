@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.controller;
+package info.mackiewicz.bankapp.dto;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;

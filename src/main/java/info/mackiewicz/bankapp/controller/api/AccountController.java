@@ -1,5 +1,6 @@
-package info.mackiewicz.bankapp.controller;
+package info.mackiewicz.bankapp.controller.api;
 
+import info.mackiewicz.bankapp.dto.CreateAccountRequest;
 import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.service.AccountService;
 import org.springframework.http.HttpStatus;
