@@ -1,54 +1,54 @@
 # flyctl launch added from .gitignore
-**\HELP.md
-**\target
-!**\.mvn\wrapper\maven-wrapper.jar
-!**\**\src\main\**\target
-!**\**\src\test\**\target
-**\logs
-**\.git
-**\BankApp.git
+**/HELP.md
+**/target/
+!**/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+**/logs/
+**/.git/
+**/BankApp.git/
 
 # Database files
-**\*.db
-**\*.sqlite
-**\*.sqlite3
-**\h2db
-**\*.mv.db
-**\*.trace.db
-**\*.sql
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+**/h2db/
+**/*.mv.db
+**/*.trace.db
+**/*.sql
 
 # H2 specific
-db
-**\.h2
+db/
+**/.h2/
 
 ### STS ###
-**\.apt_generated
-**\.classpath
-**\.factorypath
-**\.project
-**\.settings
-**\.springBeans
-**\.sts4-cache
+**/.apt_generated
+**/.classpath
+**/.factorypath
+**/.project
+**/.settings
+**/.springBeans
+**/.sts4-cache
 
 ### IntelliJ IDEA ###
-**\.idea
-**\*.iws
-**\*.iml
-**\*.ipr
+**/.idea
+**/*.iws
+**/*.iml
+**/*.ipr
 
 ### NetBeans ###
-nbproject\private
-nbbuild
-dist
-nbdist
-.nb-gradle
-**\build
-!**\**\src\main\**\build
-!**\**\src\test\**\build
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+**/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 ### VS Code ###
-**\.vscode
+**/.vscode/
 
 ### Environment Variables ###
-**\.env
+**/.env
 fly.toml
