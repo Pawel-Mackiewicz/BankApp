@@ -1,36 +1,34 @@
-# Stage 1: Build the application
-FROM eclipse-temurin:21-jdk-alpine AS builder
-
-# Set the working directory inside the container
+# Stage 1: Dependencies
+FROM eclipse-temurin:21-jdk-alpine AS dependencies
 WORKDIR /app
 
-# Copy Maven wrapper and project configuration files
+# Copy only the files needed for dependency resolution
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
 
-# Ensure the Maven wrapper has execution permissions
-RUN chmod +x mvnw
+# Make mvnw executable and download dependencies
+RUN chmod +x mvnw && \
+    ./mvnw dependency:go-offline
 
-# Download dependencies to speed up future builds
-RUN ./mvnw dependency:go-offline
-
-# Copy the source code into the container
-COPY src src
-
-# Build the application, skipping tests for faster execution
-RUN ./mvnw clean package -DskipTests
-
-# Stage 2: Create a lightweight final image
-FROM eclipse-temurin:21-jre-alpine
-
-# Set the working directory inside the container
+# Stage 2: Build
+FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 
-# Copy the built JAR file from the builder stage
-COPY --from=builder /app/target/BankApp-0.1.0-SNAPSHOT.jar app.jar
+# Copy dependencies and files from previous stage
+COPY --from=dependencies /root/.m2 /root/.m2
+COPY --from=dependencies /app/mvnw /app/pom.xml ./
+COPY --from=dependencies /app/.mvn .mvn
 
-# Expose the application port
+# Copy source code and build
+COPY src src
+RUN chmod +x mvnw && \
+    ./mvnw clean package -DskipTests
+
+# Stage 3: Runtime
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+COPY --from=builder /app/target/BankApp-0.1.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 
-# Run the application
 CMD ["java", "-jar", "app.jar"]

@@ -28,7 +28,7 @@ public class DashboardController {
     public String getDashboard(@AuthenticationPrincipal User user, Model model) {
         DashboardDTO dashboard = dashboardService.getDashboardData(user.getId());
         model.addAttribute("dashboard", dashboard);
-        model.addAttribute("transferForm", new TransferForm());  // To jest konieczne!
+        model.addAttribute("transferForm", new TransferForm());
         model.addAttribute("userName", user.getUsername());
         return "dashboard";
     }

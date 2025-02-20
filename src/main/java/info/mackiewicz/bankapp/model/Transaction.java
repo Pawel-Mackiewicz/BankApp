@@ -56,6 +56,7 @@ public class Transaction {
         @Column(name = "date")
     private LocalDateTime date;
 
+    @Column(name = "internal_transaction")
     private boolean internalTransaction;
 
 
