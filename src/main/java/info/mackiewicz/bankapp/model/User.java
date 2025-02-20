@@ -48,10 +48,10 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @JsonIgnore
@@ -72,17 +72,14 @@ public class User implements UserDetails {
     @Column(name = "account_counter")
     private Integer accountCounter = 0;
 
-    //TODO: Add roles in enum
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     private Set<String> roles;
 
-    
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  // zmiana na EAGER
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Account> accounts;
-
 
     public User() {
         expired = false;
@@ -112,9 +109,10 @@ public class User implements UserDetails {
         return Objects.equals(id, user.id) && Objects.equals(PESEL, user.PESEL);
     }
     
-        public int hashCode() {
-            return Objects.hash(id, PESEL);
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, PESEL);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -137,6 +135,7 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return !expired;
     }
+    
     @Override
     public boolean isEnabled() {
         return enabled;
@@ -154,7 +153,6 @@ public class User implements UserDetails {
     }
 
     public String getFullName() {   
-        return  firstname + " " + lastname;
+        return firstname + " " + lastname;
     }
 }
-

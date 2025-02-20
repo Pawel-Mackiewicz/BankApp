@@ -11,7 +11,7 @@ public class SchedulerService {
         this.transactionService = transactionService;
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 600000)
     public void scheduleProcessAllNewTransactions() {
         transactionService.processAllNewTransactions();
     }

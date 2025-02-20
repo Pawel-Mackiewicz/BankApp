@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.mapper;
 
 import org.springframework.stereotype.Component;
 
+import info.mackiewicz.bankapp.dto.UpdateUserRequest;
 import info.mackiewicz.bankapp.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.model.User;
 
@@ -17,6 +18,25 @@ public class UserMapper {
         user.setEmail(dto.getEmail().toLowerCase());
         user.setPassword(dto.getPassword()); // password will be encoded in service layer
         return user;
+    }
+
+    public User updateUserFromRequest(User existingUser, UpdateUserRequest request) {
+        if (request.getFirstname() != null) {
+            existingUser.setFirstname(capitalize(request.getFirstname()));
+        }
+        if (request.getLastname() != null) {
+            existingUser.setLastname(capitalize(request.getLastname()));
+        }
+        if (request.getEmail() != null) {
+            existingUser.setEmail(request.getEmail().toLowerCase());
+        }
+        if (request.getPESEL() != null) {
+            existingUser.setPESEL(request.getPESEL());
+        }
+        if (request.getPassword() != null) {
+            existingUser.setPassword(request.getPassword()); // password will be encoded in service layer
+        }
+        return existingUser;
     }
 
     private String capitalize(String str) {

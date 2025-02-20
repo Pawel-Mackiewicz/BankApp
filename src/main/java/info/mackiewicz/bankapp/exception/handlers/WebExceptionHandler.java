@@ -6,19 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-import info.mackiewicz.bankapp.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.exception.DuplicatedUserException;
-import info.mackiewicz.bankapp.exception.InvalidUserException;
-import info.mackiewicz.bankapp.exception.NoTransactionsForAccountException;
-import info.mackiewicz.bankapp.exception.OwnerAccountsNotFoundException;
-import info.mackiewicz.bankapp.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.exception.TransactionAmountNotSpecifiedException;
-import info.mackiewicz.bankapp.exception.TransactionCannotBeProcessedException;
-import info.mackiewicz.bankapp.exception.TransactionDestinationAccountNotSpecifiedException;
-import info.mackiewicz.bankapp.exception.TransactionNotFoundException;
-import info.mackiewicz.bankapp.exception.TransactionSourceAccountNotSpecifiedException;
-import info.mackiewicz.bankapp.exception.TransactionTypeNotSpecifiedException;
-import info.mackiewicz.bankapp.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.exception.*;
 
 @ControllerAdvice(basePackages = "info.mackiewicz.bankapp.web")
 public class WebExceptionHandler {
