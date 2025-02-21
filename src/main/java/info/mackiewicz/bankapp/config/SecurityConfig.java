@@ -9,7 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import info.mackiewicz.bankapp.service.CustomUserDetailsService;
 import info.mackiewicz.bankapp.service.AdminUserService;
@@ -25,6 +29,16 @@ public class SecurityConfig {
                          AdminUserService adminUserService) {
         this.userDetailsService = userDetailsService;
         this.adminUserService = adminUserService;
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
     
     // Security chain for API endpoints (priorytet wysoki)
@@ -72,6 +86,7 @@ public class SecurityConfig {
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
+                .addLogoutHandler(new SecurityContextLogoutHandler())
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
@@ -79,6 +94,8 @@ public class SecurityConfig {
             .sessionManagement(sessions -> sessions
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(true)
+                .sessionRegistry(sessionRegistry())
+                .expiredUrl("/login?expired")
             )
             .exceptionHandling(e -> e
                 .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))
