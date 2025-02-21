@@ -37,6 +37,10 @@ public class Account {
     private Integer userAccountNumber;
 
     @Getter
+    @Setter
+    private String iban;
+
+    @Getter
     private BigDecimal balance;
 
     @Getter
