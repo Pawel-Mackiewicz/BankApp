@@ -15,6 +15,7 @@ function loadUserSettings() {
             // Update user data
             document.getElementById('firstname').textContent = user.firstname;
             document.getElementById('lastname').textContent = user.lastname;
+            document.getElementById('phoneNumber').textContent = user.phoneNumber;
             document.getElementById('email').textContent = user.email;
             document.getElementById('username').textContent = user.username;
 

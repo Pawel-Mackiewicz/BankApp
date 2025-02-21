@@ -51,7 +51,7 @@
             font-weight: bold;
             transition: all 0.3s ease;
             opacity: 1;
-            max-height: 50px; /* Dostosuj do rzeczywistej wysokości elementu */
+            max-height: 50px;
             overflow: hidden;
         }
         .requirement-item.hidden {
@@ -128,6 +128,17 @@
         </div>
 
         <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="tel" 
+                   id="phoneNumber" 
+                   th:field="*{phoneNumber}" 
+                   class="form-control"
+                   th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-invalid'"
+                   placeholder="Enter your phone number (e.g. +48123456789)"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+        </div>
+
+        <div class="form-group">
             <label for="password">Password:</label>
             <input type="password" 
                    id="password" 
@@ -193,31 +204,25 @@ $(document).ready(function() {
         }
     }
 
-// Validate firstname field: checks for non-empty and only allows Polish letters
-function validateName() {
-    const firstname = $('#firstname').val();
-    // Check if the field is not empty
-    if (!validateField($('#firstname'), firstname.length >= 1, 'First name is required')) {
-        return false;
+    // Validate firstname field: checks for non-empty and only allows Polish letters
+    function validateName() {
+        const firstname = $('#firstname').val();
+        if (!validateField($('#firstname'), firstname.length >= 1, 'First name is required')) {
+            return false;
+        }
+        const regex = /^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/;
+        return validateField($('#firstname'), regex.test(firstname), 'First name must contain only letters');
     }
-    // Regular expression for letters in the Polish alphabet
-    const regex = /^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/;
-    // Validate that firstname contains only allowed characters
-    return validateField($('#firstname'), regex.test(firstname), 'First name must contain only letters');
-}
 
-// Validate lastname field: checks for non-empty and only allows Polish letters
-function validateLastname() {
-    const lastname = $('#lastname').val();
-    // Check if the field is not empty
-    if (!validateField($('#lastname'), lastname.length >= 1, 'Last name is required')) {
-        return false;
+    // Validate lastname field: checks for non-empty and only allows Polish letters
+    function validateLastname() {
+        const lastname = $('#lastname').val();
+        if (!validateField($('#lastname'), lastname.length >= 1, 'Last name is required')) {
+            return false;
+        }
+        const regex = /^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/;
+        return validateField($('#lastname'), regex.test(lastname), 'Last name must contain only letters');
     }
-    // Regular expression for letters in the Polish alphabet
-    const regex = /^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$/;
-    // Validate that lastname contains only allowed characters
-    return validateField($('#lastname'), regex.test(lastname), 'Last name must contain only letters');
-}
 
     // PESEL validation
     function validatePesel() {
@@ -231,6 +236,28 @@ function validateLastname() {
         const email = $('#email').val();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return validateField($('#email'), emailRegex.test(email), 'Please enter a valid email address');
+    }
+
+    // Phone number validation
+    function validatePhoneNumber() {
+        const phoneNumber = $('#phoneNumber').val();
+        const phoneRegex = /^(\+48\d{9}|0\d{9}|[1-9]\d{8})$/;
+        const isValid = phoneRegex.test(phoneNumber);
+        let errorMessage = 'Invalid phone number format. ';
+        
+        if (!isValid) {
+            if (phoneNumber.startsWith('+') && !phoneNumber.startsWith('+48')) {
+                errorMessage += 'Only +48 prefix is allowed.';
+            } else if (phoneNumber.startsWith('0') && phoneNumber.length !== 10) {
+                errorMessage += 'When starting with 0, number must be exactly 10 digits.';
+            } else if (!phoneNumber.startsWith('+') && !phoneNumber.startsWith('0') && phoneNumber.length !== 9) {
+                errorMessage += 'Number must be exactly 9 digits when not using prefix.';
+            } else {
+                errorMessage += 'Use +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX format.';
+            }
+        }
+        
+        return validateField($('#phoneNumber'), isValid, errorMessage);
     }
 
     // Password validation
@@ -278,21 +305,17 @@ function validateLastname() {
         const dateOfBirth = new Date($('#dateOfBirth').val());
         const today = new Date();
         
-        // Check if date is in the future
         if (dateOfBirth > today) {
             return validateField($('#dateOfBirth'), false, 'Date of birth cannot be in the future');
         }
         
-        // Calculate age
         let age = today.getFullYear() - dateOfBirth.getFullYear();
         const monthDiff = today.getMonth() - dateOfBirth.getMonth();
         
-        // Adjust age if birthday hasn't occurred this year
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dateOfBirth.getDate())) {
             age--;
         }
 
-        // Check if age is within valid range (18-120)
         if (age > 120) {
             return validateField($('#dateOfBirth'), false, 'Age cannot exceed 120 years');
         }
@@ -317,13 +340,14 @@ function validateLastname() {
         const isLastnameValid = validateLastname();
         const isPeselValid = validatePesel();
         const isEmailValid = validateEmail();
+        const isPhoneNumberValid = validatePhoneNumber();
         const isPasswordValid = validatePassword();
         const isConfirmPasswordValid = validateConfirmPassword();
         const isDateOfBirthValid = validateDateOfBirth();
 
         // If any validation fails, prevent form submission
         if (!isNameValid || !isLastnameValid || !isPeselValid || !isEmailValid || 
-            !isPasswordValid || !isConfirmPasswordValid || !isDateOfBirthValid) {
+            !isPhoneNumberValid || !isPasswordValid || !isConfirmPasswordValid || !isDateOfBirthValid) {
             e.preventDefault();
             e.stopPropagation();
             
@@ -332,6 +356,7 @@ function validateLastname() {
             if (!isLastnameValid) $('#lastname').addClass('is-invalid');
             if (!isPeselValid) $('#PESEL').addClass('is-invalid');
             if (!isEmailValid) $('#email').addClass('is-invalid');
+            if (!isPhoneNumberValid) $('#phoneNumber').addClass('is-invalid');
             if (!isPasswordValid) $('#password').addClass('is-invalid');
             if (!isConfirmPasswordValid) $('#confirmPassword').addClass('is-invalid');
             if (!isDateOfBirthValid) $('#dateOfBirth').addClass('is-invalid');
@@ -343,6 +368,7 @@ function validateLastname() {
     $('#lastname').on('input', validateLastname);
     $('#PESEL').on('input', validatePesel);
     $('#email').on('input', validateEmail);
+    $('#phoneNumber').on('input', validatePhoneNumber);
     $('#password').on('input', function() {
         validatePassword();
         validateConfirmPassword();

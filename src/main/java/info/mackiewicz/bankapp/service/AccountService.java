@@ -5,6 +5,7 @@ import info.mackiewicz.bankapp.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.repository.AccountRepository;
+import info.mackiewicz.bankapp.utils.IbanGenerator;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -26,27 +27,38 @@ public class AccountService {
     public Account createAccount(Integer userId) {
         User user = userService.getUserById(userId);
         Account account = new Account(user);
+        account = setupIban(account);
+
         return accountRepository.save(account);
+    }
+
+    public Account setupIban(Account account) {
+        String iban = IbanGenerator.generateIban(account.getOwner().getId(), account.getUserAccountNumber());
+        account.setIban(iban);
+        return account;
     }
 
     public Account getAccountById(int id) {
         return accountRepository.findById(id)
-                .orElseThrow(() -> new AccountNotFoundByIdException("Account with ID " + id + " does not exist."));
+                .orElseThrow(() -> new AccountNotFoundByIdException("Account with ID " + id + " not found."));
     }
 
     public List<Account> getAccountsByOwnersPESEL(String pesel) {
         return accountRepository.findAccountsByOwner_PESEL(pesel)
-                .orElseThrow(() -> new OwnerAccountsNotFoundException("User with PESEL " + pesel + " does not have any account."));
+                .orElseThrow(() -> new OwnerAccountsNotFoundException(
+                        "User with PESEL " + pesel + " does not have any account."));
     }
 
     public List<Account> getAccountsByOwnersUsername(String username) {
         return accountRepository.findAccountsByOwner_username(username)
-                .orElseThrow(() -> new OwnerAccountsNotFoundException("User: " + username + " does not have any account."));
+                .orElseThrow(
+                        () -> new OwnerAccountsNotFoundException("User: " + username + " does not have any account."));
     }
 
     public List<Account> getAccountsByOwnersId(Integer id) {
         return accountRepository.findAccountsByOwner_id(id)
-                .orElseThrow(() -> new OwnerAccountsNotFoundException("User with ID " + id  + " does not have any account."));
+                .orElseThrow(
+                        () -> new OwnerAccountsNotFoundException("User with ID " + id + " does not have any account."));
     }
 
     public List<Account> getAllAccounts() {

@@ -17,7 +17,8 @@ public class UserMapper {
         user.setDateOfBirth(dto.getDateOfBirth());
         user.setPESEL(dto.getPESEL());
         user.setEmail(dto.getEmail().toLowerCase());
-        user.setPassword(dto.getPassword()); // password will be encoded in service layer
+        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setPassword(dto.getPassword());
         return user;
     }
 
@@ -34,8 +35,8 @@ public class UserMapper {
         if (request.getPESEL() != null) {
             existingUser.setPESEL(request.getPESEL());
         }
-        if (request.getPassword() != null) {
-            existingUser.setPassword(request.getPassword()); // password will be encoded in service layer
+        if (request.getPhoneNumber() != null) {
+            existingUser.setPhoneNumber(request.getPhoneNumber());
         }
         return existingUser;
     }
