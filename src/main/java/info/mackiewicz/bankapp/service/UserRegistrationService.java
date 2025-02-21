@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import info.mackiewicz.bankapp.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.mapper.UserMapper;
 import info.mackiewicz.bankapp.model.User;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class UserRegistrationService {
 
@@ -15,12 +17,6 @@ public class UserRegistrationService {
 
     // Only allow letters (English and Polish)
     private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
-
-    public UserRegistrationService(UserService userService, UserMapper userMapper, AccountService accountService) {
-        this.userService = userService;
-        this.userMapper = userMapper;
-        this.accountService = accountService;
-    }
 
     public User registerUser(UserRegistrationDto registrationDto) {
         User user = userMapper.toUser(registrationDto);
@@ -33,9 +29,8 @@ public class UserRegistrationService {
         if (!isValidLetters(user.getLastname())) {
             throw new IllegalArgumentException("Invalid last name: only letters allowed.");
         }
-
+        
         User createdUser = userService.createUser(user);
-
         accountService.createAccount(createdUser.getId());
 
         return createdUser;

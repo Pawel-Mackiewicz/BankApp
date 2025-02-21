@@ -4,19 +4,18 @@ import info.mackiewicz.bankapp.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.exception.InvalidUserException;
 import info.mackiewicz.bankapp.model.User;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class SettingsService implements SettingsServiceInterface {
 
     private final UserService userService;
-
-    public SettingsService(UserService userService) {
-        this.userService = userService;
-    }
+    private final PasswordService passwordService;
 
     @Override
     public User getUserSettings(Integer userId) {
@@ -26,18 +25,16 @@ public class SettingsService implements SettingsServiceInterface {
     @Override
     @Transactional
     public boolean changePassword(User user, ChangePasswordRequest request) {
-        // Sprawdzanie poprawności obecnego hasła
-        if (!userService.verifyPassword(request.getCurrentPassword(), user.getPassword())) {
+
+        if (!passwordService.verifyPassword(request.getCurrentPassword(), user.getPassword())) {
             throw new InvalidUserException("Incorrect current password");
         }
 
-        // Sprawdzanie zgodności nowego hasła z potwierdzeniem
         if (!request.getNewPassword().equals(request.getConfirmPassword())) {
             throw new InvalidUserException("New password and confirmation do not match");
         }
 
-        // Ustawienie i zapisanie nowego hasła
-        user.setPassword(userService.encodePassword(request.getNewPassword()));
+        user.setPassword(request.getNewPassword());
         userService.updateUser(user);
         log.info("Changed password for user: {}", user.getUsername());
         
@@ -49,13 +46,11 @@ public class SettingsService implements SettingsServiceInterface {
     public void changeUsername(User user, ChangeUsernameRequest request) {
         String oldUsername = user.getUsername();
         String newUsername = request.getNewUsername();
-        
-        // Sprawdzanie czy nowa nazwa jest inna niż obecna
+
         if (newUsername.equals(user.getUsername())) {
             throw new InvalidUserException("New username is the same as the current one");
         }
 
-        // Sprawdzanie czy nowa nazwa nie jest już zajęta
         if (userService.checkUsernameExists(newUsername)) {
             throw new InvalidUserException("Username " + newUsername + " is already taken");
         }

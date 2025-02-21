@@ -9,8 +9,6 @@ public interface UserServiceInterface {
     User getUserByUsername(String username);
     List<User> getAllUsers();
     User updateUser(User user);
-    boolean checkUsernameExists(String username);
     void deleteUser(Integer id);
-    String encodePassword(String password);
-    boolean verifyPassword(String rawPassword, String encodedPassword);
+    boolean checkUsernameExists(String username);
 }

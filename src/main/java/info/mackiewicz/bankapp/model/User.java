@@ -32,6 +32,8 @@ import lombok.Data;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
+
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -87,6 +89,7 @@ public class User implements UserDetails {
         locked = false;
         enabled = true;
         roles = new HashSet<>();
+        addDefaultRole();
         accounts = new HashSet<>();
         accountCounter = 0;
     }
@@ -96,6 +99,9 @@ public class User implements UserDetails {
         return accountCounter;
     }
 
+    private void addDefaultRole() {
+        roles.add("ROLE_USER");
+    }
     @JsonProperty
     public void setPassword(String password) {
         this.password = password;

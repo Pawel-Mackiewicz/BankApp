@@ -2,8 +2,15 @@ package info.mackiewicz.bankapp.service;
 
 import org.springframework.stereotype.Service;
 
+import info.mackiewicz.bankapp.model.User;
+
 @Service
 public class UsernameGeneratorService {
+
+    public User generateUsername(User user) {
+        user.setUsername(generateUsername(user.getFirstname(), user.getLastname(), user.getEmail()));
+        return user;
+    }
     
     public String generateUsername(String firstname, String lastname, String email) {
         String baseUsername = generateBaseUsername(firstname, lastname);

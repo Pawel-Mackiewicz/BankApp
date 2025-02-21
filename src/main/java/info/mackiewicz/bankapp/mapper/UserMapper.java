@@ -8,6 +8,7 @@ import info.mackiewicz.bankapp.model.User;
 
 @Component
 public class UserMapper {
+    
     public User toUser(UserRegistrationDto dto) {
         User user = new User();
         

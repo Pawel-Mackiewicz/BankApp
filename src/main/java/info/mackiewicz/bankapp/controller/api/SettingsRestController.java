@@ -22,8 +22,14 @@ public class SettingsRestController {
     }
 
     @GetMapping("/user")
-    public User getUserSettings(@AuthenticationPrincipal User user) {
-        return settingsService.getUserSettings(user.getId());
+    public ResponseEntity<User> getUserSettings(@AuthenticationPrincipal User user) {
+        User requestedUser = settingsService.getUserSettings(user.getId());
+        
+        if (!requestedUser.getId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
+        
+        return ResponseEntity.ok(requestedUser);
     }
 
     @PostMapping("/change-password")
