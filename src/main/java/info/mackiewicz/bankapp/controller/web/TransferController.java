@@ -20,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/dashboard/transfer")
