@@ -1,18 +1,41 @@
 # System Patterns & Architecture
 
-## Dashboard UI Patterns [Updated: 2025-02-22 18:20]
+## Dashboard UI Patterns [Updated: 2025-02-22 20:11]
 
 ### 1. IBAN Display
+- IBANs are displayed in the "My Accounts" section of the dashboard.
+- IBANs are now highlighted on hover using CSS `text-shadow`.
+- IBANs are copyable by clicking on them.
 
--   IBANs are displayed in the "My Accounts" section of the dashboard.
--   IBANs are now highlighted on hover using CSS `text-shadow`.
--   IBANs are copyable by clicking on them.
+### 2. Transfer Interface
+- Tabbed interface for different transfer types
+- Dynamic form validation
+- Real-time balance and IBAN display
+- Responsive design patterns
 
-### 2. "Make a Transfer" Title
+### 3. Form Validation Patterns
+```javascript
+// Real-time validation pattern
+async function validateInput(input) {
+    const value = input.value;
+    const type = input.dataset.type;
+    
+    try {
+        const response = await fetch(`/api/validate-${type}?value=${value}`);
+        const data = await response.json();
+        
+        if (data.valid) {
+            setValid(input);
+        } else {
+            setInvalid(input, data.message);
+        }
+    } catch (error) {
+        setInvalid(input, 'Validation error');
+    }
+}
+```
 
--   The "Make a Transfer" title is centered using inline CSS.
-
-## Transaction System Patterns [Updated: 2025-02-22 17:22]
+## Transaction System Patterns [Updated: 2025-02-22 20:11]
 
 ### 1. Struktura Transakcji
 ```java
@@ -98,9 +121,62 @@ List<Transaction> filtered = filterService.filterTransactions(
 - Format IBAN w osobnej klasie IbanValidator
 - Reguły biznesowe w TransactionService
 - Walidacja na poziomie strategii transakcji
+- Nowe wzorce walidacji:
+  * Walidacja email przez AccountRepository
+  * Walidacja dostępnych środków
+  * Walidacja uprawnień do kont
 
 ### 5. Wzorce
 - Strategy Pattern dla różnych typów transakcji
 - Builder Pattern dla tworzenia transakcji
 - Factory Method dla strategii transakcji
 - Validator Pattern dla walidacji
+- Observer Pattern dla aktualizacji UI
+- Command Pattern dla operacji transferowych
+
+### 6. Nowe Wzorce UI
+```javascript
+// Tab Management Pattern
+class TabManager {
+    constructor(tabContainer, contentContainer) {
+        this.tabs = tabContainer.querySelectorAll('[data-tab]');
+        this.contents = contentContainer.querySelectorAll('[data-content]');
+        
+        this.tabs.forEach(tab => {
+            tab.addEventListener('click', () => this.switchTab(tab));
+        });
+    }
+    
+    switchTab(activeTab) {
+        // Deaktywuj wszystkie
+        this.tabs.forEach(tab => tab.classList.remove('active'));
+        this.contents.forEach(content => content.classList.remove('active'));
+        
+        // Aktywuj wybrany
+        activeTab.classList.add('active');
+        const content = document.querySelector(
+            `[data-content="${activeTab.dataset.tab}"]`
+        );
+        content.classList.add('active');
+    }
+}
+
+// Form State Management Pattern
+class FormStateManager {
+    constructor(form) {
+        this.form = form;
+        this.state = {};
+        this.validators = {};
+        
+        this.setupValidators();
+        this.setupListeners();
+    }
+    
+    async validate(field) {
+        const validator = this.validators[field.name];
+        if (validator) {
+            return await validator(field.value);
+        }
+        return true;
+    }
+}

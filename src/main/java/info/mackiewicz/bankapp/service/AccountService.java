@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -59,6 +60,10 @@ public class AccountService {
         return accountRepository.findAccountsByOwner_id(id)
                 .orElseThrow(
                         () -> new OwnerAccountsNotFoundException("User with ID " + id + " does not have any account."));
+    }
+
+    public Optional<Account> findByIban(String iban) {
+        return accountRepository.findByIban(iban);
     }
 
     public List<Account> getAllAccounts() {

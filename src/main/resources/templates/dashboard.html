@@ -257,6 +257,70 @@
             background-color: #b30029;
         }
 
+        /* Tabs styling */
+        .nav-tabs {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav-tabs .nav-link {
+            color: #495057;
+            background-color: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px 4px 0 0;
+            padding: 0.5rem 1rem;
+            margin-bottom: -1px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border-color: #e9ecef #e9ecef #dee2e6;
+            background-color: #f8f9fa;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #8c0032;
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+            font-weight: 500;
+        }
+
+        /* Form validation styles */
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            padding-right: calc(1.5em + 0.75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+
+        .invalid-feedback {
+            display: none;
+            width: 100%;
+            margin-top: 0.25rem;
+            font-size: 80%;
+            color: #dc3545;
+        }
+
+        .was-validated .form-control:invalid ~ .invalid-feedback,
+        .form-control.is-invalid ~ .invalid-feedback {
+            display: block;
+        }
+
+        /* Recipient method toggle */
+        .btn-group-toggle .btn {
+            color: #8c0032;
+            background-color: white;
+            border-color: #8c0032;
+            transition: all 0.3s ease;
+        }
+
+        .btn-group-toggle .btn.active {
+            color: white;
+            background-color: #8c0032;
+            border-color: #8c0032;
+        }
+
         .transfer-form {
             background-color: #f8f9fa;
             padding: 1.5rem;
@@ -418,40 +482,159 @@
         <div th:if="${errorMessage}" class="alert alert-danger mb-3">
             <p th:text="${errorMessage}"></p>
         </div>
-        <form th:action="@{/dashboard/transfer}" method="post" th:object="${transferForm}">
-            <div class="form-group">
-                <label for="sourceAccountId">From Account:</label>
-                <select id="sourceAccountId" name="sourceAccountId" class="form-control" required>
-                    <option value="">Select account</option>
-                    <option th:each="account : ${dashboard.accounts}"
-                            th:value="${account.id}"
-                            th:text="'Account ' + ${account.userAccountNumber} + ' (Balance: ' + ${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')} + ' PLN)'">
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="recipientAccountId">To Account:</label>
-                <input type="number" id="recipientAccountId" name="recipientAccountId" class="form-control" required/>
-            </div>
-            <div class="form-group">
-                <label for="recipientName">Recipient Name:</label>
-                <input type="text" id="recipientName" name="recipientName" class="form-control" required/>
-            </div>
-            <div class="form-group">
-                <label for="amount">Amount:</label>
-                <div class="input-group">
-                    <input type="number" id="amount" name="amount" class="form-control" step="0.01" min="0.01" required/>
-                    <div class="input-group-append">
-                        <span class="input-group-text">PLN</span>
+        
+        <!-- Transfer type tabs -->
+        <ul class="nav nav-tabs mb-3" id="transferTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="own-tab" data-toggle="tab" href="#own" role="tab">
+                    Own Accounts
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="internal-tab" data-toggle="tab" href="#internal" role="tab">
+                    Bank Transfer
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="external-tab" data-toggle="tab" href="#external" role="tab">
+                    External Transfer
+                </a>
+            </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content" id="transferTabsContent">
+            <!-- Own accounts transfer -->
+            <div class="tab-pane fade show active" id="own" role="tabpanel">
+                <form th:action="@{/dashboard/transfer/own}" method="post" class="own-transfer-form" id="ownTransferForm">
+                    <div class="form-group">
+                        <label for="ownSourceAccountId">From Account:</label>
+                        <select id="ownSourceAccountId" name="sourceAccountId" class="form-control" required>
+                            <option value="">Select account</option>
+                            <option th:each="account : ${dashboard.accounts}"
+                                    th:value="${account.id}"
+                                    th:text="|Account ${account.userAccountNumber} - ${account.formattedIban} (Balance: ${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')} PLN)|">
+                            </option>
+                        </select>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="ownDestinationAccountId">To Account:</label>
+                        <select id="ownDestinationAccountId" name="destinationAccountId" class="form-control" required>
+                            <option value="">Select account</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ownAmount">Amount:</label>
+                        <div class="input-group">
+                            <input type="number" id="ownAmount" name="amount" class="form-control" step="0.01" min="0.01" required/>
+                            <div class="input-group-append">
+                                <span class="input-group-text">PLN</span>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ownTitle">Title:</label>
+                        <input type="text" id="ownTitle" name="title" class="form-control" required/>
+                    </div>
+                    <button type="submit" class="btn-transfer">Send Transfer</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" class="form-control" required/>
+
+            <!-- Internal bank transfer -->
+            <div class="tab-pane fade" id="internal" role="tabpanel">
+                <form th:action="@{/dashboard/transfer/internal}" method="post" class="internal-transfer-form" id="internalTransferForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="internalSourceAccountId">From Account:</label>
+                        <select id="internalSourceAccountId" name="sourceAccountId" class="form-control" required>
+                            <option value="">Select account</option>
+                            <option th:each="account : ${dashboard.accounts}"
+                                    th:value="${account.id}"
+                                    th:text="|Account ${account.userAccountNumber} - ${account.formattedIban} (Balance: ${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')} PLN)|">
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">Please select an account</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Recipient Identification Method:</label>
+                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                            <label class="btn btn-outline-primary active w-50">
+                                <input type="radio" name="recipientMethod" value="iban" checked> IBAN
+                            </label>
+                            <label class="btn btn-outline-primary w-50">
+                                <input type="radio" name="recipientMethod" value="email"> Email
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group recipient-iban">
+                        <label for="internalRecipientIban">Recipient IBAN:</label>
+                        <input type="text" id="internalRecipientIban" name="recipientIban" class="form-control" required pattern="[A-Z]{2}[0-9]{26}" title="Please enter a valid IBAN (e.g., PL12345678901234567890123456)"/>
+                        <div class="invalid-feedback">Please enter a valid IBAN</div>
+                    </div>
+                    <div class="form-group recipient-email" style="display: none;">
+                        <label for="internalRecipientEmail">Recipient Email:</label>
+                        <input type="email" id="internalRecipientEmail" name="recipientEmail" class="form-control"/>
+                        <div class="invalid-feedback">Please enter a valid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="internalAmount">Amount:</label>
+                        <div class="input-group">
+                            <input type="number" id="internalAmount" name="amount" class="form-control" step="0.01" min="0.01" required/>
+                            <div class="input-group-append">
+                                <span class="input-group-text">PLN</span>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback">Please enter a valid amount greater than 0</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="internalTitle">Title:</label>
+                        <input type="text" id="internalTitle" name="title" class="form-control" required minlength="3"/>
+                        <div class="invalid-feedback">Please enter a transfer title (minimum 3 characters)</div>
+                    </div>
+                    <button type="submit" class="btn-transfer">Send Transfer</button>
+                </form>
             </div>
-            <button type="submit" class="btn-transfer">Send Transfer</button>
-        </form>
+
+            <!-- External transfer -->
+            <div class="tab-pane fade" id="external" role="tabpanel">
+                <form th:action="@{/dashboard/transfer/external}" method="post" class="external-transfer-form" id="externalTransferForm">
+                    <div class="form-group">
+                        <label for="externalSourceAccountId">From Account:</label>
+                        <select id="externalSourceAccountId" name="sourceAccountId" class="form-control" required>
+                            <option value="">Select account</option>
+                            <option th:each="account : ${dashboard.accounts}"
+                                    th:value="${account.id}"
+                                    th:text="|Account ${account.userAccountNumber} - ${account.formattedIban} (Balance: ${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')} PLN)|">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="externalRecipientIban">Recipient IBAN:</label>
+                        <input type="text" id="externalRecipientIban" name="recipientIban" class="form-control" required/>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="externalRecipientName">Recipient Name:</label>
+                        <input type="text" id="externalRecipientName" name="recipientName" class="form-control" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="externalAmount">Amount:</label>
+                        <div class="input-group">
+                            <input type="number" id="externalAmount" name="amount" class="form-control" step="0.01" min="0.01" required/>
+                            <div class="input-group-append">
+                                <span class="input-group-text">PLN</span>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="externalTitle">Title:</label>
+                        <input type="text" id="externalTitle" name="title" class="form-control" required/>
+                    </div>
+                    <button type="submit" class="btn-transfer">Send Transfer</button>
+                </form>
+            </div>
+        </div>
     </div>
 </main>
 
@@ -463,9 +646,10 @@
 <!-- Notification -->
 <div id="copyNotification" class="copy-success">IBAN skopiowany do schowka</div>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<!-- Scripts with correct loading order -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="/js/dashboard.js"></script>
 </body>
 </html>

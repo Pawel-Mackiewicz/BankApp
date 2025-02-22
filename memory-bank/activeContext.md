@@ -1,29 +1,60 @@
-# Active Development Context
+# Aktualny Kontekst Projektu
 
-## Current Focus [2025-02-22 18:20]
+## Implementacja Systemu Przelewów
 
-### Dashboard UI Improvements
+### Bieżący Status
+Zaimplementowano system zakładek i różne typy przelewów w formularzu "Make a Transfer".
 
-#### 1. IBAN Highlight
-- [x] Implemented text-shadow highlight on hover for IBANs.
-- [ ] Verify that highlight is visually appealing and doesn't interfere with readability.
+### Zrealizowane Elementy
+1. Frontend:
+   - System zakładek w sekcji "Make a Transfer"
+   - Dynamiczna walidacja IBAN i email
+   - Poprawiona kolejność ładowania skryptów JavaScript
+   - Wyświetlanie IBAN i salda przy kontach
+   - Obsługa różnych typów formularzy
 
-#### 2. "Make a Transfer" Alignment
-- [x] Centered the "Make a Transfer" title.
-- [ ] Confirm that centering is consistent across different screen sizes.
+2. Backend:
+   - Zaktualizowano AccountRepository o metody:
+     * findByIban
+     * findFirstByOwner_email
+   - Rozszerzono ValidationController o lepszą walidację emaila
+   - Usunięto stary TransferForm
+   - Dodano dedykowane DTO dla każdego typu przelewu
 
-### Potwierdzone Decyzje
-1.  `text-shadow` was used instead of `background-color` for highlighting IBANs.
-2.  Inline style was added for "Make a Transfer" title to center it.
+3. Walidacja:
+   - IBAN przez IbanValidator
+   - Email przez AccountRepository (sprawdzanie zarówno emaila jak i username)
+   - Saldo konta przed wykonaniem przelewu
+   - Natychmiastowa walidacja w formularzu
 
-### Oczekiwane Rezultaty na Dziś
-1.  Visually appealing IBAN highlight.
-2.  Centered "Make a Transfer" title.
+### Typy Przelewów
+1. Przelew między własnymi kontami:
+   - Dynamiczna lista kont z wyłączeniem wybranego
+   - Wyświetlanie IBAN i salda dla obu kont
 
-### Następne Kroki (na jutro)
-1.  Test responsiveness.
-2.  Get user feedback.
+2. Przelew wewnętrzny:
+   - Walidacja IBAN lub email odbiorcy
+   - Obsługa obu metod identyfikacji odbiorcy
 
-### Ryzyka do Monitorowania
-- Readability of highlighted IBANs.
-- Consistency of UI across screen sizes.
+3. Przelew zewnętrzny:
+   - Walidacja IBAN
+   - Implementacja jako withdrawal
+
+### Aktualne Funkcjonalności
+- Przełączanie między typami przelewów
+- Dynamiczna walidacja wszystkich pól
+- Natychmiastowe komunikaty o błędach
+- Automatyczna aktualizacja list kont
+- Zabezpieczenia przed nieprawidłowymi danymi
+
+### Następne Kroki
+1. Testy integracyjne nowych funkcjonalności
+2. Monitoring działania walidacji
+3. Zbieranie feedbacku od użytkowników
+4. Potencjalne rozszerzenie o @BankTag w przyszłości
+
+### Uwagi Techniczne
+- Skrypty JavaScript załadowane w prawidłowej kolejności
+- Wykorzystanie Bootstrap dla komponentów UI
+- Zaimplementowana obsługa błędów na froncie i backendzie
+- Dodana walidacja cross-field dla przelewów własnych
