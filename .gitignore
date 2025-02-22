@@ -51,9 +51,6 @@ build/
 ### Environment Variables ###
 .env
 .credentials
-.clinerules-architect
-.clinerules-ask
-.clinerules-code
 hs_err_pid7228.log
 IdeaProjects.lnk
 key
