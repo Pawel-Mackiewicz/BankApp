@@ -18,10 +18,6 @@ public class IbanGenerator {
                 .toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(generateIban(0, 1));
-    }
-
     public String formatIban(String iban) {
         return Iban.valueOf(iban).toFormattedString();
     }

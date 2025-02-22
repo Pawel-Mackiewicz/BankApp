@@ -97,7 +97,6 @@ public class TransactionHistoryRestController {
         List<Transaction> transactions = transactionService.getRecentTransactions(accountId, Integer.MAX_VALUE);
         List<Transaction> filteredTransactions = filterService.filterTransactions(
                 transactions, dateFrom, dateTo, type, amountFrom, amountTo, searchQuery);
-
         TransactionExporter exporter = exporters.stream()
                 .filter(e -> e.getFormat().equalsIgnoreCase(format))
                 .findFirst()

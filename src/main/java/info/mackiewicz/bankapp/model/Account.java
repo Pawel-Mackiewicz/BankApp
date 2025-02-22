@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import info.mackiewicz.bankapp.utils.IbanGenerator;
 import info.mackiewicz.bankapp.dto.AccountOwnerDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -115,5 +116,9 @@ public class Account {
     @Override
     public String toString() {
         return String.format("Account #%d [balance = %.2f]", userAccountNumber, balance);
+    }
+
+    public String getFormattedIban() {
+        return IbanGenerator.formatIban(this.iban);
     }
 }
