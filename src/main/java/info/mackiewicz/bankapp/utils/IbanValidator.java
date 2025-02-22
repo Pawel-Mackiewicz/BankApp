@@ -2,9 +2,12 @@ package info.mackiewicz.bankapp.utils;
 
 import org.iban4j.IbanUtil;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class IbanValidator {
 
-    public static boolean isValid(String iban) {
+    public boolean isValid(String iban) {
         return IbanUtil.isValid(iban);
     }
 }

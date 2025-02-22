@@ -22,21 +22,21 @@ public class DashboardDTO {
     private String currency = "PLN";
 
     public boolean isRecipient(Transaction transaction) {
-        return switch (transaction.getType()) {
+        return switch (transaction.getType().getCategory()) {
             case TRANSFER -> userId.equals(transaction.getDestinationAccount().getOwner().getId());
             case WITHDRAWAL, FEE -> false;
-            default -> true;
+            case DEPOSIT -> true;
         };
     }
 
     public String getOtherPartyName(Transaction transaction) {
-        return switch (transaction.getType()) {
+        return switch (transaction.getType().getCategory()) {
             case TRANSFER -> isRecipient(transaction)
-                ? transaction.getDestinationAccount().getOwner().getFullName()
-                : transaction.getSourceAccount().getOwner().getFullName();
+                ? transaction.getSourceAccount().getOwner().getFullName()
+                : transaction.getDestinationAccount().getOwner().getFullName();
             case DEPOSIT -> "Deposit";
             case WITHDRAWAL -> "Withdrawal";
-            default -> "Fee";
+            case FEE -> "Fee";
         };
     }
 }

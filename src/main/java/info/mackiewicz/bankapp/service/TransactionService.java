@@ -4,6 +4,7 @@ import info.mackiewicz.bankapp.exception.*;
 import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.model.TransactionStatus;
+import info.mackiewicz.bankapp.model.TransactionType;
 import info.mackiewicz.bankapp.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 
@@ -18,7 +19,8 @@ public class TransactionService {
     private final TransactionProcessor processor;
     private final AccountService accountService;
 
-    TransactionService(TransactionRepository repository, TransactionProcessor processor, AccountService accountService) {
+    TransactionService(TransactionRepository repository, TransactionProcessor processor,
+            AccountService accountService) {
         this.repository = repository;
         this.processor = processor;
         this.accountService = accountService;
@@ -27,13 +29,13 @@ public class TransactionService {
     @Transactional
     public Transaction createTransaction(Transaction transaction) {
         Transaction savedTransaction = repository.save(transaction);
-        processInternalTransfer(savedTransaction);
+        processOwnTransfer(savedTransaction);
 
         return savedTransaction;
     }
 
-    private void processInternalTransfer(Transaction savedTransaction) {
-        if (savedTransaction.isInternalTransaction()) {
+    private void processOwnTransfer(Transaction savedTransaction) {
+        if (TransactionType.TRANSFER_OWN.equals(savedTransaction.getType())) {
             processTransaction(savedTransaction);
         }
     }
@@ -57,20 +59,22 @@ public class TransactionService {
     }
 
     public List<Transaction> getTransactionsByAccountId(int accountId) {
-        //throws exception, if account does not exist
+        // throws exception, if account does not exist
         @SuppressWarnings("unused")
         Account account = accountService.getAccountById(accountId);
 
-            return repository.findByAccountId(accountId)
-                    .orElseThrow(() -> new NoTransactionsForAccountException("Account " + accountId + " did not make any transactions"));
+        return repository.findByAccountId(accountId)
+                .orElseThrow(() -> new NoTransactionsForAccountException(
+                        "Account " + accountId + " did not make any transactions"));
     }
 
     public List<Transaction> getRecentTransactions(int accountId, int count) {
         return repository.findTopNByAccountIdOrderByCreatedDesc(accountId, count)
-                .orElseThrow(() -> new NoTransactionsForAccountException("Account " + accountId + " did not make any transactions"));
+                .orElseThrow(() -> new NoTransactionsForAccountException(
+                        "Account " + accountId + " did not make any transactions"));
     }
 
-    //*********** TRANSACTION PROCESSING ************
+    // *********** TRANSACTION PROCESSING ************
     @Async
     public void processTransactionById(int transactionId) {
         Transaction transaction = getTransactionById(transactionId);
@@ -85,11 +89,13 @@ public class TransactionService {
 
     private void processTransaction(Transaction transaction) {
         switch (transaction.getStatus()) {
-                    case DONE -> throw new TransactionAlreadyProcessedException("Transaction " + transaction.getId() + " has already been processed");
-                    case FAULTY -> throw new TransactionCannotBeProcessedException("Transaction " + transaction.getId() + " cannot be processed");
-                    case NEW -> processor.processTransaction(transaction);
-                    case PENDING -> throw new UnsupportedOperationException("Unimplemented case: " + transaction.getStatus());
-                    default -> throw new IllegalArgumentException("Unexpected value: " + transaction.getStatus());
+            case DONE -> throw new TransactionAlreadyProcessedException(
+                    "Transaction " + transaction.getId() + " has already been processed");
+            case FAULTY -> throw new TransactionCannotBeProcessedException(
+                    "Transaction " + transaction.getId() + " cannot be processed");
+            case NEW -> processor.processTransaction(transaction);
+            case PENDING -> throw new UnsupportedOperationException("Unimplemented case: " + transaction.getStatus());
+            default -> throw new IllegalArgumentException("Unexpected value: " + transaction.getStatus());
         }
     }
 }

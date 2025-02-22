@@ -35,11 +35,11 @@ public class TransactionHydrator {
     }
 
     public Transaction hydrate(Transaction transaction) {
-        switch (transaction.getType()) {
-            case DEPOSIT    -> transaction.setStrategy(depositTransaction);
+        switch (transaction.getType().getCategory()) {
+            case DEPOSIT -> transaction.setStrategy(depositTransaction);
             case WITHDRAWAL -> transaction.setStrategy(withdrawalTransaction);
-            case TRANSFER   -> transaction.setStrategy(transferTransaction);
-            case FEE        -> {
+            case TRANSFER -> transaction.setStrategy(transferTransaction);
+            case FEE -> {
                 Account bankAccount = accountService.getAccountById(BANK_ACCOUNT_ID);
                 transaction.setDestinationAccount(bankAccount);
                 transaction.setStrategy(transferTransaction);

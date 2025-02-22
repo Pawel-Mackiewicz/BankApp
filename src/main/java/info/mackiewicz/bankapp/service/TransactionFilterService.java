@@ -16,20 +16,27 @@ import java.util.stream.Collectors;
 public class TransactionFilterService {
 
     public List<Transaction> filterTransactions(List<Transaction> transactions,
-                                              LocalDateTime dateFrom,
-                                              LocalDateTime dateTo,
-                                              String type,
-                                              BigDecimal amountFrom,
-                                              BigDecimal amountTo,
-                                              String searchQuery) {
+                                               LocalDateTime dateFrom,
+                                               LocalDateTime dateTo,
+                                               String type,
+                                               BigDecimal amountFrom,
+                                               BigDecimal amountTo,
+                                               String searchQuery) {
         return transactions.stream()
                 .filter(t -> dateFrom == null || !t.getDate().isBefore(dateFrom))
                 .filter(t -> dateTo == null || !t.getDate().isAfter(dateTo))
-                .filter(t -> type == null || t.getType().toString().equals(type))
+                .filter(t -> type == null || filterByType(t, type))
                 .filter(t -> amountFrom == null || t.getAmount().compareTo(amountFrom) >= 0)
                 .filter(t -> amountTo == null || t.getAmount().compareTo(amountTo) <= 0)
                 .filter(t -> matches(t, searchQuery))
                 .collect(Collectors.toList());
+    }
+
+    private boolean filterByType(Transaction transaction, String type) {
+        if (type.equals("TRANSFER")) {
+            return transaction.getType().getCategory().toString().equals("TRANSFER");
+        }
+        return transaction.getType().toString().equals(type);
     }
 
     private boolean matches(Transaction transaction, String searchQuery) {
@@ -39,15 +46,24 @@ public class TransactionFilterService {
 
         String query = searchQuery.toLowerCase();
         return transaction.getTitle().toLowerCase().contains(query) ||
-                matchesAccountId(transaction.getSourceAccount(), query) ||
-                matchesAccountId(transaction.getDestinationAccount(), query);
+                matchesAccount(transaction.getSourceAccount(), query) ||
+                matchesAccount(transaction.getDestinationAccount(), query);
     }
 
-    private boolean matchesAccountId(Account account, String query) {
-        return Optional.ofNullable(account)
-                .map(Account::getId)
+    private boolean matchesAccount(Account account, String query) {
+        if (account == null) {
+            return false;
+        }
+
+        return Optional.ofNullable(account.getId())
                 .map(String::valueOf)
                 .map(id -> id.contains(query))
+                .orElse(false) ||
+                Optional.ofNullable(account.getOwner())
+                .map(owner -> {
+                    String fullName = owner.getFullName().toLowerCase();
+                    return fullName.contains(query);
+                })
                 .orElse(false);
     }
 

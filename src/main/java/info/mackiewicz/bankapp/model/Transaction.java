@@ -56,12 +56,6 @@ public class Transaction {
         @Column(name = "date")
     private LocalDateTime date;
 
-    @Column(name = "internal_transaction")
-    private boolean internalTransaction;
-
-
-
-
     
     @PrePersist
     public void prePersist() {
@@ -84,16 +78,16 @@ public class Transaction {
     }
 
     public String getOtherPartyName(Integer userId) {
-        if (this.type == TransactionType.TRANSFER && this.sourceAccount.getOwnerId().equals(userId)) {
-            return this.destinationAccount.getOwner().getUsername();
-        } else if (this.type == TransactionType.TRANSFER && this.destinationAccount.getOwnerId().equals(userId)) {
-            return this.sourceAccount.getOwner().getUsername();
+        if (this.type == TransactionType.FEE) {
+            return "Fee";
         } else if (this.type == TransactionType.DEPOSIT) {
             return "Deposit";
         } else if (this.type == TransactionType.WITHDRAWAL) {
             return "Withdrawal";
-        } else {
-            return "Fees";
+        } else if (this.destinationAccount.getOwnerId().equals(userId)) {  // If the transaction is a transfer and the user is the owner of the destination account, return the source account owner's username
+            return this.sourceAccount.getOwner().getUsername();
+        } else {                                                           // If the transaction is a transfer and the user is the owner of the source account, return the destination account owner's username     
+            return this.destinationAccount.getOwner().getUsername();
         }
     }
 }

@@ -45,11 +45,13 @@ public class LoggingService {
                 .append("\tType: ").append(transaction.getType().getDisplayName()).append("\n")
                 .append("\tAmount: ").append(transaction.getAmount()).append("\n");
 
-        if (transaction.getType() != TransactionType.DEPOSIT) {
-            sb.append("\tFrom: ").append(formatAccountInfo(transaction.getSourceAccount())).append("\n");
-        }
-        if (transaction.getType() != TransactionType.FEE && transaction.getType() != TransactionType.WITHDRAWAL) {
-            sb.append("\tTo: ").append(formatAccountInfo(transaction.getDestinationAccount())).append("\n");
+        switch (transaction.getType().getCategory()) {
+            case DEPOSIT -> sb.append("\tTo: ").append(formatAccountInfo(transaction.getDestinationAccount())).append("\n");
+            case WITHDRAWAL, FEE -> sb.append("\tFrom: ").append(formatAccountInfo(transaction.getSourceAccount())).append("\n");
+            case TRANSFER -> {
+                sb.append("\tFrom: ").append(formatAccountInfo(transaction.getSourceAccount())).append("\n");
+                sb.append("\tTo: ").append(formatAccountInfo(transaction.getDestinationAccount())).append("\n");
+            }
         }
         TRANSACTION_LOGGER.info(sb.toString());
     }
@@ -57,7 +59,8 @@ public class LoggingService {
     public static void logSuccessfulTransaction(Transaction transaction) {
         StringBuilder sb = new StringBuilder();
         sb.append("Successful Transaction\n\tID: ").append(transaction.getId());
-        switch (transaction.getType()) {
+
+        switch (transaction.getType().getCategory()) {
             case TRANSFER -> sb.append(String.format(
                     "\n\tAmount Sent: %.2f\n\tFrom: %s\n\tTo: %s",
                     transaction.getAmount(),

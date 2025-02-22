@@ -5,9 +5,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import info.mackiewicz.bankapp.dto.AccountOwnerDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,11 +34,12 @@ public class Account {
     private Integer id;
 
     @Getter
-    @Column(name = "user_account_number")
+    @Column(name = "user_account_number", nullable = false)
     private Integer userAccountNumber;
 
     @Getter
     @Setter
+    @Column(unique = true, nullable = false)
     private String iban;
 
     @Getter
@@ -49,7 +51,7 @@ public class Account {
 
     @Getter
     @Setter
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner_id")
     private User owner;
@@ -62,6 +64,11 @@ public class Account {
         this.balance = BigDecimal.ZERO;
         this.creationDate = LocalDateTime.now();
         this.userAccountNumber = owner.getNextAccountNumber();  
+    }
+
+    @JsonProperty("owner")
+    public AccountOwnerDTO getOwnerDTO() {
+        return owner != null ? new AccountOwnerDTO(owner) : null;
     }
 
     @JsonProperty("owner_id")
@@ -85,9 +92,7 @@ public class Account {
         balance = balance.subtract(amount);
     }
 
-    // There is two checks, one after another in every transaction. leave it?
     public boolean canWithdraw(BigDecimal amount) {
-
         return (balance.compareTo(amount) >= 0);
     }
 

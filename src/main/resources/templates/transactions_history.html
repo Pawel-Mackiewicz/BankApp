@@ -186,7 +186,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="logo">BankApp</div>
         <nav>
@@ -204,11 +203,9 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <div class="container">
-        <!-- Filters Panel -->
         <div class="filters-panel">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4>Transaction History</h4>
                 <div class="export-buttons">
                     <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportTransactions('csv')">
@@ -222,20 +219,33 @@
             
             <div class="filters-grid">
                 <div class="filter-group">
+                    <label for="accountId">Account</label>
+                    <select id="accountId" name="accountId" class="filter-input">
+                        <option th:each="account : ${accounts}" 
+                                th:value="${account.id}"
+                                th:text="${account.iban + ' (' + #numbers.formatDecimal(account.balance, 1, 2) + ' PLN)'}"
+                                th:selected="${account.id == selectedAccountId}">
+                        </option>
+                    </select>
+                </div>
+                <div class="filter-group">
                     <label for="dateFrom">From Date</label>
-                    <input type="datetime-local" id="dateFrom" name="dateFrom" class="filter-input">
+                    <input type="date" id="dateFrom" name="dateFrom" class="filter-input">
                 </div>
                 <div class="filter-group">
                     <label for="dateTo">To Date</label>
-                    <input type="datetime-local" id="dateTo" name="dateTo" class="filter-input">
+                    <input type="date" id="dateTo" name="dateTo" class="filter-input">
                 </div>
                 <div class="filter-group">
                     <label for="type">Transaction Type</label>
                     <select id="type" name="type" class="filter-input">
                         <option value="">All</option>
-                        <option value="TRANSFER">Transfer</option>
+                        <option value="TRANSFER_OWN">Own Account Transfer</option>
+                        <option value="TRANSFER_INTERNAL">Internal Transfer</option>
+                        <option value="TRANSFER_EXTERNAL">External Transfer</option>
                         <option value="DEPOSIT">Deposit</option>
                         <option value="WITHDRAWAL">Withdrawal</option>
+                        <option value="FEE">Fee</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -249,12 +259,11 @@
                 <div class="filter-group">
                     <label for="searchQuery">Search</label>
                     <input type="text" id="searchQuery" name="searchQuery" class="filter-input" 
-                           placeholder="Account number or title...">
+                           placeholder="Search by person name, title...">
                 </div>
             </div>
         </div>
 
-        <!-- Desktop Table View -->
         <table class="transactions-table">
             <thead>
                 <tr>
@@ -267,50 +276,12 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Początkowe transakcje -->
-                <tr th:each="transaction : ${transactions}">
-                    <td th:text="${#temporals.format(transaction.date, 'dd-MM-yyyy HH:mm')}">Date</td>
-                    <td>
-                        <span class="transaction-amount"
-                              th:classappend="${transaction.type.toString() == 'DEPOSIT' || transaction.type.toString() == 'TRANSFER'} ? 'amount-positive' : 'amount-negative'"
-                              th:text="${(transaction.type.toString() == 'DEPOSIT' || transaction.type.toString() == 'TRANSFER' ? '+' : '-') + #numbers.formatDecimal(transaction.amount, 1, 'COMMA', 2, 'POINT') + ' PLN'}">
-                            Amount
-                        </span>
-                    </td>
-                    <td th:text="${transaction.type}">Type</td>
-                    <td th:text="${transaction.sourceAccount?.id + ' → ' + transaction.destinationAccount?.id}">From → To</td>
-                    <td th:text="${transaction.title}">Title</td>
-                    <td th:text="${transaction.status}">Status</td>
-                </tr>
             </tbody>
         </table>
 
-        <!-- Mobile Card View -->
         <div class="transaction-cards">
-            <!-- Początkowe transakcje w widoku mobilnym -->
-            <div th:each="transaction : ${transactions}" class="transaction-card">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="transaction-date" th:text="${#temporals.format(transaction.date, 'dd-MM-yyyy')}">Date</div>
-                        <div class="transaction-title" th:text="${transaction.title}">Title</div>
-                        <div class="transaction-parties" th:text="${transaction.sourceAccount?.id + ' → ' + transaction.destinationAccount?.id}">From → To</div>
-                    </div>
-                    <div>
-                        <span class="transaction-amount"
-                              th:classappend="${transaction.type.toString() == 'DEPOSIT' || transaction.type.toString() == 'TRANSFER_IN'} ? 'amount-positive' : 'amount-negative'"
-                              th:text="${(transaction.type.toString() == 'DEPOSIT' || transaction.type.toString() == 'TRANSFER_IN' ? '+' : '-') + #numbers.formatDecimal(transaction.amount, 1, 'COMMA', 2, 'POINT') + ' PLN'}">
-                            Amount
-                        </span>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <span class="badge badge-secondary" th:text="${transaction.type}">Type</span>
-                    <span class="badge badge-info" th:text="${transaction.status}">Status</span>
-                </div>
-            </div>
         </div>
 
-        <!-- Loading Spinner -->
         <div class="loading-spinner">
             <div class="spinner-border text-primary" role="status">
                 <span class="sr-only">Loading...</span>

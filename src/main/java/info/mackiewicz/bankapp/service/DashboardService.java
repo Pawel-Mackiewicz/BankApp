@@ -102,7 +102,7 @@ public class DashboardService {
                 .withSourceAccount(transferForm.getSourceAccountId())
                 .withDestinationAccount(transferForm.getRecipientAccountId())
                 .withAmount(transferForm.getAmount())
-                .withType(TransactionType.TRANSFER)
+                .withType(getTransactionType(transferForm))
                 .withTransactionTitle(transferForm.getTitle())
                 .build();
 
@@ -110,6 +110,13 @@ public class DashboardService {
 
     }
 
+    private TransactionType getTransactionType(TransferForm transferForm) {
+        Account acc1 = accountService.getAccountById(transferForm.getSourceAccountId());
+        Account acc2 = accountService.getAccountById(transferForm.getRecipientAccountId());
+        return acc1.getOwnerId().equals(acc2.getOwnerId())
+                ? TransactionType.TRANSFER_OWN
+                : TransactionType.TRANSFER_INTERNAL;
+    }
     @Transactional
     public void createNewAccount(Integer userId) {
         accountService.createAccount(userId);
