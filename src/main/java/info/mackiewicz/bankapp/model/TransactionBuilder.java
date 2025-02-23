@@ -1,41 +1,48 @@
 package info.mackiewicz.bankapp.model;
 
-import java.math.BigDecimal;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import info.mackiewicz.bankapp.exception.TransactionAmountNotSpecifiedException;
 import info.mackiewicz.bankapp.exception.TransactionDestinationAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.exception.TransactionSourceAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.exception.TransactionTypeNotSpecifiedException;
-import info.mackiewicz.bankapp.service.AccountService;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
 
 @Component
 @Scope("prototype")
 public class TransactionBuilder {
 
-    private final AccountService accountService;
-
     private Account sourceAccount;
     private Account destinationAccount;
     private TransactionType type;
-    private TransactionStatus status;
+    private final TransactionStatus status;
     private BigDecimal amount;
     private String title;
 
-    public TransactionBuilder(AccountService accountService) {
-        this.accountService = accountService;
+    public TransactionBuilder() {
         this.status = TransactionStatus.NEW;
     }
 
-    public TransactionBuilder withSourceAccount(Integer accountId) {
-        this.sourceAccount = accountId == null ? null : accountService.getAccountById(accountId);
+    public Transaction build() {
+        validate();
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setType(type);
+        transaction.setStatus(status);
+        transaction.setSourceAccount(sourceAccount);
+        transaction.setDestinationAccount(destinationAccount);
+        transaction.setTitle(title);
+        return transaction;
+    }
+
+    public TransactionBuilder withSourceAccount(Account account) {
+        this.sourceAccount = account;
         return this;
     }
 
-    public TransactionBuilder withDestinationAccount(Integer accountId) {
-        this.destinationAccount = accountId == null ? null : accountService.getAccountById(accountId);
+    public TransactionBuilder withDestinationAccount(Account account) {
+        this.destinationAccount = account;
         return this;
     }
 
@@ -59,17 +66,6 @@ public class TransactionBuilder {
         return this;
     }
 
-    public Transaction build() {
-        validate();
-        Transaction transaction = new Transaction();
-        transaction.setAmount(amount);
-        transaction.setType(type);
-        transaction.setStatus(status);
-        transaction.setSourceAccount(sourceAccount);
-        transaction.setDestinationAccount(destinationAccount);
-        transaction.setTitle(title);
-        return transaction;
-    }
 
     private void validate() {
         if (amount == null) {

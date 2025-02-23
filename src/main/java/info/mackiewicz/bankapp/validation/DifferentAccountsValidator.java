@@ -1,9 +1,10 @@
 package info.mackiewicz.bankapp.validation;
 
+import info.mackiewicz.bankapp.dto.TransferRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import info.mackiewicz.bankapp.dto.ExternalAccountTransferRequest;
-import info.mackiewicz.bankapp.dto.InternalAccountTransferRequest;
+import info.mackiewicz.bankapp.dto.ExternalTransferRequest;
+import info.mackiewicz.bankapp.dto.InternalTransferRequest;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,17 +30,17 @@ public class DifferentAccountsValidator implements ConstraintValidator<Different
             return true; // Let @NotNull handle null validation
         }
 
-        if (value instanceof InternalAccountTransferRequest) {
-            return validateInternalTransfer((InternalAccountTransferRequest) value);
-        } else if (value instanceof ExternalAccountTransferRequest) {
-            return validateExternalTransfer((ExternalAccountTransferRequest) value);
+        if (value instanceof InternalTransferRequest) {
+            return validateInternalTransfer((InternalTransferRequest) value);
+        } else if (value instanceof ExternalTransferRequest) {
+            return validateExternalTransfer((TransferRequest) value);
         }
 
         log.debug("Validation skipped - not a transfer request");
         return true; // Not a transfer request, validation not applicable
     }
 
-    private boolean validateInternalTransfer(InternalAccountTransferRequest request) {
+    private boolean validateInternalTransfer(InternalTransferRequest request) {
         log.debug("Validating internal transfer: sourceIban={}, recipientIban={}", 
                  request.getSourceIban(), request.getRecipientIban());
         
@@ -53,7 +54,7 @@ public class DifferentAccountsValidator implements ConstraintValidator<Different
         return result;
     }
 
-    private boolean validateExternalTransfer(ExternalAccountTransferRequest request) {
+    private boolean validateExternalTransfer(TransferRequest request) {
         log.debug("Validating external transfer: sourceIban={}, recipientIban={}", 
                  request.getSourceIban(), request.getRecipientIban());
         
