@@ -1,5 +1,12 @@
 package info.mackiewicz.bankapp.controller.web;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import info.mackiewicz.bankapp.converter.TransactionAssembler;
 import info.mackiewicz.bankapp.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.dto.OwnTransferRequest;
@@ -11,15 +18,7 @@ import info.mackiewicz.bankapp.service.AccountService;
 import info.mackiewicz.bankapp.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @Controller
@@ -43,10 +42,12 @@ public class TransferController {
             Transaction transaction = transactionAssembler.assembleOwnTransfer(request);
 
             transactionService.createTransaction(transaction);
-            redirectAttributes.addFlashAttribute("successMessage",
+            redirectAttributes.addFlashAttribute("transferSuccessMessage",
                     "Transfer between own accounts created successfully");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            log.info("Flash success message set for own transfer: Transfer between own accounts created successfully");
+         } catch (Exception e) {
+             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+             log.error("Flash error message set for own transfer: " + e.getMessage());
         }
         return "redirect:/dashboard";
     }
@@ -68,9 +69,11 @@ public class TransferController {
             Transaction transaction = transactionAssembler.assembleInternalTransfer(request);
 
             transactionService.createTransaction(transaction);
-            redirectAttributes.addFlashAttribute("successMessage", "Internal bank transfer created successfully");
+            redirectAttributes.addFlashAttribute("transferSuccessMessage", "Internal bank transfer created successfully");
+            log.info("Flash success message set for internal transfer: Internal bank transfer created successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            log.error("Flash error message set for internal transfer: " + e.getMessage());
         }
         return "redirect:/dashboard";
     }
@@ -86,9 +89,11 @@ public class TransferController {
             Transaction transaction = transactionAssembler.assembleExternalTransfer(request);
 
             transactionService.createTransaction(transaction);
-            redirectAttributes.addFlashAttribute("successMessage", "External transfer created successfully");
+            redirectAttributes.addFlashAttribute("transferSuccessMessage", "External transfer created successfully");
+            log.info("Flash success message set for external transfer: External transfer created successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            log.error("Flash error message set for external transfer: " + e.getMessage());
         }
         return "redirect:/dashboard";
     }

@@ -90,8 +90,8 @@
     <div th:if="${not #lists.isEmpty(dashboard.accounts)}" class="transfer-form mt-4 column">
         <h3>Make a Transfer</h3>
         <!-- Transfer messages -->
-        <div th:if="${successMessage != null && !successMessage.contains('account')}" class="alert alert-success mb-3">
-            <p th:text="${successMessage}"></p>
+        <div th:if="${transferSuccessMessage != null}" class="alert alert-success mb-3">
+            <p th:text="${transferSuccessMessage}"></p>
         </div>
         <div th:if="${errorMessage}" class="alert alert-danger mb-3">
             <p th:text="${errorMessage}"></p>

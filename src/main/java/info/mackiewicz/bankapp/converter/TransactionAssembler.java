@@ -67,6 +67,11 @@ public class TransactionAssembler {
     }
 
     private TransactionType resolveTransactionType(TransferRequest request) {
+        
+        //TODO: IMPLEMENT LOGIC WHEN TRANSACTION IS THROUGH EMAIL
+        if (request.getRecipientIban() == null) {
+            return TransactionType.TRANSFER_INTERNAL;
+        }
 
         return request.getSourceIban().regionMatches(5, request.getRecipientIban(), 5, 20)
                 ? TransactionType.TRANSFER_OWN :
