@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class OwnAccountTransferRequest {
+public class OwnTransferRequest {
     @NotNull(message = "Source account is required")
     private Integer sourceAccountId;
 

@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.mapper;
+package info.mackiewicz.bankapp.converter;
 
 import org.springframework.stereotype.Component;
 
