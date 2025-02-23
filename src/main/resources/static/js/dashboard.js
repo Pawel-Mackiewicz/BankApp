@@ -431,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
 
                         // Reload page to show updated balances and transactions
-                        window.location.reload();
+                        form.submit();
                     } catch (error) {
                         console.error('Transfer error:', error);
                         const errorAlert = document.createElement('div');
@@ -443,6 +443,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     console.log('Form validation failed');
                 }
+                 // Debug: Log flash messages from server if any
+                 const flashSuccess = document.querySelector('.alert.alert-success');
+                 const flashError = document.querySelector('.alert.alert-danger');
+                 if (flashSuccess) {
+                     console.log("Flash success message found:", flashSuccess.textContent.trim());
+                 }
+                 if (flashError) {
+                     console.log("Flash error message found:", flashError.textContent.trim());
+                 }
             });
         }
     });
