@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.model.TransactionType;
 import info.mackiewicz.bankapp.service.strategy.DepositTransaction;
@@ -14,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class TransactionHydratorTest {
 
