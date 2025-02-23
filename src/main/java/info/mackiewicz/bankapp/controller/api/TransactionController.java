@@ -25,22 +25,24 @@ public class TransactionController {
         this.transactionBuilder = transactionBuilder;
     }
 
-    // Create a new transaction.
-    // POST /api/transactions
-    @PostMapping
-    public ResponseEntity<Transaction> createTransaction(@RequestBody CreateTransactionRequest request) {
-        Transaction transaction = transactionBuilder
-                .withSourceAccount(request.getSourceAccountId()) // could be null for DEPOSIT
-                .withDestinationAccount(request.getDestinationAccountId())  // could be null for WITHDRAW, FEE
-                .withAmount(request.getAmount())
-                .withType(request.getType())
-                .withTransactionTitle(request.getTitle())
-                .build();
+    // Disabled for testing purposes
+    // // Create a new transaction.
+    // // POST /api/transactions
+    // @PostMapping
+    // public ResponseEntity<Transaction> createTransaction(@RequestBody CreateTransactionRequest request) {
 
-        // Save transaction via service layer
-        Transaction savedTransaction = transactionService.createTransaction(transaction);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
-    }
+    //     Transaction transaction = transactionBuilder
+    //             .withSourceAccount(request.getSourceAccountId()) // could be null for DEPOSIT
+    //             .withDestinationAccount(request.getDestinationAccountId())  // could be null for WITHDRAW, FEE
+    //             .withAmount(request.getAmount())
+    //             .withType(request.getType())
+    //             .withTransactionTitle(request.getTitle())
+    //             .build();
+
+    //     // Save transaction via service layer
+    //     Transaction savedTransaction = transactionService.createTransaction(transaction);
+    //     return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
+    // }
 
     //Delete transaction by its ID.
     // DELETE /api/transactions/{id}

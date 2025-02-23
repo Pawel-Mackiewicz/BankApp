@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import info.mackiewicz.bankapp.dto.DashboardDTO;
-import info.mackiewicz.bankapp.dto.ExternalAccountTransferRequest;
-import info.mackiewicz.bankapp.dto.InternalAccountTransferRequest;
-import info.mackiewicz.bankapp.dto.OwnAccountTransferRequest;
+import info.mackiewicz.bankapp.dto.ExternalTransferRequest;
+import info.mackiewicz.bankapp.dto.InternalTransferRequest;
+import info.mackiewicz.bankapp.dto.OwnTransferRequest;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.DashboardService;
 
@@ -28,9 +28,9 @@ public class DashboardController {
     public String getDashboard(@AuthenticationPrincipal User user, Model model) {
         DashboardDTO dashboard = dashboardService.getDashboardData(user.getId());
         model.addAttribute("dashboard", dashboard);
-        model.addAttribute("ownTransferForm", new OwnAccountTransferRequest());
-        model.addAttribute("internalTransferForm", new InternalAccountTransferRequest());
-        model.addAttribute("externalTransferForm", new ExternalAccountTransferRequest());
+        model.addAttribute("ownTransferForm", new OwnTransferRequest());
+        model.addAttribute("internalTransferForm", new InternalTransferRequest());
+        model.addAttribute("externalTransferForm", new ExternalTransferRequest());
         model.addAttribute("userName", user.getUsername());
         return "dashboard";
     }

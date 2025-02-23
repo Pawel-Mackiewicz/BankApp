@@ -1,12 +1,12 @@
 package info.mackiewicz.bankapp.controller.api;
 
+import info.mackiewicz.bankapp.converter.UserMapper;
 import info.mackiewicz.bankapp.dto.UpdateUserRequest;
 import info.mackiewicz.bankapp.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.UserRegistrationService;
 import info.mackiewicz.bankapp.service.UserService;
 import info.mackiewicz.bankapp.validation.RequestValidator;
-import info.mackiewicz.bankapp.mapper.UserMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

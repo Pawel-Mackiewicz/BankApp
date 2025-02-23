@@ -2,8 +2,8 @@ package info.mackiewicz.bankapp.service;
 
 import org.springframework.stereotype.Service;
 
+import info.mackiewicz.bankapp.converter.UserMapper;
 import info.mackiewicz.bankapp.dto.UserRegistrationDto;
-import info.mackiewicz.bankapp.mapper.UserMapper;
 import info.mackiewicz.bankapp.model.User;
 import lombok.RequiredArgsConstructor;
 

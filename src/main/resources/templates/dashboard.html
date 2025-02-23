@@ -160,10 +160,10 @@
                 <form th:action="@{/dashboard/transfer/internal}" method="post" class="internal-transfer-form" id="internalTransferForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="internalSourceAccountId">From Account:</label>
-                        <select id="internalSourceAccountId" name="sourceAccountId" class="form-control" required>
+                        <select id="internalSourceAccountId" name="sourceIban" class="form-control" required>
                             <option value="">Select account</option>
                             <option th:each="account : ${dashboard.accounts}"
-                                    th:value="${account.id}"
+                                    th:value="${account.iban}"
                                     th:text="|Account ${account.userAccountNumber} - ${account.formattedIban} (Balance: ${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')} PLN)|">
                             </option>
                         </select>
@@ -214,17 +214,17 @@
                 <form th:action="@{/dashboard/transfer/external}" method="post" class="external-transfer-form" id="externalTransferForm">
                     <div class="form-group">
                         <label for="externalSourceAccountId">From Account:</label>
-                        <select id="externalSourceAccountId" name="sourceAccountId" class="form-control" required>
+                        <select id="externalSourceAccountId" name="sourceIban" class="form-control" required>
                             <option value="">Select account</option>
                             <option th:each="account : ${dashboard.accounts}"
-                                    th:value="${account.id}"
+                                    th:value="${account.iban}"
                                     th:text="|Account ${account.userAccountNumber} - ${account.formattedIban} (Balance: ${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')} PLN)|">
                             </option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="externalRecipientIban">Recipient IBAN:</label>
-                        <input type="text" id="externalRecipientIban" name="recipientIban" class="form-control" required/>
+                        <input type="text" id="externalRecipientIban" name="recipientIban" class="form-control" required pattern="[A-Z]{2}[0-9]{26}" title="Please enter a valid IBAN (e.g., PL12345678901234567890123456)"/>
                         <div class="invalid-feedback"></div>
                     </div>
                     <div class="form-group">
