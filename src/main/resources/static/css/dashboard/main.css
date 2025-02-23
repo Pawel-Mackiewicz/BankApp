@@ -1,0 +1,229 @@
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background-color: #8c0032;
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin-left: 2rem;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover, nav ul li a.active {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.user-panel {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-logout {
+    background-color: #d50032;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #b30029;
+}
+
+/* Main layout */
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.column {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Account styles */
+.account-card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: transform 0.3s;
+}
+
+.account-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.account-summary {
+    grid-column: span 1.5;
+}
+
+/* IBAN styles */
+.iban-container {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.iban-text {
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.iban-text:hover {
+    cursor: pointer;
+    text-shadow: 0 0 3px rgba(140, 0, 50, 0.5);
+}
+
+.copy-iban-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #8c0032;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.copy-iban-btn:hover {
+    background-color: rgba(140, 0, 50, 0.1);
+}
+
+/* Transaction styles */
+.transaction {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.3s;
+}
+
+.transaction:hover {
+    background-color: #f8f9fa;
+}
+
+.transaction:last-child {
+    border-bottom: none;
+}
+
+.transaction-info {
+    flex: 1;
+}
+
+.transaction-title {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.transaction-party {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.transaction-date {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.amount {
+    font-weight: 500;
+    margin: 0 1rem;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.95rem;
+}
+
+.amount.positive {
+    color: #28a745;
+}
+
+.amount.negative {
+    color: #dc3545;
+}
+
+.transaction-status {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    background-color: #fff;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Notification */
+.copy-success {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1000;
+}
+
+.copy-success.show {
+    opacity: 1;
+}
