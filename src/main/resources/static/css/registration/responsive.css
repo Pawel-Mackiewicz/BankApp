@@ -1,0 +1,76 @@
+/* Responsive styles */
+@media (max-width: 576px) {
+    .container {
+        margin-top: 20px;
+        padding: 15px;
+        width: 95%;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    p {
+        font-size: 0.9rem;
+    }
+
+    .form-group {
+        margin-bottom: 0.8rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .form-group input {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .alert {
+        padding: 10px;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+
+    .password-requirements {
+        font-size: 0.8rem;
+        padding-left: 1rem;
+    }
+
+    .requirement-item {
+        margin: 0.15rem 0;
+        font-size: 0.8rem;
+    }
+
+    .invalid-feedback {
+        font-size: 75%;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .container {
+        margin-top: 30px;
+        width: 80%;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .password-requirements {
+        font-size: 0.82rem;
+    }
+}
+
+/* Adjust date input for better mobile display */
+@media (max-width: 768px) {
+    input[type="date"] {
+        min-height: 38px;
+    }
+}
