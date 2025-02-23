@@ -1,5 +1,8 @@
 package info.mackiewicz.bankapp.controller.web;
 
+import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
+ 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,23 +18,33 @@ import info.mackiewicz.bankapp.dto.OwnTransferRequest;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.DashboardService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
     private final DashboardService dashboardService;
-
+ 
     public DashboardController(DashboardService dashboardService) {
         this.dashboardService = dashboardService;
     }
-
+ 
     @GetMapping
-    public String getDashboard(@AuthenticationPrincipal User user, Model model) {
+    public String getDashboard(@AuthenticationPrincipal User user, Model model, HttpServletRequest request) {
         DashboardDTO dashboard = dashboardService.getDashboardData(user.getId());
         model.addAttribute("dashboard", dashboard);
         model.addAttribute("ownTransferForm", new OwnTransferRequest());
         model.addAttribute("internalTransferForm", new InternalTransferRequest());
         model.addAttribute("externalTransferForm", new ExternalTransferRequest());
         model.addAttribute("userName", user.getUsername());
+        Map<String, ?> flashMap = org.springframework.web.servlet.support.RequestContextUtils.getInputFlashMap(request);
+        if (flashMap != null) {
+            model.addAllAttributes(flashMap);
+            log.info("Flash attributes added to model: {}", flashMap);
+        } else {
+            log.info("No flash attributes found in request");
+        }
         return "dashboard";
     }
 
