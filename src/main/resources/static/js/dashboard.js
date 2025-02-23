@@ -249,7 +249,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateAmount(input) {
         const amount = parseFloat(input.value);
-        const sourceAccountSelect = input.closest('form').querySelector('select[id$="SourceAccountId"]');
+        const form = input.closest('form');
+        let sourceAccountSelect;
+        
+        // Użyj odpowiedniego selektora w zależności od typu formularza
+        if (form.id === 'ownTransferForm') {
+            sourceAccountSelect = form.querySelector('select[id$="SourceAccountId"]');
+        } else {
+            sourceAccountSelect = form.querySelector('select[name="sourceIban"]');
+        }
+        
         const selectedOption = sourceAccountSelect.selectedOptions[0];
         
         if (!selectedOption.value) {
@@ -374,8 +383,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         
                         console.log('Sending request to:', this.action);
-                        // Sprawdź czy wszystkie wymagane pola są obecne
-                        const requiredFields = ['sourceAccountId', 'amount', 'title'];
+                        // Przygotuj listę wymaganych pól w zależności od typu formularza
+                        let requiredFields = ['amount', 'title'];
+                        
+                        if (this.id === 'ownTransferForm') {
+                            requiredFields.push('sourceAccountId');
+                        } else {
+                            requiredFields.push('sourceIban');
+                        }
+
                         const recipientMethod = formData.get('recipientMethod');
                         
                         // Dodaj logi aby sprawdzić typ formularza i recipientMethod
@@ -388,8 +404,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             } else {
                                 requiredFields.push('recipientEmail');
                             }
-                        } else if (this.id !== 'ownTransferForm' && this.id !== 'externalTransferForm') {
-                            requiredFields.push('recipientEmail');
+                        } else if (this.id === 'externalTransferForm') {
+                            requiredFields.push('recipientIban', 'recipientName');
                         }
 
                         const missingFields = requiredFields.filter(field => !formData.get(field));
