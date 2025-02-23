@@ -378,9 +378,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         const requiredFields = ['sourceAccountId', 'amount', 'title'];
                         const recipientMethod = formData.get('recipientMethod');
                         
-                        if (recipientMethod === 'iban') {
-                            requiredFields.push('recipientIban');
-                        } else {
+                        // Dodaj logi aby sprawdzić typ formularza i recipientMethod
+                        console.log('Form type:', this.id);
+                        console.log('Recipient method:', recipientMethod);
+
+                        if (this.id === 'internalTransferForm') {
+                            if (recipientMethod === 'iban') {
+                                requiredFields.push('recipientIban');
+                            } else {
+                                requiredFields.push('recipientEmail');
+                            }
+                        } else if (this.id !== 'ownTransferForm' && this.id !== 'externalTransferForm') {
                             requiredFields.push('recipientEmail');
                         }
 
