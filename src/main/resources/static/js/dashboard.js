@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const emailInput = document.getElementById('internalRecipientEmail');
     if (emailInput) {
         emailInput.addEventListener('input', debounce(async function() {
-            await validateEmail(this);
+            await validateEmail(emailInput);
         }, 500));
     }
 
