@@ -4,6 +4,7 @@
 
 ### Bieżący Status
 Zaimplementowano system zakładek i różne typy przelewów w formularzu "Make a Transfer".
+Zaktualizowano TransactionHistoryRestController do korzystania z TransactionFilterDTO.
 
 ### Zrealizowane Elementy
 1. Frontend:
@@ -20,6 +21,10 @@ Zaimplementowano system zakładek i różne typy przelewów w formularzu "Make a
    - Rozszerzono ValidationController o lepszą walidację emaila
    - Usunięto stary TransferForm
    - Dodano dedykowane DTO dla każdego typu przelewu
+   - Zrefaktoryzowano TransactionHistoryRestController:
+     * Wykorzystanie TransactionFilterDTO
+     * Uproszczenie endpointów
+     * Lepsza obsługa filtrowania i sortowania
 
 3. Walidacja:
    - IBAN przez IbanValidator
@@ -46,6 +51,7 @@ Zaimplementowano system zakładek i różne typy przelewów w formularzu "Make a
 - Natychmiastowe komunikaty o błędach
 - Automatyczna aktualizacja list kont
 - Zabezpieczenia przed nieprawidłowymi danymi
+- Ulepszony system filtrowania i sortowania historii transakcji
 
 ### Następne Kroki
 1. Testy integracyjne nowych funkcjonalności
@@ -58,3 +64,4 @@ Zaimplementowano system zakładek i różne typy przelewów w formularzu "Make a
 - Wykorzystanie Bootstrap dla komponentów UI
 - Zaimplementowana obsługa błędów na froncie i backendzie
 - Dodana walidacja cross-field dla przelewów własnych
+- Zoptymalizowane API historii transakcji z użyciem DTO
