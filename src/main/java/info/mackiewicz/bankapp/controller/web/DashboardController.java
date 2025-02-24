@@ -17,18 +17,15 @@ import info.mackiewicz.bankapp.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.dto.OwnTransferRequest;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.DashboardService;
-
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
     private final DashboardService dashboardService;
- 
-    public DashboardController(DashboardService dashboardService) {
-        this.dashboardService = dashboardService;
-    }
  
     @GetMapping
     public String getDashboard(@AuthenticationPrincipal User user, Model model, HttpServletRequest request) {
