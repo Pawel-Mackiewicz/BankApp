@@ -10,14 +10,15 @@ import info.mackiewicz.bankapp.service.export.TransactionExporter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -50,9 +51,8 @@ public class TransactionHistoryRestController {
             @RequestParam(defaultValue = "desc") String sortDirection
     ) {
         log.debug("Fetching transactions for account {} (user: {})", accountId, user.getUsername());
-
-        String transactionType = type;
-        List<Transaction> filteredTransactions = getFilteredTransactions(user, accountId, dateFrom, dateTo, transactionType, amountFrom, amountTo, searchQuery);
+        
+        List<Transaction> filteredTransactions = getFilteredTransactions(user, accountId, dateFrom, dateTo, type, amountFrom, amountTo, searchQuery);
         filterService.sortTransactions(filteredTransactions, sortBy, sortDirection);
 
         return getPagedTransactions(filteredTransactions, page, size);
@@ -71,47 +71,29 @@ public class TransactionHistoryRestController {
             @RequestParam(defaultValue = "csv") String format
     ) {
         log.debug("Exporting transactions for account {} (user: {}) in {} format", accountId, user.getUsername(), format);
-
-        String transactionType = type;
-        List<Transaction> filteredTransactions = getFilteredTransactions(user, accountId, dateFrom, dateTo, transactionType, amountFrom, amountTo, searchQuery);
+        
+        List<Transaction> filteredTransactions = getFilteredTransactions(user, accountId, dateFrom, dateTo, type, amountFrom, amountTo, searchQuery);
 
         TransactionExporter exporter = exporters.stream()
                 .filter(e -> e.getFormat().equalsIgnoreCase(format))
                 .findFirst()
-                .orElse(null);
-
-        if (exporter == null) {
-            log.warn("Unsupported export format: {}", format);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(("Unsupported export format: " + format).getBytes());
-        }
+                .orElseThrow(() -> new UnsupportedOperationException("Unsupported export format: " + format));
 
         return exporter.exportTransactions(filteredTransactions);
     }
 
-    private List<Transaction> getFilteredTransactions(User user, Integer accountId, LocalDateTime dateFrom, LocalDateTime dateTo, String transactionType, BigDecimal amountFrom, BigDecimal amountTo, String searchQuery) {
+    private List<Transaction> getFilteredTransactions(User user, Integer accountId, LocalDateTime dateFrom, LocalDateTime dateTo, String type, BigDecimal amountFrom, BigDecimal amountTo, String searchQuery) {
         Account account = accountService.getAccountById(accountId);
         if (!account.getOwner().getId().equals(user.getId())) {
             throw new AccessDeniedException("Account doesn't belong to user");
         }
 
         List<Transaction> transactions = transactionService.getRecentTransactions(accountId, Integer.MAX_VALUE);
-        return filterService.filterTransactions(
-                transactions, dateFrom, dateTo, transactionType, amountFrom, amountTo, searchQuery);
+        return filterService.filterTransactions(transactions, dateFrom, dateTo, type, amountFrom, amountTo, searchQuery);
     }
 
-    private ResponseEntity<Page<Transaction>> getPagedTransactions(List<Transaction> filteredTransactions, int page, int size) {
-        // Apply pagination
-        int start = page * size;
-        int end = Math.min(start + size, filteredTransactions.size());
-
-        if (start > filteredTransactions.size()) {
-            log.debug("Requested page {} is beyond available data", page);
-            return ResponseEntity.ok(new PageImpl<>(List.of(), PageRequest.of(page, size), filteredTransactions.size()));
-        }
-
-        List<Transaction> pageContent = filteredTransactions.subList(start, end);
-        log.debug("Returning page {} with {} transactions", page, pageContent.size());
-
-        return ResponseEntity.ok(new PageImpl<>(pageContent, PageRequest.of(page, size), filteredTransactions.size()));
+    private ResponseEntity<Page<Transaction>> getPagedTransactions(List<Transaction> transactions, int page, int size) {
+        Page<Transaction> pagedTransactions = new PageImpl<>(transactions, PageRequest.of(page, size), transactions.size());
+        return ResponseEntity.ok(pagedTransactions);
     }
 }
