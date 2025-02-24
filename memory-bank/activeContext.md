@@ -1,67 +1,137 @@
 # Aktualny Kontekst Projektu
 
-## Implementacja Systemu Przelewów
+## Plan Implementacji Systemu Resetowania Hasła - 2 dni
 
-### Bieżący Status
-Zaimplementowano system zakładek i różne typy przelewów w formularzu "Make a Transfer".
-Zaktualizowano TransactionHistoryRestController do korzystania z TransactionFilterDTO.
+### Dzień 1: Backend i Podstawowy Frontend
 
-### Zrealizowane Elementy
-1. Frontend:
-   - System zakładek w sekcji "Make a Transfer"
-   - Dynamiczna walidacja IBAN i email
-   - Poprawiona kolejność ładowania skryptów JavaScript
-   - Wyświetlanie IBAN i salda przy kontach
-   - Obsługa różnych typów formularzy
+#### Rano (4h): Backend Core
+1. PasswordResetController (2h):
+   ```java
+   @RestController
+   @RequestMapping("/api/password")
+   public class PasswordResetController {
+       @PostMapping("/reset-request")    // Żądanie resetu
+       @PostMapping("/reset-complete")   // Zmiana hasła
+   }
+   ```
 
-2. Backend:
-   - Zaktualizowano AccountRepository o metody:
-     * findByIban
-     * findFirstByOwner_email
-   - Rozszerzono ValidationController o lepszą walidację emaila
-   - Usunięto stary TransferForm
-   - Dodano dedykowane DTO dla każdego typu przelewu
-   - Zrefaktoryzowano TransactionHistoryRestController:
-     * Wykorzystanie TransactionFilterDTO
-     * Uproszczenie endpointów
-     * Lepsza obsługa filtrowania i sortowania
+2. Integracja Email (2h):
+   - Szybka integracja z resend.com
+   - Prosty szablon emaila
+   - Podstawowy retry (max 3 próby)
 
-3. Walidacja:
-   - IBAN przez IbanValidator
-   - Email przez AccountRepository (sprawdzanie zarówno emaila jak i username)
-   - Saldo konta przed wykonaniem przelewu
-   - Natychmiastowa walidacja w formularzu
+#### Po południu (4h): Frontend Podstawowy
+1. Formularze HTML (2h):
+   - Link w login.html
+   - reset-password.html
+   - new-password.html
 
-### Typy Przelewów
-1. Przelew między własnymi kontami:
-   - Dynamiczna lista kont z wyłączeniem wybranego
-   - Wyświetlanie IBAN i salda dla obu kont
+2. JavaScript Core (2h):
+   ```javascript
+   // reset-password.js
+   async function requestReset(email)
+   async function completeReset(token, password)
+   ```
 
-2. Przelew wewnętrzny:
-   - Walidacja IBAN lub email odbiorcy
-   - Obsługa obu metod identyfikacji odbiorcy
+### Dzień 2: Security i Finalizacja
 
-3. Przelew zewnętrzny:
-   - Walidacja IBAN
-   - Implementacja jako withdrawal
+#### Rano (4h): Bezpieczeństwo
+1. Rate Limiting (2h):
+   ```java
+   @Component
+   public class SimpleRateLimiter {
+       // Max 3 próby/godzinę per email
+       // Max 5 prób/godzinę per IP
+   }
+   ```
 
-### Aktualne Funkcjonalności
-- Przełączanie między typami przelewów
-- Dynamiczna walidacja wszystkich pól
-- Natychmiastowe komunikaty o błędach
-- Automatyczna aktualizacja list kont
-- Zabezpieczenia przed nieprawidłowymi danymi
-- Ulepszony system filtrowania i sortowania historii transakcji
+2. Monitoring (2h):
+   ```java
+   @Service
+   public class SecurityLogger {
+       // Logowanie prób resetowania
+       // Podstawowe alerty
+   }
+   ```
 
-### Następne Kroki
-1. Testy integracyjne nowych funkcjonalności
-2. Monitoring działania walidacji
-3. Zbieranie feedbacku od użytkowników
-4. Potencjalne rozszerzenie o @BankTag w przyszłości
+#### Po południu (4h): Testy i Finalizacja
+1. Testy Krytyczne (2h):
+   - Testy jednostkowe TokenService
+   - Testy integracyjne flow resetowania
+   - Testy bezpieczeństwa (rate limit)
 
-### Uwagi Techniczne
-- Skrypty JavaScript załadowane w prawidłowej kolejności
-- Wykorzystanie Bootstrap dla komponentów UI
-- Zaimplementowana obsługa błędów na froncie i backendzie
-- Dodana walidacja cross-field dla przelewów własnych
-- Zoptymalizowane API historii transakcji z użyciem DTO
+2. Finalizacja i Deployment (2h):
+   - Code review
+   - Testy manualne
+   - Deployment na staging
+
+### Priorytety
+1. Bezpieczeństwo:
+   - Walidacja tokenów
+   - Rate limiting
+   - Podstawowe logowanie
+
+2. UX:
+   - Prosty, jasny interfejs
+   - Komunikaty błędów
+   - Walidacja formularzy
+
+3. Monitoring:
+   - Logowanie prób resetowania
+   - Alerty o podejrzanych wzorcach
+   - Metryki skuteczności
+
+### Minimalna Funkcjonalność (MVP)
+1. Backend:
+   - Generowanie bezpiecznych tokenów
+   - Wysyłka emaili
+   - Podstawowa walidacja
+
+2. Frontend:
+   - Formularz "Zapomniałem hasła"
+   - Formularz nowego hasła
+   - Podstawowa walidacja JS
+
+3. Bezpieczeństwo:
+   - Prosty rate limiting
+   - Logowanie zdarzeń
+   - Podstawowe alerty
+
+### Co Można Pominąć
+1. Zaawansowane funkcje:
+   - Złożone szablony email
+   - Zaawansowane monitorowanie
+   - Pełne pokrycie testami
+
+2. Nice-to-have:
+   - Customizacja wiadomości
+   - Statystyki użycia
+   - Zaawansowane metryki
+
+### Kolejność Implementacji
+1. Dzień 1 - Rano:
+   09:00-11:00 - PasswordResetController
+   11:00-13:00 - Integracja Email
+
+2. Dzień 1 - Popołudnie:
+   14:00-16:00 - Formularze HTML
+   16:00-18:00 - Core JavaScript
+
+3. Dzień 2 - Rano:
+   09:00-11:00 - Rate Limiting
+   11:00-13:00 - Security Logging
+
+4. Dzień 2 - Popołudnie:
+   14:00-16:00 - Testy Krytyczne
+   16:00-18:00 - Deployment
+
+### Definition of Done
+1. Techniczne:
+   - Działające endpointy API
+   - Podstawowe testy przechodzą
+   - Działa rate limiting
+
+2. Biznesowe:
+   - Użytkownik może zresetować hasło
+   - System jest bezpieczny
+   - Podstawowe monitorowanie działa
