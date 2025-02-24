@@ -7,6 +7,8 @@ import info.mackiewicz.bankapp.service.AccountService;
 import info.mackiewicz.bankapp.service.TransactionFilterService;
 import info.mackiewicz.bankapp.service.TransactionService;
 import info.mackiewicz.bankapp.service.export.TransactionExporter;
+import info.mackiewicz.bankapp.dto.TransactionFilterDTO;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -46,46 +48,33 @@ public class TransactionHistoryRestController {
     @GetMapping
     public ResponseEntity<Page<Transaction>> getTransactions(
             @AuthenticationPrincipal User user,
-            @NotNull @RequestParam Integer accountId,
-            @RequestParam(defaultValue = "0") @Min(0) int page,
-            @RequestParam(defaultValue = "" + DEFAULT_PAGE_SIZE) @Min(1) int size,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateFrom,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo,
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) BigDecimal amountFrom,
-            @RequestParam(required = false) BigDecimal amountTo,
-            @RequestParam(required = false) String query,
-            @RequestParam(defaultValue = DEFAULT_SORT_FIELD) String sortBy,
-            @RequestParam(defaultValue = DEFAULT_SORT_DIRECTION) String sortDirection
+            @Valid TransactionFilterDTO filter
     ) {
-        log.debug("Fetching transactions for account {} (user: {})", accountId, user.getUsername());
+        log.debug("Fetching transactions for account {} (user: {})", filter.getAccountId(), user.getUsername());
         
-        verifyAccountOwnership(user, accountId);
+        verifyAccountOwnership(user, filter.getAccountId());
         
-        List<Transaction> transactions = getFilteredAndSortedTransactions(
-                accountId, dateFrom, dateTo, type, amountFrom, amountTo, query, sortBy, sortDirection);
+        List<Transaction> transactions = getFilteredAndSortedTransactions(filter);
         
-        return ResponseEntity.ok(createPaginatedResponse(transactions, page, size));
+        return ResponseEntity.ok(createPaginatedResponse(transactions, filter.getPage(), filter.getSize()));
     }
 
     @GetMapping("/export")
     public ResponseEntity<byte[]> exportTransactions(
             @AuthenticationPrincipal User user,
-            @NotNull @RequestParam Integer accountId,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateFrom,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo,
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) BigDecimal amountFrom,
-            @RequestParam(required = false) BigDecimal amountTo,
-            @RequestParam(required = false) String query,
+            @Valid TransactionFilterDTO filter,
             @RequestParam(defaultValue = DEFAULT_EXPORT_FORMAT) String format
     ) {
-        log.debug("Exporting transactions for account {} (user: {}) in {} format", accountId, user.getUsername(), format);
+        log.debug("Exporting transactions for account {} (user: {}) in {} format",
+                filter.getAccountId(), user.getUsername(), format);
 
-        verifyAccountOwnership(user, accountId);
-
-        List<Transaction> transactions = getFilteredAndSortedTransactions(
-                accountId, dateFrom, dateTo, type, amountFrom, amountTo, query, DEFAULT_SORT_FIELD, DEFAULT_SORT_DIRECTION);
+        verifyAccountOwnership(user, filter.getAccountId());
+        
+        // Set default sorting for export
+        filter.setSortBy(DEFAULT_SORT_FIELD);
+        filter.setSortDirection(DEFAULT_SORT_DIRECTION);
+        
+        List<Transaction> transactions = getFilteredAndSortedTransactions(filter);
 
         TransactionExporter exporter = findExporter(format);
         return exporter.exportTransactions(transactions);
@@ -98,21 +87,13 @@ public class TransactionHistoryRestController {
         }
     }
 
-    private List<Transaction> getFilteredAndSortedTransactions(
-            Integer accountId,
-            LocalDateTime dateFrom,
-            LocalDateTime dateTo,
-            String type,
-            BigDecimal amountFrom,
-            BigDecimal amountTo,
-            String query,
-            String sortBy,
-            String sortDirection
-    ) {
-        List<Transaction> transactions = transactionService.getRecentTransactions(accountId, MAX_RECENT_TRANSACTIONS);
+    private List<Transaction> getFilteredAndSortedTransactions(TransactionFilterDTO filter) {
+        List<Transaction> transactions = transactionService.getRecentTransactions(filter.getAccountId(), MAX_RECENT_TRANSACTIONS);
         List<Transaction> filteredTransactions = filterService.filterTransactions(
-                transactions, dateFrom, dateTo, type, amountFrom, amountTo, query);
-        filterService.sortTransactions(filteredTransactions, sortBy, sortDirection);
+                transactions, filter.getDateFrom(), filter.getDateTo(),
+                filter.getType(), filter.getAmountFrom(), filter.getAmountTo(),
+                filter.getQuery());
+        filterService.sortTransactions(filteredTransactions, filter.getSortBy(), filter.getSortDirection());
         return filteredTransactions;
     }
 
