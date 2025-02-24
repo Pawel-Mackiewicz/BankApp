@@ -8,6 +8,8 @@ import info.mackiewicz.bankapp.service.UserRegistrationService;
 import info.mackiewicz.bankapp.service.UserService;
 import info.mackiewicz.bankapp.validation.RequestValidator;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -23,16 +26,6 @@ public class UserController {
     private final UserRegistrationService registrationService;
     private final RequestValidator requestValidator;
     private final UserMapper userMapper;
-
-    public UserController(UserService userService,
-                       UserRegistrationService registrationService,
-                       RequestValidator requestValidator,
-                       UserMapper userMapper) {
-        this.userService = userService;
-        this.registrationService = registrationService;
-        this.requestValidator = requestValidator;
-        this.userMapper = userMapper;
-    }
 
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDto registrationDto, BindingResult bindingResult) {
