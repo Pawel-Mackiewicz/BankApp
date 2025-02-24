@@ -32,7 +32,7 @@ public class PasswordResetToken {
     /**
      * User who requested password reset.
      */
-    @JoinColumn(name = "user_email", nullable = false)
+    @Column(name = "user_email", nullable = false)
     private String userEmail;
 
     /**

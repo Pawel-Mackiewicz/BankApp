@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.repository;
 
 import info.mackiewicz.bankapp.model.PasswordResetToken;
-import info.mackiewicz.bankapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,15 +25,15 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
      * Find active tokens for a user.
      * Used for validating token limits per user.
      */
-    @Query("SELECT t FROM PasswordResetToken t WHERE t.user = :user AND t.used = false AND t.expiresAt > :now")
-    List<PasswordResetToken> findValidTokensByUser(@Param("user") User user, @Param("now") LocalDateTime now);
+    @Query("SELECT t FROM PasswordResetToken t WHERE t.userEmail = :userEmail AND t.used = false AND t.expiresAt > :now")
+    List<PasswordResetToken> findValidTokensByUserEmail(@Param("userEmail") String userEmail, @Param("now") LocalDateTime now);
 
     /**
      * Count active tokens for a user.
      * Used for rate limiting - preventing users from requesting too many tokens.
      */
-    @Query("SELECT COUNT(t) FROM PasswordResetToken t WHERE t.user_email = :user_email AND t.used = false AND t.expiresAt > :now")
-    long countValidTokensByUserEmail(@Param("user_email") String userEmail, @Param("now") LocalDateTime now);
+    @Query("SELECT COUNT(t) FROM PasswordResetToken t WHERE t.userEmail = :userEmail AND t.used = false AND t.expiresAt > :now")
+    long countValidTokensByUserEmail(@Param("userEmail") String userEmail, @Param("now") LocalDateTime now);
 
     /**
      * Find all active tokens.
