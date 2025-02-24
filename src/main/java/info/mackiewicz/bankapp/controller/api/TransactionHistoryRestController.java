@@ -9,22 +9,17 @@ import info.mackiewicz.bankapp.service.TransactionService;
 import info.mackiewicz.bankapp.service.export.TransactionExporter;
 import info.mackiewicz.bankapp.dto.TransactionFilterDTO;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -34,7 +29,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionHistoryRestController {
 
-    private static final int DEFAULT_PAGE_SIZE = 20;
     private static final int MAX_RECENT_TRANSACTIONS = 100;
     private static final String DEFAULT_SORT_FIELD = "date";
     private static final String DEFAULT_SORT_DIRECTION = "desc";

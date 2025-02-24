@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 public class RegistrationController {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+    private final UserRegistrationService registrationService;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
