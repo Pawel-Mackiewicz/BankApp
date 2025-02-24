@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,17 +22,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+@RequiredArgsConstructor
 @Service
 public class AccountService implements AccountServiceInterface {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
     private final AccountRepository accountRepository;
     private final UserService userService;
-
-    public AccountService(AccountRepository accountRepository, UserService userService) {
-        this.accountRepository = accountRepository;
-        this.userService = userService;
-    }
 
     @Override
     @Transactional
