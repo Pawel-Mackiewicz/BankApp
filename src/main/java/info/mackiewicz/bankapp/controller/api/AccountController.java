@@ -3,22 +3,19 @@ package info.mackiewicz.bankapp.controller.api;
 import info.mackiewicz.bankapp.dto.CreateAccountRequest;
 import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.service.AccountService;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-//BY CHATGPT
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
 
     private final AccountService accountService;
-
-    // Constructor injection of AccountService
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
 
     // GET /api/accounts/{id} - Retrieve an account by its ID
     @GetMapping("/{id}")

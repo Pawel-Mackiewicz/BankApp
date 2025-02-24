@@ -5,20 +5,19 @@ import info.mackiewicz.bankapp.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.SettingsService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/settings")
 public class SettingsRestController {
 
     private final SettingsService settingsService;
-
-    public SettingsRestController(SettingsService settingsService) {
-        this.settingsService = settingsService;
-    }
 
     @GetMapping("/user")
     public ResponseEntity<User> getUserSettings(@AuthenticationPrincipal User user) {
