@@ -1,6 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Stan filtrów
-    let filters = {
+/**
+ * Transaction History Module
+ */
+
+// State Management
+const TransactionState = {
+    filters: {
         page: 0,
         size: 20,
         dateFrom: null,
@@ -11,23 +15,29 @@ document.addEventListener('DOMContentLoaded', function() {
         searchQuery: null,
         sortBy: 'date',
         sortDirection: 'desc',
-        accountId: document.querySelector('#accountId').value
-    };
+        accountId: null
+    },
 
-    // Stan ładowania
-    let loading = false;
-    let hasMoreData = true;
-    let totalElements = 0;
-    let loadedElements = 0;
+    loading: false,
+    hasMoreData: true,
+    totalElements: 0,
+    loadedElements: 0,
 
-    // Funkcja do tworzenia URL z parametrami
-    function buildUrl(baseUrl = '/api/transaction-history') {
+    resetPagination() {
+        this.filters.page = 0;
+        this.hasMoreData = true;
+        this.loadedElements = 0;
+        this.totalElements = 0;
+    }
+};
+
+// API Functions
+const TransactionAPI = {
+    buildUrl(baseUrl = '/api/transaction-history') {
         const params = new URLSearchParams();
+        params.append('accountId', TransactionState.filters.accountId);
         
-        // Ensure accountId is always included
-        params.append('accountId', filters.accountId);
-        
-        Object.entries(filters).forEach(([key, value]) => {
+        Object.entries(TransactionState.filters).forEach(([key, value]) => {
             if (key !== 'accountId' && value !== null && value !== '') {
                 if (key === 'dateFrom' && value) {
                     params.append(key, value + 'T00:00:00');
@@ -40,32 +50,82 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         return `${baseUrl}?${params.toString()}`;
-    }
+    },
 
-    // Funkcja sprawdzająca czy są jeszcze transakcje do załadowania
-    function hasMoreTransactions() {
-        return loadedElements < totalElements;
-    }
-
-    // Funkcja określająca znak transakcji z perspektywy wybranego konta
-    function shouldShowPositive(transaction) {
-        // Dla depozytów zawsze plus
-        if (transaction.type.name === 'DEPOSIT') {
-            return true;
-        }
+    async loadTransactions(append = false) {
+        if (TransactionState.loading || (!append && !TransactionState.hasMoreData)) return;
+        if (append && !TransactionUI.hasMoreTransactions()) return;
         
-        // Dla opłat i wypłat zawsze minus
-        if (transaction.type.name === 'FEE' || transaction.type.name === 'WITHDRAWAL') {
-            return false;
-        }
-        
-        // Dla transferów sprawdzamy czy wybrane konto jest odbiorcą
-        return transaction.destinationAccount?.id === parseInt(filters.accountId);
-    }
+        TransactionState.loading = true;
+        TransactionUI.showLoadingSpinner();
 
-    // Funkcja do tworzenia elementu transakcji (widok mobilny)
-    function createTransactionCard(transaction) {
-        const isPositive = shouldShowPositive(transaction);
+        try {
+            const response = await fetch(this.buildUrl());
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            TransactionState.totalElements = data.totalElements;
+            
+            if (!append) {
+                TransactionUI.clearTransactions();
+                TransactionState.loadedElements = 0;
+            }
+
+            data.content.forEach(transaction => {
+                TransactionUI.renderTransaction(transaction);
+            });
+
+            TransactionState.loadedElements += data.content.length;
+            TransactionState.hasMoreData = TransactionUI.hasMoreTransactions();
+
+            if (append && TransactionState.hasMoreData) {
+                TransactionState.filters.page++;
+            }
+        } catch (error) {
+            console.error('Error loading transactions:', error);
+            alert('Error loading transactions. Please try again.');
+        } finally {
+            TransactionState.loading = false;
+            TransactionUI.hideLoadingSpinner();
+        }
+    }
+};
+
+// UI Functions
+const TransactionUI = {
+    elements: {
+        table: () => document.querySelector('.transactions-table tbody'),
+        cards: () => document.querySelector('.transaction-cards'),
+        spinner: () => document.querySelector('.loading-spinner')
+    },
+
+    showLoadingSpinner() {
+        this.elements.spinner().classList.add('visible');
+    },
+
+    hideLoadingSpinner() {
+        this.elements.spinner().classList.remove('visible');
+    },
+
+    clearTransactions() {
+        this.elements.table().innerHTML = '';
+        this.elements.cards().innerHTML = '';
+    },
+
+    hasMoreTransactions() {
+        return TransactionState.loadedElements < TransactionState.totalElements;
+    },
+
+    shouldShowPositive(transaction) {
+        if (transaction.type.name === 'DEPOSIT') return true;
+        if (transaction.type.name === 'FEE' || transaction.type.name === 'WITHDRAWAL') return false;
+        return transaction.destinationAccount?.id === parseInt(TransactionState.filters.accountId);
+    },
+
+    createTransactionCard(transaction) {
+        const isPositive = this.shouldShowPositive(transaction);
         const amountClass = isPositive ? 'amount-positive' : 'amount-negative';
         const amountPrefix = isPositive ? '+' : '-';
         const sourceOwner = transaction.sourceAccount?.owner?.fullName || '';
@@ -91,11 +151,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-    }
+    },
 
-    // Funkcja do tworzenia wiersza tabeli (widok desktop)
-    function createTransactionRow(transaction) {
-        const isPositive = shouldShowPositive(transaction);
+    createTransactionRow(transaction) {
+        const isPositive = this.shouldShowPositive(transaction);
         const amountClass = isPositive ? 'amount-positive' : 'amount-negative';
         const amountPrefix = isPositive ? '+' : '-';
         const sourceOwner = transaction.sourceAccount?.owner?.fullName || '';
@@ -115,123 +174,86 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${transaction.status}</td>
             </tr>
         `;
+    },
+
+    renderTransaction(transaction) {
+        this.elements.table().insertAdjacentHTML('beforeend', this.createTransactionRow(transaction));
+        this.elements.cards().insertAdjacentHTML('beforeend', this.createTransactionCard(transaction));
     }
+};
 
-    // Funkcja do ładowania transakcji
-    async function loadTransactions(append = false) {
-        if (loading || (!append && !hasMoreData)) return;
-        if (append && !hasMoreTransactions()) return;
-        
-        loading = true;
-        const loadingSpinner = document.querySelector('.loading-spinner');
-        loadingSpinner.classList.add('visible');
-
-        try {
-            const response = await fetch(buildUrl());
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-
-            totalElements = data.totalElements;
-            
-            if (!append) {
-                document.querySelector('.transactions-table tbody').innerHTML = '';
-                document.querySelector('.transaction-cards').innerHTML = '';
-                loadedElements = 0;
-            }
-
-            data.content.forEach(transaction => {
-                document.querySelector('.transactions-table tbody')
-                    .insertAdjacentHTML('beforeend', createTransactionRow(transaction));
-                document.querySelector('.transaction-cards')
-                    .insertAdjacentHTML('beforeend', createTransactionCard(transaction));
+// Event Handlers
+const TransactionEvents = {
+    setupFilterHandlers() {
+        document.querySelectorAll('.filter-input').forEach(input => {
+            input.addEventListener('change', () => {
+                TransactionState.filters[input.name] = input.value;
+                TransactionState.resetPagination();
+                TransactionAPI.loadTransactions();
             });
+        });
+    },
 
-            loadedElements += data.content.length;
-            hasMoreData = hasMoreTransactions();
-
-            if (append && hasMoreData) {
-                filters.page++;
-            }
-        } catch (error) {
-            console.error('Error loading transactions:', error);
-            alert('Error loading transactions. Please try again.');
-        } finally {
-            loading = false;
-            loadingSpinner.classList.remove('visible');
-        }
-    }
-
-    // Funkcja eksportu
-    window.exportTransactions = function(format) {
-        const params = new URLSearchParams();
-        
-        // Always include accountId
-        params.append('accountId', filters.accountId);
-        
-        // Add other filters except pagination
-        const { page, size, sortBy, sortDirection, ...exportFilters } = filters;
-        Object.entries(exportFilters).forEach(([key, value]) => {
-            if (key !== 'accountId' && value !== null && value !== '') {
-                if (key === 'dateFrom' && value) {
-                    params.append(key, value + 'T00:00:00');
-                } else if (key === 'dateTo' && value) {
-                    params.append(key, value + 'T23:59:59');
+    setupSortHandlers() {
+        document.querySelectorAll('.sort-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const column = header.dataset.column;
+                if (TransactionState.filters.sortBy === column) {
+                    TransactionState.filters.sortDirection = 
+                        TransactionState.filters.sortDirection === 'asc' ? 'desc' : 'asc';
                 } else {
-                    params.append(key, value);
+                    TransactionState.filters.sortBy = column;
+                    TransactionState.filters.sortDirection = 'desc';
                 }
-            }
-        });
-        params.append('format', format);
 
-        window.location.href = `/api/transaction-history/export?${params.toString()}`;
-    };
-
-    // Obsługa filtrów
-    document.querySelectorAll('.filter-input').forEach(input => {
-        input.addEventListener('change', () => {
-            filters[input.name] = input.value;
-            filters.page = 0;
-            hasMoreData = true;
-            loadedElements = 0;
-            totalElements = 0;
-            loadTransactions();
-        });
-    });
-
-    // Obsługa sortowania
-    document.querySelectorAll('.sort-header').forEach(header => {
-        header.addEventListener('click', () => {
-            const column = header.dataset.column;
-            if (filters.sortBy === column) {
-                filters.sortDirection = filters.sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                filters.sortBy = column;
-                filters.sortDirection = 'desc';
-            }
-            filters.page = 0;
-            hasMoreData = true;
-            loadedElements = 0;
-            totalElements = 0;
-            loadTransactions();
-            
-            // Aktualizacja ikon sortowania
-            document.querySelectorAll('.sort-header').forEach(h => {
-                h.classList.remove('sorted-asc', 'sorted-desc');
+                TransactionState.resetPagination();
+                TransactionAPI.loadTransactions();
+                
+                document.querySelectorAll('.sort-header').forEach(h => {
+                    h.classList.remove('sorted-asc', 'sorted-desc');
+                });
+                header.classList.add(`sorted-${TransactionState.filters.sortDirection}`);
             });
-            header.classList.add(`sorted-${filters.sortDirection}`);
         });
-    });
+    },
 
-    // Obsługa infinite scroll
-    window.addEventListener('scroll', () => {
-        if (!loading && hasMoreData && 
-            window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-            loadTransactions(true);
+    setupInfiniteScroll() {
+        window.addEventListener('scroll', () => {
+            if (!TransactionState.loading && TransactionState.hasMoreData && 
+                window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+                TransactionAPI.loadTransactions(true);
+            }
+        });
+    }
+};
+
+// Export function
+window.exportTransactions = function(format) {
+    const params = new URLSearchParams();
+    params.append('accountId', TransactionState.filters.accountId);
+    
+    const { page, size, sortBy, sortDirection, ...exportFilters } = TransactionState.filters;
+    Object.entries(exportFilters).forEach(([key, value]) => {
+        if (key !== 'accountId' && value !== null && value !== '') {
+            if (key === 'dateFrom' && value) {
+                params.append(key, value + 'T00:00:00');
+            } else if (key === 'dateTo' && value) {
+                params.append(key, value + 'T23:59:59');
+            } else {
+                params.append(key, value);
+            }
         }
     });
+    params.append('format', format);
 
-    // Inicjalne załadowanie
-    loadTransactions();
+    window.location.href = `/api/transaction-history/export?${params.toString()}`;
+};
+
+// Initialization
+document.addEventListener('DOMContentLoaded', function() {
+    TransactionState.filters.accountId = document.querySelector('#accountId').value;
+    TransactionEvents.setupFilterHandlers();
+    TransactionEvents.setupSortHandlers();
+    TransactionEvents.setupInfiniteScroll();
+    TransactionAPI.loadTransactions();
 });
