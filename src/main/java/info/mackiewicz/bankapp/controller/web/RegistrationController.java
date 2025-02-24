@@ -4,6 +4,8 @@ import info.mackiewicz.bankapp.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.UserRegistrationService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,15 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@RequiredArgsConstructor
 @Controller
 public class RegistrationController {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
-    private final UserRegistrationService registrationService;
-
-    public RegistrationController(UserRegistrationService registrationService) {
-        this.registrationService = registrationService;
-    }
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
