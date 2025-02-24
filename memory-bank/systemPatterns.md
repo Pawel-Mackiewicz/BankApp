@@ -1,182 +1,221 @@
-# System Patterns & Architecture
+# System Patterns
 
-## Dashboard UI Patterns [Updated: 2025-02-22 20:11]
+## Architektura Warstw
 
-### 1. IBAN Display
-- IBANs are displayed in the "My Accounts" section of the dashboard.
-- IBANs are now highlighted on hover using CSS `text-shadow`.
-- IBANs are copyable by clicking on them.
+### 1. Warstwa Prezentacji (UI)
+- Pattern: MVC
+- Implementacja:
+  * Kontrolery Spring MVC dla obsługi żądań HTTP
+  * Thymeleaf dla renderowania widoków
+  * JavaScript dla interakcji po stronie klienta
+  * Walidacja dwustronna (client-side i server-side)
 
-### 2. Transfer Interface
-- Tabbed interface for different transfer types
-- Dynamic form validation
-- Real-time balance and IBAN display
-- Responsive design patterns
+### 2. Warstwa Biznesowa (Services)
+- Pattern: Service Layer
+- Implementacja:
+  * Serwisy Spring dla logiki biznesowej
+  * Dependency Injection dla luźnego powiązania komponentów
+  * Transaction management dla operacji ACID
+  * Event-driven dla operacji asynchronicznych
 
-### 3. Form Validation Patterns
-```javascript
-// Real-time validation pattern
-async function validateInput(input) {
-    const value = input.value;
-    const type = input.dataset.type;
-    
-    try {
-        const response = await fetch(`/api/validate-${type}?value=${value}`);
-        const data = await response.json();
-        
-        if (data.valid) {
-            setValid(input);
-        } else {
-            setInvalid(input, data.message);
-        }
-    } catch (error) {
-        setInvalid(input, 'Validation error');
-    }
-}
-```
+### 3. Warstwa Dostępu do Danych
+- Pattern: Repository
+- Implementacja:
+  * Spring Data JPA dla operacji bazodanowych
+  * Hibernate jako ORM
+  * Custom queries dla złożonych operacji
 
-## Transaction System Patterns [Updated: 2025-02-22 20:11]
+## Design Patterns
 
-### 1. Struktura Transakcji
+### 1. Repository Pattern
 ```java
-public enum TransactionCategory {
-    TRANSFER("Transfer"),   // przelewy
-    DEPOSIT("Deposit"),     // wpłaty
-    WITHDRAWAL("Withdrawal"), // wypłaty
-    FEE("Fee")             // opłaty
-}
-
-public enum TransactionType {
-    TRANSFER_OWN(
-        TransactionCategory.TRANSFER,
-        "Własne konto",
-        true,   // wymaga IBAN
-        0.0     // bez prowizji
-    ),
-    
-    TRANSFER_INTERNAL(
-        TransactionCategory.TRANSFER,
-        "Przelew w banku",
-        true,   // wymaga IBAN
-        0.0     // bez prowizji
-    ),
-    
-    TRANSFER_EXTERNAL(
-        TransactionCategory.TRANSFER,
-        "Przelew zewnętrzny",
-        true,   // wymaga IBAN
-        0.01    // prowizja 1%
-    ),
-    
-    // Inne operacje
-    DEPOSIT(...),
-    WITHDRAWAL(...)
+// Przykład dla PasswordResetToken
+@Repository
+public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
+    Optional<PasswordResetToken> findByToken(String token);
+    void deleteByExpiryDateLessThan(LocalDateTime now);
 }
 ```
 
-### 2. Strategie Transakcji
+### 2. Service Pattern
 ```java
-// Interface dla wszystkich strategii
-public interface TransactionStrategy {
-    void process(Transaction transaction);
-    void validate(Transaction transaction);
+@Service
+public class PasswordResetTokenService {
+    private final PasswordResetTokenRepository repository;
+    private final JwtUtil jwtUtil;
+    
+    // Constructor injection
+    public PasswordResetTokenService(PasswordResetTokenRepository repository, JwtUtil jwtUtil) {
+        this.repository = repository;
+        this.jwtUtil = jwtUtil;
+    }
 }
+```
 
-// Przykład implementacji dla przelewu
-public class TransferTransaction implements TransactionStrategy {
-    @Override
-    public void process(Transaction transaction) {
-        // Logika przelewu zależna od typu
-        switch(transaction.getType()) {
-            case TRANSFER_OWN: // logika przelewu własnego
-            case TRANSFER_INTERNAL: // logika przelewu wewnętrznego
-            case TRANSFER_EXTERNAL: // logika przelewu zewnętrznego
+### 3. DTO Pattern
+```java
+public class PasswordResetRequestDTO {
+    private String email;
+    // Getters, setters, validation
+}
+```
+
+### 4. Builder Pattern
+```java
+// Używany w konstruowaniu złożonych obiektów
+public class TransactionBuilder {
+    private Transaction transaction = new Transaction();
+    
+    public TransactionBuilder withAmount(BigDecimal amount) {
+        transaction.setAmount(amount);
+        return this;
+    }
+    // ...
+}
+```
+
+## Security Patterns
+
+### 1. Token-Based Authentication
+- Implementation: JWT dla tokenów resetowania hasła
+- Bezpieczne generowanie i walidacja
+- Ograniczony czas życia tokenów
+- Jednorazowe użycie
+
+### 2. Rate Limiting
+```java
+@Service
+public class SecurityService {
+    private final RateLimiter rateLimiter;
+    
+    public void checkRateLimit(String ipAddress) {
+        if (!rateLimiter.tryAcquire()) {
+            throw new TooManyRequestsException();
         }
     }
 }
 ```
 
-### 3. Filtrowanie Transakcji
-Istniejący system filtrowania obsługuje:
-- Filtrowanie po kategorii (np. "TRANSFER")
-- Filtrowanie po konkretnym typie
-- Filtrowanie po dacie
-- Filtrowanie po kwocie
-- Wyszukiwanie po tekście
-
+### 3. Validation Pattern
 ```java
-// Przykład użycia:
-List<Transaction> filtered = filterService.filterTransactions(
-    transactions,
-    dateFrom,    // od kiedy
-    dateTo,      // do kiedy
-    "TRANSFER",  // kategoria lub typ
-    minAmount,   // minimalna kwota
-    maxAmount,   // maksymalna kwota
-    searchQuery  // tekst do wyszukania
-);
+@Valid
+@RequestBody PasswordResetRequestDTO request
 ```
 
-### 4. Walidacja
-- Format IBAN w osobnej klasie IbanValidator
-- Reguły biznesowe w TransactionService
-- Walidacja na poziomie strategii transakcji
-- Nowe wzorce walidacji:
-  * Walidacja email przez AccountRepository
-  * Walidacja dostępnych środków
-  * Walidacja uprawnień do kont
+## Integration Patterns
 
-### 5. Wzorce
-- Strategy Pattern dla różnych typów transakcji
-- Builder Pattern dla tworzenia transakcji
-- Factory Method dla strategii transakcji
-- Validator Pattern dla walidacji
-- Observer Pattern dla aktualizacji UI
-- Command Pattern dla operacji transferowych
+### 1. Email Service Integration
+- Pattern: Gateway Pattern
+- Implementation: Abstrakcja dla serwisu email
+  * Łatwa zmiana dostawcy (np. z resend.com na inny)
+  * Retry mechanism dla nieudanych prób
+  * Asynchroniczne wysyłanie
 
-### 6. Nowe Wzorce UI
-```javascript
-// Tab Management Pattern
-class TabManager {
-    constructor(tabContainer, contentContainer) {
-        this.tabs = tabContainer.querySelectorAll('[data-tab]');
-        this.contents = contentContainer.querySelectorAll('[data-content]');
-        
-        this.tabs.forEach(tab => {
-            tab.addEventListener('click', () => this.switchTab(tab));
-        });
-    }
-    
-    switchTab(activeTab) {
-        // Deaktywuj wszystkie
-        this.tabs.forEach(tab => tab.classList.remove('active'));
-        this.contents.forEach(content => content.classList.remove('active'));
-        
-        // Aktywuj wybrany
-        activeTab.classList.add('active');
-        const content = document.querySelector(
-            `[data-content="${activeTab.dataset.tab}"]`
-        );
-        content.classList.add('active');
+### 2. Event-Driven Pattern
+```java
+@Service
+public class EmailService {
+    @Async
+    public CompletableFuture<Void> sendPasswordResetEmail(String to, String token) {
+        // Asynchroniczne wysyłanie emaila
     }
 }
+```
 
-// Form State Management Pattern
-class FormStateManager {
-    constructor(form) {
-        this.form = form;
-        this.state = {};
-        this.validators = {};
-        
-        this.setupValidators();
-        this.setupListeners();
-    }
+## Testing Patterns
+
+### 1. Unit Testing
+```java
+@Test
+public void testPasswordResetTokenCreation() {
+    // Given
+    String email = "test@example.com";
     
-    async validate(field) {
-        const validator = this.validators[field.name];
-        if (validator) {
-            return await validator(field.value);
-        }
-        return true;
+    // When
+    PasswordResetToken token = service.createToken(email);
+    
+    // Then
+    assertNotNull(token);
+    assertEquals(email, token.getUser().getEmail());
+}
+```
+
+### 2. Integration Testing
+```java
+@SpringBootTest
+public class PasswordResetIntegrationTest {
+    @Autowired
+    private PasswordResetTokenService service;
+    
+    @Test
+    public void testCompleteResetFlow() {
+        // Test pełnego flow resetowania hasła
     }
 }
+```
+
+## Error Handling Pattern
+
+### 1. Global Exception Handler
+```java
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException ex) {
+        // Obsługa błędu
+    }
+}
+```
+
+## Monitoring Pattern
+
+### 1. Logging Pattern
+```java
+@Slf4j
+public class PasswordResetTokenService {
+    public void createToken(String email) {
+        log.info("Creating password reset token for user: {}", email);
+        // ...
+        log.debug("Token created successfully");
+    }
+}
+```
+
+### 2. Metrics Collection
+```java
+@Component
+public class SecurityMetrics {
+    private final Counter passwordResetAttempts;
+    private final Counter passwordResetSuccess;
+    
+    public void recordResetAttempt() {
+        passwordResetAttempts.increment();
+    }
+}
+```
+
+## Best Practices
+
+### 1. Code Organization
+- Spójny podział na pakiety
+- Separacja odpowiedzialności
+- Czytelne nazewnictwo
+- Dokumentacja kluczowych komponentów
+
+### 2. Security
+- Walidacja wszystkich inputów
+- Bezpieczne przechowywanie danych
+- Audyt operacji bezpieczeństwa
+- Rate limiting dla krytycznych operacji
+
+### 3. Performance
+- Asynchroniczne operacje gdzie możliwe
+- Efektywne wykorzystanie cache
+- Optymalizacja zapytań bazodanowych
+- Monitoring wydajności
+
+### 4. Maintainability
+- Jasna dokumentacja
+- Testy jednostkowe i integracyjne
+- Czysty kod zgodny z SOLID
+- Łatwa rozszerzalność
