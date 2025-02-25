@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -22,13 +24,16 @@ import info.mackiewicz.bankapp.service.AdminUserService;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+    
     private final CustomUserDetailsService userDetailsService;
     private final AdminUserService adminUserService;
     
-    public SecurityConfig(CustomUserDetailsService userDetailsService, 
+    public SecurityConfig(CustomUserDetailsService userDetailsService,
                          AdminUserService adminUserService) {
         this.userDetailsService = userDetailsService;
         this.adminUserService = adminUserService;
+        logger.info("Initializing SecurityConfig...");
     }
 
     @Bean
