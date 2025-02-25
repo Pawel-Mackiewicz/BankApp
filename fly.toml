@@ -1,29 +1,22 @@
-# fly.toml app configuration file generated for bankapp-late-sun-2873 on 2025-02-25T16:17:54+01:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
-app = 'bankapp-late-sun-2873'
-primary_region = 'ams'
+app = "bankapp-prod"
+primary_region = "ams"
 
 [build]
-  builder = 'cloudfoundry/cnb:bionic'
-  buildpacks = ['paketo-buildpacks/java']
+  dockerfile = "Dockerfile"
 
 [env]
-  JAVA_VERSION = '21'
-  PORT = '8080'
-  SPRING_PROFILES_ACTIVE = 'prod'
+  SPRING_PROFILES_ACTIVE = "prod"
+  PORT = "8080"
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = true
   auto_start_machines = true
-  min_machines_running = 0
-  processes = ['app']
+  min_machines_running = 1
+  processes = ["app"]
 
 [[vm]]
-  cpu_kind = 'shared'
+  cpu_kind = "shared"
   cpus = 1
   memory_mb = 512
