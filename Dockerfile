@@ -28,7 +28,7 @@ RUN chmod +x mvnw && \
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-COPY --from=builder /app/target/BankApp-0.1.6.jar app.jar
+COPY --from=builder /app/target/BankApp-0.1.8-SNAPSHOT.jar app.jar
 EXPOSE 8080
 
 CMD ["java", "-jar", "app.jar"]
