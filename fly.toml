@@ -1,6 +1,7 @@
-app = "bankapp-proud-brook-5978" # DODANE: Upewnij się, że nazwa się zgadza
+# fly.toml app configuration file for bankapp-proud-brook-5978
+app = 'bankapp-proud-brook-5978'
+primary_region = 'ams'  
 
-primary_region = "ams"
 
 [env]
   JAVA_TOOL_OPTIONS = "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
@@ -17,7 +18,6 @@ primary_region = "ams"
     type = "requests"
     hard_limit = 250
     soft_limit = 200
-
   [[http_service.checks]]
     interval = "30s"
     timeout = "5s"
@@ -34,15 +34,11 @@ primary_region = "ams"
     port = 80
     handlers = ["http"]
     force_https = true
-
   [[services.ports]]
     port = 443
     handlers = ["tls", "http"]
 
 [[vm]]
-  memory = "512mb"
-  cpu_kind = "shared"
+  memory = '512mb'
+  cpu_kind = 'shared'
   cpus = 1
-
-[processes]
-  app = "java -jar /app/bankapp-0.1.8.jar"
