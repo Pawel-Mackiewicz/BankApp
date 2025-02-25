@@ -157,3 +157,65 @@ public class PasswordResetController {
    - Zaawansowane statystyki
    - Automatyczne alerty
    - Dashboard bezpieczeństwa
+
+## [2025-02-25] - Konfiguracja Deploymentu na Heroku
+
+### Kontekst
+Aplikacja Spring Boot wymaga skonfigurowania automatycznego deployu na platformie Heroku. Baza danych jest już skonfigurowana na zewnętrznym serwisie.
+
+### Główne Decyzje
+
+#### 1. Konfiguracja Systemu
+**Decyzja**: Minimalna konfiguracja niezbędna do uruchomienia na Heroku
+
+**Wymagane Pliki**:
+- `system.properties`: Określenie wersji Javy (21)
+- `Procfile`: Definicja sposobu uruchamiania aplikacji
+
+**Uzasadnienie**:
+- Heroku wymaga jawnego określenia wersji Javy
+- Procfile zapewnia prawidłowe uruchomienie aplikacji
+
+#### 2. Proces Deploymentu
+**Decyzja**: Wykorzystanie GitHub Actions i Heroku CLI
+
+**Kroki Wdrożenia**:
+1. Utworzenie aplikacji na Heroku
+2. Połączenie z repozytorium GitHub
+3. Konfiguracja zmiennych środowiskowych
+4. Uruchomienie automatycznego deploymentu
+
+**Uzasadnienie**:
+- Automatyzacja procesu deploymentu
+- Integracja z istniejącym flow CI/CD
+- Łatwe zarządzanie wersjami
+
+### Plan Implementacji
+
+#### Krok 1: Konfiguracja Podstawowa
+```bash
+# Logowanie do Heroku
+heroku login
+
+# Tworzenie aplikacji
+heroku create bankapp-prod
+
+# Konfiguracja środowiska
+heroku config:set SPRING_PROFILES_ACTIVE=prod
+```
+
+#### Krok 2: Continuous Deployment
+1. Połączenie repozytorium GitHub z Heroku przez Dashboard
+2. Konfiguracja automatycznego deploymentu dla brancha main
+3. Konfiguracja review apps (opcjonalnie)
+
+### Metryki Sukcesu
+1. Aplikacja uruchamia się poprawnie na Heroku
+2. Automatyczny deployment działa po push na main
+3. Aplikacja poprawnie łączy się z zewnętrzną bazą danych
+4. Logi pokazują prawidłowe działanie aplikacji
+
+### Monitoring i Utrzymanie
+1. Regularne sprawdzanie logów Heroku
+2. Monitoring zużycia zasobów
+3. Backup konfiguracji
