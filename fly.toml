@@ -1,14 +1,18 @@
-# fly.toml app configuration file generated for bankapp-winter-water-3545 on 2025-02-25T16:06:01+01:00
+# fly.toml app configuration file generated for bankapp-late-sun-2873 on 2025-02-25T16:17:54+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
+app = 'bankapp-late-sun-2873'
+primary_region = 'ams'
+
 [build]
-  builder = 'paketobuildpacks/builder:base'
-  buildpacks = ['gcr.io/paketo-buildpacks/java']
+  builder = 'cloudfoundry/cnb:bionic'
+  buildpacks = ['paketo-buildpacks/java']
 
 [env]
   JAVA_VERSION = '21'
+  PORT = '8080'
   SPRING_PROFILES_ACTIVE = 'prod'
 
 [http_service]
