@@ -1,12 +1,9 @@
-# fly.toml app configuration file generated for bankapp-proud-brook-5978 on 2025-02-17T17:58:09+01:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
+# fly.toml app configuration file for bankapp-proud-brook-5978
+primary_region = "ams"
 
-app = 'bankapp-proud-brook-5978'
-primary_region = 'ams'
-
-[build]
+[env]
+  JAVA_TOOL_OPTIONS = "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+  SPRING_PROFILES_ACTIVE = "prod"
 
 [http_service]
   internal_port = 8080
@@ -14,9 +11,32 @@ primary_region = 'ams'
   auto_stop_machines = false
   auto_start_machines = true
   min_machines_running = 1
-  processes = ['app']
+  processes = ["app"]
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 250
+    soft_limit = 200
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "30s"
+    method = "GET"
+    path = "/login"
+    protocol = "http"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+  processes = ["app"]
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
+  memory = "512mb"
+  cpu_kind = "shared"
   cpus = 1
