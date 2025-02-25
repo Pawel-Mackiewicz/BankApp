@@ -11,8 +11,8 @@
     </parent>
     <groupId>info.mackiewicz</groupId>
     <artifactId>BankApp</artifactId>
-    <version>0.1.8-SNAPSHOT</version>
-    <name>BankApp</name>
+    <version>0.1.8</version>
+    <name>bankapp</name>
     <description>BankApp</description>
     <url />
     <licenses>

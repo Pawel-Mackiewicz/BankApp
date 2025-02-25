@@ -40,3 +40,6 @@ primary_region = "ams"
   memory = "512mb"
   cpu_kind = "shared"
   cpus = 1
+
+[processes]
+  app = "java -jar /app/bankapp-0.1.8.jar"
