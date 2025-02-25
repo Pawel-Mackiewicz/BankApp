@@ -11,4 +11,5 @@ public interface UserServiceInterface {
     User updateUser(User user);
     void deleteUser(Integer id);
     boolean checkUsernameExists(String username);
+    boolean userExistsByEmail(String email);
 }
