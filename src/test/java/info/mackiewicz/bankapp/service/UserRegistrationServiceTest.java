@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.service;
 
+import info.mackiewicz.bankapp.converter.UserMapper;
 import info.mackiewicz.bankapp.dto.UserRegistrationDto;
-import info.mackiewicz.bankapp.mapper.UserMapper;
 import info.mackiewicz.bankapp.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

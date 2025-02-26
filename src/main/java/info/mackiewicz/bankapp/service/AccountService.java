@@ -7,6 +7,7 @@ import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.repository.AccountRepository;
 import info.mackiewicz.bankapp.utils.IbanGenerator;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,5 +129,19 @@ public class AccountService {
         logger.info("withdraw: accountRepository.save returned: {}", savedAccount);
         logger.info("withdraw: Ending");
         return savedAccount;
+    }
+
+    public Optional<Account> findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
+        logger.info("findAccountByOwnersEmail: Starting with email: {}", recipientEmail);
+        Optional<Account> account = accountRepository.findFirstByOwner_email(recipientEmail);
+        logger.info("findAccountByOwnersEmail: findFirstByOwner_email returned: {}", account);
+        return account;
+    }
+
+    public Optional<Account> findAccountByIban(String sourceIban) {
+        logger.info("findAccountByIban: Starting with IBAN: {}", sourceIban);
+        Optional<Account> account = accountRepository.findByIban(sourceIban);
+        logger.info("findAccountByIban: findByIban returned: {}", account);
+        return account;
     }
 }
