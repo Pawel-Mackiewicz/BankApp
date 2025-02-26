@@ -20,13 +20,16 @@ import info.mackiewicz.bankapp.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
+  
     private final DashboardService dashboardService;
  
+  
     @GetMapping
     public String getDashboard(@AuthenticationPrincipal User user, Model model, HttpServletRequest request) {
         DashboardDTO dashboard = dashboardService.getDashboardData(user.getId());

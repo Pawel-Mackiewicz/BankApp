@@ -1,57 +1,52 @@
 package info.mackiewicz.bankapp.controller.web;
 
-import info.mackiewicz.bankapp.dto.ExternalAccountTransferRequest;
-import info.mackiewicz.bankapp.dto.InternalAccountTransferRequest;
-import info.mackiewicz.bankapp.dto.OwnAccountTransferRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import info.mackiewicz.bankapp.converter.TransactionAssembler;
+import info.mackiewicz.bankapp.dto.InternalTransferRequest;
+import info.mackiewicz.bankapp.dto.OwnTransferRequest;
+import info.mackiewicz.bankapp.dto.TransferRequest;
 import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.Transaction;
-import info.mackiewicz.bankapp.model.TransactionType;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.AccountService;
 import info.mackiewicz.bankapp.service.TransactionService;
-import info.mackiewicz.bankapp.model.TransactionBuilder;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.math.BigDecimal;
-import java.util.Optional;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Controller
 @RequestMapping("/dashboard/transfer")
 @RequiredArgsConstructor
 public class TransferController {
 
     private final TransactionService transactionService;
+    private final TransactionAssembler transactionAssembler;
     private final AccountService accountService;
-    private final TransactionBuilder transactionBuilder;
 
     @PostMapping("/own")
     public String handleOwnTransfer(
             @AuthenticationPrincipal User user,
-            OwnAccountTransferRequest request,
+            OwnTransferRequest request,
             RedirectAttributes redirectAttributes) {
         try {
             validateAccountOwnership(user, request.getSourceAccountId());
             validateAccountOwnership(user, request.getDestinationAccountId());
 
-            Transaction transaction = transactionBuilder
-                    .withSourceAccount(request.getSourceAccountId())
-                    .withDestinationAccount(request.getDestinationAccountId())
-                    .withAmount(new BigDecimal(request.getAmount()))
-                    .withTransactionTitle(request.getTitle())
-                    .withType(TransactionType.TRANSFER_OWN)
-                    .build();
+            Transaction transaction = transactionAssembler.assembleOwnTransfer(request);
 
             transactionService.createTransaction(transaction);
-            redirectAttributes.addFlashAttribute("successMessage", "Transfer between own accounts created successfully");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("transferSuccessMessage",
+                    "Transfer between own accounts created successfully");
+            log.info("Flash success message set for own transfer: Transfer between own accounts created successfully");
+         } catch (Exception e) {
+             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+             log.error("Flash error message set for own transfer: " + e.getMessage());
         }
         return "redirect:/dashboard";
     }
@@ -59,31 +54,25 @@ public class TransferController {
     @PostMapping("/internal")
     public String handleInternalTransfer(
             @AuthenticationPrincipal User user,
-            @Valid InternalAccountTransferRequest request,
+            @Valid InternalTransferRequest request,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
         try {
             if (!request.isValid()) {
                 throw new IllegalArgumentException("Either IBAN or email must be provided");
             }
-            validateAccountOwnership(user, request.getSourceAccountId());
+            validateAccountOwnership(user, request.getSourceIban());
 
-            // Get destination account by IBAN
-            Account destinationAccount = accountService.findByIban(request.getRecipientIban())
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid recipient IBAN"));
-
-            Transaction transaction = transactionBuilder
-                    .withSourceAccount(request.getSourceAccountId())
-                    .withDestinationAccount(destinationAccount.getId())
-                    .withAmount(new BigDecimal(request.getAmount()))
-                    .withTransactionTitle(request.getTitle())
-                    .withType(TransactionType.TRANSFER_INTERNAL)
-                    .build();
+            log.info(": -> Request: " + request);
+            
+            Transaction transaction = transactionAssembler.assembleInternalTransfer(request);
 
             transactionService.createTransaction(transaction);
-            redirectAttributes.addFlashAttribute("successMessage", "Internal bank transfer created successfully");
+            redirectAttributes.addFlashAttribute("transferSuccessMessage", "Internal bank transfer created successfully");
+            log.info("Flash success message set for internal transfer: Internal bank transfer created successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            log.error("Flash error message set for internal transfer: " + e.getMessage());
         }
         return "redirect:/dashboard";
     }
@@ -91,22 +80,19 @@ public class TransferController {
     @PostMapping("/external")
     public String handleExternalTransfer(
             @AuthenticationPrincipal User user,
-            ExternalAccountTransferRequest request,
+            TransferRequest request,
             RedirectAttributes redirectAttributes) {
         try {
-            validateAccountOwnership(user, request.getSourceAccountId());
+            validateAccountOwnership(user, request.getSourceIban());
 
-            Transaction transaction = transactionBuilder
-                    .withSourceAccount(request.getSourceAccountId())
-                    .withAmount(new BigDecimal(request.getAmount()))
-                    .withTransactionTitle(request.getTitle())
-                    .withType(TransactionType.TRANSFER_EXTERNAL)
-                    .build();
+            Transaction transaction = transactionAssembler.assembleExternalTransfer(request);
 
             transactionService.createTransaction(transaction);
-            redirectAttributes.addFlashAttribute("successMessage", "External transfer created successfully");
+            redirectAttributes.addFlashAttribute("transferSuccessMessage", "External transfer created successfully");
+            log.info("Flash success message set for external transfer: External transfer created successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            log.error("Flash error message set for external transfer: " + e.getMessage());
         }
         return "redirect:/dashboard";
     }
@@ -114,6 +100,14 @@ public class TransferController {
     private void validateAccountOwnership(User user, Integer accountId) {
         if (!accountService.getAccountsByOwnersId(user.getId()).stream()
                 .anyMatch(account -> account.getId().equals(accountId))) {
+            throw new IllegalArgumentException("You don't have permission to this account");
+        }
+    }
+
+    private void validateAccountOwnership(User user, String accountIban) {
+        if (!accountService.getAccountsByOwnersId(user.getId()).stream()
+                .map(Account::getIban)
+                .anyMatch(iban -> iban.equals(accountIban))) {
             throw new IllegalArgumentException("You don't have permission to this account");
         }
     }
