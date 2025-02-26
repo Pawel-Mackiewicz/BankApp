@@ -481,6 +481,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         // Remove success message after 5 seconds
                         setTimeout(() => successAlert.remove(), 5000);
+
                     } catch (error) {
                         console.error('Transfer error:', error);
                         const errorAlert = document.createElement('div');
