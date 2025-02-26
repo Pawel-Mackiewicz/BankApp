@@ -6,8 +6,10 @@ import info.mackiewicz.bankapp.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -15,7 +17,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,141 +36,138 @@ class PasswordResetTokenServiceTest {
     }
 
     @Test
-    void createToken_ShouldGenerateNewToken_WhenUserHasNoActiveTokens() {
-        // Arrange
-        when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class))).thenReturn(0L);
-        when(tokenRepository.save(any(PasswordResetToken.class))).thenAnswer(i -> i.getArgument(0));
+    void createToken_WhenUserHasNoActiveTokens_ShouldCreateNewToken() {
+        // given
+        when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class)))
+                .thenReturn(0L);
+        when(tokenRepository.save(any(PasswordResetToken.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        try (MockedStatic<JwtUtil> jwtUtil = mockStatic(JwtUtil.class)) {
-            jwtUtil.when(() -> JwtUtil.generateToken(TEST_EMAIL)).thenReturn(TEST_TOKEN);
+        try (MockedStatic<JwtUtil> jwtUtilMock = Mockito.mockStatic(JwtUtil.class)) {
+            jwtUtilMock.when(() -> JwtUtil.generateToken(TEST_EMAIL))
+                    .thenReturn(TEST_TOKEN);
 
-            // Act
+            // when
             String token = tokenService.createToken(TEST_EMAIL);
 
-            // Assert
+            // then
+            assertNotNull(token);
             assertEquals(TEST_TOKEN, token);
-            verify(tokenRepository).save(any(PasswordResetToken.class));
-            verify(tokenRepository).countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class));
-            jwtUtil.verify(() -> JwtUtil.generateToken(TEST_EMAIL));
+
+            ArgumentCaptor<PasswordResetToken> tokenCaptor = ArgumentCaptor.forClass(PasswordResetToken.class);
+            verify(tokenRepository).save(tokenCaptor.capture());
+
+            PasswordResetToken savedToken = tokenCaptor.getValue();
+            assertEquals(TEST_TOKEN, savedToken.getToken());
+            assertEquals(TEST_EMAIL, savedToken.getUserEmail());
+            assertFalse(savedToken.isUsed());
+            assertTrue(savedToken.getExpiresAt().isAfter(LocalDateTime.now()));
         }
     }
 
     @Test
-    void createToken_ShouldThrowException_WhenUserExceededTokenLimit() {
-        // Arrange
-        when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class))).thenReturn(2L);
+    void createToken_WhenUserHasTooManyActiveTokens_ShouldThrowException() {
+        // given
+        when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class)))
+                .thenReturn(2L);
 
-        // Act & Assert
-        assertThrows(IllegalStateException.class, () -> tokenService.createToken(TEST_EMAIL));
-        verify(tokenRepository, never()).save(any(PasswordResetToken.class));
+        // when & then
+        assertThrows(IllegalStateException.class,
+                () -> tokenService.createToken(TEST_EMAIL));
+        verify(tokenRepository, never()).save(any());
     }
 
     @Test
-    void validateToken_ShouldReturnUserEmail_WhenTokenIsValid() {
-        // Arrange
+    void validateToken_WhenTokenIsValid_ShouldReturnUserEmail() {
+        // given
         PasswordResetToken validToken = new PasswordResetToken(TEST_TOKEN, TEST_EMAIL);
-        when(tokenRepository.findByToken(TEST_TOKEN)).thenReturn(Optional.of(validToken));
+        when(tokenRepository.findByToken(TEST_TOKEN))
+                .thenReturn(Optional.of(validToken));
 
-        // Act
+        // when
         Optional<String> result = tokenService.validateToken(TEST_TOKEN);
 
-        // Assert
+        // then
         assertTrue(result.isPresent());
         assertEquals(TEST_EMAIL, result.get());
     }
 
     @Test
-    void validateToken_ShouldReturnEmpty_WhenTokenDoesNotExist() {
-        // Arrange
-        when(tokenRepository.findByToken(TEST_TOKEN)).thenReturn(Optional.empty());
-
-        // Act
-        Optional<String> result = tokenService.validateToken(TEST_TOKEN);
-
-        // Assert
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void validateToken_ShouldReturnEmpty_WhenTokenIsExpired() {
-        // Arrange
+    void validateToken_WhenTokenIsExpired_ShouldReturnEmpty() {
+        // given
         PasswordResetToken expiredToken = new PasswordResetToken(TEST_TOKEN, TEST_EMAIL);
+        // Ustawiamy datę wygaśnięcia w przeszłości
         expiredToken.setExpiresAt(LocalDateTime.now().minusHours(1));
-        when(tokenRepository.findByToken(TEST_TOKEN)).thenReturn(Optional.of(expiredToken));
+        
+        when(tokenRepository.findByToken(TEST_TOKEN))
+                .thenReturn(Optional.of(expiredToken));
 
-        // Act
+        // when
         Optional<String> result = tokenService.validateToken(TEST_TOKEN);
 
-        // Assert
+        // then
         assertTrue(result.isEmpty());
     }
 
     @Test
-    void consumeToken_ShouldMarkTokenAsUsed_WhenTokenIsValid() {
-        // Arrange
+    void validateToken_WhenTokenIsUsed_ShouldReturnEmpty() {
+        // given
+        PasswordResetToken usedToken = new PasswordResetToken(TEST_TOKEN, TEST_EMAIL);
+        usedToken.setUsed(true);
+        usedToken.setUsedAt(LocalDateTime.now());
+        
+        when(tokenRepository.findByToken(TEST_TOKEN))
+                .thenReturn(Optional.of(usedToken));
+
+        // when
+        Optional<String> result = tokenService.validateToken(TEST_TOKEN);
+
+        // then
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void consumeToken_WhenTokenIsValid_ShouldMarkAsUsedAndReturnTrue() {
+        // given
         PasswordResetToken validToken = new PasswordResetToken(TEST_TOKEN, TEST_EMAIL);
-        when(tokenRepository.findByToken(TEST_TOKEN)).thenReturn(Optional.of(validToken));
-        when(tokenRepository.save(any(PasswordResetToken.class))).thenAnswer(i -> i.getArgument(0));
+        when(tokenRepository.findByToken(TEST_TOKEN))
+                .thenReturn(Optional.of(validToken));
+        when(tokenRepository.save(any(PasswordResetToken.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Act
+        // when
         boolean result = tokenService.consumeToken(TEST_TOKEN);
 
-        // Assert
+        // then
         assertTrue(result);
-        assertTrue(validToken.isUsed());
-        assertNotNull(validToken.getUsedAt());
-        verify(tokenRepository).save(validToken);
+        verify(tokenRepository).save(argThat(token -> 
+            token.isUsed() && token.getUsedAt() != null
+        ));
     }
 
     @Test
-    void consumeToken_ShouldReturnFalse_WhenTokenDoesNotExist() {
-        // Arrange
-        when(tokenRepository.findByToken(TEST_TOKEN)).thenReturn(Optional.empty());
+    void canRequestToken_WhenUserHasNoActiveTokens_ShouldReturnTrue() {
+        // given
+        when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class)))
+                .thenReturn(0L);
 
-        // Act
-        boolean result = tokenService.consumeToken(TEST_TOKEN);
-
-        // Assert
-        assertFalse(result);
-        verify(tokenRepository, never()).save(any());
-    }
-
-    @Test
-    void consumeToken_ShouldReturnFalse_WhenTokenIsExpired() {
-        // Arrange
-        PasswordResetToken expiredToken = new PasswordResetToken(TEST_TOKEN, TEST_EMAIL);
-        expiredToken.setExpiresAt(LocalDateTime.now().minusHours(1));
-        when(tokenRepository.findByToken(TEST_TOKEN)).thenReturn(Optional.of(expiredToken));
-
-        // Act
-        boolean result = tokenService.consumeToken(TEST_TOKEN);
-
-        // Assert
-        assertFalse(result);
-        verify(tokenRepository, never()).save(any());
-    }
-
-    @Test
-    void canRequestToken_ShouldReturnTrue_WhenUserHasNoActiveTokens() {
-        // Arrange
-        when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class))).thenReturn(0L);
-
-        // Act
+        // when
         boolean result = tokenService.canRequestToken(TEST_EMAIL);
 
-        // Assert
+        // then
         assertTrue(result);
     }
 
     @Test
-    void canRequestToken_ShouldReturnFalse_WhenUserHasMaxActiveTokens() {
-        // Arrange
-        when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class))).thenReturn(2L);
+    void canRequestToken_WhenUserHasTooManyActiveTokens_ShouldReturnFalse() {
+        // given
+        when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class)))
+                .thenReturn(2L);
 
-        // Act
+        // when
         boolean result = tokenService.canRequestToken(TEST_EMAIL);
 
-        // Assert
+        // then
         assertFalse(result);
     }
 }
