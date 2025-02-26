@@ -45,7 +45,7 @@ public class PasswordResetTokenService {
     }
 
     /**
-     * Validates a token and returns associated user if valid
+     * Validates a token and returns associated user's email if valid
      * @param token Token to validate
      * @return Optional containing the user's email if token is valid, empty otherwise
      */
