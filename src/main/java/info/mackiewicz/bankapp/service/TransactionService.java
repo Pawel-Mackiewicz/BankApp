@@ -7,24 +7,19 @@ import info.mackiewicz.bankapp.model.TransactionStatus;
 import info.mackiewicz.bankapp.model.TransactionType;
 import info.mackiewicz.bankapp.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class TransactionService {
     private final TransactionRepository repository;
     private final TransactionProcessor processor;
     private final AccountService accountService;
-
-    TransactionService(TransactionRepository repository, TransactionProcessor processor,
-            AccountService accountService) {
-        this.repository = repository;
-        this.processor = processor;
-        this.accountService = accountService;
-    }
 
     @Transactional
     public Transaction createTransaction(Transaction transaction) {

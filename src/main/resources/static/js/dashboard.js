@@ -373,14 +373,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (isValid) {
                     try {
+                        console.log('=== Transaction Flow Start ===');
                         console.log('Form validation passed');
                         const formData = new FormData(this);
                         
-                        // Log form data
-                        console.log('Form data:');
+                        // Log detailed form data
+                        console.log('Form data details:');
                         for (let [key, value] of formData.entries()) {
-                            console.log(`${key}: ${value}`);
+                            console.log(`Field: ${key}, Value: ${value}, Type: ${typeof value}`);
                         }
+                        console.log('Form ID:', this.id);
+                        console.log('Form Action:', this.action);
                         
                         console.log('Sending request to:', this.action);
                         // Przygotuj listę wymaganych pól w zależności od typu formularza
@@ -430,8 +433,55 @@ document.addEventListener('DOMContentLoaded', function() {
                             throw new Error(`Transfer failed: ${response.status} ${responseText}`);
                         }
 
-                        // Reload page to show updated balances and transactions
-                        form.submit();
+                        // Add flash message to form
+                        const successAlert = document.createElement('div');
+                        successAlert.className = 'alert alert-success mt-3';
+                        successAlert.textContent = 'Transfer completed successfully.';
+                        this.prepend(successAlert);
+                        
+                        // Reset form
+                        this.reset();
+                        resetValidation(this);
+
+                        // Update account summary by fetching just the account summary part
+                        fetch('/dashboard')
+                            .then(response => response.text())
+                            .then(html => {
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(html, 'text/html');
+                                // Update account summary
+                                const newAccounts = doc.querySelector('.account-summary');
+                                if (newAccounts) {
+                                    const currentAccounts = document.querySelector('.account-summary');
+                                    if (currentAccounts) {
+                                        currentAccounts.innerHTML = newAccounts.innerHTML;
+                                    }
+                                }
+
+                                // Update recent transactions
+                                const newTransactions = doc.querySelector('.column:first-child');
+                                if (newTransactions) {
+                                    const currentTransactions = document.querySelector('.column:first-child');
+                                    if (currentTransactions) {
+                                        currentTransactions.innerHTML = newTransactions.innerHTML;
+                                    }
+                                }
+
+                                // Re-attach IBAN copy functionality to new elements
+                                document.querySelectorAll('.copy-iban-btn, .iban-text').forEach(element => {
+                                    element.addEventListener('click', function() {
+                                        const iban = this.getAttribute('data-iban');
+                                        copyIban(iban);
+                                    });
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error updating account summary:', error);
+                            });
+
+                        // Remove success message after 5 seconds
+                        setTimeout(() => successAlert.remove(), 5000);
+
                     } catch (error) {
                         console.error('Transfer error:', error);
                         const errorAlert = document.createElement('div');

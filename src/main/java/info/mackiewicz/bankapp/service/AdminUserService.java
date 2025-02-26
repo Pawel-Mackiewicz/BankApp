@@ -6,15 +6,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.repository.AdminUserRepository;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service("adminUserDetailsService")
 public class AdminUserService implements UserDetailsService {
     
     private final AdminUserRepository adminUserRepository;
-    
-    public AdminUserService(AdminUserRepository adminUserRepository) {
-        this.adminUserRepository = adminUserRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
