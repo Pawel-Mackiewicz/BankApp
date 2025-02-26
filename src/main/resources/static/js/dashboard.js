@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const emailInput = document.getElementById('internalRecipientEmail');
     if (emailInput) {
         emailInput.addEventListener('input', debounce(async function() {
-            await validateEmail(this);
+            await validateEmail(emailInput);
         }, 500));
     }
 
@@ -249,7 +249,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateAmount(input) {
         const amount = parseFloat(input.value);
-        const sourceAccountSelect = input.closest('form').querySelector('select[id$="SourceAccountId"]');
+        const form = input.closest('form');
+        let sourceAccountSelect;
+        
+        // Użyj odpowiedniego selektora w zależności od typu formularza
+        if (form.id === 'ownTransferForm') {
+            sourceAccountSelect = form.querySelector('select[id$="SourceAccountId"]');
+        } else {
+            sourceAccountSelect = form.querySelector('select[name="sourceIban"]');
+        }
+        
         const selectedOption = sourceAccountSelect.selectedOptions[0];
         
         if (!selectedOption.value) {
@@ -374,14 +383,29 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         
                         console.log('Sending request to:', this.action);
-                        // Sprawdź czy wszystkie wymagane pola są obecne
-                        const requiredFields = ['sourceAccountId', 'amount', 'title'];
+                        // Przygotuj listę wymaganych pól w zależności od typu formularza
+                        let requiredFields = ['amount', 'title'];
+                        
+                        if (this.id === 'ownTransferForm') {
+                            requiredFields.push('sourceAccountId');
+                        } else {
+                            requiredFields.push('sourceIban');
+                        }
+
                         const recipientMethod = formData.get('recipientMethod');
                         
-                        if (recipientMethod === 'iban') {
-                            requiredFields.push('recipientIban');
-                        } else {
-                            requiredFields.push('recipientEmail');
+                        // Dodaj logi aby sprawdzić typ formularza i recipientMethod
+                        console.log('Form type:', this.id);
+                        console.log('Recipient method:', recipientMethod);
+
+                        if (this.id === 'internalTransferForm') {
+                            if (recipientMethod === 'iban') {
+                                requiredFields.push('recipientIban');
+                            } else {
+                                requiredFields.push('recipientEmail');
+                            }
+                        } else if (this.id === 'externalTransferForm') {
+                            requiredFields.push('recipientIban', 'recipientName');
                         }
 
                         const missingFields = requiredFields.filter(field => !formData.get(field));
@@ -407,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
 
                         // Reload page to show updated balances and transactions
-                        window.location.reload();
+                        form.submit();
                     } catch (error) {
                         console.error('Transfer error:', error);
                         const errorAlert = document.createElement('div');
@@ -419,6 +443,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     console.log('Form validation failed');
                 }
+                 // Debug: Log flash messages from server if any
+                 const flashSuccess = document.querySelector('.alert.alert-success');
+                 const flashError = document.querySelector('.alert.alert-danger');
+                 if (flashSuccess) {
+                     console.log("Flash success message found:", flashSuccess.textContent.trim());
+                 }
+                 if (flashError) {
+                     console.log("Flash error message found:", flashError.textContent.trim());
+                 }
             });
         }
     });
