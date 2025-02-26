@@ -6,6 +6,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import info.mackiewicz.bankapp.converter.TransactionAssembler;
 import info.mackiewicz.bankapp.dto.InternalTransferRequest;
@@ -16,9 +19,7 @@ import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.service.AccountService;
 import info.mackiewicz.bankapp.service.TransactionService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Controller
 @RequestMapping("/dashboard/transfer")

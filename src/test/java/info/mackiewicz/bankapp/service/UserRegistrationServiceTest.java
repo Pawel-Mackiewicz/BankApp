@@ -1,8 +1,5 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.converter.UserMapper;
-import info.mackiewicz.bankapp.dto.UserRegistrationDto;
-import info.mackiewicz.bankapp.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -10,8 +7,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import static org.mockito.Mockito.when;
+
+import info.mackiewicz.bankapp.converter.UserMapper;
+import info.mackiewicz.bankapp.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.model.User;
 
 class UserRegistrationServiceTest {
 

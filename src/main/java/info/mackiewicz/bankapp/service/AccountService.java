@@ -77,9 +77,19 @@ public class AccountService {
                 .orElseThrow(
                         () -> new OwnerAccountsNotFoundException("User with ID " + id + " does not have any account."));
     }
+  
+      public Optional<Account> findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
+        logger.info("findAccountByOwnersEmail: Starting with email: {}", recipientEmail);
+        Optional<Account> account = accountRepository.findFirstByOwner_email(recipientEmail);
+        logger.info("findAccountByOwnersEmail: findFirstByOwner_email returned: {}", account);
+        return account;
+    }
 
-    public Optional<Account> findByIban(String iban) {
-        return accountRepository.findByIban(iban);
+    public Optional<Account> findAccountByIban(String sourceIban) {
+        logger.info("findAccountByIban: Starting with IBAN: {}", sourceIban);
+        Optional<Account> account = accountRepository.findByIban(sourceIban);
+        logger.info("findAccountByIban: findByIban returned: {}", account);
+        return account;
     }
 
     public List<Account> getAllAccounts() {
@@ -100,6 +110,7 @@ public class AccountService {
         account.setOwner(userService.getUserById(newId));
         return accountRepository.save(account);
     }
+  
 
     // FINANCIAL OPERATIONS
 
@@ -129,19 +140,5 @@ public class AccountService {
         logger.info("withdraw: accountRepository.save returned: {}", savedAccount);
         logger.info("withdraw: Ending");
         return savedAccount;
-    }
-
-    public Optional<Account> findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
-        logger.info("findAccountByOwnersEmail: Starting with email: {}", recipientEmail);
-        Optional<Account> account = accountRepository.findFirstByOwner_email(recipientEmail);
-        logger.info("findAccountByOwnersEmail: findFirstByOwner_email returned: {}", account);
-        return account;
-    }
-
-    public Optional<Account> findAccountByIban(String sourceIban) {
-        logger.info("findAccountByIban: Starting with IBAN: {}", sourceIban);
-        Optional<Account> account = accountRepository.findByIban(sourceIban);
-        logger.info("findAccountByIban: findByIban returned: {}", account);
-        return account;
     }
 }
