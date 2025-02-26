@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.utils;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import info.mackiewicz.bankapp.model.Account;
 import lombok.Getter;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class AccountLockManager {
     @Getter

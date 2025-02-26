@@ -6,20 +6,18 @@ import info.mackiewicz.bankapp.utils.AccountLockManager;
 import info.mackiewicz.bankapp.model.Transaction;
 import info.mackiewicz.bankapp.utils.LoggingService;
 import info.mackiewicz.bankapp.utils.Util;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@RequiredArgsConstructor
 @Service
 public class TransactionProcessor {
 
     private final TransactionHydrator hydrator;
     private final TransactionRepository repository;
 
-    public TransactionProcessor(TransactionHydrator hydrator, TransactionRepository repository) {
-        this.hydrator = hydrator;
-        this.repository = repository;
-    }
 
     @Transactional
     public void processTransaction(Transaction transaction) {

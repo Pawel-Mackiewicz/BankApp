@@ -1,144 +1,137 @@
 package info.mackiewicz.bankapp.service;
 
 import info.mackiewicz.bankapp.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.exception.InvalidOperationException;
 import info.mackiewicz.bankapp.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.repository.AccountRepository;
 import info.mackiewicz.bankapp.utils.IbanGenerator;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
-public class AccountService {
+public class AccountService implements AccountServiceInterface {
 
-    private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
     private final AccountRepository accountRepository;
     private final UserService userService;
 
-    public AccountService(AccountRepository accountRepository, UserService userService) {
-        this.accountRepository = accountRepository;
-        this.userService = userService;
-    }
-
+    @Override
     @Transactional
-    public Account createAccount(Integer userId) {
-        logger.info("createAccount: Starting with userId: {}", userId);
+    public Account createAccount(@NotNull Integer userId) {
+        log.debug("Creating account for user ID: {}", userId);
         User user = userService.getUserById(userId);
-        logger.info("createAccount: userService.getUserById returned: {}", user);
         Account account = new Account(user);
-        logger.info("createAccount: Account created: {}", account);
         account = setupIban(account);
-        logger.info("createAccount: setupIban returned: {}", account);
-
-        logger.info("createAccount: Calling accountRepository.save with account: {}", account);
-        Account savedAccount = accountRepository.save(account);
-        logger.info("createAccount: accountRepository.save returned: {}", savedAccount);
-        logger.info("createAccount: Ending");
-        return savedAccount;
+        return accountRepository.save(account);
     }
 
-    public Account setupIban(Account account) {
+    private Account setupIban(Account account) {
         String iban = IbanGenerator.generateIban(account.getOwner().getId(), account.getUserAccountNumber());
         account.setIban(iban);
         return account;
     }
 
+    @Override
     public Account getAccountById(int id) {
-        logger.info("getAccountById: Starting with id: {}", id);
-        Optional<Account> account = accountRepository.findById(id);
-        logger.info("getAccountById: accountRepository.findById returned: {}", account);
-        Account result = account.orElseThrow(() -> new AccountNotFoundByIdException("Account with ID " + id + " not found."));
-        logger.info("getAccountById: Ending with result: {}", result);
-        return result;
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new AccountNotFoundByIdException("Account with ID " + id + " not found."));
     }
 
-    public List<Account> getAccountsByOwnersPESEL(String pesel) {
-        return accountRepository.findAccountsByOwner_PESEL(pesel)
-                .orElseThrow(() -> new OwnerAccountsNotFoundException(
-                        "User with PESEL " + pesel + " does not have any account."));
-    }
-
-    public List<Account> getAccountsByOwnersUsername(String username) {
-        return accountRepository.findAccountsByOwner_username(username)
-                .orElseThrow(
-                        () -> new OwnerAccountsNotFoundException("User: " + username + " does not have any account."));
-    }
-
-    public List<Account> getAccountsByOwnersId(Integer id) {
-        return accountRepository.findAccountsByOwner_id(id)
-                .orElseThrow(
-                        () -> new OwnerAccountsNotFoundException("User with ID " + id + " does not have any account."));
-    }
-  
-      public Optional<Account> findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
-        logger.info("findAccountByOwnersEmail: Starting with email: {}", recipientEmail);
-        Optional<Account> account = accountRepository.findFirstByOwner_email(recipientEmail);
-        logger.info("findAccountByOwnersEmail: findFirstByOwner_email returned: {}", account);
-        return account;
-    }
-
-    public Optional<Account> findAccountByIban(String sourceIban) {
-        logger.info("findAccountByIban: Starting with IBAN: {}", sourceIban);
-        Optional<Account> account = accountRepository.findByIban(sourceIban);
-        logger.info("findAccountByIban: findByIban returned: {}", account);
-        return account;
-    }
-
+    @Override
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }
 
-    public void deleteAccountById(int id) {
-        logger.info("deleteAccountById: Starting with id: {}", id);
-        Account account = getAccountById(id);
-        logger.info("deleteAccountById: getAccountById returned: {}", account);
-        accountRepository.delete(account);
-        logger.info("deleteAccountById: accountRepository.delete called");
-        logger.info("deleteAccountById: Ending");
+    @Override
+    public Optional<Account> findAccountByIban(String iban) {
+        log.debug("Finding account by IBAN: {}", iban);
+        return accountRepository.findByIban(iban);
     }
 
-    public Account changeAccountOwner(int id, int newId) {
+    @Override
+    public List<Account> getAccountsByOwnerCriteria(String value, Function<String, Optional<List<Account>>> finder,
+            String criteriaName) {
+        return finder.apply(value)
+                .orElseThrow(() -> new OwnerAccountsNotFoundException(
+                        String.format("User with %s %s does not have any account.", criteriaName, value)));
+    }
+
+    @Override
+    public List<Account> getAccountsByOwnersPESEL(String pesel) {
+        return getAccountsByOwnerCriteria(pesel, accountRepository::findAccountsByOwner_PESEL, "PESEL");
+    }
+
+    @Override
+    public List<Account> getAccountsByOwnersUsername(String username) {
+        return getAccountsByOwnerCriteria(username, accountRepository::findAccountsByOwner_username, "username");
+    }
+
+    @Override
+    public List<Account> getAccountsByOwnersId(Integer id) {
+        return getAccountsByOwnerCriteria(id.toString(),
+                value -> accountRepository.findAccountsByOwner_id(Integer.parseInt(value)),
+                "ID");
+    }
+
+    @Override
+    public Optional<Account> findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
+        log.debug("Finding account by owner's email: {}", recipientEmail);
+        return accountRepository.findFirstByOwner_email(recipientEmail);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAccountById(int id) {
+        log.debug("Deleting account with ID: {}", id);
         Account account = getAccountById(id);
-        account.setOwner(userService.getUserById(newId));
+        accountRepository.delete(account);
+    }
+
+    @Override
+    @Transactional
+    public Account changeAccountOwner(int accountId, int newOwnerId) {
+        Account account = getAccountById(accountId);
+        User newOwner = userService.getUserById(newOwnerId);
+        account.setOwner(newOwner);
         return accountRepository.save(account);
     }
-  
 
-    // FINANCIAL OPERATIONS
-
+    @Override
     @Transactional
-    public Account deposit(int accountId, BigDecimal amount) {
-        logger.info("deposit: Starting with accountId: {}, amount: {}", accountId, amount);
+    public Account deposit(int accountId,
+            @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidOperationException("Deposit amount must be greater than zero");
+        }
+
         Account account = getAccountById(accountId);
-        logger.info("deposit: getAccountById returned: {}", account);
         account.deposit(amount);
-        logger.info("deposit: Account balance after deposit: {}", account.getBalance());
-        logger.info("deposit: Calling accountRepository.save with account: {}", account);
-        Account savedAccount = accountRepository.save(account);
-        logger.info("deposit: accountRepository.save returned: {}", savedAccount);
-        logger.info("deposit: Ending");
-        return savedAccount;
+        return accountRepository.save(account);
     }
 
+    @Override
     @Transactional
-    public Account withdraw(int accountId, BigDecimal amount) {
-        logger.info("withdraw: Starting with accountId: {}, amount: {}", accountId, amount);
+    public Account withdraw(int accountId,
+            @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidOperationException("Withdrawal amount must be greater than zero");
+        }
+
         Account account = getAccountById(accountId);
-        logger.info("withdraw: getAccountById returned: {}", account);
         account.withdraw(amount);
-        logger.info("withdraw: Account balance after withdraw: {}", account.getBalance());
-        logger.info("withdraw: Calling accountRepository.save with account: {}", account);
-        Account savedAccount = accountRepository.save(account);
-        logger.info("withdraw: accountRepository.save returned: {}", savedAccount);
-        logger.info("withdraw: Ending");
-        return savedAccount;
+        return accountRepository.save(account);
     }
 }

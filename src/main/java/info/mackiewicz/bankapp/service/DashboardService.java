@@ -8,17 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import info.mackiewicz.bankapp.dto.DashboardDTO;
 import info.mackiewicz.bankapp.model.Account;
 import info.mackiewicz.bankapp.model.Transaction;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class DashboardService {
     private final AccountService accountService;
     private final TransactionService transactionService;
 
-    public DashboardService(AccountService accountService,
-            TransactionService transactionService) {
-        this.accountService = accountService;
-        this.transactionService = transactionService;
-    }
 
     public DashboardDTO getDashboardData(Integer userId) {
         List<Account> accounts = getAccountsByUserId(userId);

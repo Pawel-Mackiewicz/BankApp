@@ -21,9 +21,9 @@ import info.mackiewicz.bankapp.service.AccountService;
 import info.mackiewicz.bankapp.service.TransactionService;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/dashboard/transfer")
-@RequiredArgsConstructor
 public class TransferController {
 
     private final TransactionService transactionService;
