@@ -53,7 +53,19 @@ public class AccountService implements AccountServiceInterface {
     }
 
     @Override
-    public List<Account> getAccountsByOwnerCriteria(String value, Function<String, Optional<List<Account>>> finder, String criteriaName) {
+    public List<Account> getAllAccounts() {
+        return accountRepository.findAll();
+    }
+
+    @Override
+    public Optional<Account> findAccountByIban(String iban) {
+        logger.debug("Finding account by IBAN: {}", iban);
+        return accountRepository.findByIban(iban);
+    }
+
+    @Override
+    public List<Account> getAccountsByOwnerCriteria(String value, Function<String, Optional<List<Account>>> finder,
+            String criteriaName) {
         return finder.apply(value)
                 .orElseThrow(() -> new OwnerAccountsNotFoundException(
                         String.format("User with %s %s does not have any account.", criteriaName, value)));
@@ -71,20 +83,9 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     public List<Account> getAccountsByOwnersId(Integer id) {
-        return getAccountsByOwnerCriteria(id.toString(), 
-            value -> accountRepository.findAccountsByOwner_id(Integer.parseInt(value)), 
-            "ID");
-    }
-
-    @Override
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
-    }
-
-    @Override
-    public Optional<Account> findAccountByIban(String iban) {
-        logger.debug("Finding account by IBAN: {}", iban);
-        return accountRepository.findByIban(iban);
+        return getAccountsByOwnerCriteria(id.toString(),
+                value -> accountRepository.findAccountsByOwner_id(Integer.parseInt(value)),
+                "ID");
     }
 
     @Override
@@ -112,7 +113,8 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     @Transactional
-    public Account deposit(int accountId, @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
+    public Account deposit(int accountId,
+            @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidOperationException("Deposit amount must be greater than zero");
         }
@@ -124,7 +126,8 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     @Transactional
-    public Account withdraw(int accountId, @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
+    public Account withdraw(int accountId,
+            @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidOperationException("Withdrawal amount must be greater than zero");
         }
