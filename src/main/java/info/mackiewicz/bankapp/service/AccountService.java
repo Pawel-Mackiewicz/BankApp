@@ -8,30 +8,32 @@ import info.mackiewicz.bankapp.model.User;
 import info.mackiewicz.bankapp.repository.AccountRepository;
 import info.mackiewicz.bankapp.utils.IbanGenerator;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AccountService implements AccountServiceInterface {
 
+    private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
     private final AccountRepository accountRepository;
     private final UserService userService;
 
     @Override
     @Transactional
     public Account createAccount(@NotNull Integer userId) {
-        log.debug("Creating account for user ID: {}", userId);
+        logger.debug("Creating account for user ID: {}", userId);
         User user = userService.getUserById(userId);
         Account account = new Account(user);
         account = setupIban(account);
@@ -57,7 +59,7 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     public Optional<Account> findAccountByIban(String iban) {
-        log.debug("Finding account by IBAN: {}", iban);
+        logger.debug("Finding account by IBAN: {}", iban);
         return accountRepository.findByIban(iban);
     }
 
@@ -88,14 +90,14 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     public Optional<Account> findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
-        log.debug("Finding account by owner's email: {}", recipientEmail);
+        logger.debug("Finding account by owner's email: {}", recipientEmail);
         return accountRepository.findFirstByOwner_email(recipientEmail);
     }
 
     @Override
     @Transactional
     public void deleteAccountById(int id) {
-        log.debug("Deleting account with ID: {}", id);
+        logger.debug("Deleting account with ID: {}", id);
         Account account = getAccountById(id);
         accountRepository.delete(account);
     }
