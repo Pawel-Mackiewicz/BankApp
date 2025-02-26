@@ -1,5 +1,142 @@
 # Aktualny Kontekst Projektu
 
+## Implementacja REST API dla Resetowania Hasła
+
+### Specyfikacja API
+
+### Struktura Klas
+
+#### 1. DTO
+```java
+// PasswordResetRequestDTO.java
+public class PasswordResetRequestDTO {
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
+    private String email;
+}
+
+// PasswordResetDTO.java
+public class PasswordResetDTO {
+    @NotBlank(message = "Token is required")
+    private String token;
+    
+    @NotBlank(message = "New password is required")
+    private String newPassword;
+}
+```
+
+#### 2. Controller
+```java
+@RestController
+@RequestMapping("/api/password")
+@Validated
+public class PasswordResetController {
+    private final PasswordResetService passwordResetService;
+    
+    @PostMapping("/reset-request")
+    public ResponseEntity<Void> requestReset(
+        @Valid @RequestBody PasswordResetRequestDTO request
+    ) {
+        // Implementacja
+    }
+    
+    @PostMapping("/reset-complete")
+    public ResponseEntity<Void> completeReset(
+        @Valid @RequestBody PasswordResetDTO request
+    ) {
+        // Implementacja
+    }
+}
+```
+
+#### 3. Service Interface
+```java
+public interface PasswordResetService {
+    void requestReset(String email);
+    void completeReset(String token, String newPassword);
+}
+```
+
+#### 4. Obsługa Błędów
+
+```java
+@RestControllerAdvice
+public class PasswordResetExceptionHandler {
+    @ExceptionHandler(RateLimitExceededException.class)
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    public ErrorResponse handleRateLimit(RateLimitExceededException ex) {
+        return new ErrorResponse("Too many reset attempts");
+    }
+    
+    @ExceptionHandler(InvalidTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleInvalidToken(InvalidTokenException ex) {
+        return new ErrorResponse("Invalid or expired token");
+    }
+    
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidation(MethodArgumentNotValidException ex) {
+        return new ErrorResponse("Validation failed");
+    }
+}
+```
+
+#### 5. Struktura Response
+
+```java
+public class ErrorResponse {
+    private String message;
+    private LocalDateTime timestamp = LocalDateTime.now();
+    
+    public ErrorResponse(String message) {
+        this.message = message;
+    }
+}
+```
+
+#### 6. REST API Endpoints
+
+##### POST /api/password/reset-request
+**Request Body**:
+```json
+{
+  "email": "string"
+}
+```
+**Response**:
+- 200 OK: Email został wysłany
+- 400 Bad Request: Nieprawidłowy format email
+- 429 Too Many Requests: Przekroczono limit prób
+
+#### 2. POST /api/password/reset-complete
+**Request Body**:
+```json
+{
+  "token": "string",
+  "newPassword": "string"
+}
+```
+**Response**:
+- 200 OK: Hasło zostało zmienione
+- 400 Bad Request: Nieprawidłowy format hasła
+- 401 Unauthorized: Nieprawidłowy token
+- 429 Too Many Requests: Przekroczono limit prób
+
+### Wymagania Bezpieczeństwa
+1. Rate Limiting:
+   - 3 próby/godzinę per email
+   - 5 prób/godzinę per IP
+2. Walidacja hasła:
+   - Minimum 8 znaków
+   - Przynajmniej 1 cyfra
+   - Przynajmniej 1 znak specjalny
+   - Przynajmniej 1 wielka litera
+3. Token:
+   - JWT z czasem ważności 15 minut
+   - Podpisany kluczem aplikacji
+   - Zawiera email użytkownika
+
 ## Plan Implementacji Systemu Resetowania Hasła - 2 dni
 
 ### Dzień 1: Backend i Podstawowy Frontend
