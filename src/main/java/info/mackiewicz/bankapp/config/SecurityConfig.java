@@ -76,6 +76,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/api/password/**").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(basic -> basic
@@ -99,7 +100,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable) // Tymczasowo wyłączone dla debugowania
             .userDetailsService(userDetailsService)
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/public/**", "/login", "/css/**", "/js/**", "/images/**", "/register", "/favicon.ico").permitAll()
+                .requestMatchers("/public/**", "/login", "/css/**", "/js/**", "/images/**", "/register", "/password-reset/**", "/favicon.ico").permitAll()
                 .requestMatchers("/dashboard/**").authenticated()
                 .anyRequest().authenticated()
             )
