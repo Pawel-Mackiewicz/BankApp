@@ -80,4 +80,25 @@ public class PasswordResetTokenService {
     public boolean canRequestToken(String userEmail) {
         return tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now()) < MAX_ACTIVE_TOKENS_PER_USER;
     }
+
+        /**
+     * Removes tokens older than 30 days from the database
+     * @return Number of tokens deleted
+     */
+    @Transactional
+    public int cleanupOldTokens() {
+        LocalDateTime cutoffDate = LocalDateTime.now().minusDays(30);
+        return tokenRepository.deleteTokensOlderThan(cutoffDate);
+    }
+    
+    /**
+     * Removes tokens older than specified number of days
+     * @param days Number of days after which tokens are considered old
+     * @return Number of tokens deleted
+     */
+    @Transactional
+    public int cleanupOldTokens(int days) {
+        LocalDateTime cutoffDate = LocalDateTime.now().minusDays(days);
+        return tokenRepository.deleteTokensOlderThan(cutoffDate);
+    }
 }
