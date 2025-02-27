@@ -1,13 +1,15 @@
 package info.mackiewicz.bankapp.config;
 
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.springframework.lang.NonNull;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -36,6 +38,14 @@ public class WebConfig implements WebMvcConfigurer {
         viewResolver.setCharacterEncoding("UTF-8");
         return viewResolver;
     }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder
+            .rootUri("http://localhost:8080")
+            .build();
+    }
+
     @Override
     public void addViewControllers(@NonNull ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
