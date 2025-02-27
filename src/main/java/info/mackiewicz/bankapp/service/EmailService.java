@@ -14,10 +14,15 @@ public class EmailService {
     private final Resend resend;
 
     public EmailService(@Value("${app.resend.api-key}") String apiKey) {
-        this.resend = new Resend(apiKey);
+        this.resend = createResendClient(apiKey);
+    }
+    
+    // Protected method to allow overriding in tests
+    protected Resend createResendClient(String apiKey) {
+        return new Resend(apiKey);
     }
 
- public String sendEmail(String to, String subject, String htmlContent) {
+    public String sendEmail(String to, String subject, String htmlContent) {
         try {
             CreateEmailOptions request = CreateEmailOptions.builder()
                 .from("info@bankapp.mackiewicz.info")
@@ -35,8 +40,9 @@ public class EmailService {
 
     public void sendPasswordResetEmail(String email, String token) {
 
+        String link = "http://localhost:8080/password-reset/token/" + token;
         String subject = "BankApp: Password Reset Request";
-        String content = "To reset your password, click the link: " + token;
+        String content = "To reset your password, click the link: " + link;
         sendEmail(email, subject, content);
     }
 
