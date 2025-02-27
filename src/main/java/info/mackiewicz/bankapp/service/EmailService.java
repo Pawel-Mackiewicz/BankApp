@@ -8,8 +8,6 @@ import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
 import com.resend.services.emails.model.CreateEmailResponse;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
 public class EmailService {
 
@@ -22,7 +20,7 @@ public class EmailService {
  public String sendEmail(String to, String subject, String htmlContent) {
         try {
             CreateEmailOptions request = CreateEmailOptions.builder()
-                .from("noreply@twojadomena.com")
+                .from("info@bankapp.mackiewicz.info")
                 .to(to)
                 .subject(subject)
                 .html(htmlContent)
@@ -36,14 +34,23 @@ public class EmailService {
     }
 
     public void sendPasswordResetEmail(String email, String token) {
-        //TODO: implement email sending with password reset token;
-        String subject = "Password Reset Request";
+
+        String subject = "BankApp: Password Reset Request";
         String content = "To reset your password, click the link: " + token;
         sendEmail(email, subject, content);
     }
 
     public void sendPasswordResetConfirmation(String email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sendPasswordResetConfirmation'");
+
+        String subject = "BankApp: Password Reset Confirmation";
+        String content = "Your password has been successfully reset.";
+        sendEmail(email, subject, content);
+    }
+
+    public void sendWelcomeEmail(String email) {
+
+        String subject = "Welcome to BankApp!";
+        String content = "Welcome to BankApp! We are glad you are here.";
+        sendEmail(email, subject, content);
     }
 }
