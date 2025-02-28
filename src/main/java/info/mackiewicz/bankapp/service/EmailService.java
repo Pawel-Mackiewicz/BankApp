@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.service.email.EmailSender;
-import info.mackiewicz.bankapp.service.template.EmailTemplateProvider;
-import info.mackiewicz.bankapp.service.template.api.EmailContent;
+import info.mackiewicz.bankapp.service.email.template.EmailTemplateProvider;
+import info.mackiewicz.bankapp.service.email.template.api.EmailContent;
 
 /**
  * Service for sending various types of emails.

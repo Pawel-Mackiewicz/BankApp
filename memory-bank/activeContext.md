@@ -1,3 +1,31 @@
+## Current Session Context
+28.02.2025, 15:30
+
+## Recent Changes
+- Zaimplementowano nowy system szablonów emaili z użyciem HTML i CSS
+- Dodano system zmiennych do personalizacji treści
+- Zaktualizowano EmailService do pracy z nowymi szablonami
+- Rozszerzono testy o sprawdzanie zawartości emaili
+- Dodano konfigurację app.base-url
+- Zaktualizowano dokumentację w decisionLog.md i progress.md
+
+## Current Goals
+1. Przetestowanie systemu szablonów w środowisku produkcyjnym:
+   - Sprawdzenie wyświetlania w różnych klientach pocztowych
+   - Weryfikacja responsywności
+   - Testy wydajności wysyłania
+
+2. Przygotowanie dokumentacji:
+   - Instrukcja tworzenia nowych szablonów
+   - Lista dostępnych zmiennych do personalizacji
+   - Przewodnik stylów dla szablonów
+
+## Open Questions
+1. Czy należy dodać w przyszłości obsługę wielu języków w szablonach?
+2. Czy warto zaimplementować system śledzenia otwarć emaili?
+3. Czy powinniśmy umożliwić użytkownikom personalizację kolorystyki?
+4. Jakie dodatkowe typy emaili mogą być potrzebne w przyszłości?
+
 # Aktualny Kontekst Projektu
 
 ## System Resetowania Hasła - Zakończony
