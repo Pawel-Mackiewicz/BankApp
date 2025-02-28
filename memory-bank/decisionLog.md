@@ -1,5 +1,161 @@
 # Decision Log
 
+## [2025-02-28] - Password Reset System Implementation Completion
+
+### Context
+The password reset system implementation has been completed successfully using SHA-256 for token hashing. The system has been tested and is working correctly.
+
+### Key Decisions
+
+#### 1. Finalization of Token Hashing Strategy
+**Decision**: Continue using SHA-256 for token hashing rather than migrating to Argon2id
+
+**Implementation Details**:
+- Maintain the existing 32-byte secure random token generation
+- Continue using SHA-256 for token hashing
+- Store hashed tokens in the token_hash column
+- Ensure proper token validation
+
+**Rationale**:
+- SHA-256 provides sufficient security for the current use case
+- Implementation is already complete and working correctly
+- No need for additional complexity at this time
+- Focus on stability and reliability of the existing solution
+
+#### 2. System Testing and Validation
+**Decision**: Comprehensive testing confirms system readiness
+
+**Testing Approach**:
+- Unit tests for TokenHashingService and PasswordResetTokenService
+- Integration tests for the complete password reset flow
+- Security testing for rate limiting and token validation
+- End-to-end testing with email delivery
+
+**Rationale**:
+- Ensures all components work together correctly
+- Validates security measures are effective
+- Confirms user experience meets requirements
+- Provides confidence in system reliability
+
+#### 3. Deployment Strategy
+**Decision**: Direct deployment to production
+
+**Implementation Details**:
+- Deploy all components simultaneously
+- Monitor system performance and security
+- Provide support for any issues that arise
+
+**Rationale**:
+- System is well-tested and ready for production
+- Simple deployment minimizes transition issues
+- Immediate availability of the password reset functionality
+- Clear monitoring plan ensures quick response to any issues
+
+## [2025-02-27] - Token Hashing Security Enhancement
+
+### Context
+Current implementation stores plain tokens in the database, which poses a security risk if the database is compromised. We need to enhance security by implementing token hashing while maintaining existing functionality.
+
+### Key Decisions
+
+#### 1. Token Generation and Hashing
+**Decision**: Implement secure token generation and hashing mechanism
+
+**Implementation Details**:
+- Use SecureRandom for token generation (32 bytes)
+- Implement SHA-256 for token hashing
+- Store only hashed tokens in database
+- Implement proper token validation
+
+**Rationale**:
+- Protect against database breaches
+- Follow security best practices
+- Maintain current functionality
+- Enable future security enhancements
+
+#### 2. Database Schema Changes
+**Decision**: Implement clean schema update
+
+**Changes**:
+- Replace token column with token_hash column
+- Update unique constraints
+- Remove existing tokens
+
+**Rationale**:
+- Clean implementation without legacy support
+- Simplified database structure
+- Clear security boundaries
+- Fresh start with secure implementation
+
+#### 3. Implementation Strategy
+**Decision**: Direct replacement with token removal
+
+**Steps**:
+1. Backup existing schema (for rollback)
+2. Remove all existing tokens
+3. Update schema and deploy new code
+4. Start fresh with hashed tokens
+
+**Rationale**:
+- Clean and straightforward implementation
+- No need for migration complexity
+- Immediate security benefits
+- Minimal deployment complexity
+
+#### 4. Token Generation and Hashing Process
+**Decision**: Implement secure token generation and hashing mechanism
+
+**Process Steps**:
+1. Token Generation:
+   - Generate 32 random bytes using SecureRandom
+   - Base64URL encode the bytes to create the plain token
+   - This token is sent to the user via email
+
+2. Token Hashing:
+   - Use SHA-256 algorithm for hashing
+   - Store only the hash in the database
+   - Never store or log the plain token
+
+3. Token Validation:
+   - Hash the received token using same parameters
+   - Compare with stored hash
+   - Prevent token reuse
+
+**Implementation Example**:
+```java
+public class TokenHashingService {
+    private static final int TOKEN_LENGTH = 32;  // bytes
+    
+    public String generateToken() {
+        byte[] tokenBytes = new byte[TOKEN_LENGTH];
+        new SecureRandom().nextBytes(tokenBytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
+    }
+    
+    public String hashToken(String token) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(token.getBytes(StandardCharsets.UTF_8));
+            return Base64.getEncoder().encodeToString(hashBytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 algorithm not available", e);
+        }
+    }
+}
+```
+
+**Security Considerations**:
+- Token entropy: 256 bits (32 bytes) of randomness
+- Secure hashing with SHA-256
+- No plain token storage
+- Token expiration and usage tracking
+
+**Rationale**:
+- High security against brute force
+- Protection against database breaches
+- Clean separation of tokens and hashes
+- Industry standard approach
+
 ## [2025-02-27] - Password Reset System Implementation Day 2
 
 ### Context
