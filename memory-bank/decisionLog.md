@@ -1,5 +1,72 @@
 # Decision Log
 
+## 28.02.2025 - Email System Refactoring
+
+**Context:**
+System emaili nie spełniał zasad SOLID, łącząc logikę szablonów i wysyłania w jednej klasie. Potrzebna była refaktoryzacja.
+
+**Decision:**
+1. Rozdzielić odpowiedzialności na niezależne komponenty:
+   - EmailSender - interfejs dla wysyłania emaili
+   - ResendEmailSender - konkretna implementacja dla Resend API
+   - EmailTemplateProvider - interfejs dla zarządzania szablonami
+   - DefaultEmailTemplateProvider - implementacja szablonów HTML
+   - EmailContent - klasa dla zawartości emaila
+   - EmailTemplate - abstrakcyjna klasa bazowa dla szablonów
+   - Konkretne implementacje szablonów
+
+**Rationale:**
+1. Single Responsibility Principle:
+   - Każda klasa ma jedną odpowiedzialność
+   - EmailSender tylko wysyła emaile
+   - EmailTemplateProvider tylko zarządza szablonami
+
+2. Open/Closed Principle:
+   - Łatwe dodawanie nowych szablonów przez dziedziczenie
+   - Możliwość dodania nowych implementacji wysyłki emaili
+
+3. Liskov Substitution Principle:
+   - Wszystkie implementacje EmailSender są wymienne
+   - Wszystkie szablony mogą być używane wymiennie
+
+4. Interface Segregation Principle:
+   - Małe, specyficzne interfejsy
+   - Klienci zależą tylko od potrzebnych metod
+
+5. Dependency Inversion Principle:
+   - EmailService zależy od abstrakcji, nie konkretnych implementacji
+   - Łatwe testowanie dzięki możliwości mockowania
+
+**Implementation:**
+1. Interfejsy:
+   - EmailSender dla wysyłki emaili
+   - EmailTemplateProvider dla szablonów
+
+2. Klasy abstrakcyjne:
+   - EmailTemplate jako baza dla szablonów
+   - TemplateVariables do konfiguracji szablonów
+
+3. Implementacje:
+   - ResendEmailSender dla Resend API
+   - DefaultEmailTemplateProvider dla szablonów HTML
+   - Konkretne szablony dla różnych typów emaili
+
+4. Testy:
+   - Mocki interfejsów dla łatwego testowania
+   - Sprawdzanie interakcji między komponentami
+
+**Results:**
+1. Łatwiejsze testowanie dzięki interfejsom
+2. Możliwość łatwej wymiany implementacji
+3. Czytelniejszy i bardziej modularny kod
+4. Łatwiejsze dodawanie nowych funkcjonalności
+
+**Future Considerations:**
+1. Dodanie wsparcia dla wielu języków w szablonach
+2. Implementacja systemu śledzenia emaili
+3. Możliwość personalizacji wyglądu przez użytkowników
+
+
 ## [2025-02-28] - Password Reset System Implementation Completion
 
 ### Context

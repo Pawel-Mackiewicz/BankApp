@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.service.template;
+package info.mackiewicz.bankapp.service.email.template;
 
 /**
  * Password reset confirmation email template.

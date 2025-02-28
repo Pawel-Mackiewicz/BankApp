@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.service.template.api;
+package info.mackiewicz.bankapp.service.email.template.api;
 
 /**
  * Data class for email content.

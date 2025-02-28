@@ -1,7 +1,8 @@
-package info.mackiewicz.bankapp.service.template;
+package info.mackiewicz.bankapp.service.email.template;
 
 import org.springframework.stereotype.Component;
-import info.mackiewicz.bankapp.service.template.api.EmailContent;
+
+import info.mackiewicz.bankapp.service.email.template.api.EmailContent;
 
 /**
  * Default implementation of EmailTemplateProvider using specific template classes.

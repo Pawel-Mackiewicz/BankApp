@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.service.template;
+package info.mackiewicz.bankapp.service.email.template;
 
 /**
  * Base class for all email templates.

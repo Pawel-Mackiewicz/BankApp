@@ -1,6 +1,6 @@
-package info.mackiewicz.bankapp.service.template;
+package info.mackiewicz.bankapp.service.email.template;
 
-import info.mackiewicz.bankapp.service.template.api.EmailContent;
+import info.mackiewicz.bankapp.service.email.template.api.EmailContent;
 
 /**
  * Interface for email template management.
