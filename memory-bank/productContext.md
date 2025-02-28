@@ -30,11 +30,43 @@ BankApp to aplikacja bankowa zbudowana w Java Spring Boot, oferująca podstawowe
    - Sprawdzanie dostępnych środków
    - Weryfikacja uprawnień
 
+### System Bezpieczeństwa
+1. Uwierzytelnianie:
+   - Logowanie przez email/hasło
+   - Resetowanie hasła przez email (resend.com)
+   - Tokeny jednorazowego użytku
+   - Rate limiting dla prób logowania
+
+2. Autoryzacja:
+   - Role użytkowników
+   - Uprawnienia do kont
+   - Walidacja tokenów
+   - Audyt operacji
+
+3. Ochrona Danych:
+   - Szyfrowanie wrażliwych danych
+   - Bezpieczne przechowywanie haseł
+   - Ochrona przed atakami CSRF
+   - Monitoring bezpieczeństwa
+
 ### Interfejs Użytkownika
 - System zakładek dla różnych typów przelewów
 - Dynamiczna walidacja formularzy
 - Wyświetlanie IBAN i salda
 - Kopiowanie IBAN do schowka
+- Formularze zarządzania kontem:
+  * Resetowanie hasła
+  * Aktualizacja danych
+  * Zmiana ustawień bezpieczeństwa
+
+### Powiadomienia
+- Powiadomienia email:
+  * Reset hasła
+  * Potwierdzenia transakcji
+  * Alerty bezpieczeństwa
+- Integracja z resend.com
+- Szablony wiadomości
+- System retry dla nieudanych wysyłek
 
 ### Pozostałe Funkcje
 - Zarządzanie kontami użytkowników
@@ -57,12 +89,27 @@ BankApp to aplikacja bankowa zbudowana w Java Spring Boot, oferująca podstawowe
 - RESTful API
 - Bootstrap dla UI
 - JavaScript dla walidacji frontend
+- resend.com dla komunikacji email
+
+## Integracje Zewnętrzne
+1. Email (resend.com):
+   - Wysyłka powiadomień
+   - Resetowanie haseł
+   - Potwierdzenia operacji
+   - Alerty bezpieczeństwa
+
+2. API Zewnętrzne:
+   - Walidacja IBAN
+   - Systemy monitoringu
+   - Serwisy bezpieczeństwa
 
 ## Cele Projektu
 - Bezpieczne zarządzanie transakcjami
 - Przyjazny interfejs użytkownika
 - Skalowalność i wydajność
 - Zgodność z najlepszymi praktykami branżowymi
+- Wysoki poziom bezpieczeństwa
+- Efektywna obsługa użytkowników
 
 ## Standardy Implementacyjne
 1. Frontend:
@@ -70,21 +117,28 @@ BankApp to aplikacja bankowa zbudowana w Java Spring Boot, oferująca podstawowe
    - Responsywny design
    - Spójny wygląd komponentów
    - Obsługa błędów w UI
+   - Informacje zwrotne dla użytkownika
 
 2. Backend:
    - Walidacja wielopoziomowa
    - Transakcyjność operacji
    - Logowanie zdarzeń
    - Zabezpieczenia CSRF
+   - Rate limiting
+   - Monitoring bezpieczeństwa
 
 3. API:
    - RESTful endpoints
    - Walidacja requestów
    - Standardowe formaty odpowiedzi
    - Obsługa błędów HTTP
+   - Dokumentacja API
 
 ## Planowane Rozszerzenia
 - Implementacja @BankTag
 - Szablony przelewów
 - Przelewy cykliczne
 - Powiadomienia o transakcjach
+- Dwuetapowa weryfikacja (2FA)
+- System alertów bezpieczeństwa
+- Rozszerzony monitoring bezpieczeństwa

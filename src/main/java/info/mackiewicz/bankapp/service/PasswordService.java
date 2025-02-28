@@ -24,10 +24,14 @@ public class PasswordService {
     public User ensurePasswordEncoded(User user) {
         String password = user.getPassword();
         if (!isPasswordEncoded(password)) {
-            user.setPassword(passwordEncoder.encode(password));
+            user.setPassword(encodePassword(password));
             log.info("Password encoded for user with ID: {}", user.getId());
         }
         return user;
+    }
+
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
     /**

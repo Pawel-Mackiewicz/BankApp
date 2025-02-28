@@ -42,6 +42,11 @@ public class UserService implements UserServiceInterface {
         return saved;
     }
 
+    public void changeUsersPassword(String email, String newPassword) {
+        userRepository.updatePasswordByEmail(email, passwordService.encodePassword(newPassword));
+        log.info("Changed password for user with email: {}", email);
+    }
+
     @Override
     public User getUserById(Integer id) {
         return userRepository.findById(id)
@@ -69,6 +74,18 @@ public class UserService implements UserServiceInterface {
     
     @Override
     public boolean checkUsernameExists(String username) {
-        return userRepository.findByUsername(username).isPresent();
+        return userRepository.existsByUsername(username);
     }
+
+    @Override
+    public boolean userExistsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+    }
+    
 }
