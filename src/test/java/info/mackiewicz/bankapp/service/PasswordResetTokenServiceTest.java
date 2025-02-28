@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.service;
 
+import info.mackiewicz.bankapp.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.model.PasswordResetToken;
 import info.mackiewicz.bankapp.repository.PasswordResetTokenRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,7 +72,7 @@ class PasswordResetTokenServiceTest {
                 .thenReturn(2L);
 
         // when & then
-        assertThrows(IllegalStateException.class,
+        assertThrows(TooManyPasswordResetAttemptsException.class,
                 () -> tokenService.createToken(TEST_EMAIL));
         verify(tokenRepository, never()).save(any());
         verify(tokenHashingService, never()).generateToken();

@@ -32,6 +32,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(TooManyPasswordResetAttemptsException.class)
+    public ResponseEntity<String> handleTooManyPasswordResetAttemptsException(TooManyPasswordResetAttemptsException ex) {
+        logger.error("Too many password reset attempts: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getMessage());
+    }
+
     // Handling Account Exceptions
     @ExceptionHandler(AccountNotFoundByIdException.class)
     public ResponseEntity<String> handleAccountNotFoundByIdException(AccountNotFoundByIdException ex) {
