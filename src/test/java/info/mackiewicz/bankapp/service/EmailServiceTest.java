@@ -54,7 +54,7 @@ class EmailServiceTest {
     void sendPasswordResetEmail_UsesCorrectTemplate() {
         // Arrange
         String email = "test@example.com";
-        String userName = "test";
+        String userName = "Test User";
         String token = "reset-token";
         String expectedResetLink = TEST_BASE_URL + "/password-reset/token/" + token;
         EmailContent mockContent = new EmailContent("Reset Subject", "<p>Reset content</p>");
@@ -63,7 +63,7 @@ class EmailServiceTest {
             .thenReturn(mockContent);
 
         // Act
-        emailService.sendPasswordResetEmail(email, token);
+        emailService.sendPasswordResetEmail(email, token, "Test User");
 
         // Assert
         verify(templateProvider).getPasswordResetEmail(userName, expectedResetLink);

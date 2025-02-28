@@ -81,4 +81,11 @@ public class UserService implements UserServiceInterface {
     public boolean userExistsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+    }
+    
 }
