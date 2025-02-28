@@ -24,10 +24,11 @@ public class PasswordResetToken {
     private Long id;
 
     /**
-     * The token sent to user's email.
+     * The hashed token value stored in database.
+     * Original token is sent to user's email and never stored.
      */
-    @Column(nullable = false, unique = true)
-    private String token;
+    @Column(name = "token_hash", nullable = false, unique = true)
+    private String tokenHash;
 
     /**
      * User who requested password reset.
@@ -57,12 +58,12 @@ public class PasswordResetToken {
     private LocalDateTime usedAt;
 
     /**
-     * Creates a new password reset token for the given user
-     * @param token The token value
-     * @param user The user requesting password reset
+     * Creates a new password reset token, valid for an hour, for the given user
+     * @param tokenHash The hashed token value
+     * @param userEmail The email of the user requesting password reset
      */
-    public PasswordResetToken(String token, String userEmail) {
-        this.token = token;
+    public PasswordResetToken(String tokenHash, String userEmail) {
+        this.tokenHash = tokenHash;
         this.userEmail = userEmail;
         this.expiresAt = LocalDateTime.now().plusMinutes(60);
         this.used = false;

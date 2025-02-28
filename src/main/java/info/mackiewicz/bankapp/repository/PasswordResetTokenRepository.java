@@ -18,9 +18,9 @@ import java.util.Optional;
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
     
     /**
-     * Find token by its value
+     * Find token by its hashed value
      */
-    Optional<PasswordResetToken> findByToken(String token);
+    Optional<PasswordResetToken> findByTokenHash(String tokenHash);
     
     /**
      * Find active tokens for a user.
@@ -57,5 +57,4 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
     @Modifying
     @Query("DELETE FROM PasswordResetToken t WHERE t.expiresAt <= :cutoffDate")
     int deleteTokensOlderThan(@Param("cutoffDate") LocalDateTime cutoffDate);
-}
 }
