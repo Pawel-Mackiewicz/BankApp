@@ -1,30 +1,33 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.model.PasswordResetToken;
-import info.mackiewicz.bankapp.repository.PasswordResetTokenRepository;
-import info.mackiewicz.bankapp.utils.JwtUtil;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
+import info.mackiewicz.bankapp.model.PasswordResetToken;
+import info.mackiewicz.bankapp.repository.PasswordResetTokenRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service for managing password reset tokens
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PasswordResetTokenService {
 
     private static final int MAX_ACTIVE_TOKENS_PER_USER = 2;
     
     private final PasswordResetTokenRepository tokenRepository;
+    private final TokenHashingService tokenHashingService;
 
     /**
      * Creates a new password reset token for the given user
      * @param userEmail User email
-     * @return Token value
+     * @return Plain token to be sent to user
      */
     @Transactional
     public String createToken(String userEmail) {
@@ -34,14 +37,15 @@ public class PasswordResetTokenService {
             throw new IllegalStateException("Too many active reset tokens");
         }
 
-        // Generate new token
-        String token = JwtUtil.generateToken(userEmail);
+        // Generate new token and its hash
+        String plainToken = tokenHashingService.generateToken();
+        String tokenHash = tokenHashingService.hashToken(plainToken);
         
-        // Create and save token entity
-        PasswordResetToken resetToken = new PasswordResetToken(token, userEmail);
+        // Create and save token entity with hash
+        PasswordResetToken resetToken = new PasswordResetToken(tokenHash, userEmail);
         tokenRepository.save(resetToken);
         
-        return token;
+        return plainToken;  // Return plain token to be sent via email
     }
 
     /**
@@ -50,7 +54,21 @@ public class PasswordResetTokenService {
      * @return Optional containing the user's email if token is valid, empty otherwise
      */
     public Optional<String> validateToken(String token) {
-        return tokenRepository.findByToken(token)
+        String tokenHash = tokenHashingService.hashToken(token);
+        
+        Optional<PasswordResetToken> foundToken = tokenRepository.findByTokenHash(tokenHash);
+        
+        if (log.isDebugEnabled()) {
+            log.debug("Validating token: found={}", foundToken.isPresent());
+            
+            if (foundToken.isPresent()) {
+                PasswordResetToken resetToken = foundToken.get();
+                log.debug("Token status: expired={}, used={}, valid={}",
+                    resetToken.isExpired(), resetToken.isUsed(), resetToken.isValid());
+            }
+        }
+        
+        return tokenRepository.findByTokenHash(tokenHash)
                 .filter(PasswordResetToken::isValid)
                 .map(PasswordResetToken::getUserEmail);
     }
@@ -62,12 +80,38 @@ public class PasswordResetTokenService {
      */
     @Transactional
     public boolean consumeToken(String token) {
-        return tokenRepository.findByToken(token)
-                .filter(PasswordResetToken::isValid)
+        String tokenHash = tokenHashingService.hashToken(token);
+        
+        Optional<PasswordResetToken> foundToken = tokenRepository.findByTokenHash(tokenHash);
+        
+        if (log.isDebugEnabled()) {
+            log.debug("Consuming token: found={}", foundToken.isPresent());
+            
+            if (foundToken.isPresent()) {
+                PasswordResetToken resetToken = foundToken.get();
+                log.debug("Token status: expired={}, used={}, valid={}",
+                    resetToken.isExpired(), resetToken.isUsed(), resetToken.isValid());
+            }
+        }
+        
+        return tokenRepository.findByTokenHash(tokenHash)
+                .filter(resetToken -> {
+                    boolean isValid = resetToken.isValid();
+                    if (log.isDebugEnabled()) {
+                        log.debug("Token valid for consumption: {}", isValid);
+                    }
+                    return isValid;
+                })
                 .map(resetToken -> {
-                    resetToken.markAsUsed();
-                    tokenRepository.save(resetToken);
-                    return true;
+                    try {
+                        resetToken.markAsUsed();
+                        tokenRepository.save(resetToken);
+                        log.debug("Token successfully consumed");
+                        return true;
+                    } catch (Exception e) {
+                        log.error("Error consuming token", e);
+                        return false;
+                    }
                 })
                 .orElse(false);
     }
@@ -81,7 +125,7 @@ public class PasswordResetTokenService {
         return tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now()) < MAX_ACTIVE_TOKENS_PER_USER;
     }
 
-        /**
+    /**
      * Removes tokens older than 30 days from the database
      * @return Number of tokens deleted
      */
