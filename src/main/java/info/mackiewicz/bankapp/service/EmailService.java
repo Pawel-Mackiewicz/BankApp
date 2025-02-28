@@ -23,6 +23,8 @@ public class EmailService {
     }
 
     public String sendEmail(String to, String subject, String htmlContent) {
+        validateEmailParameters(to, subject, htmlContent);
+        
         try {
             CreateEmailOptions request = CreateEmailOptions.builder()
                 .from("info@bankapp.mackiewicz.info")
@@ -34,7 +36,22 @@ public class EmailService {
             CreateEmailResponse response = resend.emails().send(request);
             return response.getId();
         } catch (ResendException e) {
-            throw new RuntimeException("Błąd wysyłania e-maila: " + e.getMessage(), e);
+            throw new RuntimeException("Error sending email: " + e.getMessage(), e);
+        }
+    }
+
+    private void validateEmailParameters(String to, String subject, String htmlContent) {
+        if (to == null || to.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email recipient (to) cannot be null or empty");
+        }
+        if (!to.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new IllegalArgumentException("Invalid email format: " + to);
+        }
+        if (subject == null || subject.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email subject cannot be null or empty");
+        }
+        if (htmlContent == null || htmlContent.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email content cannot be null or empty");
         }
     }
 

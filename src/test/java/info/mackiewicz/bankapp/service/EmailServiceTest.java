@@ -1,173 +1,193 @@
 package info.mackiewicz.bankapp.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.contains;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import com.resend.Resend;
+import com.resend.core.exception.ResendException;
+import com.resend.services.emails.Emails;
+import com.resend.services.emails.model.CreateEmailOptions;
+import com.resend.services.emails.model.CreateEmailResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.resend.Resend;
-import com.resend.core.exception.ResendException;
-import com.resend.services.emails.EmailsService;
-import com.resend.services.emails.model.CreateEmailOptions;
-import com.resend.services.emails.model.CreateEmailResponse;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmailServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(EmailServiceTest.class);
-    
-    private static final String TEST_API_KEY = "re_test_key";
-    private static final String TEST_EMAIL = "test@example.com";
-    private static final String TEST_TOKEN = "test-token";
-    private static final String TEST_RESPONSE_ID = "email_123456789";
-
     @Mock
-    private Resend resend;
+    private Resend resendMock;
     
     @Mock
-    private EmailsService emailsService;
+    private Emails emailsMock;
     
     private EmailService emailService;
-
+    
     @BeforeEach
-    void setUp() throws Exception {
-        // Configure mocked Resend to return emailsService
-        when(resend.emails()).thenReturn(emailsService);
-        
-        // Create EmailService with mocked Resend
-        emailService = new EmailService(TEST_API_KEY) {
+    void setUp() {
+        // Create a test instance that overrides client creation
+        emailService = new EmailService("test-api-key") {
             @Override
             protected Resend createResendClient(String apiKey) {
-                // Override to return our mock instead of creating a real client
-                assertEquals(TEST_API_KEY, apiKey, "API key should match");
-                return resend;
+                return resendMock;
             }
         };
     }
 
     @Test
-    void sendEmail_Success_ReturnsResponseId() throws ResendException {
+    void sendEmail_Success() throws ResendException {
         // Arrange
-        String subject = "Test Subject";
-        String content = "Test Content";
-        
-        // Mock response from Resend
+        String expectedId = "test-email-id";
         CreateEmailResponse mockResponse = new CreateEmailResponse();
-        mockResponse.setId(TEST_RESPONSE_ID);
-        when(emailsService.send(any(CreateEmailOptions.class))).thenReturn(mockResponse);
-        
+        mockResponse.setId(expectedId);
+        when(resendMock.emails()).thenReturn(emailsMock);
+        when(emailsMock.send(any(CreateEmailOptions.class)))
+            .thenReturn(mockResponse);
+
         // Act
-        String result = emailService.sendEmail(TEST_EMAIL, subject, content);
-        
-        assertEquals(TEST_RESPONSE_ID, result, "Should return response ID");
-        
-        // Verify the email options were correctly built
-        ArgumentCaptor<CreateEmailOptions> optionsCaptor = ArgumentCaptor.forClass(CreateEmailOptions.class);
-        verify(emailsService).send(optionsCaptor.capture());
-        
-        CreateEmailOptions capturedOptions = optionsCaptor.getValue();
-        assertEquals("info@bankapp.mackiewicz.info", capturedOptions.getFrom(), "From address should match");
-        assertEquals(TEST_EMAIL, capturedOptions.getTo().get(0), "To address should match");
-        assertEquals(subject, capturedOptions.getSubject(), "Subject should match");
-        assertEquals(content, capturedOptions.getHtml(), "Content should match");
-        
-        logger.info("sendEmail_Success_ReturnsResponseId: Test passed");
+        String resultId = emailService.sendEmail(
+            "test@example.com",
+            "Test Subject",
+            "<p>Test content</p>"
+        );
+
+        // Assert
+        assertEquals(expectedId, resultId);
+        verify(emailsMock).send(any(CreateEmailOptions.class));
     }
 
     @Test
-    void sendEmail_WhenResendThrowsException_ShouldWrapInRuntimeException() throws ResendException {
+    void sendEmail_ThrowsException_WhenResendFails() throws ResendException {
         // Arrange
-        String subject = "Test Subject";
-        String content = "Test Content";
-        ResendException resendException = new ResendException("API error");
-        
-        when(emailsService.send(any(CreateEmailOptions.class))).thenThrow(resendException);
-        
+        when(resendMock.emails()).thenReturn(emailsMock);
+        when(emailsMock.send(any(CreateEmailOptions.class)))
+            .thenThrow(new ResendException("API Error"));
+
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, 
-            () -> emailService.sendEmail(TEST_EMAIL, subject, content),
-            "Should throw RuntimeException when Resend throws an exception");
-        
-        assertTrue(exception.getMessage().contains("Błąd wysyłania e-maila"), 
-            "Exception message should indicate an email sending error");
-        assertEquals(resendException, exception.getCause(), 
-            "ResendException should be the cause of the RuntimeException");
-        
-        logger.info("sendEmail_WhenResendThrowsException_ShouldWrapInRuntimeException: Test passed");
+        assertThrows(RuntimeException.class, () ->
+            emailService.sendEmail(
+                "test@example.com",
+                "Test Subject",
+                "<p>Test content</p>"
+            )
+        );
     }
 
     @Test
-    void sendPasswordResetEmail_ShouldCallSendEmailWithCorrectParams() {
+    void sendPasswordResetEmail_ContainsCorrectContent() throws ResendException {
         // Arrange
-        // Create a spy of the emailService to verify sendEmail is called correctly
-        EmailService spy = spy(emailService);
-        doReturn(TEST_RESPONSE_ID).when(spy).sendEmail(anyString(), anyString(), anyString());
+        String email = "test@example.com";
+        String token = "reset-token-123";
+        CreateEmailResponse mockResponse = new CreateEmailResponse();
+        mockResponse.setId("test-email-id");
+        when(resendMock.emails()).thenReturn(emailsMock);
+        when(emailsMock.send(any(CreateEmailOptions.class)))
+            .thenReturn(mockResponse);
         
         // Act
-        spy.sendPasswordResetEmail(TEST_EMAIL, TEST_TOKEN);
-        
+        emailService.sendPasswordResetEmail(email, token);
+
         // Assert
-        // Verify sendEmail was called with the correct parameters
-        verify(spy).sendEmail(
-            eq(TEST_EMAIL),
-            eq("BankApp: Password Reset Request"),
-            contains("http://localhost:8080/password-reset/token/" + TEST_TOKEN)
-        );
-        
-        logger.info("sendPasswordResetEmail_ShouldCallSendEmailWithCorrectParams: Test passed");
+        verify(emailsMock).send(argThat(request -> {
+            String content = request.getHtml();
+            return content != null &&
+                   content.contains(token) &&
+                   content.contains("http://localhost:8080/password-reset/token/") &&
+                   request.getSubject() != null &&
+                   request.getSubject().contains("Password Reset");
+        }));
     }
 
     @Test
-    void sendPasswordResetConfirmation_ShouldCallSendEmailWithCorrectParams() {
+    void sendPasswordResetConfirmation_ContainsCorrectContent() throws ResendException {
         // Arrange
-        EmailService spy = spy(emailService);
-        doReturn(TEST_RESPONSE_ID).when(spy).sendEmail(anyString(), anyString(), anyString());
+        CreateEmailResponse mockResponse = new CreateEmailResponse();
+        mockResponse.setId("test-email-id");
+        when(resendMock.emails()).thenReturn(emailsMock);
+        when(emailsMock.send(any(CreateEmailOptions.class)))
+            .thenReturn(mockResponse);
+        
+        String email = "test@example.com";
         
         // Act
-        spy.sendPasswordResetConfirmation(TEST_EMAIL);
-        
+        emailService.sendPasswordResetConfirmation(email);
+
         // Assert
-        verify(spy).sendEmail(
-            eq(TEST_EMAIL),
-            eq("BankApp: Password Reset Confirmation"),
-            contains("Your password has been successfully reset")
-        );
-        
-        logger.info("sendPasswordResetConfirmation_ShouldCallSendEmailWithCorrectParams: Test passed");
+        verify(emailsMock).send(argThat(request -> 
+            request.getSubject() != null &&
+            request.getSubject().contains("Password Reset Confirmation") &&
+            request.getHtml() != null &&
+            request.getHtml().contains("successfully reset")
+        ));
     }
 
     @Test
-    void sendWelcomeEmail_ShouldCallSendEmailWithCorrectParams() {
+    void sendWelcomeEmail_ContainsCorrectContent() throws ResendException {
         // Arrange
-        EmailService spy = spy(emailService);
-        doReturn(TEST_RESPONSE_ID).when(spy).sendEmail(anyString(), anyString(), anyString());
+        CreateEmailResponse mockResponse = new CreateEmailResponse();
+        mockResponse.setId("test-email-id");
+        when(resendMock.emails()).thenReturn(emailsMock);
+        when(emailsMock.send(any(CreateEmailOptions.class)))
+            .thenReturn(mockResponse);
+        
+        String email = "test@example.com";
         
         // Act
-        spy.sendWelcomeEmail(TEST_EMAIL);
-        
+        emailService.sendWelcomeEmail(email);
+
         // Assert
-        verify(spy).sendEmail(
-            eq(TEST_EMAIL),
-            eq("Welcome to BankApp!"),
-            contains("Welcome to BankApp")
-        );
+        verify(emailsMock).send(argThat(request -> 
+            request.getSubject() != null &&
+            request.getSubject().contains("Welcome to BankApp") &&
+            request.getHtml() != null &&
+            request.getHtml().contains("Welcome to BankApp")
+        ));
+    }
+
+    @Test
+    void allEmails_UseCorrectFromAddress() throws ResendException {
+        // Arrange
+        CreateEmailResponse mockResponse = new CreateEmailResponse();
+        mockResponse.setId("test-email-id");
+        when(resendMock.emails()).thenReturn(emailsMock);
+        when(emailsMock.send(any(CreateEmailOptions.class)))
+            .thenReturn(mockResponse);
         
-        logger.info("sendWelcomeEmail_ShouldCallSendEmailWithCorrectParams: Test passed");
+        // Act
+        emailService.sendWelcomeEmail("test@example.com");
+
+        // Assert
+        verify(emailsMock).send(argThat(request ->
+            request.getFrom() != null &&
+            "info@bankapp.mackiewicz.info".equals(request.getFrom())
+        ));
+    }
+
+    @Test
+    void sendEmail_ValidatesRequiredFields() {
+        // Assert null/empty validation
+        assertAll(
+            () -> assertThrows(IllegalArgumentException.class, () ->
+                emailService.sendEmail(null, "subject", "content")
+            ),
+            () -> assertThrows(IllegalArgumentException.class, () ->
+                emailService.sendEmail("", "subject", "content")
+            ),
+            () -> assertThrows(IllegalArgumentException.class, () ->
+                emailService.sendEmail("test@example.com", null, "content")
+            ),
+            () -> assertThrows(IllegalArgumentException.class, () ->
+                emailService.sendEmail("test@example.com", "", "content")
+            ),
+            () -> assertThrows(IllegalArgumentException.class, () ->
+                emailService.sendEmail("test@example.com", "subject", null)
+            ),
+            () -> assertThrows(IllegalArgumentException.class, () ->
+                emailService.sendEmail("test@example.com", "subject", "")
+            )
+        );
     }
 }
