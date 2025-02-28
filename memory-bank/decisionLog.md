@@ -1,159 +1,221 @@
 # Decision Log
 
-## [2024-02-22] - System Przelewów Bankowych
+## [2024-02-24] - Przyspieszony Plan Implementacji Systemu Resetowania Hasła
 
-### Lokalizacja Implementacji
-Implementacja będzie zintegrowana w istniejącym formularzu "Make a Transfer" na stronie dashboard (transfer-form div, linia 412).
+### Kontekst
+Potrzeba przyspieszenia implementacji systemu resetowania hasła z pierwotnego planu 4-tygodniowego do 2 dni, zachowując kluczowe aspekty bezpieczeństwa i funkcjonalności.
 
-### Szczegóły implementacji UI
+### Główne Decyzje
 
-#### 1. System Zakładek
-- Zakładki będą dodane w górnej części formularza transferowego
-- Trzy typy zakładek:
-  1. Własne konta
-  2. Przelew w banku
-  3. Przelew zewnętrzny
+#### 1. Ograniczenie Zakresu
+**Decyzja**: Skupienie się na MVP (Minimum Viable Product)
 
-#### 2. Formularze dla Każdego Typu
-1. Przelew między własnymi kontami
-   ```html
-   - Select konta źródłowego z wyświetleniem:
-     - Numeru konta
-     - IBAN
-     - Dostępnego salda
-   - Select konta docelowego (bez wybranego konta źródłowego)
-     - Numer konta
-     - IBAN
-     - Dostępne saldo
-   - Kwota
-   - Tytuł przelewu
-   ```
+**Uzasadnienie**:
+- Czas implementacji ograniczony do 2 dni
+- Konieczność priorytetyzacji kluczowych funkcjonalności
+- Możliwość późniejszego rozszerzenia systemu
 
-2. Przelew w ramach banku
-   ```html
-   - Select konta źródłowego z:
-     - Numerem konta
-     - IBAN
-     - Dostępnym saldem
-   - Wybór metody identyfikacji odbiorcy:
-     - IBAN (walidacja przez IbanValidator)
-     - Email (walidacja przez AccountRepository)
-   - Kwota
-   - Tytuł przelewu
-   ```
+**Konsekwencje**:
+- Szybsze wdrożenie podstawowej funkcjonalności
+- Mniejsza złożoność początkowego rozwiązania
+- Łatwiejsze testowanie i deployment
 
-3. Przelew zewnętrzny
-   ```html
-   - Select konta źródłowego z:
-     - Numerem konta
-     - IBAN
-     - Dostępnym saldem
-   - Pole IBAN odbiorcy (walidacja przez IbanValidator)
-   - Nazwa odbiorcy
-   - Kwota
-   - Tytuł przelewu
-   ```
+#### 2. Architektura API
+**Decyzja**: Ograniczenie do 2 głównych endpointów:
+- `/api/password/reset-request`
+- `/api/password/reset-complete`
 
-### Walidacja
-1. Frontend (JavaScript):
-   - Natychmiastowa walidacja formularzy
-   - Dynamiczne ukrywanie wybranego konta źródłowego z listy kont docelowych
-   - Walidacja IBAN w czasie rzeczywistym
-   - Walidacja dostępnych środków
-   - Wyświetlanie błędów inline w formularzu
+**Uzasadnienie**:
+- Minimalna niezbędna funkcjonalność
+- Uproszczenie logiki biznesowej
+- Zmniejszenie powierzchni ataku
 
-2. Backend:
-   - IbanValidator dla walidacji numerów IBAN
-   - AccountRepository do wyszukiwania kont po emailu
-   - Weryfikacja dostępnych środków
-   - Walidacja uprawnień do kont
+**Implementacja**:
+```java
+@RestController
+@RequestMapping("/api/password")
+public class PasswordResetController {
+    @PostMapping("/reset-request")     // Generacja i wysyłka tokenu
+    @PostMapping("/reset-complete")    // Walidacja tokenu i zmiana hasła
+}
+```
 
-### Integracja z Backendem
-1. Modyfikacja kontrolera:
-   - Nowe endpointy dla różnych typów przelewów
-   - Obsługa walidacji
-   - Zwracanie odpowiednich komunikatów błędów
+#### 3. Bezpieczeństwo
+**Decyzja**: Implementacja podstawowego ale solidnego systemu zabezpieczeń
 
-2. Serwisy:
-   - Rozszerzenie TransactionService o obsługę różnych typów przelewów
-   - Integracja z IbanValidator
-   - Wykorzystanie AccountRepository do wyszukiwania po emailu
+**Kluczowe Elementy**:
+1. Rate Limiting:
+   - 3 próby/godzinę per email
+   - 5 prób/godzinę per IP
 
-### Modyfikacje DTO
-Wykorzystanie istniejących klas:
-- OwnAccountTransferRequest
-- InternalAccountTransferRequest
-- ExternalAccountTransferRequest
+2. Walidacja:
+   - Sprawdzanie tokenu JWT
+   - Walidacja emaila
+   - Wymagania dla hasła
+
+3. Monitoring:
+   - Logowanie prób resetowania
+   - Podstawowe alerty bezpieczeństwa
+
+**Uzasadnienie**:
+- Zachowanie kluczowych aspektów bezpieczeństwa
+- Możliwość szybkiego wdrożenia
+- Łatwe rozszerzenie w przyszłości
+
+#### 4. Frontend
+**Decyzja**: Minimalistyczny ale funkcjonalny interfejs
+
+**Implementacja**:
+1. Formularze:
+   - reset-password.html
+   - new-password.html
+
+2. Walidacja:
+   - Podstawowa walidacja JS
+   - Komunikaty błędów
+   - Spójny wygląd z istniejącym UI
+
+**Uzasadnienie**:
+- Szybka implementacja
+- Zachowanie spójności z istniejącym interfejsem
+- Dobry UX mimo prostoty
+
+#### 5. Email
+**Decyzja**: Prosta integracja z resend.com
+
+**Szczegóły**:
+- Podstawowy szablon
+- Retry mechanizm (max 3 próby)
+- Logowanie statusów wysyłki
+
+**Uzasadnienie**:
+- Szybka implementacja
+- Niezawodność wysyłki
+- Możliwość późniejszego rozszerzenia
 
 ### Plan Wdrożenia
-1. Modyfikacja HTML/CSS:
-   - Dodanie systemu zakładek
-   - Utworzenie formularzy dla każdego typu przelewu
-   - Stylizacja zgodna z istniejącym designem
 
-2. Implementacja JavaScript:
-   - Obsługa przełączania zakładek
-   - Dynamiczna walidacja
-   - Aktualizacja list kont
-   - Obsługa błędów
+#### Dzień 1
+1. Rano (4h):
+   - Implementacja kontrolera
+   - Podstawowa integracja email
 
-3. Backend:
-   - Rozszerzenie kontrolerów
-   - Implementacja walidacji
-   - Integracja z istniejącymi serwisami
+2. Popołudnie (4h):
+   - Formularze HTML
+   - Logika JavaScript
 
-4. Testy:
-   - Testy jednostkowe nowej funkcjonalności
-   - Testy integracyjne
-   - Testy UI/UX
+#### Dzień 2
+1. Rano (4h):
+   - Rate limiting
+   - System monitorowania
 
-### Następne kroki
-1. Rozpoczęcie implementacji HTML/CSS
-2. Implementacja logiki JavaScript
-3. Rozszerzenie backendu
-4. Testy i walidacja
+2. Popołudnie (4h):
+   - Testy krytyczne
+   - Deployment
 
-## [2024-02-22] - System Przelewów Bankowych - Status Implementacji
+### Metryki Sukcesu
+1. Funkcjonalne:
+   - Działający proces resetowania hasła
+   - Poprawna wysyłka emaili
+   - Skuteczna zmiana hasła
 
-### Zrealizowane Funkcjonalności
-1. Frontend:
-   - System zakładek w "Make Transfer"
-   - Dynamiczna walidacja IBAN i email
-   - Poprawiona kolejność ładowania skryptów
-   - Wyświetlanie IBAN i salda przy kontach
-
-2. Backend:
-   - Zaktualizowano AccountRepository:
-     * findByIban
-     * findFirstByOwner_email
-   - Rozszerzono ValidationController
-   - Usunięto stary TransferForm
-   - Dodano dedykowane DTO
-
-3. Walidacja:
-   - IBAN przez IbanValidator
-   - Email przez AccountRepository
-   - Saldo konta przed przelewem
-   - Natychmiastowa walidacja w UI
-
-### Rezultaty Implementacji
-1. Interfejs:
-   - Intuicyjny system zakładek
-   - Lepsze UX przy wyborze kont
-   - Natychmiastowy feedback
-
-2. Kod:
-   - Większa modularność
-   - Lepsza separacja odpowiedzialności
-   - Rozszerzona walidacja
+2. Techniczne:
+   - Podstawowe testy przechodzą
+   - Rate limiting działa
+   - Monitoring aktywny
 
 3. Bezpieczeństwo:
-   - Dwustronna walidacja
-   - Weryfikacja uprawnień
-   - Kontrola dostępnych środków
+   - Brak możliwości obejścia zabezpieczeń
+   - Skuteczna walidacja tokenów
+   - Podstawowe logowanie zdarzeń
 
-### Kolejne Kroki
-1. Testy integracyjne
-2. Monitoring walidacji
-3. Zbieranie feedbacku
-4. Przygotowanie do @BankTag
+### Ryzyka i Mitygacja
+1. Bezpieczeństwo:
+   - Ryzyko: Ograniczony czas na testy bezpieczeństwa
+   - Mitygacja: Skupienie się na kluczowych zabezpieczeniach
+
+2. Wydajność:
+   - Ryzyko: Brak czasu na optymalizację
+   - Mitygacja: Monitorowanie podstawowych metryk
+
+3. UX:
+   - Ryzyko: Uproszczony interfejs
+   - Mitygacja: Zachowanie kluczowych elementów UX
+
+### Przyszłe Rozszerzenia
+1. Bezpieczeństwo:
+   - Zaawansowany monitoring
+   - Dodatkowe zabezpieczenia
+   - Rozszerzone metryki
+
+2. UX:
+   - Rozbudowane szablony email
+   - Bardziej zaawansowany interfejs
+   - Dodatkowe funkcje użytkownika
+
+3. Monitoring:
+   - Zaawansowane statystyki
+   - Automatyczne alerty
+   - Dashboard bezpieczeństwa
+
+## [2025-02-25] - Konfiguracja Deploymentu na Heroku
+
+### Kontekst
+Aplikacja Spring Boot wymaga skonfigurowania automatycznego deployu na platformie Heroku. Baza danych jest już skonfigurowana na zewnętrznym serwisie.
+
+### Główne Decyzje
+
+#### 1. Konfiguracja Systemu
+**Decyzja**: Minimalna konfiguracja niezbędna do uruchomienia na Heroku
+
+**Wymagane Pliki**:
+- `system.properties`: Określenie wersji Javy (21)
+- `Procfile`: Definicja sposobu uruchamiania aplikacji
+
+**Uzasadnienie**:
+- Heroku wymaga jawnego określenia wersji Javy
+- Procfile zapewnia prawidłowe uruchomienie aplikacji
+
+#### 2. Proces Deploymentu
+**Decyzja**: Wykorzystanie GitHub Actions i Heroku CLI
+
+**Kroki Wdrożenia**:
+1. Utworzenie aplikacji na Heroku
+2. Połączenie z repozytorium GitHub
+3. Konfiguracja zmiennych środowiskowych
+4. Uruchomienie automatycznego deploymentu
+
+**Uzasadnienie**:
+- Automatyzacja procesu deploymentu
+- Integracja z istniejącym flow CI/CD
+- Łatwe zarządzanie wersjami
+
+### Plan Implementacji
+
+#### Krok 1: Konfiguracja Podstawowa
+```bash
+# Logowanie do Heroku
+heroku login
+
+# Tworzenie aplikacji
+heroku create bankapp-prod
+
+# Konfiguracja środowiska
+heroku config:set SPRING_PROFILES_ACTIVE=prod
+```
+
+#### Krok 2: Continuous Deployment
+1. Połączenie repozytorium GitHub z Heroku przez Dashboard
+2. Konfiguracja automatycznego deploymentu dla brancha main
+3. Konfiguracja review apps (opcjonalnie)
+
+### Metryki Sukcesu
+1. Aplikacja uruchamia się poprawnie na Heroku
+2. Automatyczny deployment działa po push na main
+3. Aplikacja poprawnie łączy się z zewnętrzną bazą danych
+4. Logi pokazują prawidłowe działanie aplikacji
+
+### Monitoring i Utrzymanie
+1. Regularne sprawdzanie logów Heroku
+2. Monitoring zużycia zasobów
+3. Backup konfiguracji
