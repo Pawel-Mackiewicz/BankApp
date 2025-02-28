@@ -1,193 +1,106 @@
 package info.mackiewicz.bankapp.service;
 
-import com.resend.Resend;
-import com.resend.core.exception.ResendException;
-import com.resend.services.emails.Emails;
-import com.resend.services.emails.model.CreateEmailOptions;
-import com.resend.services.emails.model.CreateEmailResponse;
+import info.mackiewicz.bankapp.service.email.EmailSender;
+import info.mackiewicz.bankapp.service.template.api.EmailContent;
+import info.mackiewicz.bankapp.service.template.EmailTemplateProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmailServiceTest {
 
-    @Mock
-    private Resend resendMock;
+    private static final String TEST_BASE_URL = "http://test.com";
     
     @Mock
-    private Emails emailsMock;
+    private EmailSender emailSender;
     
+    @Mock
+    private EmailTemplateProvider templateProvider;
+    
+    @InjectMocks
     private EmailService emailService;
-    
+
     @BeforeEach
     void setUp() {
-        // Create a test instance that overrides client creation
-        emailService = new EmailService("test-api-key") {
-            @Override
-            protected Resend createResendClient(String apiKey) {
-                return resendMock;
-            }
-        };
+        ReflectionTestUtils.setField(emailService, "baseUrl", TEST_BASE_URL);
     }
 
     @Test
-    void sendEmail_Success() throws ResendException {
-        // Arrange
-        String expectedId = "test-email-id";
-        CreateEmailResponse mockResponse = new CreateEmailResponse();
-        mockResponse.setId(expectedId);
-        when(resendMock.emails()).thenReturn(emailsMock);
-        when(emailsMock.send(any(CreateEmailOptions.class)))
-            .thenReturn(mockResponse);
-
-        // Act
-        String resultId = emailService.sendEmail(
-            "test@example.com",
-            "Test Subject",
-            "<p>Test content</p>"
-        );
-
-        // Assert
-        assertEquals(expectedId, resultId);
-        verify(emailsMock).send(any(CreateEmailOptions.class));
-    }
-
-    @Test
-    void sendEmail_ThrowsException_WhenResendFails() throws ResendException {
-        // Arrange
-        when(resendMock.emails()).thenReturn(emailsMock);
-        when(emailsMock.send(any(CreateEmailOptions.class)))
-            .thenThrow(new ResendException("API Error"));
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () ->
-            emailService.sendEmail(
-                "test@example.com",
-                "Test Subject",
-                "<p>Test content</p>"
-            )
-        );
-    }
-
-    @Test
-    void sendPasswordResetEmail_ContainsCorrectContent() throws ResendException {
+    void sendWelcomeEmail_UsesCorrectTemplate() {
         // Arrange
         String email = "test@example.com";
-        String token = "reset-token-123";
-        CreateEmailResponse mockResponse = new CreateEmailResponse();
-        mockResponse.setId("test-email-id");
-        when(resendMock.emails()).thenReturn(emailsMock);
-        when(emailsMock.send(any(CreateEmailOptions.class)))
-            .thenReturn(mockResponse);
-        
-        // Act
-        emailService.sendPasswordResetEmail(email, token);
+        String userName = "test";
+        EmailContent mockContent = new EmailContent("Test Subject", "<p>Test content</p>");
+        when(templateProvider.getWelcomeEmail(userName))
+            .thenReturn(mockContent);
 
-        // Assert
-        verify(emailsMock).send(argThat(request -> {
-            String content = request.getHtml();
-            return content != null &&
-                   content.contains(token) &&
-                   content.contains("http://localhost:8080/password-reset/token/") &&
-                   request.getSubject() != null &&
-                   request.getSubject().contains("Password Reset");
-        }));
-    }
-
-    @Test
-    void sendPasswordResetConfirmation_ContainsCorrectContent() throws ResendException {
-        // Arrange
-        CreateEmailResponse mockResponse = new CreateEmailResponse();
-        mockResponse.setId("test-email-id");
-        when(resendMock.emails()).thenReturn(emailsMock);
-        when(emailsMock.send(any(CreateEmailOptions.class)))
-            .thenReturn(mockResponse);
-        
-        String email = "test@example.com";
-        
-        // Act
-        emailService.sendPasswordResetConfirmation(email);
-
-        // Assert
-        verify(emailsMock).send(argThat(request -> 
-            request.getSubject() != null &&
-            request.getSubject().contains("Password Reset Confirmation") &&
-            request.getHtml() != null &&
-            request.getHtml().contains("successfully reset")
-        ));
-    }
-
-    @Test
-    void sendWelcomeEmail_ContainsCorrectContent() throws ResendException {
-        // Arrange
-        CreateEmailResponse mockResponse = new CreateEmailResponse();
-        mockResponse.setId("test-email-id");
-        when(resendMock.emails()).thenReturn(emailsMock);
-        when(emailsMock.send(any(CreateEmailOptions.class)))
-            .thenReturn(mockResponse);
-        
-        String email = "test@example.com";
-        
         // Act
         emailService.sendWelcomeEmail(email);
 
         // Assert
-        verify(emailsMock).send(argThat(request -> 
-            request.getSubject() != null &&
-            request.getSubject().contains("Welcome to BankApp") &&
-            request.getHtml() != null &&
-            request.getHtml().contains("Welcome to BankApp")
-        ));
+        verify(templateProvider).getWelcomeEmail(userName);
+        verify(emailSender).send(email, mockContent.subject(), mockContent.htmlContent());
     }
 
     @Test
-    void allEmails_UseCorrectFromAddress() throws ResendException {
+    void sendPasswordResetEmail_UsesCorrectTemplate() {
         // Arrange
-        CreateEmailResponse mockResponse = new CreateEmailResponse();
-        mockResponse.setId("test-email-id");
-        when(resendMock.emails()).thenReturn(emailsMock);
-        when(emailsMock.send(any(CreateEmailOptions.class)))
-            .thenReturn(mockResponse);
+        String email = "test@example.com";
+        String userName = "test";
+        String token = "reset-token";
+        String expectedResetLink = TEST_BASE_URL + "/password-reset/token/" + token;
+        EmailContent mockContent = new EmailContent("Reset Subject", "<p>Reset content</p>");
         
+        when(templateProvider.getPasswordResetEmail(userName, expectedResetLink))
+            .thenReturn(mockContent);
+
         // Act
-        emailService.sendWelcomeEmail("test@example.com");
+        emailService.sendPasswordResetEmail(email, token);
 
         // Assert
-        verify(emailsMock).send(argThat(request ->
-            request.getFrom() != null &&
-            "info@bankapp.mackiewicz.info".equals(request.getFrom())
-        ));
+        verify(templateProvider).getPasswordResetEmail(userName, expectedResetLink);
+        verify(emailSender).send(email, mockContent.subject(), mockContent.htmlContent());
     }
 
     @Test
-    void sendEmail_ValidatesRequiredFields() {
-        // Assert null/empty validation
-        assertAll(
-            () -> assertThrows(IllegalArgumentException.class, () ->
-                emailService.sendEmail(null, "subject", "content")
-            ),
-            () -> assertThrows(IllegalArgumentException.class, () ->
-                emailService.sendEmail("", "subject", "content")
-            ),
-            () -> assertThrows(IllegalArgumentException.class, () ->
-                emailService.sendEmail("test@example.com", null, "content")
-            ),
-            () -> assertThrows(IllegalArgumentException.class, () ->
-                emailService.sendEmail("test@example.com", "", "content")
-            ),
-            () -> assertThrows(IllegalArgumentException.class, () ->
-                emailService.sendEmail("test@example.com", "subject", null)
-            ),
-            () -> assertThrows(IllegalArgumentException.class, () ->
-                emailService.sendEmail("test@example.com", "subject", "")
-            )
-        );
+    void sendPasswordResetConfirmation_UsesCorrectTemplate() {
+        // Arrange
+        String email = "test@example.com";
+        String userName = "test";
+        String expectedLoginLink = TEST_BASE_URL + "/login";
+        EmailContent mockContent = new EmailContent("Confirmation Subject", "<p>Confirmation content</p>");
+        
+        when(templateProvider.getPasswordResetConfirmationEmail(userName, expectedLoginLink))
+            .thenReturn(mockContent);
+
+        // Act
+        emailService.sendPasswordResetConfirmation(email);
+
+        // Assert
+        verify(templateProvider).getPasswordResetConfirmationEmail(userName, expectedLoginLink);
+        verify(emailSender).send(email, mockContent.subject(), mockContent.htmlContent());
+    }
+
+    @Test
+    void sendEmail_ExtractsUsernameCorrectly() {
+        // Arrange
+        String email = "user.name@example.com";
+        String expectedUsername = "user.name";
+        EmailContent mockContent = new EmailContent("Test Subject", "<p>Test content</p>");
+        when(templateProvider.getWelcomeEmail(expectedUsername))
+            .thenReturn(mockContent);
+
+        // Act
+        emailService.sendWelcomeEmail(email);
+
+        // Assert
+        verify(templateProvider).getWelcomeEmail(expectedUsername);
     }
 }

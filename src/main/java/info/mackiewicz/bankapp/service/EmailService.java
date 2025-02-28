@@ -3,77 +3,65 @@ package info.mackiewicz.bankapp.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.resend.Resend;
-import com.resend.core.exception.ResendException;
-import com.resend.services.emails.model.CreateEmailOptions;
-import com.resend.services.emails.model.CreateEmailResponse;
+import info.mackiewicz.bankapp.service.email.EmailSender;
+import info.mackiewicz.bankapp.service.template.EmailTemplateProvider;
+import info.mackiewicz.bankapp.service.template.api.EmailContent;
 
+/**
+ * Service for sending various types of emails.
+ * Uses EmailSender for delivery and EmailTemplateProvider for content generation.
+ */
 @Service
 public class EmailService {
 
-    private final Resend resend;
+    private final EmailSender emailSender;
+    private final EmailTemplateProvider templateProvider;
+    private final String baseUrl;
 
-    public EmailService(@Value("${app.resend.api-key}") String apiKey) {
-        this.resend = createResendClient(apiKey);
-    }
-    
-    // Protected method to allow overriding in tests
-    protected Resend createResendClient(String apiKey) {
-        return new Resend(apiKey);
-    }
-
-    public String sendEmail(String to, String subject, String htmlContent) {
-        validateEmailParameters(to, subject, htmlContent);
-        
-        try {
-            CreateEmailOptions request = CreateEmailOptions.builder()
-                .from("info@bankapp.mackiewicz.info")
-                .to(to)
-                .subject(subject)
-                .html(htmlContent)
-                .build();
-
-            CreateEmailResponse response = resend.emails().send(request);
-            return response.getId();
-        } catch (ResendException e) {
-            throw new RuntimeException("Error sending email: " + e.getMessage(), e);
-        }
+    public EmailService(
+            EmailSender emailSender,
+            EmailTemplateProvider templateProvider,
+            @Value("${app.base-url:http://localhost:8080}") String baseUrl) {
+        this.emailSender = emailSender;
+        this.templateProvider = templateProvider;
+        this.baseUrl = baseUrl;
     }
 
-    private void validateEmailParameters(String to, String subject, String htmlContent) {
-        if (to == null || to.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email recipient (to) cannot be null or empty");
-        }
-        if (!to.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            throw new IllegalArgumentException("Invalid email format: " + to);
-        }
-        if (subject == null || subject.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email subject cannot be null or empty");
-        }
-        if (htmlContent == null || htmlContent.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email content cannot be null or empty");
-        }
-    }
-
-    public void sendPasswordResetEmail(String email, String token) {
-
-        String link = "http://localhost:8080/password-reset/token/" + token;
-        String subject = "BankApp: Password Reset Request";
-        String content = "To reset your password, click the link: " + link;
-        sendEmail(email, subject, content);
-    }
-
-    public void sendPasswordResetConfirmation(String email) {
-
-        String subject = "BankApp: Password Reset Confirmation";
-        String content = "Your password has been successfully reset.";
-        sendEmail(email, subject, content);
-    }
-
+    /**
+     * Sends welcome email to new user.
+     * @param email recipient's email address
+     */
     public void sendWelcomeEmail(String email) {
+        String userName = extractUsername(email);
+        EmailContent content = templateProvider.getWelcomeEmail(userName);
+        emailSender.send(email, content.subject(), content.htmlContent());
+    }
 
-        String subject = "Welcome to BankApp!";
-        String content = "Welcome to BankApp! We are glad you are here.";
-        sendEmail(email, subject, content);
+    /**
+     * Sends password reset email with reset link.
+     * @param email recipient's email address
+     * @param token password reset token
+     */
+    public void sendPasswordResetEmail(String email, String token) {
+        String userName = extractUsername(email);
+        String resetLink = baseUrl + "/password-reset/token/" + token;
+        EmailContent content = templateProvider.getPasswordResetEmail(userName, resetLink);
+        emailSender.send(email, content.subject(), content.htmlContent());
+    }
+
+    /**
+     * Sends password reset confirmation email.
+     * @param email recipient's email address
+     */
+    public void sendPasswordResetConfirmation(String email) {
+        String userName = extractUsername(email);
+        String loginLink = baseUrl + "/login";
+        EmailContent content = templateProvider.getPasswordResetConfirmationEmail(userName, loginLink);
+        emailSender.send(email, content.subject(), content.htmlContent());
+    }
+
+    // Extracts username from email address for personalization
+    private String extractUsername(String email) {
+        return email.split("@")[0];
     }
 }
