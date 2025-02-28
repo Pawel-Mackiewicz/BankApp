@@ -1,11 +1,16 @@
 package info.mackiewicz.bankapp.integration;
 
-import info.mackiewicz.bankapp.config.TestConfig;
-import info.mackiewicz.bankapp.model.PasswordResetToken;
-import info.mackiewicz.bankapp.repository.PasswordResetTokenRepository;
-import info.mackiewicz.bankapp.service.PasswordResetService;
-import info.mackiewicz.bankapp.service.PasswordResetTokenService;
-import info.mackiewicz.bankapp.service.TokenHashingService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import info.mackiewicz.bankapp.exception.TooManyPasswordResetAttemptsException;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,10 +18,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import info.mackiewicz.bankapp.config.TestConfig;
+import info.mackiewicz.bankapp.model.PasswordResetToken;
+import info.mackiewicz.bankapp.repository.PasswordResetTokenRepository;
+import info.mackiewicz.bankapp.service.PasswordResetTokenService;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -26,12 +31,6 @@ class PasswordResetTokenIntegrationTest {
 
     @Autowired
     private PasswordResetTokenService tokenService;
-
-    @Autowired
-    private PasswordResetService passwordResetService;
-
-    @Autowired
-    private TokenHashingService tokenHashingService;
 
     @Autowired
     private PasswordResetTokenRepository tokenRepository;
@@ -84,7 +83,7 @@ class PasswordResetTokenIntegrationTest {
         assertNotNull(token2);
         
         // Try to create one more token
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(TooManyPasswordResetAttemptsException.class, () -> {
             tokenService.createToken(TEST_EMAIL);
         });
     }

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import info.mackiewicz.bankapp.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.model.PasswordResetToken;
 import info.mackiewicz.bankapp.repository.PasswordResetTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class PasswordResetTokenService {
         // Check if user hasn't exceeded token limit
         long activeTokens = tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now());
         if (activeTokens >= MAX_ACTIVE_TOKENS_PER_USER) {
-            throw new IllegalStateException("Too many active reset tokens");
+            throw new TooManyPasswordResetAttemptsException();
         }
 
         // Generate new token and its hash
@@ -68,7 +69,7 @@ public class PasswordResetTokenService {
             }
         }
         
-        return tokenRepository.findByTokenHash(tokenHash)
+        return foundToken
                 .filter(PasswordResetToken::isValid)
                 .map(PasswordResetToken::getUserEmail);
     }
