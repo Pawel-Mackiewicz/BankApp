@@ -38,6 +38,9 @@ public class UserMapper {
         if (request.getPhoneNumber() != null) {
             existingUser.setPhoneNumber(request.getPhoneNumber());
         }
+        if (request.getPassword() != null) {
+            existingUser.setPassword(request.getPassword());
+        }
         return existingUser;
     }
 

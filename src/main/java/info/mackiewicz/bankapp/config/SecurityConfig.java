@@ -17,8 +17,8 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
-import info.mackiewicz.bankapp.service.CustomUserDetailsService;
 import info.mackiewicz.bankapp.service.AdminUserService;
+import info.mackiewicz.bankapp.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -77,11 +77,11 @@ public class SecurityConfig {
         http
             .securityMatcher("/api/**")
             .userDetailsService(adminUserService)
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/public/**"))
+            .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/api/password/**").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(basic -> basic
@@ -105,7 +105,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable) // Tymczasowo wyłączone dla debugowania
             .userDetailsService(userDetailsService)
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/public/**", "/login", "/css/**", "/js/**", "/images/**", "/register", "/favicon.ico").permitAll()
+                .requestMatchers("/public/**", "/login", "/css/**", "/js/**", "/images/**", "/register", "/password-reset/**", "/favicon.ico").permitAll()
                 .requestMatchers("/dashboard/**").authenticated()
                 .anyRequest().authenticated()
             )
