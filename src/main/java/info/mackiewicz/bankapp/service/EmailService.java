@@ -41,11 +41,11 @@ public class EmailService {
      * Sends password reset email with reset link.
      * @param email recipient's email address
      * @param token password reset token
+     * @param fullNameOfUser full name of user for personalization
      */
-    public void sendPasswordResetEmail(String email, String token) {
-        String userName = extractUsername(email);
+    public void sendPasswordResetEmail(String email, String token, String fullNameOfUser) {
         String resetLink = baseUrl + "/password-reset/token/" + token;
-        EmailContent content = templateProvider.getPasswordResetEmail(userName, resetLink);
+        EmailContent content = templateProvider.getPasswordResetEmail(fullNameOfUser, resetLink);
         emailSender.send(email, content.subject(), content.htmlContent());
     }
 
