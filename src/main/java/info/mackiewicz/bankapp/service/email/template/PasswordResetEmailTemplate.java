@@ -29,7 +29,7 @@ public class PasswordResetEmailTemplate extends EmailTemplate {
             <div class="info-box">
                 <p style="margin: 0;"><strong>Important:</strong></p>
                 <ul style="margin-bottom: 0;">
-                    <li>This link is valid for 30 minutes</li>
+                    <li>This link is valid for 60 minutes</li>
                     <li>The link can only be used once</li>
                 </ul>
             </div>
