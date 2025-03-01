@@ -31,9 +31,8 @@ public class EmailService {
      * Sends welcome email to new user.
      * @param email recipient's email address
      */
-    public void sendWelcomeEmail(String email) {
-        String userName = extractUsername(email);
-        EmailContent content = templateProvider.getWelcomeEmail(userName);
+    public void sendWelcomeEmail(String email, String fullNameOfUser) {
+        EmailContent content = templateProvider.getWelcomeEmail(fullNameOfUser);
         emailSender.send(email, content.subject(), content.htmlContent());
     }
 
@@ -53,15 +52,9 @@ public class EmailService {
      * Sends password reset confirmation email.
      * @param email recipient's email address
      */
-    public void sendPasswordResetConfirmation(String email) {
-        String userName = extractUsername(email);
+    public void sendPasswordResetConfirmation(String email, String fullNameOfUser) {
         String loginLink = baseUrl + "/login";
-        EmailContent content = templateProvider.getPasswordResetConfirmationEmail(userName, loginLink);
+        EmailContent content = templateProvider.getPasswordResetConfirmationEmail(fullNameOfUser, loginLink);
         emailSender.send(email, content.subject(), content.htmlContent());
-    }
-
-    // Extracts username from email address for personalization
-    private String extractUsername(String email) {
-        return email.split("@")[0];
     }
 }

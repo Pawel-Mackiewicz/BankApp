@@ -33,7 +33,7 @@ public class ResendEmailSender implements EmailSender {
         
         try {
             CreateEmailOptions request = CreateEmailOptions.builder()
-                .from(fromAddress)
+                .from("BankApp <" + fromAddress + ">")
                 .to(to)
                 .subject(subject)
                 .html(htmlContent)

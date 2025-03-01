@@ -31,7 +31,7 @@ public class PasswordResetTokenService {
      * @return Plain token to be sent to user
      */
     @Transactional
-    public String createToken(String userEmail) {
+    public String createToken(String userEmail, String fullName) {
         // Check if user hasn't exceeded token limit
         long activeTokens = tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now());
         if (activeTokens >= MAX_ACTIVE_TOKENS_PER_USER) {
@@ -43,7 +43,7 @@ public class PasswordResetTokenService {
         String tokenHash = tokenHashingService.hashToken(plainToken);
         
         // Create and save token entity with hash
-        PasswordResetToken resetToken = new PasswordResetToken(tokenHash, userEmail);
+        PasswordResetToken resetToken = new PasswordResetToken(tokenHash, userEmail, fullName);
         tokenRepository.save(resetToken);
         
         return plainToken;  // Return plain token to be sent via email
@@ -54,10 +54,11 @@ public class PasswordResetTokenService {
      * @param token Token to validate
      * @return Optional containing the user's email if token is valid, empty otherwise
      */
-    public Optional<String> validateToken(String token) {
+    public Optional<PasswordResetToken> validateToken(String token) {
         String tokenHash = tokenHashingService.hashToken(token);
         
-        Optional<PasswordResetToken> foundToken = tokenRepository.findByTokenHash(tokenHash);
+        Optional<PasswordResetToken> foundToken = tokenRepository.findByTokenHash(tokenHash)
+            .filter(PasswordResetToken::isValid);
         
         if (log.isDebugEnabled()) {
             log.debug("Validating token: found={}", foundToken.isPresent());
@@ -69,9 +70,7 @@ public class PasswordResetTokenService {
             }
         }
         
-        return foundToken
-                .filter(PasswordResetToken::isValid)
-                .map(PasswordResetToken::getUserEmail);
+        return foundToken;
     }
 
     /**

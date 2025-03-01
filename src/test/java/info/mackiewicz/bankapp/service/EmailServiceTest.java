@@ -43,7 +43,7 @@ class EmailServiceTest {
             .thenReturn(mockContent);
 
         // Act
-        emailService.sendWelcomeEmail(email);
+        emailService.sendWelcomeEmail(email, userName);
 
         // Assert
         verify(templateProvider).getWelcomeEmail(userName);
@@ -82,7 +82,7 @@ class EmailServiceTest {
             .thenReturn(mockContent);
 
         // Act
-        emailService.sendPasswordResetConfirmation(email);
+        emailService.sendPasswordResetConfirmation(email, userName);
 
         // Assert
         verify(templateProvider).getPasswordResetConfirmationEmail(userName, expectedLoginLink);
@@ -99,7 +99,7 @@ class EmailServiceTest {
             .thenReturn(mockContent);
 
         // Act
-        emailService.sendWelcomeEmail(email);
+        emailService.sendWelcomeEmail(email, expectedUsername);
 
         // Assert
         verify(templateProvider).getWelcomeEmail(expectedUsername);
