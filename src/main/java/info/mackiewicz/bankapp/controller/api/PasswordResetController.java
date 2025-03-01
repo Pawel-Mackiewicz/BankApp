@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import info.mackiewicz.bankapp.dto.PasswordResetDTO;
 import info.mackiewicz.bankapp.dto.PasswordResetRequestDTO;
+import info.mackiewicz.bankapp.model.PasswordResetToken;
 import info.mackiewicz.bankapp.service.PasswordResetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +38,9 @@ public class PasswordResetController {
             throw new IllegalArgumentException("Passwords do not match");
         }
         
-        String email = passwordResetService.validateToken(request.getToken())
+        PasswordResetToken token = passwordResetService.validateToken(request.getToken())
             .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
-        passwordResetService.completeReset(request.getToken(), email, request.getPassword());
+        passwordResetService.completeReset(request.getToken(), token.getUserEmail(), token.getFullName(), request.getPassword());
         return ResponseEntity.ok().build();
     }
 }
