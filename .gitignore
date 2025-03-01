@@ -7,6 +7,12 @@ logs/
 .git/
 BankApp.git/
 
+# RooCode
+.clinerules-architect
+.clinerules-git-master
+.clinerules-ask
+.clinerules-code
+
 # Database files
 *.db
 *.sqlite
