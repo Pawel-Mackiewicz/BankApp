@@ -36,11 +36,12 @@ class PasswordResetTokenIntegrationTest {
     private PasswordResetTokenRepository tokenRepository;
 
     private static final String TEST_EMAIL = "test@example.com";
+    private static final String TEST_FULL_NAME = "Test User";
 
     @Test
     void fullPasswordResetFlow_ShouldWorkCorrectly() {
         // Arrange - Request password reset
-        String token = tokenService.createToken(TEST_EMAIL);
+        String token = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
         assertNotNull(token);
 
         // Verify token is stored as hash
@@ -49,13 +50,12 @@ class PasswordResetTokenIntegrationTest {
                 .findFirst();
         assertTrue(storedToken.isPresent());
         assertNotEquals(token, storedToken.get().getTokenHash());
-
         // Act - Validate token
-        Optional<String> validatedEmail = tokenService.validateToken(token);
-        
+        Optional<PasswordResetToken> validatedToken = tokenService.validateToken(token);
+
         // Assert - Token validation successful
-        assertTrue(validatedEmail.isPresent());
-        assertEquals(TEST_EMAIL, validatedEmail.get());
+        assertTrue(validatedToken.isPresent());
+        assertEquals(TEST_EMAIL, validatedToken.get().getUserEmail());
 
         // Act - Consume token
         boolean consumed = tokenService.consumeToken(token);
@@ -75,8 +75,8 @@ class PasswordResetTokenIntegrationTest {
     @Test
     void tokenLimits_ShouldBeEnforced() {
         // Create max number of tokens
-        String token1 = tokenService.createToken(TEST_EMAIL);
-        String token2 = tokenService.createToken(TEST_EMAIL);
+        String token1 = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
+        String token2 = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
         
         // Assert both tokens are valid
         assertNotNull(token1);
@@ -84,14 +84,14 @@ class PasswordResetTokenIntegrationTest {
         
         // Try to create one more token
         assertThrows(TooManyPasswordResetAttemptsException.class, () -> {
-            tokenService.createToken(TEST_EMAIL);
+            tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
         });
     }
 
     @Test
     void expiredTokens_ShouldBeCleanedUp() {
         // Create a token
-        String token = tokenService.createToken(TEST_EMAIL);
+        String token = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
         
         // Manually expire the token in database
         tokenRepository.findAll().stream()
@@ -103,8 +103,8 @@ class PasswordResetTokenIntegrationTest {
                 });
         
         // Verify token is now invalid
-        Optional<String> validatedEmail = tokenService.validateToken(token);
-        assertFalse(validatedEmail.isPresent());
+        Optional<PasswordResetToken> validatedToken = tokenService.validateToken(token);
+        assertFalse(validatedToken.map(PasswordResetToken::getUserEmail).isPresent());
         
         // Clean up old tokens
         int deletedCount = tokenService.cleanupOldTokens(0);
@@ -117,12 +117,12 @@ class PasswordResetTokenIntegrationTest {
     @Test
     void multipleValidations_ShouldWork() {
         // Create token
-        String token = tokenService.createToken(TEST_EMAIL);
+        String token = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
         
         // Multiple validations should work until consumed
-        assertTrue(tokenService.validateToken(token).isPresent());
-        assertTrue(tokenService.validateToken(token).isPresent());
-        assertTrue(tokenService.validateToken(token).isPresent());
+        assertTrue(tokenService.validateToken(token).map(PasswordResetToken::getUserEmail).isPresent());
+        assertTrue(tokenService.validateToken(token).map(PasswordResetToken::getUserEmail).isPresent());
+        assertTrue(tokenService.validateToken(token).map(PasswordResetToken::getUserEmail).isPresent());
         
         // Consume token
         assertTrue(tokenService.consumeToken(token));

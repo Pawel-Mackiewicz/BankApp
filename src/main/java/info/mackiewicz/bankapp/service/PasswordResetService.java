@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.model.PasswordResetToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +35,7 @@ public class PasswordResetService {
             log.info("User with email {} not found", email);
             return;
         }
-        String token = passwordResetTokenService.createToken(email);
+        String token = passwordResetTokenService.createToken(email, fullNameOfUser);
         emailService.sendPasswordResetEmail(email, token, fullNameOfUser);
 
     }
@@ -47,7 +48,7 @@ public class PasswordResetService {
      * @param newPassword New password to set
      * @throws IllegalStateException if token is invalid or already used
      */
-    public void completeReset(String token, String email, String newPassword) {
+    public void completeReset(String token, String email, String fullNameOfUser, String newPassword) {
         log.info("Attempting to complete password reset for email: {}", email);
         
         boolean tokenConsumed = passwordResetTokenService.consumeToken(token);
@@ -60,7 +61,7 @@ public class PasswordResetService {
         userService.changeUsersPassword(email, newPassword);
         
         log.debug("Password updated successfully, sending confirmation email to: {}", email);
-        emailService.sendPasswordResetConfirmation(email);
+        emailService.sendPasswordResetConfirmation(email, fullNameOfUser);
         
         log.info("Password reset completed successfully for email: {}", email);
     }
@@ -72,7 +73,7 @@ public class PasswordResetService {
      * @return Optional containing the user's email if token is valid, empty
      *         otherwise
      */
-    public Optional<String> validateToken(String token) {
+    public Optional<PasswordResetToken> validateToken(String token) {
         return passwordResetTokenService.validateToken(token);
     }
 

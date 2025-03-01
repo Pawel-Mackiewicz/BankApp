@@ -31,10 +31,17 @@ public class PasswordResetToken {
     private String tokenHash;
 
     /**
-     * User who requested password reset.
+     * Email of the user who requested password reset.
      */
     @Column(name = "user_email", nullable = false)
     private String userEmail;
+
+    
+    /**
+     * Fullname of the user who requested password reset.
+     */
+    @Column(name = "user_fullname", nullable = false)
+    private String fullName;
 
     /**
      * Date and time when the token expires.
@@ -61,10 +68,12 @@ public class PasswordResetToken {
      * Creates a new password reset token, valid for an hour, for the given user
      * @param tokenHash The hashed token value
      * @param userEmail The email of the user requesting password reset
+     * @param fullName The full name of the user requesting password reset
      */
-    public PasswordResetToken(String tokenHash, String userEmail) {
+    public PasswordResetToken(String tokenHash, String userEmail, String fullName) {
         this.tokenHash = tokenHash;
         this.userEmail = userEmail;
+        this.fullName = fullName;
         this.expiresAt = LocalDateTime.now().plusMinutes(60);
         this.used = false;
     }

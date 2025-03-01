@@ -1,5 +1,240 @@
 # Decision Log
 
+## [01.03.2025] Simple Rate Limiting Implementation Using Spring Boot
+
+### Context
+Need a simple solution for limiting login and password reset attempts. Will use Spring Boot's built-in capabilities without additional infrastructure.
+
+### Solution
+```java
+@Component
+public class SimpleRateLimiter {
+    private final LoadingCache<String, Integer> attemptsCache;
+    
+    public SimpleRateLimiter() {
+        attemptsCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build(new CacheLoader<String, Integer>() {
+                public Integer load(String key) { return 0; }
+            });
+    }
+    
+    public boolean isBlocked(String key) {
+        int attempts = attemptsCache.get(key);
+        return attempts >= getMaxAttempts(key);
+    }
+    
+    public void recordAttempt(String key) {
+        int attempts = attemptsCache.get(key);
+        attemptsCache.put(key, attempts + 1);
+    }
+    
+    private int getMaxAttempts(String key) {
+        return key.contains("login") ? 10 : 5; // 10 for login, 5 for reset
+    }
+}
+```
+
+### Usage Example
+```java
+@Service
+public class SecurityService {
+    private final SimpleRateLimiter rateLimiter;
+    
+    public void checkRateLimit(HttpServletRequest request, String type) {
+        String ip = request.getRemoteAddr();
+        String key = ip + ":" + type;
+        
+        if (rateLimiter.isBlocked(key)) {
+            throw new TooManyAttemptsException();
+        }
+        rateLimiter.recordAttempt(key);
+    }
+}
+```
+
+### Benefits
+1. Simple implementation - single class
+2. No external dependencies
+3. Automatic cleanup after 1 hour
+4. Easy to understand and maintain
+
+### Implementation Steps
+1. Add SimpleRateLimiter class
+2. Inject into security services
+3. Add to login and password reset flows
+
+## [01.03.2025] IP-Based Rate Limiting Design Using Spring Security
+
+### Context
+Need to implement IP-based rate limiting for password reset and login attempts to prevent brute force attacks. After analysis, we can leverage Spring Security's built-in features instead of implementing a custom Redis solution.
+
+### Spring Security Solution
+
+#### 1. Using Built-in Rate Limiting
+Spring Security provides built-in support for rate limiting through its login failure handling:
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .formLogin()
+                .failureHandler(authenticationFailureHandler())
+            .and()
+            .rememberMe()
+            .and()
+            .sessionManagement()
+                .maximumSessions(1)
+                .expiredUrl("/login?expired");
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
+    }
+}
+
+@Component
+public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+    
+    private final LoginAttemptService loginAttemptService;
+    
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request,
+                                      HttpServletResponse response,
+                                      AuthenticationException exception) throws IOException, ServletException {
+        String ip = request.getRemoteAddr();
+        loginAttemptService.loginFailed(ip);
+        
+        if (loginAttemptService.isBlocked(ip)) {
+            response.sendError(HttpStatus.TOO_MANY_REQUESTS.value(),
+                "Too many login attempts. Please try again later");
+            return;
+        }
+        
+        super.onAuthenticationFailure(request, response, exception);
+    }
+}
+```
+
+#### 2. Login Attempt Tracking Service
+
+```java
+@Service
+public class LoginAttemptService {
+    private final int MAX_ATTEMPT = 10;
+    private LoadingCache<String, Integer> attemptsCache;
+
+    public LoginAttemptService() {
+        attemptsCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build(new CacheLoader<String, Integer>() {
+                @Override
+                public Integer load(String key) {
+                    return 0;
+                }
+            });
+    }
+
+    public void loginSucceeded(String key) {
+        attemptsCache.invalidate(key);
+    }
+
+    public void loginFailed(String key) {
+        int attempts = 0;
+        try {
+            attempts = attemptsCache.get(key);
+        } catch (ExecutionException e) {
+            attempts = 0;
+        }
+        attempts++;
+        attemptsCache.put(key, attempts);
+    }
+
+    public boolean isBlocked(String key) {
+        try {
+            return attemptsCache.get(key) >= MAX_ATTEMPT;
+        } catch (ExecutionException e) {
+            return false;
+        }
+    }
+}
+```
+
+#### 3. Password Reset Rate Limiting
+
+```java
+@Component
+public class PasswordResetRateLimiter {
+    private final int MAX_RESET_ATTEMPTS = 5;
+    private LoadingCache<String, Integer> resetAttemptsCache;
+
+    public PasswordResetRateLimiter() {
+        resetAttemptsCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build(new CacheLoader<String, Integer>() {
+                @Override
+                public Integer load(String key) {
+                    return 0;
+                }
+            });
+    }
+
+    @PostFilter("@passwordResetRateLimiter.checkRateLimit(#ip)")
+    public boolean checkRateLimit(String ip) {
+        int attempts = getAttempts(ip);
+        return attempts < MAX_RESET_ATTEMPTS;
+    }
+
+    private int getAttempts(String ip) {
+        try {
+            return resetAttemptsCache.get(ip);
+        } catch (ExecutionException e) {
+            return 0;
+        }
+    }
+
+    public void incrementAttempts(String ip) {
+        int attempts = getAttempts(ip);
+        resetAttemptsCache.put(ip, attempts + 1);
+    }
+}
+```
+
+### Benefits
+1. No additional infrastructure needed (no Redis)
+2. Uses Spring Security's mature and tested framework
+3. In-memory solution with automatic cleanup
+4. Easy to implement and maintain
+5. Built-in integration with Spring Security events
+
+### Implementation Steps
+1. Add rate limiting configuration to SecurityConfig
+2. Implement CustomAuthenticationFailureHandler
+3. Create LoginAttemptService for tracking login attempts
+4. Implement PasswordResetRateLimiter for reset attempts
+5. Add rate limit interceptors to relevant endpoints
+6. Implement proper error responses
+
+### Monitoring
+1. Add metrics for:
+   - Failed login attempts per IP
+   - Password reset attempts per IP
+   - Number of blocked IPs
+2. Configure alerts for suspicious patterns
+3. Log security events for audit trail
+
+### Security Considerations
+1. Use X-Forwarded-For header handling for proper IP detection
+2. Consider implementing IP whitelist for internal services
+3. Add proper logging for security audit
+4. Implement graceful degradation if cache service fails
+
+
 ## 28.02.2025 - Email System Refactoring
 
 **Context:**

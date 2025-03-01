@@ -1,4 +1,45 @@
-## Current Session Context
+## New Session Context
+03.01.2025, 17:43
+
+## Recent Architectural Decisions
+- Designed IP-based rate limiting system
+  * Utilizing Spring Security's built-in features
+  * In-memory solution with Guava Cache
+  * Login attempts: 10 per hour per IP
+  * Password reset attempts: 5 per hour per IP
+  * Automatic cleanup after 1 hour
+  * Integration with Spring Security events
+
+## Recent Changes
+
+## Recent Changes
+- Password reset system fully implemented and tested
+- New HTML/CSS email template system deployed
+- Added content personalization variables
+- Updated EmailService for new templates
+- Extended email content testing
+- Added app.base-url configuration
+
+## Current Goals
+1. Production testing of template system:
+   - Verify display in various email clients
+   - Test responsiveness
+   - Performance testing of sending system
+
+2. Documentation preparation:
+   - Template creation guide
+   - Available personalization variables list
+   - Template style guide
+
+## Open Questions
+1. Should we add multi-language support for templates?
+2. Is it worth implementing email open tracking?
+3. Should we allow users to customize template colors?
+4. What additional email types might be needed in the future?
+
+---
+
+## Previous Session Context
 28.02.2025, 15:30
 
 ## Recent Changes

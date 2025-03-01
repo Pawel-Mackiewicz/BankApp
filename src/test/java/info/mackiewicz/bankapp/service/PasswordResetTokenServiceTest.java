@@ -32,6 +32,7 @@ class PasswordResetTokenServiceTest {
     private static final String TEST_EMAIL = "test@example.com";
     private static final String TEST_TOKEN = "test-token";
     private static final String TEST_TOKEN_HASH = "test-token-hash";
+    private static final String TEST_FULL_NAME = "Test User";
 
     @BeforeEach
     void setUp() {
@@ -47,57 +48,57 @@ class PasswordResetTokenServiceTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
         when(tokenHashingService.generateToken()).thenReturn(TEST_TOKEN);
         when(tokenHashingService.hashToken(TEST_TOKEN)).thenReturn(TEST_TOKEN_HASH);
+// when
+String token = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
 
-        // when
-        String token = tokenService.createToken(TEST_EMAIL);
+// then
+assertNotNull(token);
+assertEquals(TEST_TOKEN, token);
 
-        // then
-        assertNotNull(token);
-        assertEquals(TEST_TOKEN, token);
+ArgumentCaptor<PasswordResetToken> tokenCaptor = ArgumentCaptor.forClass(PasswordResetToken.class);
+verify(tokenRepository).save(tokenCaptor.capture());
 
-        ArgumentCaptor<PasswordResetToken> tokenCaptor = ArgumentCaptor.forClass(PasswordResetToken.class);
-        verify(tokenRepository).save(tokenCaptor.capture());
+PasswordResetToken savedToken = tokenCaptor.getValue();
+assertEquals(TEST_TOKEN_HASH, savedToken.getTokenHash());
+assertEquals(TEST_EMAIL, savedToken.getUserEmail());
+assertEquals(TEST_FULL_NAME, savedToken.getFullName());
+assertFalse(savedToken.isUsed());
+assertTrue(savedToken.getExpiresAt().isAfter(LocalDateTime.now()));
+}
 
-        PasswordResetToken savedToken = tokenCaptor.getValue();
-        assertEquals(TEST_TOKEN_HASH, savedToken.getTokenHash());
-        assertEquals(TEST_EMAIL, savedToken.getUserEmail());
-        assertFalse(savedToken.isUsed());
-        assertTrue(savedToken.getExpiresAt().isAfter(LocalDateTime.now()));
-    }
+@Test
+void createToken_WhenUserHasTooManyActiveTokens_ShouldThrowException() {
+// given
+when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class)))
+        .thenReturn(2L);
 
-    @Test
-    void createToken_WhenUserHasTooManyActiveTokens_ShouldThrowException() {
-        // given
-        when(tokenRepository.countValidTokensByUserEmail(eq(TEST_EMAIL), any(LocalDateTime.class)))
-                .thenReturn(2L);
-
-        // when & then
-        assertThrows(TooManyPasswordResetAttemptsException.class,
-                () -> tokenService.createToken(TEST_EMAIL));
-        verify(tokenRepository, never()).save(any());
-        verify(tokenHashingService, never()).generateToken();
+// when & then
+assertThrows(TooManyPasswordResetAttemptsException.class,
+        () -> tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME));
+verify(tokenRepository, never()).save(any());
+verify(tokenHashingService, never()).generateToken();
     }
 
     @Test
     void validateToken_WhenTokenIsValid_ShouldReturnUserEmail() {
         // given
-        PasswordResetToken validToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL);
+        PasswordResetToken validToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL, TEST_FULL_NAME);
         when(tokenHashingService.hashToken(TEST_TOKEN)).thenReturn(TEST_TOKEN_HASH);
         when(tokenRepository.findByTokenHash(TEST_TOKEN_HASH))
                 .thenReturn(Optional.of(validToken));
 
         // when
-        Optional<String> result = tokenService.validateToken(TEST_TOKEN);
+        Optional<PasswordResetToken> result = tokenService.validateToken(TEST_TOKEN);
 
         // then
         assertTrue(result.isPresent());
-        assertEquals(TEST_EMAIL, result.get());
+        assertEquals(TEST_EMAIL, result.get().getUserEmail());
     }
 
     @Test
     void validateToken_WhenTokenIsExpired_ShouldReturnEmpty() {
         // given
-        PasswordResetToken expiredToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL);
+        PasswordResetToken expiredToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL, TEST_FULL_NAME);
         expiredToken.setExpiresAt(LocalDateTime.now().minusHours(1));
         
         when(tokenHashingService.hashToken(TEST_TOKEN)).thenReturn(TEST_TOKEN_HASH);
@@ -105,7 +106,7 @@ class PasswordResetTokenServiceTest {
                 .thenReturn(Optional.of(expiredToken));
 
         // when
-        Optional<String> result = tokenService.validateToken(TEST_TOKEN);
+        Optional<PasswordResetToken> result = tokenService.validateToken(TEST_TOKEN);
 
         // then
         assertTrue(result.isEmpty());
@@ -114,7 +115,7 @@ class PasswordResetTokenServiceTest {
     @Test
     void validateToken_WhenTokenIsUsed_ShouldReturnEmpty() {
         // given
-        PasswordResetToken usedToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL);
+        PasswordResetToken usedToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL, TEST_FULL_NAME);
         usedToken.setUsed(true);
         usedToken.setUsedAt(LocalDateTime.now());
         
@@ -123,7 +124,7 @@ class PasswordResetTokenServiceTest {
                 .thenReturn(Optional.of(usedToken));
 
         // when
-        Optional<String> result = tokenService.validateToken(TEST_TOKEN);
+        Optional<PasswordResetToken> result = tokenService.validateToken(TEST_TOKEN);
 
         // then
         assertTrue(result.isEmpty());
@@ -132,7 +133,7 @@ class PasswordResetTokenServiceTest {
     @Test
     void consumeToken_WhenTokenIsValid_ShouldMarkAsUsedAndReturnTrue() {
         // given
-        PasswordResetToken validToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL);
+        PasswordResetToken validToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL, TEST_FULL_NAME);
         when(tokenHashingService.hashToken(TEST_TOKEN)).thenReturn(TEST_TOKEN_HASH);
         when(tokenRepository.findByTokenHash(TEST_TOKEN_HASH))
                 .thenReturn(Optional.of(validToken));
