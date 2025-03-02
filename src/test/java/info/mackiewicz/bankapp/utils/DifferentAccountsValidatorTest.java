@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.utils;
 
-import info.mackiewicz.bankapp.dto.ExternalTransferRequest;
-import info.mackiewicz.bankapp.dto.InternalTransferRequest;
-import info.mackiewicz.bankapp.dto.TransferRequest;
-import info.mackiewicz.bankapp.validation.DifferentAccountsValidator;
+import info.mackiewicz.bankapp.account.validation.DifferentAccountsValidator;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.ExternalTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -7,7 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import info.mackiewicz.bankapp.model.User;
+import info.mackiewicz.bankapp.security.service.PasswordService;
+import info.mackiewicz.bankapp.user.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;

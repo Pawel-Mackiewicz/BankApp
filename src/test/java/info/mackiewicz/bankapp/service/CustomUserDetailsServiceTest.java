@@ -1,6 +1,9 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.model.User;
+import info.mackiewicz.bankapp.security.service.CustomUserDetailsService;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.service.UserService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

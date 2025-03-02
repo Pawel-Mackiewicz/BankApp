@@ -1,4 +1,154 @@
-# Decision Log
+# Architectural Decisions Log
+
+## [02.03.2025] - Complete Domain Structure
+
+### Context
+Need to map all existing files to appropriate domains, including both core business domains and the presentation layer.
+
+### Structure
+
+```
+src/main/java/info/mackiewicz/bankapp/
+├── user/                  # User Domain
+│   ├── model/
+│   │   ├── User.java
+│   │   ├── AdminUser.java
+│   │   └── dto/
+│   │       ├── UpdateUserRequest.java
+│   │       └── UserRegistrationDto.java
+│   ├── service/
+│   │   ├── UserService.java
+│   │   ├── UserServiceInterface.java
+│   │   ├── AdminUserService.java
+│   │   ├── UserRegistrationService.java
+│   │   └── UsernameGeneratorService.java
+│   ├── repository/
+│   │   ├── UserRepository.java
+│   │   └── AdminUserRepository.java
+│   └── validation/
+│       └── Adult.java
+│       └── AdultValidator.java
+
+├── account/              # Account Domain
+│   ├── model/
+│   │   ├── Account.java
+│   │   └── dto/
+│   │       ├── AccountOwnerDTO.java
+│   │       └── CreateAccountRequest.java
+│   ├── service/
+│   │   ├── AccountService.java
+│   │   └── AccountServiceInterface.java
+│   ├── repository/
+│   │   └── AccountRepository.java
+│   └── validation/
+│       └── IbanValidator.java
+
+├── transaction/          # Transaction Domain
+│   ├── model/
+│   │   ├── Transaction.java
+│   │   ├── TransactionType.java
+│   │   ├── TransactionStatus.java
+│   │   ├── TransactionCategory.java
+│   │   └── dto/
+│   │       ├── CreateTransactionRequest.java
+│   │       ├── TransferRequest.java
+│   │       └── TransactionFilterDTO.java
+│   ├── service/
+│   │   ├── TransactionService.java
+│   │   ├── TransactionProcessor.java
+│   │   ├── TransactionFilterService.java
+│   │   └── strategy/
+│   │       ├── TransactionStrategy.java
+│   │       ├── TransferTransaction.java
+│   │       ├── DepositTransaction.java
+│   │       └── WithdrawalTransaction.java
+│   ├── repository/
+│   │   └── TransactionRepository.java
+│   └── validation/
+│       └── DifferentAccountsValidator.java
+
+├── security/            # Security Domain
+│   ├── model/
+│   │   ├── PasswordResetToken.java
+│   │   └── dto/
+│   │       ├── PasswordResetDTO.java
+│   │       └── ChangePasswordRequest.java
+│   ├── service/
+│   │   ├── PasswordService.java
+│   │   ├── PasswordResetService.java
+│   │   ├── TokenHashingService.java
+│   │   └── CustomUserDetailsService.java
+│   └── config/
+│       └── SecurityConfig.java
+
+├── notification/        # Notification Domain
+│   ├── email/
+│   │   ├── EmailService.java
+│   │   ├── EmailSender.java
+│   │   └── ResendEmailSender.java
+│   └── template/
+│       ├── EmailTemplate.java
+│       ├── EmailTemplateProvider.java
+│       └── templates/
+│           ├── PasswordResetEmailTemplate.java
+│           └── WelcomeEmailTemplate.java
+
+├── presentation/        # Presentation Layer
+│   ├── dashboard/
+│   │   ├── controller/
+│   │   │   ├── DashboardController.java
+│   │   │   ├── SettingsController.java
+│   │   │   └── TransactionHistoryController.java
+│   │   ├── service/
+│   │   │   ├── DashboardService.java
+│   │   │   └── SettingsService.java
+│   │   └── dto/
+│   │       ├── DashboardDTO.java
+│   │       └── SettingsDTO.java
+│   ├── auth/
+│   │   ├── controller/
+│   │   │   ├── LoginController.java
+│   │   │   ├── RegistrationController.java
+│   │   │   └── PasswordResetController.java
+│   │   └── dto/
+│   │       └── LoginDTO.java
+│   └── shared/
+│       └── layout/
+
+├── shared/             # Shared Infrastructure
+│   ├── config/
+│   │   ├── WebConfig.java
+│   │   └── AsyncConfiguration.java
+│   ├── exception/
+│   │   ├── GlobalExceptionHandler.java
+│   │   └── all custom exceptions...
+│   └── util/
+│       ├── JwtUtil.java
+│       ├── IbanGenerator.java
+│       ├── LoggingService.java
+│       └── AccountLockManager.java
+
+└── export/             # Export Module
+    ├── TransactionExporter.java
+    ├── CsvTransactionExporter.java
+    └── PdfTransactionExporter.java
+```
+
+### Key Points
+1. Core domains contain their complete vertical slice (model, service, repository, validation)
+2. Presentation layer is separate and organized by user interface areas
+3. Shared code is properly isolated
+4. Clear separation between business logic and presentation
+5. Infrastructure concerns (security, notification, export) are separate modules
+
+### Next Steps
+1. Create the directory structure
+2. Move files to their new locations
+3. Update package declarations and imports
+4. Verify all tests still pass
+5. Document any breaking changes
+
+
 
 ## [01.03.2025] Simple Rate Limiting Implementation Using Spring Boot
 

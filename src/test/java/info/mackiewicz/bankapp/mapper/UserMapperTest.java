@@ -8,10 +8,10 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import info.mackiewicz.bankapp.converter.UserMapper;
-import info.mackiewicz.bankapp.dto.UpdateUserRequest;
-import info.mackiewicz.bankapp.dto.UserRegistrationDto;
-import info.mackiewicz.bankapp.model.User;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.user.UserMapper;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
 
 class UserMapperTest {
 
