@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import info.mackiewicz.bankapp.account.util.IbanGenerator;
-import info.mackiewicz.bankapp.shared.util.IbanValidator;
+import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
 
 class IbanGeneratorTest {
 
@@ -37,7 +37,7 @@ class IbanGeneratorTest {
         String iban = IbanGenerator.generateIban(userId, accountCounter);
     
         // Then
-        assertTrue(IbanValidator.isValid(iban));
+        assertTrue(IbanValidationUtil.isValid(iban));
     }
     
     @Test
