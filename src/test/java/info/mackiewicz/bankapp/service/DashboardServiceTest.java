@@ -1,8 +1,13 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.dto.DashboardDTO;
-import info.mackiewicz.bankapp.model.Account;
-import info.mackiewicz.bankapp.model.User;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.DashboardDTO;
+import info.mackiewicz.bankapp.presentation.dashboard.service.DashboardService;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.service.UserService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

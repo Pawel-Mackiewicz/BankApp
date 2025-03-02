@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import info.mackiewicz.bankapp.exception.TooManyPasswordResetAttemptsException;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,9 +18,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import info.mackiewicz.bankapp.config.TestConfig;
-import info.mackiewicz.bankapp.model.PasswordResetToken;
-import info.mackiewicz.bankapp.repository.PasswordResetTokenRepository;
-import info.mackiewicz.bankapp.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.security.model.PasswordResetToken;
+import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
+import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.shared.exception.TooManyPasswordResetAttemptsException;
 
 @SpringBootTest
 @ActiveProfiles("test")

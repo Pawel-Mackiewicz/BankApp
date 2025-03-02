@@ -18,11 +18,13 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import info.mackiewicz.bankapp.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.exception.OwnerAccountsNotFoundException;
-import info.mackiewicz.bankapp.model.Account;
-import info.mackiewicz.bankapp.model.User;
-import info.mackiewicz.bankapp.repository.AccountRepository;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.service.UserService;
 
 class AccountServiceTest {
 

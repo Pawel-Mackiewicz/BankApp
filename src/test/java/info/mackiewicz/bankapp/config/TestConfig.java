@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.config;
 
-import info.mackiewicz.bankapp.service.email.EmailSender;
-import info.mackiewicz.bankapp.service.email.template.EmailTemplateProvider;
+import info.mackiewicz.bankapp.notification.email.EmailSender;
+import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
 
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;

@@ -7,13 +7,9 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
-import info.mackiewicz.bankapp.exception.NoTransactionsForAccountException;
-import info.mackiewicz.bankapp.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.exception.TransactionCannotBeProcessedException;
-import info.mackiewicz.bankapp.exception.TransactionNotFoundException;
-import info.mackiewicz.bankapp.model.Account;
-import info.mackiewicz.bankapp.model.Transaction;
-import info.mackiewicz.bankapp.model.TransactionStatus;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.service.AccountService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -23,7 +19,15 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import info.mackiewicz.bankapp.repository.TransactionRepository;
+import info.mackiewicz.bankapp.shared.exception.NoTransactionsForAccountException;
+import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedException;
+import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedException;
+import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
+import info.mackiewicz.bankapp.transaction.service.TransactionProcessor;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
 
 class TransactionServiceTest {
 

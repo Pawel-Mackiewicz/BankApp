@@ -1,8 +1,12 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.converter.UserMapper;
-import info.mackiewicz.bankapp.dto.UserRegistrationDto;
-import info.mackiewicz.bankapp.model.User;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.user.UserMapper;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.service.UserRegistrationService;
+import info.mackiewicz.bankapp.user.service.UserService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
