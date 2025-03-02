@@ -1,8 +1,11 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.model.Transaction;
-import info.mackiewicz.bankapp.model.TransactionType;
-import info.mackiewicz.bankapp.repository.TransactionRepository;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
+import info.mackiewicz.bankapp.transaction.service.TransactionHydrator;
+import info.mackiewicz.bankapp.transaction.service.TransactionProcessor;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

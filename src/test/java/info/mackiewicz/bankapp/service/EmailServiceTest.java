@@ -1,8 +1,9 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.service.email.EmailSender;
-import info.mackiewicz.bankapp.service.email.template.EmailTemplateProvider;
-import info.mackiewicz.bankapp.service.email.template.api.EmailContent;
+import info.mackiewicz.bankapp.notification.email.EmailContent;
+import info.mackiewicz.bankapp.notification.email.EmailSender;
+import info.mackiewicz.bankapp.notification.email.EmailService;
+import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

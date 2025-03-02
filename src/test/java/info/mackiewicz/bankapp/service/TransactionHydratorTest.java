@@ -1,11 +1,14 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.model.Transaction;
-import info.mackiewicz.bankapp.model.TransactionType;
-import info.mackiewicz.bankapp.service.strategy.DepositTransaction;
-import info.mackiewicz.bankapp.service.strategy.FeeTransaction;
-import info.mackiewicz.bankapp.service.strategy.TransferTransaction;
-import info.mackiewicz.bankapp.service.strategy.WithdrawalTransaction;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.transaction.service.TransactionHydrator;
+import info.mackiewicz.bankapp.transaction.service.strategy.DepositTransaction;
+import info.mackiewicz.bankapp.transaction.service.strategy.FeeTransaction;
+import info.mackiewicz.bankapp.transaction.service.strategy.TransferTransaction;
+import info.mackiewicz.bankapp.transaction.service.strategy.WithdrawalTransaction;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
