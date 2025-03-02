@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.account.validation;
 
-import info.mackiewicz.bankapp.shared.util.IbanValidator;
+import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class ValidationController {
     @GetMapping("/validate-iban")
     public ResponseEntity<Map<String, Object>> validateIban(@RequestParam String iban) {
         try {
-            boolean isValid = IbanValidator.isValid(iban);
+            boolean isValid = IbanValidationUtil.isValid(iban);
             return ResponseEntity.ok(Map.of(
                 "valid", isValid,
                 "message", isValid ? "Valid IBAN format" : "Invalid IBAN format"

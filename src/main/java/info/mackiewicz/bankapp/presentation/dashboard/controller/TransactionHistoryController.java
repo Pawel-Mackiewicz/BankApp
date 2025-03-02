@@ -25,6 +25,6 @@ public class TransactionHistoryController {
         model.addAttribute("accounts", userAccounts);
         model.addAttribute("selectedAccountId", userAccounts.get(0).getId());
         model.addAttribute("userName", user.getUsername());
-        return "transactions_history";
+        return "transactions-history";
     }
 }
