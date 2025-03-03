@@ -3,29 +3,34 @@ package info.mackiewicz.bankapp.notification.email.template;
 import info.mackiewicz.bankapp.notification.email.EmailContent;
 
 /**
- * Interface for email template management.
+ * Provider interface for email templates. This interface defines methods for obtaining
+ * various types of email templates used in the application. Each method returns
+ * a complete email content with subject and body.
  */
 public interface EmailTemplateProvider {
     /**
-     * Gets welcome email template.
-     * @param userName user's name for personalization
-     * @return email content and subject
+     * Creates a welcome email template for new users.
+     *
+     * @param userName user's full name for personalization of the email content
+     * @return EmailContent object containing the welcome email subject and HTML body
      */
     EmailContent getWelcomeEmail(String userName);
 
     /**
-     * Gets password reset email template.
-     * @param userName user's name for personalization
-     * @param resetLink password reset link
-     * @return email content and subject
+     * Creates a password reset email template containing a reset link.
+     *
+     * @param userName user's full name for personalization of the email content
+     * @param resetLink full URL to the password reset page
+     * @return EmailContent object containing the password reset email subject and HTML body
      */
     EmailContent getPasswordResetEmail(String userName, String resetLink);
 
     /**
-     * Gets password reset confirmation email template.
-     * @param userName user's name for personalization
-     * @param loginLink login page link
-     * @return email content and subject
+     * Creates a password reset confirmation email template after successful password change.
+     *
+     * @param userName user's full name for personalization of the email content
+     * @param loginLink full URL to the login page
+     * @return EmailContent object containing the confirmation email subject and HTML body
      */
     EmailContent getPasswordResetConfirmationEmail(String userName, String loginLink);
 }

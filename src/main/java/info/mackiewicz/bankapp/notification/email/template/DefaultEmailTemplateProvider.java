@@ -8,16 +8,28 @@ import info.mackiewicz.bankapp.notification.email.template.templates.PasswordRes
 import info.mackiewicz.bankapp.notification.email.template.templates.WelcomeEmailTemplate;
 
 /**
- * Default implementation of EmailTemplateProvider using specific template classes.
+ * Default implementation of EmailTemplateProvider that manages all email templates
+ * used in the application. This implementation uses specific template classes for
+ * different types of emails, providing a clean separation of concerns and maintainable
+ * email template management.
+ *
+ * @see EmailTemplateProvider
+ * @see WelcomeEmailTemplate
+ * @see PasswordResetEmailTemplate
+ * @see PasswordResetConfirmationTemplate
  */
 @Component
-public class DefaultEmailTemplateProvider implements EmailTemplateProvider {
+class DefaultEmailTemplateProvider implements EmailTemplateProvider {
     
     private final WelcomeEmailTemplate welcomeTemplate;
     private final PasswordResetEmailTemplate resetTemplate;
     private final PasswordResetConfirmationTemplate resetConfirmationTemplate;
 
-    public DefaultEmailTemplateProvider() {
+    /**
+     * Creates a new instance of DefaultEmailTemplateProvider.
+     * Initializes all required email templates.
+     */
+    DefaultEmailTemplateProvider() {
         this.welcomeTemplate = new WelcomeEmailTemplate();
         this.resetTemplate = new PasswordResetEmailTemplate();
         this.resetConfirmationTemplate = new PasswordResetConfirmationTemplate();

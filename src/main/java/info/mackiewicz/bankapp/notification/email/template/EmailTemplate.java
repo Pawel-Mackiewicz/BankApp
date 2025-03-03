@@ -1,11 +1,24 @@
 package info.mackiewicz.bankapp.notification.email.template;
 
 /**
- * Base class for all email templates.
- * Provides common functionality and structure for email templates.
+ * Base abstract class for all email templates. Provides common HTML structure and styling
+ * for all email templates in the application. This class implements a template method pattern
+ * where concrete classes only need to provide the specific content and subject of the email.
+ *
+ * This class ensures consistent email styling and structure across all email communications
+ * by providing a base HTML template with predefined CSS styles.
+ *
+ * The template method pattern is used to ensure that all email templates follow the same
+ * structure and styling while allowing specific implementations to define their own content
+ * and subject. Template classes should extend this class and implement the abstract methods.
+ *
+ * @see WelcomeEmailTemplate
+ * @see PasswordResetEmailTemplate
+ * @see PasswordResetConfirmationTemplate
  */
 public abstract class EmailTemplate {
     
+    // Base HTML template with styling - not meant to be modified by implementing classes
     private static final String BASE_TEMPLATE = """
             <!DOCTYPE html>
             <html>
