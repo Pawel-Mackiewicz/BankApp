@@ -55,9 +55,12 @@
     <div class="column account-summary">
         <h2>My Accounts</h2>
 
-        <!-- Account creation messages -->
+        <!-- Account messages -->
         <div th:if="${successMessage != null && successMessage.contains('account')}" class="alert alert-success">
             <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage != null && errorMessage.contains('account')}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
         </div>
 
         <!-- Account List -->
@@ -93,7 +96,7 @@
         <div th:if="${transferSuccessMessage != null}" class="alert alert-success mb-3">
             <p th:text="${transferSuccessMessage}"></p>
         </div>
-        <div th:if="${errorMessage}" class="alert alert-danger mb-3">
+        <div th:if="${errorMessage != null && errorMessage.contains('transaction')}" class="alert alert-danger">
             <p th:text="${errorMessage}"></p>
         </div>
         

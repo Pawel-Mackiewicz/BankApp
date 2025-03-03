@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.account.service;
 
 import info.mackiewicz.bankapp.user.model.User;
-
+    
 import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class AccountValidationService {
             throw new IllegalArgumentException("Owner cannot be null");
         }
         if (owner.getAccounts().size() >= 3) {
-            throw new IllegalArgumentException("User cannot have more than 3 accounts");
+            throw new IllegalArgumentException("User account limit: Please contact us if You need more accounts");
         }
         if (owner.isLocked()) {
             throw new IllegalArgumentException("User is locked");

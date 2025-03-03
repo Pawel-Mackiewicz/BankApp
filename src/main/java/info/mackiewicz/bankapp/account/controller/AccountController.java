@@ -53,12 +53,4 @@ public class AccountController {
             accountService.deleteAccountById(id);
             return ResponseEntity.noContent().build();
     }
-
-    // PUT /api/accounts/{id}/change-owner - Change the owner of an account
-    // The request body should contain a User object representing the new owner
-    @PutMapping("/{id}/change-owner/{newOwnerId}")
-    public ResponseEntity<Account> changeAccountOwner(@PathVariable int id, @PathVariable int newOwnerId) {
-            Account account = accountService.changeAccountOwner(id, newOwnerId);
-            return ResponseEntity.ok(account);
-    }
 }

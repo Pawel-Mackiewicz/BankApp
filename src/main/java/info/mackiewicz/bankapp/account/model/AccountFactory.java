@@ -23,8 +23,6 @@ import lombok.RequiredArgsConstructor;
             validationService.validateNewAccountOwner(owner);
             Account account = new Account();
             account.owner = owner;
-            account.balance = BigDecimal.ZERO;
-            account.creationDate = LocalDateTime.now();
             account.userAccountNumber = owner.getNextAccountNumber();
             account.iban = IbanGenerator.generateIban(owner.getId(), account.getUserAccountNumber());
             return account;

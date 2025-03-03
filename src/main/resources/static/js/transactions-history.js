@@ -128,8 +128,8 @@ const TransactionUI = {
         const isPositive = this.shouldShowPositive(transaction);
         const amountClass = isPositive ? 'amount-positive' : 'amount-negative';
         const amountPrefix = isPositive ? '+' : '-';
-        const sourceOwner = transaction.sourceAccount?.owner?.fullName || '';
-        const destinationOwner = transaction.destinationAccount?.owner?.fullName || '';
+        const sourceOwner = transaction.sourceAccount?.ownerName || '';
+        const destinationOwner = transaction.destinationAccount?.ownerName || '';
 
         return `
             <div class="transaction-card">
@@ -157,8 +157,8 @@ const TransactionUI = {
         const isPositive = this.shouldShowPositive(transaction);
         const amountClass = isPositive ? 'amount-positive' : 'amount-negative';
         const amountPrefix = isPositive ? '+' : '-';
-        const sourceOwner = transaction.sourceAccount?.owner?.fullName || '';
-        const destinationOwner = transaction.destinationAccount?.owner?.fullName || '';
+        const sourceOwner = transaction.sourceAccount?.ownerName || '';
+        const destinationOwner = transaction.destinationAccount?.ownerName || '';
 
         return `
             <tr>
