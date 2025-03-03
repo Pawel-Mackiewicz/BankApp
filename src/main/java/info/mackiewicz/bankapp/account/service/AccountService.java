@@ -99,15 +99,6 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     @Transactional
-    public Account changeAccountOwner(int accountId, int newOwnerId) {
-        Account account = getAccountById(accountId);
-        User newOwner = userService.getUserById(newOwnerId);
-        account.setOwner(newOwner);
-        return accountRepository.save(account);
-    }
-
-    @Override
-    @Transactional
     public Account deposit(int accountId,
             @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
