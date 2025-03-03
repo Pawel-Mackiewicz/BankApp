@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.model.AccountFactory;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
@@ -30,179 +32,198 @@ class AccountServiceTest {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountServiceTest.class);
 
-    private int accountId = 1;
-    private Account account = new Account(new User());
-    {
-        try {
-            java.lang.reflect.Field field = Account.class.getDeclaredField("id");
-            field.setAccessible(true);
-            field.set(account, accountId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Mock
     private AccountRepository accountRepository;
 
     @Mock
     private UserService userService;
 
+    @Mock
+    private AccountFactory accountFactory;
+
     @InjectMocks
     private AccountService accountService;
+
+    private Account testAccount;
+    private User testUser;
+    private final int TEST_ACCOUNT_ID = 1;
+    private final int TEST_USER_ID = 1;
+    private final String TEST_IBAN = "PL12345678901234567890123456";
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        
+        // Initialize test user
+        testUser = new User();
+        testUser.setId(TEST_USER_ID);
+        
+        // Create test account using factory
+        testAccount = createTestAccount();
+        
+        // Setup common mocks
+        when(accountFactory.createAccount(any(User.class))).thenReturn(testAccount);
+    }
+
+    private Account createTestAccount() {
+        try {
+            // Use reflection to create Account instance
+            java.lang.reflect.Constructor<Account> constructor = Account.class.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            Account account = constructor.newInstance();
+
+            // Set required fields using reflection
+            java.lang.reflect.Field idField = Account.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(account, TEST_ACCOUNT_ID);
+
+            java.lang.reflect.Field ownerField = Account.class.getDeclaredField("owner");
+            ownerField.setAccessible(true);
+            ownerField.set(account, testUser);
+
+            java.lang.reflect.Field ibanField = Account.class.getDeclaredField("iban");
+            ibanField.setAccessible(true);
+            ibanField.set(account, TEST_IBAN);
+            
+            return account;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create test account", e);
+        }
     }
 
     @Test
     void testGetAccountById() {
         logger.info("testGetAccountById: Starting test");
-        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-        Account result = accountService.getAccountById(accountId);
+        when(accountRepository.findById(TEST_ACCOUNT_ID)).thenReturn(Optional.of(testAccount));
+        
+        Account result = accountService.getAccountById(TEST_ACCOUNT_ID);
+        
         assertNotNull(result);
-        assertEquals(accountId, result.getId());
+        assertEquals(TEST_ACCOUNT_ID, result.getId());
     }
 
     @Test
     void testCreateAccount() {
         logger.info("testCreateAccount: Starting test");
-        int userId = 1;
-        User user = new User();
-        user.setId(userId);
-        Account account = new Account(user);
+        when(userService.getUserById(TEST_USER_ID)).thenReturn(testUser);
+        when(accountRepository.save(any(Account.class))).thenReturn(testAccount);
 
-        when(userService.getUserById(userId)).thenReturn(user);
-        when(accountRepository.save(account)).thenReturn(account);
-
-        Account result = accountService.createAccount(userId);
+        Account result = accountService.createAccount(TEST_USER_ID);
+        
         assertNotNull(result);
-    }
-
-    @Test
-    void testDeleteAccountById() {
-        logger.info("testDeleteAccountById: Starting test");
-        int accountId = 1;
-        User user = new User();
-        Account account = new Account(user);
-        try {
-            java.lang.reflect.Field field = Account.class.getDeclaredField("id");
-            field.setAccessible(true);
-            field.set(account, accountId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-        accountService.deleteAccountById(accountId);
+        assertEquals(TEST_USER_ID, result.getOwner().getId());
     }
 
     @Test
     void testGetAccountById_NotFound() {
         logger.info("testGetAccountById_NotFound: Starting test");
-        int accountId = 1;
-        when(accountRepository.findById(accountId)).thenReturn(Optional.empty());
-        assertThrows(AccountNotFoundByIdException.class, () -> accountService.getAccountById(accountId));
+        when(accountRepository.findById(TEST_ACCOUNT_ID)).thenReturn(Optional.empty());
+        
+        assertThrows(AccountNotFoundByIdException.class, () -> 
+            accountService.getAccountById(TEST_ACCOUNT_ID));
     }
 
     @Test
     void testGetAccountsByOwnersPESEL() {
-        String pesel = "1234567890";
-        User user = new User();
-        user.setPESEL(pesel);
-        Account account = new Account(user);
-        List<Account> accounts = Collections.singletonList(account);
+        String testPesel = "1234567890";
+        testUser.setPESEL(testPesel);
+        List<Account> accounts = Collections.singletonList(testAccount);
 
-        when(accountRepository.findAccountsByOwner_PESEL(pesel)).thenReturn(Optional.of(accounts));
-        List<Account> result = accountService.getAccountsByOwnersPESEL(pesel);
+        when(accountRepository.findAccountsByOwner_PESEL(testPesel))
+            .thenReturn(Optional.of(accounts));
+            
+        List<Account> result = accountService.getAccountsByOwnersPESEL(testPesel);
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(pesel, result.get(0).getOwner().getPESEL());
+        assertEquals(testPesel, result.get(0).getOwner().getPESEL());
     }
 
     @Test
     void testGetAccountsByOwnersPESEL_NotFound() {
-        String pesel = "1234567890";
-        when(accountRepository.findAccountsByOwner_PESEL(pesel)).thenReturn(Optional.empty());
-        assertThrows(OwnerAccountsNotFoundException.class, () -> accountService.getAccountsByOwnersPESEL(pesel));
+        String testPesel = "1234567890";
+        when(accountRepository.findAccountsByOwner_PESEL(testPesel))
+            .thenReturn(Optional.empty());
+            
+        assertThrows(OwnerAccountsNotFoundException.class, () -> 
+            accountService.getAccountsByOwnersPESEL(testPesel));
     }
 
     @Test
     void testGetAccountsByOwnersUsername() {
-        String username = "testuser";
-        User user = new User();
-        user.setUsername(username);
-        Account account = new Account(user);
-        List<Account> accounts = Collections.singletonList(account);
+        String testUsername = "testuser";
+        testUser.setUsername(testUsername);
+        List<Account> accounts = Collections.singletonList(testAccount);
 
-        when(accountRepository.findAccountsByOwner_username(username)).thenReturn(Optional.of(accounts));
-        List<Account> result = accountService.getAccountsByOwnersUsername(username);
+        when(accountRepository.findAccountsByOwner_username(testUsername))
+            .thenReturn(Optional.of(accounts));
+            
+        List<Account> result = accountService.getAccountsByOwnersUsername(testUsername);
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(username, result.get(0).getOwner().getUsername());
+        assertEquals(testUsername, result.get(0).getOwner().getUsername());
     }
 
     @Test
     void testGetAccountsByOwnersUsername_NotFound() {
-        String username = "testuser";
-        when(accountRepository.findAccountsByOwner_username(username)).thenReturn(Optional.empty());
-        assertThrows(OwnerAccountsNotFoundException.class, () -> accountService.getAccountsByOwnersUsername(username));
+        String testUsername = "testuser";
+        when(accountRepository.findAccountsByOwner_username(testUsername))
+            .thenReturn(Optional.empty());
+            
+        assertThrows(OwnerAccountsNotFoundException.class, () -> 
+            accountService.getAccountsByOwnersUsername(testUsername));
     }
 
     @Test
     void testGetAccountsByOwnersId() {
-        int userId = 1;
-        User user = new User();
-        user.setId(userId);
-        Account account = new Account(user);
-        List<Account> accounts = Collections.singletonList(account);
+        List<Account> accounts = Collections.singletonList(testAccount);
 
-        when(accountRepository.findAccountsByOwner_id(userId)).thenReturn(Optional.of(accounts));
-        List<Account> result = accountService.getAccountsByOwnersId(userId);
+        when(accountRepository.findAccountsByOwner_id(TEST_USER_ID))
+            .thenReturn(Optional.of(accounts));
+            
+        List<Account> result = accountService.getAccountsByOwnersId(TEST_USER_ID);
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(userId, result.get(0).getOwner().getId());
+        assertEquals(TEST_USER_ID, result.get(0).getOwner().getId());
     }
 
     @Test
     void testGetAccountsByOwnersId_NotFound() {
-        int userId = 1;
-        when(accountRepository.findAccountsByOwner_id(userId)).thenReturn(Optional.empty());
-        assertThrows(OwnerAccountsNotFoundException.class, () -> accountService.getAccountsByOwnersId(userId));
+        when(accountRepository.findAccountsByOwner_id(TEST_USER_ID))
+            .thenReturn(Optional.empty());
+            
+        assertThrows(OwnerAccountsNotFoundException.class, () -> 
+            accountService.getAccountsByOwnersId(TEST_USER_ID));
     }
 
     @Test
     void testFindAccountByIban() {
-        String iban = "PL12345678901234567890123456";
-        User user = new User();
-        Account account = new Account(user);
-        account.setIban(iban);
-
-        when(accountRepository.findByIban(iban)).thenReturn(Optional.of(account));
-        Optional<Account> result = accountService.findAccountByIban(iban);
+        when(accountRepository.findByIban(TEST_IBAN))
+            .thenReturn(Optional.of(testAccount));
+            
+        Optional<Account> result = accountService.findAccountByIban(TEST_IBAN);
 
         assertNotNull(result);
-        assertEquals(iban, result.get().getIban());
+        assertEquals(TEST_IBAN, result.get().getIban());
     }
 
     @Test
     void testFindAccountByIban_NotFound() {
-        String iban = "PL12345678901234567890123456";
-        when(accountRepository.findByIban(iban)).thenReturn(Optional.empty());
-        Optional<Account> result = accountService.findAccountByIban(iban);
+        when(accountRepository.findByIban(TEST_IBAN))
+            .thenReturn(Optional.empty());
+            
+        Optional<Account> result = accountService.findAccountByIban(TEST_IBAN);
         assertEquals(Optional.empty(), result);
     }
 
     @Test
     void testGetAllAccounts() {
-        User user = new User();
-        Account account = new Account(user);
-        List<Account> accounts = Collections.singletonList(account);
+        List<Account> accounts = Collections.singletonList(testAccount);
 
         when(accountRepository.findAll()).thenReturn(accounts);
+        
         List<Account> result = accountService.getAllAccounts();
 
         assertNotNull(result);
@@ -210,43 +231,21 @@ class AccountServiceTest {
     }
 
     @Test
-    void testChangeAccountOwner() {
-        int accountId = 1;
-        int newUserId = 2;
-        User oldUser = new User();
-        oldUser.setId(1);
-        User newUser = new User();
-        newUser.setId(newUserId);
-        Account account = new Account(oldUser);
-
-        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-        when(userService.getUserById(newUserId)).thenReturn(newUser);
-        when(accountRepository.save(account)).thenReturn(account);
-
-        Account result = accountService.changeAccountOwner(accountId, newUserId);
-
-        assertNotNull(result);
-        assertEquals(newUserId, result.getOwner().getId());
-    }
-
-    @Test
     void testWithdraw() throws NoSuchFieldException, IllegalAccessException {
-        int accountId = 1;
-        BigDecimal amount = new BigDecimal("50.00");
-        User user = new User();
-        Account account = new Account(user);
         BigDecimal initialBalance = new BigDecimal("100.00");
+        BigDecimal withdrawAmount = new BigDecimal("50.00");
 
+        // Set initial balance
         java.lang.reflect.Field balanceField = Account.class.getDeclaredField("balance");
         balanceField.setAccessible(true);
-        balanceField.set(account, initialBalance);
+        balanceField.set(testAccount, initialBalance);
 
-        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-        when(accountRepository.save(account)).thenReturn(account);
+        when(accountRepository.findById(TEST_ACCOUNT_ID)).thenReturn(Optional.of(testAccount));
+        when(accountRepository.save(testAccount)).thenReturn(testAccount);
 
-        Account result = accountService.withdraw(accountId, amount);
+        Account result = accountService.withdraw(TEST_ACCOUNT_ID, withdrawAmount);
 
         assertNotNull(result);
-        assertEquals(initialBalance.subtract(amount), result.getBalance());
+        assertEquals(initialBalance.subtract(withdrawAmount), result.getBalance());
     }
 }

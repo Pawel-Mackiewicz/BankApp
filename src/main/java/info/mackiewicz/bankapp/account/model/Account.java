@@ -6,12 +6,11 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import info.mackiewicz.bankapp.account.model.interfaces.FinancialOperations;
 import info.mackiewicz.bankapp.account.model.interfaces.OwnershipInfo;
+import info.mackiewicz.bankapp.account.service.interfaces.FinancialOperations;
 import info.mackiewicz.bankapp.account.util.IbanGenerator;
 import info.mackiewicz.bankapp.shared.exception.InvalidOperationException;
 import info.mackiewicz.bankapp.user.model.User;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,47 +28,38 @@ public class Account implements FinancialOperations, OwnershipInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer id;
+    private Integer id;
 
     @Column(unique = true, nullable = false)
-    protected String iban;
+    private String iban;
 
     @Column(name = "user_account_number", nullable = false)
-    protected Integer userAccountNumber;
+    private Integer userAccountNumber;
 
     @Column(name = "creation_date")
-    protected LocalDateTime creationDate;
+    private LocalDateTime creationDate;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "owner_id")
-    protected User owner;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 
-    protected BigDecimal balance;
+    private BigDecimal balance;
 
-    protected Account() {
+    Account() {
         this.creationDate = LocalDateTime.now();
         this.balance = BigDecimal.ZERO;
     }
 
+    Account(User owner, int userAccountNumber, String iban) {
+        this();
+        this.owner = owner;
+        this.userAccountNumber = userAccountNumber;
+        this.iban = iban;
+    }
+
     public String getFormattedIban() {
         return IbanGenerator.formatIban(iban);
-    }
-
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        Account account = (Account) o;
-        return Objects.equals(id, account.id) && balance.equals(account.balance);
-    }
-
-    public int hashCode() {
-        int result = Integer.hashCode(id);
-        result = (31 * result) + (balance != null ? balance.hashCode() : 0);
-        return result;
     }
 
     // Implementation of OwnershipInfo interface
@@ -82,7 +72,7 @@ public class Account implements FinancialOperations, OwnershipInfo {
         return owner.getFullName();
     }
 
-     // Implementation of FinancialOperations interface
+    // Implementation of FinancialOperations interface
     @Override
     public void deposit(BigDecimal amount) {
         this.balance = this.balance.add(amount);
@@ -109,5 +99,21 @@ public class Account implements FinancialOperations, OwnershipInfo {
     @Override
     public String toString() {
         return String.format("Account #%d [balance = %.2f]", userAccountNumber, balance);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Account account = (Account) o;
+        return Objects.equals(id, account.id) ||
+                (iban != null && iban.equals(account.iban));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, iban);
     }
 }

@@ -21,10 +21,9 @@ import lombok.RequiredArgsConstructor;
         
         public Account createAccount(User owner) {
             validationService.validateNewAccountOwner(owner);
-            Account account = new Account();
-            account.owner = owner;
-            account.userAccountNumber = owner.getNextAccountNumber();
-            account.iban = IbanGenerator.generateIban(owner.getId(), account.getUserAccountNumber());
-            return account;
+            Integer userAccountNumber = owner.getNextAccountNumber();
+            String iban = IbanGenerator.generateIban(owner.getId(), userAccountNumber);
+            
+            return new Account(owner, userAccountNumber, iban);
         }
     }

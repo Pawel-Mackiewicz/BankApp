@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.account.service;
+package info.mackiewicz.bankapp.account.service.interfaces;
 
 import java.math.BigDecimal;
 import java.util.List;

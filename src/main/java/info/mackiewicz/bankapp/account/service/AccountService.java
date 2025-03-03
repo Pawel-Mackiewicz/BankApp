@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.account.service;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.AccountFactory;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.shared.exception.InvalidOperationException;
 import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
@@ -38,6 +39,7 @@ public class AccountService implements AccountServiceInterface {
         logger.debug("Creating account for user ID: {}", userId);
         User user = userService.getUserById(userId);
         Account account = accountFactory.createAccount(user);
+        Account acc = 
         return accountRepository.save(account);
     }
 
