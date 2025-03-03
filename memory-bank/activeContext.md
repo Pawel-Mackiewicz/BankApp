@@ -1,3 +1,116 @@
+# Active Context
+## Current Session Context
+[2025-03-03 10:41]
+
+Analiza mechanizmów współbieżności w systemie transakcji:
+- Asynchroniczne przetwarzanie transakcji (@Async)
+- Współbieżny dostęp do kont
+- Mechanizm blokowania kont w AccountLockManager
+
+## Recent Changes
+- Centralizacja mechanizmu blokowania w AccountLockManager
+- Dodanie obsługi współbieżności w TransactionService
+- Wykorzystanie wzorca Factory dla Account
+
+## Current Goals
+- Zapewnienie thread-safe operacji na kontach
+- Optymalizacja wydajności przetwarzania transakcji
+- Zachowanie spójności danych przy współbieżnym dostępie
+
+## Open Questions
+1. Jak zoptymalizować wykorzystanie puli wątków dla @Async?
+2. Czy potrzebny jest mechanizm timeout dla blokad?
+3. Jak często czyścić nieużywane blokady?
+
+## Current Session (2025-03-03 08:41)
+
+Analiza asynchronicznego przetwarzania transakcji:
+- Użycie @Async w TransactionService
+- Współbieżne przetwarzanie wielu transakcji
+- Wybór odpowiedniej struktury danych dla mechanizmu blokowania
+
+## Recent Decisions
+- Decyzja o użyciu ConcurrentHashMap w AccountLockManager
+
+## Current Goals
+- Zapewnienie thread-safe mechanizmu blokowania kont
+- Efektywne zarządzanie współbieżnymi transakcjami
+- Zachowanie atomowości operacji na lockach
+
+## Open Questions
+- Czy warto dodać monitoring liczby współbieżnych transakcji?
+- Jak zoptymalizować wykorzystanie puli wątków dla @Async?
+
+
+
+## Current Session (2025-03-03 08:33)
+
+Analiza przeniesienia mechanizmu blokowania z Account do AccountLockManager:
+- Identyfikacja obecnego mechanizmu synchronizacji
+- Planowanie nowej struktury z wykorzystaniem ConcurrentHashMap
+- Rozważenie aspektów bezpieczeństwa i wydajności
+
+## Recent Decisions
+- Decyzja o centralizacji mechanizmu blokowania w AccountLockManager
+
+## Current Goals
+- Poprawa separacji odpowiedzialności poprzez przeniesienie logiki blokowania
+- Zapewnienie thread-safe dostępu do locków
+- Zachowanie obecnej funkcjonalności przy czystszej architekturze
+
+## Open Questions
+- Jak często powinniśmy czyścić nieużywane locki?
+- Czy potrzebujemy mechanizmu timeout dla locków?
+
+
+## Current Session (2025-03-03 08:23)
+
+Analiza mechanizmów synchronizacji w procesie przetwarzania transakcji:
+- @Transactional na poziomie processTransaction
+- Manualne blokowanie przez AccountLockManager
+- Zależności między mechanizmami synchronizacji
+
+## Recent Decisions
+- Utrzymanie obu mechanizmów synchronizacji (szczegóły w decisionLog.md)
+
+## Current Goals
+- Zapewnienie bezpieczeństwa transakcji na poziomie bazy danych i JVM
+- Utrzymanie czystej architektury z jasno określonymi odpowiedzialnościami
+
+## Open Questions
+- Czy obecne rozwiązanie nie jest zbyt konserwatywne i nie wpływa nadmiernie na wydajność?
+
+## New Session Context
+[02.03.2025, 19:29]
+
+## Recent Architectural Decisions
+- Wprowadzenie wzorca Builder dla klasy Account:
+  * Poprawa czytelności tworzenia obiektów
+  * Enkapsulacja logiki inicjalizacji
+  * Wbudowana walidacja
+  * Elastyczne ustawianie pól opcjonalnych
+  * Bezpieczne generowanie IBAN
+
+## Recent Changes
+- Zaktualizowano decisionLog.md o decyzję wprowadzenia wzorca Builder
+- Dodano dokumentację wzorca Builder do systemPatterns.md
+- Przygotowano plan refaktoryzacji klasy Account
+
+## Current Goals
+1. Implementacja wzorca Builder:
+   - Utworzenie klasy AccountBuilder
+   - Implementacja metod fluent interface
+   - Dodanie walidacji w metodzie build()
+   - Testy jednostkowe dla buildera
+
+## Open Questions
+1. Czy dodać dodatkowe walidacje w builderze?
+2. Czy zaimplementować wzorzec Builder dla innych klas modelowych?
+3. Czy potrzebne są dodatkowe metody konfiguracyjne w builderze?
+
+---
+
+
 ## New Session Context
 03.01.2025, 17:43
 

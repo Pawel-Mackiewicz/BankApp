@@ -1,4 +1,63 @@
 # Implementation Progress
+## Async Transaction Processing & Account Factory [2025-03-03]
+
+### Work Done
+- Zaimplementowano asynchroniczne przetwarzanie transakcji w TransactionService:
+  * Dodano adnotację @Async do kluczowych metod
+  * Zoptymalizowano współbieżne przetwarzanie
+  * Dodano mechanizm blokowania kont
+- Przeniesiono mechanizm blokowania do AccountLockManager:
+  * Wykorzystano ConcurrentHashMap dla thread-safe operacji
+  * Zaimplementowano atomowe operacje na lockach
+  * Dodano obsługę współbieżnego dostępu
+- Wykorzystano wzorzec Factory dla Account:
+  * Enkapsulacja logiki tworzenia kont w AccountFactory
+  * Zapewnienie spójnej inicjalizacji kont
+  * Centralizacja logiki generowania IBAN
+
+### Benefits Achieved
+- Lepsze wykorzystanie zasobów systemu
+- Zwiększona przepustowość przetwarzania transakcji
+- Bezpieczna obsługa współbieżności
+- Lepsza separacja odpowiedzialności
+- Scentralizowana logika tworzenia kont
+
+### Next Steps
+1. Implementacja mechanizmu timeout dla locków
+2. Dodanie monitoringu liczby współbieżnych transakcji
+3. Optymalizacja wykorzystania puli wątków
+4. Automatyczne czyszczenie nieużywanych locków
+5. Testy wydajnościowe systemu
+6. Rozszerzenie AccountFactory o dodatkowe typy kont
+
+
+## Async Transaction Processing & Account Locking [2025-03-03]
+
+### Work Done
+- Zaimplementowano asynchroniczne przetwarzanie transakcji w TransactionService:
+  * Dodano adnotację @Async do kluczowych metod
+  * Zoptymalizowano współbieżne przetwarzanie
+  * Dodano mechanizm blokowania kont
+- Przeniesiono mechanizm blokowania do AccountLockManager:
+  * Wykorzystano ConcurrentHashMap dla thread-safe operacji
+  * Zaimplementowano atomowe operacje na lockach
+  * Dodano obsługę współbieżnego dostępu
+
+### Benefits Achieved
+- Lepsze wykorzystanie zasobów systemu
+- Zwiększona przepustowość przetwarzania transakcji
+- Bezpieczna obsługa współbieżności
+- Lepsza separacja odpowiedzialności
+
+### Next Steps
+1. Implementacja mechanizmu timeout dla locków
+2. Dodanie monitoringu liczby współbieżnych transakcji
+3. Optymalizacja wykorzystania puli wątków
+4. Automatyczne czyszczenie nieużywanych locków
+5. Testy wydajnościowe systemu
+
+
+# Implementation Progress
 
 ## System wysyłki emaili - Zakończony [2025-02-28]
 

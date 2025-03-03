@@ -1,4 +1,115 @@
 # System Patterns & Architecture
+## Domain Model Patterns [Updated: 2025-03-03]
+
+### Account Factory Pattern
+```java
+public class AccountFactory {
+    private final IbanGenerator ibanGenerator;
+    
+    public Account createAccount(User owner) {
+        Account account = new Account();
+        account.setOwner(owner);
+        account.setBalance(BigDecimal.ZERO);
+        account.setCreationDate(LocalDateTime.now());
+        account.setUserAccountNumber(owner.getNextAccountNumber());
+        account.setIban(ibanGenerator.generateIban());
+        return account;
+    }
+    
+    public Account createAccountWithBalance(User owner, BigDecimal initialBalance) {
+        Account account = createAccount(owner);
+        account.setBalance(initialBalance);
+        return account;
+    }
+    
+    public Account createAccountWithIban(User owner, String iban) {
+        Account account = createAccount(owner);
+        account.setIban(iban);
+        return account;
+    }
+}
+```
+
+#### Key Features:
+1. Centralizacja tworzenia kont
+2. Spójna inicjalizacja wszystkich pól
+3. Generowanie IBAN w jednym miejscu
+4. Elastyczne warianty tworzenia kont
+5. Enkapsulacja logiki biznesowej
+
+
+## Domain Model Patterns [Updated: 2025-03-02]
+
+### Account Builder Pattern
+```java
+public class Account {
+    // ... existing fields ...
+
+    public static class AccountBuilder {
+        private User owner;
+        private String iban;
+        private BigDecimal initialBalance = BigDecimal.ZERO;
+        private LocalDateTime creationDate = LocalDateTime.now();
+
+        public AccountBuilder owner(User owner) {
+            this.owner = owner;
+            return this;
+        }
+
+        public AccountBuilder iban(String iban) {
+            this.iban = iban;
+            return this;
+        }
+
+        public AccountBuilder initialBalance(BigDecimal balance) {
+            this.initialBalance = balance;
+            return this;
+        }
+
+        public Account build() {
+            // Validation
+            if (owner == null) {
+                throw new IllegalStateException("Account must have an owner");
+            }
+
+            // Create account
+            Account account = new Account();
+            account.owner = owner;
+            account.balance = initialBalance;
+            account.creationDate = creationDate;
+            account.userAccountNumber = owner.getNextAccountNumber();
+            account.iban = iban != null ? iban : generateIban();
+
+            return account;
+        }
+
+        private String generateIban() {
+            // IBAN generation logic
+            return IbanGenerator.generate();
+        }
+    }
+
+    public static AccountBuilder builder() {
+        return new AccountBuilder();
+    }
+}
+
+// Usage example:
+Account account = Account.builder()
+    .owner(user)
+    .initialBalance(new BigDecimal("1000.00"))
+    .build();
+```
+
+#### Key Features:
+1. Fluent interface for account creation
+2. Walidacja podczas budowania
+3. Automatyczna inicjalizacja wartości domyślnych
+4. Bezpieczne generowanie IBAN
+5. Enkapsulacja logiki tworzenia konta
+
+
+# System Patterns & Architecture
 
 ## Security Patterns [Updated: 2025-02-28]
 

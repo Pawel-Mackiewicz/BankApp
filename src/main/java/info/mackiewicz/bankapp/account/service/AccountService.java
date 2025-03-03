@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.account.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.model.AccountFactory;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.account.util.IbanGenerator;
 import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.shared.exception.InvalidOperationException;
 import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
@@ -30,21 +30,15 @@ public class AccountService implements AccountServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
     private final AccountRepository accountRepository;
     private final UserService userService;
+    private final AccountFactory accountFactory;
 
     @Override
     @Transactional
     public Account createAccount(@NotNull Integer userId) {
         logger.debug("Creating account for user ID: {}", userId);
         User user = userService.getUserById(userId);
-        Account account = new Account(user);
-        account = setupIban(account);
+        Account account = accountFactory.createAccount(user);
         return accountRepository.save(account);
-    }
-
-    private Account setupIban(Account account) {
-        String iban = IbanGenerator.generateIban(account.getOwner().getId(), account.getUserAccountNumber());
-        account.setIban(iban);
-        return account;
     }
 
     @Override

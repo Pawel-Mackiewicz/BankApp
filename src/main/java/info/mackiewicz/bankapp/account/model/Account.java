@@ -31,14 +31,12 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_account_number", nullable = false)
-    Integer userAccountNumber;
-
     @Column(unique = true, nullable = false)
     String iban;
 
-    BigDecimal balance;
-
+    @Column(name = "user_account_number", nullable = false)
+    Integer userAccountNumber;
+    
     @Column(name = "creation_date")
     LocalDateTime creationDate;
 
@@ -47,6 +45,8 @@ public class Account {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner_id")
     User owner;
+
+    BigDecimal balance;
 
     protected Account() {
     }
