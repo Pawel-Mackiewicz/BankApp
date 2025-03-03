@@ -107,7 +107,7 @@ public class TransferController {
     private void validateAccountOwnership(User user, String accountIban) {
         if (!accountService.getAccountsByOwnersId(user.getId()).stream()
                 .map(Account::getIban)
-                .anyMatch(iban -> iban.equals(accountIban))) {
+                .anyMatch(iban -> iban.toString().equals(accountIban))) {
             throw new IllegalArgumentException("You don't have permission to this account");
         }
     }

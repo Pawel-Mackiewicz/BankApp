@@ -18,12 +18,12 @@ public interface OwnershipInfo {
      *
      * @return the unique ID of the owner as an Integer
      */
-    Integer getOwnerId();
+    Integer getId();
 
     /**
      * Returns the name of the owner.
      *
      * @return the name of the owner as a String
      */
-    String getOwnerName();
+    String getFullName();
 }

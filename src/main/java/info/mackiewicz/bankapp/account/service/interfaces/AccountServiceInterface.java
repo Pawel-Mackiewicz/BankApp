@@ -3,8 +3,6 @@ package info.mackiewicz.bankapp.account.service.interfaces;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
-
 import info.mackiewicz.bankapp.account.model.Account;
 import jakarta.validation.constraints.Email;
 
@@ -31,18 +29,6 @@ public interface AccountServiceInterface {
      * @throws info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException if no account is found with the given id
      */
     Account getAccountById(int id);
-
-    /**
-     * Retrieves accounts based on a flexible owner criteria using a custom finder function.
-     * This method provides a generic way to search for accounts based on any owner-related criteria.
-     *
-     * @param value The search value to match against owner criteria
-     * @param finder A function that implements the specific search logic
-     * @param criteriaName The name of the criteria being searched (for logging/error reporting)
-     * @return A list of {@link Account}s matching the specified criteria
-     * @throws IllegalArgumentException if any parameter is null or empty
-     */
-    List<Account> getAccountsByOwnerCriteria(String value, Function<String, Optional<List<Account>>> finder, String criteriaName);
 
     /**
      * Retrieves all accounts associated with an owner's PESEL number.
@@ -86,7 +72,7 @@ public interface AccountServiceInterface {
      * @return An {@link Optional} containing the account if found, or empty if no account matches the IBAN
      * @throws IllegalArgumentException if iban is null or empty
      */
-    Optional<Account> findAccountByIban(String iban);
+    Account findAccountByIban(String iban);
 
     /**
      * Finds an account by the owner's email address.
@@ -95,7 +81,7 @@ public interface AccountServiceInterface {
      * @return An {@link Optional} containing the account if found, or empty if no account is associated with the email
      * @throws IllegalArgumentException if recipientEmail is null or has invalid format
      */
-    Optional<Account> findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail);
+    Account findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail);
 
     /**
      * Deletes an account with the specified ID.

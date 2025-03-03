@@ -4,14 +4,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import org.iban4j.Iban;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import info.mackiewicz.bankapp.account.model.interfaces.OwnershipInfo;
-import info.mackiewicz.bankapp.account.service.interfaces.FinancialOperations;
-import info.mackiewicz.bankapp.account.util.IbanGenerator;
-import info.mackiewicz.bankapp.shared.exception.InvalidOperationException;
+import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
+import info.mackiewicz.bankapp.account.service.AccountServiceAccessManager;
+import info.mackiewicz.bankapp.account.util.IbanConverter;
 import info.mackiewicz.bankapp.user.model.User;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,21 +24,28 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
-@Getter
+/**
+ * Entity representing a bank account in the system.
+ */
 @Entity
 @Table(name = "accounts")
-public class Account implements FinancialOperations, OwnershipInfo {
+public class Account {
 
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Getter
+    @Convert(converter = IbanConverter.class)
     @Column(unique = true, nullable = false)
-    private String iban;
+    private Iban iban;
 
+    @Getter
     @Column(name = "user_account_number", nullable = false)
     private Integer userAccountNumber;
 
+    @Getter
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
@@ -44,63 +54,74 @@ public class Account implements FinancialOperations, OwnershipInfo {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
+    @Getter
     private BigDecimal balance;
 
+    /**
+     * Default constructor for JPA.
+     */
     Account() {
+    }
+
+    /**
+     * Creates a new account with specified owner, account number and IBAN.
+     * This constructor is package-private to enforce creation through
+     * AccountFactory.
+     *
+     * @param owner             The user who owns this account
+     * @param userAccountNumber The user-specific account number
+     * @param iban              The International Bank Account Number
+     */
+    Account(User owner, int userAccountNumber, String iban) {
         this.creationDate = LocalDateTime.now();
         this.balance = BigDecimal.ZERO;
-    }
-
-    Account(User owner, int userAccountNumber, String iban) {
-        this();
         this.owner = owner;
         this.userAccountNumber = userAccountNumber;
-        this.iban = iban;
+        this.iban = Iban.valueOf(iban);
     }
 
+    public void setBalance(BigDecimal newBalance) {
+        AccountServiceAccessManager.checkServiceAccess();
+        this.balance = newBalance;
+    }
+
+    /**
+     * Returns the IBAN in a formatted, human-readable form.
+     *
+     * @return The formatted IBAN string
+     */
     public String getFormattedIban() {
-        return IbanGenerator.formatIban(iban);
+        return iban.toFormattedString();
     }
 
-    // Implementation of OwnershipInfo interface
-    public Integer getOwnerId() {
-        return owner.getId();
+    /**
+     * Returns DTO with account owner's ID and full name.
+     *
+     * @return The owner's DTO
+     */
+    @JsonGetter("owner")
+    public AccountOwnerDTO getOwner() {
+        return new AccountOwnerDTO(owner);
     }
 
-    @Override
-    public String getOwnerName() {
-        return owner.getFullName();
-    }
 
-    // Implementation of FinancialOperations interface
-    @Override
-    public void deposit(BigDecimal amount) {
-        this.balance = this.balance.add(amount);
-    }
-
-    @Override
-    public void withdraw(BigDecimal amount) {
-        if (!canWithdraw(amount)) {
-            throw new InvalidOperationException("Insufficient funds");
-        }
-        this.balance = this.balance.subtract(amount);
-    }
-
-    @Override
-    public boolean canWithdraw(BigDecimal amount) {
-        return this.balance.compareTo(amount) >= 0;
-    }
-
-    @Override
-    public BigDecimal getBalance() {
-        return this.balance;
-    }
-
+    /**
+     * Returns a string representation of this account.
+     *
+     * @return A string containing the account number and balance
+     */
     @Override
     public String toString() {
         return String.format("Account #%d [balance = %.2f]", userAccountNumber, balance);
     }
 
+    /**
+     * Compares this account to another object for equality.
+     * Two accounts are considered equal if they have the same ID or the same IBAN.
+     *
+     * @param o The object to compare with
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -108,10 +129,15 @@ public class Account implements FinancialOperations, OwnershipInfo {
         if (o == null || getClass() != o.getClass())
             return false;
         Account account = (Account) o;
-        return Objects.equals(id, account.id) ||
-                (iban != null && iban.equals(account.iban));
+        return iban.equals(account.iban);
     }
 
+    /**
+     * Returns a hash code value for this account.
+     * The hash code is based on the account ID and IBAN.
+     *
+     * @return A hash code value for this account
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, iban);

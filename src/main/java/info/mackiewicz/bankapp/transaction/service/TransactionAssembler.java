@@ -22,10 +22,8 @@ public class TransactionAssembler {
 
     public Transaction assembleExternalTransfer(TransferRequest request) {
 
-        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban())
-                .orElseThrow(() -> new IllegalArgumentException("Source account not found"));
-        Account destinationAccount = accountService.findAccountByIban(request.getRecipientIban())
-                .orElseThrow(() -> new IllegalArgumentException("Destination account not found"));
+        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban());
+        Account destinationAccount = accountService.findAccountByIban(request.getRecipientIban());
 
         return transactionBuilder
                 .withSourceAccount(sourceAccount)
@@ -38,8 +36,7 @@ public class TransactionAssembler {
 
     public Transaction assembleInternalTransfer(InternalTransferRequest request) {
 
-        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban())
-                .orElseThrow(() -> new IllegalArgumentException("Source account not found"));
+        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban());
         Account destinationAccount = resolveDestinationAccount(request);
 
         return transactionBuilder
@@ -81,11 +78,9 @@ public class TransactionAssembler {
     private Account resolveDestinationAccount(InternalTransferRequest request) {
         
         if (request.getRecipientEmail() != null) {
-            return accountService.findAccountByOwnersEmail(request.getRecipientEmail())
-                    .orElseThrow(() -> new IllegalArgumentException("Destination account not found by email"));
+            return accountService.findAccountByOwnersEmail(request.getRecipientEmail());
         } else {
-            return accountService.findAccountByIban(request.getRecipientIban())
-                    .orElseThrow(() -> new IllegalArgumentException("Destination account not found by IBAN"));
+            return accountService.findAccountByIban(request.getRecipientIban());
         }
     }
 }

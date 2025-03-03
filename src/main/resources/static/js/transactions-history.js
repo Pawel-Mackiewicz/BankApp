@@ -60,12 +60,13 @@ const TransactionAPI = {
         TransactionUI.showLoadingSpinner();
 
         try {
-            const response = await fetch(this.buildUrl());
+            const url = this.buildUrl();
+            console.log('Requesting URL:', url);
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-
             TransactionState.totalElements = data.totalElements;
             
             if (!append) {
@@ -128,8 +129,8 @@ const TransactionUI = {
         const isPositive = this.shouldShowPositive(transaction);
         const amountClass = isPositive ? 'amount-positive' : 'amount-negative';
         const amountPrefix = isPositive ? '+' : '-';
-        const sourceOwner = transaction.sourceAccount?.ownerName || '';
-        const destinationOwner = transaction.destinationAccount?.ownerName || '';
+        const sourceOwner = transaction.sourceAccount?.owner?.fullName || '';
+        const destinationOwner = transaction.destinationAccount?.owner?.fullName || '';
 
         return `
             <div class="transaction-card">
@@ -157,8 +158,8 @@ const TransactionUI = {
         const isPositive = this.shouldShowPositive(transaction);
         const amountClass = isPositive ? 'amount-positive' : 'amount-negative';
         const amountPrefix = isPositive ? '+' : '-';
-        const sourceOwner = transaction.sourceAccount?.ownerName || '';
-        const destinationOwner = transaction.destinationAccount?.ownerName || '';
+        const sourceOwner = transaction.sourceAccount?.owner?.fullName || '';
+        const destinationOwner = transaction.destinationAccount?.owner?.fullName || '';
 
         return `
             <tr>
