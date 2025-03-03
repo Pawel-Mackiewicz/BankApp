@@ -1,6 +1,8 @@
 package info.mackiewicz.bankapp.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.TransactionFilterService;
@@ -24,16 +26,6 @@ class TransactionFilterServiceTest {
     @BeforeEach
     void setUp() {
         transactionFilterService = new TransactionFilterService();
-    }
-
-    private void setAccountId(Account account, Integer id) {
-        try {
-            Field idField = Account.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(account, id);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to set account ID", e);
-        }
     }
 
     @Test
@@ -238,11 +230,11 @@ class TransactionFilterServiceTest {
         user.setId(2);
         user.setFirstname("Jan");
         user.setLastname("Kowalski");
-        Account account1 = new Account(user);
-        Account account2 = new Account(user);
+        Account account1 = TestAccountBuilder.createTestAccountWithOwner(user);
+        TestAccountBuilder.setField(account1, "id", 1);
         
-        setAccountId(account1, 1);
-        setAccountId(account2, 2);
+        Account account2 = TestAccountBuilder.createTestAccountWithOwner(user);
+        TestAccountBuilder.setField(account2, "id", 2);
 
         Transaction transaction1 = new Transaction();
         transaction1.setDate(LocalDateTime.of(2024, 1, 1, 10, 0));

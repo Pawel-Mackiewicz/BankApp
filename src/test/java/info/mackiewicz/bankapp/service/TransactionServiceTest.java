@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.account.service.AccountService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -158,14 +159,7 @@ class TransactionServiceTest {
     void testGetTransactionsByAccountId() {
         logger.info("testGetTransactionsByAccountId: Starting test");
         Integer accountId = 1;
-        Account account = new Account();
-        try {
-            Field idField = Account.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(account, accountId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            fail("Failed to set account id using reflection: " + e.getMessage());
-        }
+        Account account = TestAccountBuilder.createTestAccountWithId(accountId);
         Transaction transaction1 = new Transaction();
         transaction1.setSourceAccount(account);
         Transaction transaction2 = new Transaction();
@@ -188,14 +182,7 @@ class TransactionServiceTest {
     void testGetTransactionsByAccountIdNotFound() {
         logger.info("testGetTransactionsByAccountIdNotFound: Starting test");
         Integer accountId = 1;
-        Account account = new Account();
-        try {
-            Field idField = Account.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(account, accountId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            fail("Failed to set account id using reflection: " + e.getMessage());
-        }
+        Account account = TestAccountBuilder.createTestAccountWithId(accountId);
 
         when(accountService.getAccountById(accountId)).thenReturn(account);
         when(transactionRepository.findByAccountId(accountId)).thenReturn(Optional.empty());
@@ -209,14 +196,7 @@ class TransactionServiceTest {
         logger.info("testGetRecentTransactions: Starting test");
         Integer accountId = 1;
         int count = 2;
-        Account account = new Account();
-        try {
-            Field idField = Account.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(account, accountId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            fail("Failed to set account id using reflection: " + e.getMessage());
-        }
+        Account account = TestAccountBuilder.createTestAccountWithId(accountId);
         Transaction transaction1 = new Transaction();
         transaction1.setSourceAccount(account);
         Transaction transaction2 = new Transaction();
