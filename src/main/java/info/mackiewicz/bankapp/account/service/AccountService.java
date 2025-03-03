@@ -101,26 +101,22 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     @Transactional
-    public Account deposit(int accountId,
+    public Account deposit(Account account,
             @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidOperationException("Deposit amount must be greater than zero");
         }
-
-        Account account = getAccountById(accountId);
         account.deposit(amount);
         return accountRepository.save(account);
     }
 
     @Override
     @Transactional
-    public Account withdraw(int accountId,
+    public Account withdraw(Account account,
             @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidOperationException("Withdrawal amount must be greater than zero");
         }
-
-        Account account = getAccountById(accountId);
         account.withdraw(amount);
         return accountRepository.save(account);
     }

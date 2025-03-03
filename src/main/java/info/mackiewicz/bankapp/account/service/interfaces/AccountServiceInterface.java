@@ -113,7 +113,7 @@ public interface AccountServiceInterface {
      * @return The updated {@link Account} after the deposit
      * @throws IllegalArgumentException if accountId is null or amount is negative
      */
-    Account deposit(int accountId, BigDecimal amount);
+    Account deposit(Account account, BigDecimal amount);
 
     /**
      * Withdraws funds from an account.
@@ -123,5 +123,5 @@ public interface AccountServiceInterface {
      * @return The updated {@link Account} after the withdrawal
      * @throws IllegalArgumentException if accountId is null or amount is negative
      */
-    Account withdraw(int accountId, BigDecimal amount);
+    Account withdraw(Account account, BigDecimal amount);
 }
