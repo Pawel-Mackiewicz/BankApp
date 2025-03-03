@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.account.service.interfaces;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
 import info.mackiewicz.bankapp.account.model.Account;
 import jakarta.validation.constraints.Email;
 
@@ -69,7 +70,7 @@ public interface AccountServiceInterface {
      * Finds an account by its IBAN (International Bank Account Number).
      *
      * @param iban The IBAN to search for
-     * @return An {@link Optional} containing the account if found, or empty if no account matches the IBAN
+     * @return An {@link Account} with the specified IBAN
      * @throws IllegalArgumentException if iban is null or empty
      */
     Account findAccountByIban(String iban);
@@ -78,7 +79,7 @@ public interface AccountServiceInterface {
      * Finds an account by the owner's email address.
      *
      * @param recipientEmail The email address to search for
-     * @return An {@link Optional} containing the account if found, or empty if no account is associated with the email
+     * @return An {@link Account} belonging to the owner with the specified email address
      * @throws IllegalArgumentException if recipientEmail is null or has invalid format
      */
     Account findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail);
@@ -94,20 +95,20 @@ public interface AccountServiceInterface {
     /**
      * Deposits funds into an account.
      *
-     * @param accountId The unique identifier of the account to deposit into
+     * @param account The account to deposit funds into
      * @param amount The amount to deposit
      * @return The updated {@link Account} after the deposit
-     * @throws IllegalArgumentException if accountId is null or amount is negative
+     * @throws IllegalArgumentException if account is null or amount is negative
      */
     Account deposit(Account account, BigDecimal amount);
 
     /**
      * Withdraws funds from an account.
      *
-     * @param accountId The unique identifier of the account to withdraw from
+     * @param account The account to withdraw funds from
      * @param amount The amount to withdraw
      * @return The updated {@link Account} after the withdrawal
-     * @throws IllegalArgumentException if accountId is null or amount is negative
+     * @throws IllegalArgumentException if account is null or amount is negative
      */
     Account withdraw(Account account, BigDecimal amount);
 }
