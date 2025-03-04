@@ -1,9 +1,11 @@
 # Event Logger System Design
 
 ## Overview
+
 System logowania eventów biznesowych zaimplementowany jako beany Spring, używający SLF4J do zapisywania zdarzeń.
 
 ## Structure
+
 ```
 src/main/java/info/mackiewicz/bankapp/event/
   ├── logger/
@@ -27,6 +29,7 @@ src/main/java/info/mackiewicz/bankapp/event/
 ## Interfaces
 
 ### AccountEventLogger
+
 ```java
 public interface AccountEventLogger {
     void created(Integer accountId, Integer userId);
@@ -39,6 +42,7 @@ public interface AccountEventLogger {
 ```
 
 ### SecurityEventLogger
+
 ```java
 public interface SecurityEventLogger {
     void loginAttempt(Integer userId, boolean success, String ipAddress);
@@ -51,6 +55,7 @@ public interface SecurityEventLogger {
 ```
 
 ### TransactionEventLogger
+
 ```java
 public interface TransactionEventLogger {
     void transfer(Integer sourceAccountId, Integer targetAccountId, BigDecimal amount);
@@ -68,7 +73,7 @@ public class EventLogger {
     private final AccountEventLogger accountEvents;
     private final SecurityEventLogger securityEvents;
     private final TransactionEventLogger transactionEvents;
-    
+
     public AccountEventLogger account() {
         return accountEvents;
     }
@@ -83,6 +88,7 @@ public class EventLogger {
 }
 
 ## Logback Configuration
+
 ```xml
 <configuration>
     <!-- Appender dla eventów konta -->
@@ -108,6 +114,7 @@ public class EventLogger {
 ```
 
 ## Error Handling
+
 ```java
 @Slf4j
 public abstract class BaseEventLogger {
@@ -126,6 +133,7 @@ public abstract class BaseEventLogger {
 ```
 
 ## Testing
+
 ```java
 @SpringBootTest
 class AccountEventLoggerTest {
@@ -150,6 +158,7 @@ class AccountEventLoggerTest {
 ```
 
 ## Usage Examples
+
 ```java
 @Service
 @RequiredArgsConstructor
@@ -173,6 +182,7 @@ public class AccountService {
 ```
 
 ## Log Format
+
 ```json
 {
   "timestamp": "2025-03-04T16:55:06.123Z",
@@ -194,36 +204,66 @@ public class AccountService {
 ```
 
 ## Implementation Details
+
 ### ErrorHandling
+
 - Retry mechanizm dla błędów zapisu
 - Dead letter queue dla nieudanych zapisów
 - Monitoring błędów przez metrics
 
 ### Performance
+
 - Buforowanie zapisów w przypadku dużego obciążenia
 - Batch processing dla niektórych typów eventów
 - Asynchroniczne zapisywanie mniej krytycznych eventów
 
 ### Security
+
 - Maskowanie wrażliwych danych
 - Walidacja danych wejściowych
 - Kontrola dostępu do logów
 
 ### Monitoring
+
 - Metryki Prometheus dla ilości eventów
 - Alerty przy przekroczeniu progów błędów
 - Dashboard z wizualizacją aktywności
 
 ## Migration Plan
+
 1. Wprowadzenie nowego systemu obok starego
 2. Stopniowa migracja serwis po serwisie
 3. Okres równoległego działania obu systemów
 4. Wyłączenie starego systemu
 
 ## Future Improvements
+
 1. Asynchroniczny zapis z kolejkowaniem
 2. API REST do odczytu logów
 3. Narzędzia analityczne
 4. System archiwizacji
 5. Integracja z systemami monitoringu
 6. Eksport do formatów biznesowych
+
+Przeanalizujmy dokładnie wszystkie aspekty systemu logowania, które mogliśmy pominąć:
+
+Konfiguracja:
+Brakuje szczegółowej konfiguracji logback.xml
+Nie określiliśmy formatu nazw plików dla backupów
+Brakuje konfiguracji wielkości plików i rotacji
+Obsługa błędów:
+Nie opisaliśmy zachowania w przypadku błędów zapisu
+Brakuje strategii retry
+Nie określiliśmy monitorowania błędów
+Implementacja:
+Nie określiliśmy sposobu generowania correlationId
+Brak dokumentacji dla metadanych
+Nie opisaliśmy formatowania wiadomości
+Testy:
+Brak przykładów testów jednostkowych
+Nie określiliśmy strategii testowania
+Brak mock examples
+Integracja:
+Nie opisaliśmy migracji z obecnego systemu
+Brak przykładów dla wszystkich serwisów
+Nie określiliśmy strategii wdrożenia
