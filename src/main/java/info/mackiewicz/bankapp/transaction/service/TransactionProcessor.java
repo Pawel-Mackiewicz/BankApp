@@ -17,6 +17,7 @@ public class TransactionProcessor {
 
     private final TransactionHydrator hydrator;
     private final TransactionRepository repository;
+    private final AccountLockManager accountLockManager;
 
 
     @Transactional
@@ -30,7 +31,7 @@ public class TransactionProcessor {
     }
 
     private void lockAndLogAccounts(Transaction transaction) {
-        AccountLockManager.lockAccounts(transaction.getDestinationAccount(), transaction.getSourceAccount());
+        accountLockManager.lockAccounts(transaction.getDestinationAccount(), transaction.getSourceAccount());
         LoggingService.logLockingAccounts(transaction);
     }
 
@@ -65,7 +66,7 @@ public class TransactionProcessor {
     }
 
     private void unlockAndLogAccounts(Transaction transaction) {
-        AccountLockManager.unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
+        accountLockManager.unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
         LoggingService.logUnlockingAccounts(transaction);
     }
 

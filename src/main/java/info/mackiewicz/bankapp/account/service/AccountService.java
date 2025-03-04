@@ -29,14 +29,41 @@ public class AccountService implements AccountServiceInterface {
     private final AccountOperationsService accountOperationsService;
     private final AccountQueryService accountQueryService;
 
+    private static final int MAX_RETRIES = 3;
+    private static final long RETRY_DELAY_MS = 100;
+
     @Override
     @Transactional
     public Account createAccount(@NotNull Integer userId) {
         log.debug("Creating account for user ID: {}", userId);
-
-        User user = userService.getUserById(userId);
-        Account account = accountFactory.createAccount(user);
-        return accountRepository.save(account);
+        int attempts = 0;
+        
+        while (attempts < MAX_RETRIES) {
+            try {
+                // Używamy blokady pesymistycznej do pobrania i aktualizacji użytkownika
+                User user = userService.getUserByIdWithPessimisticLock(userId);
+                Account account = accountFactory.createAccount(user);
+                account = accountRepository.save(account);
+                user = userService.save(user); // Zapisujemy zaktualizowany accountCounter
+                return account;
+            } catch (Exception e) {
+                attempts++;
+                if (attempts == MAX_RETRIES) {
+                    log.error("Failed to create account after {} retries for user ID: {}", MAX_RETRIES, userId, e);
+                    throw e;
+                }
+                log.warn("Attempt {} failed, retrying after delay. User ID: {}", attempts, userId, e);
+                try {
+                    Thread.sleep(RETRY_DELAY_MS * attempts);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Interrupted while waiting to retry", ie);
+                }
+            }
+        }
+        
+        // This should never be reached due to the throw in the catch block
+        throw new RuntimeException("Unexpected error in create account retry loop");
     }
 
     @Override
