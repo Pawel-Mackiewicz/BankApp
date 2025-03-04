@@ -70,12 +70,12 @@ public class AccountController {
     /**
      * Creates a new bank account for a specified user.
      *
-     * @param request The request containing user ID for whom to create the account
+     * @param userId user ID for whom to create the account
      * @return ResponseEntity containing the newly created account
      */
-    @PostMapping
-    public ResponseEntity<Account> createAccount(@Valid @RequestBody CreateAccountRequest request) {
-        Account account = accountService.createAccount(request.getUserId());
+    @PostMapping("/createFor/{userId}")
+    public ResponseEntity<Account> createAccount(@PathVariable int userId) {
+        Account account = accountService.createAccount(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(account);
     }
 
