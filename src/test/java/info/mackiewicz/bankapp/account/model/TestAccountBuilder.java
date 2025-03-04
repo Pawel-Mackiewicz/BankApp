@@ -3,7 +3,6 @@ package info.mackiewicz.bankapp.account.model;
 import info.mackiewicz.bankapp.user.model.User;
 import org.iban4j.Iban;
 import java.math.BigDecimal;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 /**

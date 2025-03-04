@@ -2,7 +2,6 @@ package info.mackiewicz.bankapp.account.service.interfaces;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import jakarta.validation.constraints.Email;
