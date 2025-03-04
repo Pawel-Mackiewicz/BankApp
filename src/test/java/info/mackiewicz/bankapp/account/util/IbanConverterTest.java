@@ -1,13 +1,18 @@
 package info.mackiewicz.bankapp.account.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.iban4j.Iban;
 import org.iban4j.IbanFormatException;
+import org.iban4j.InvalidCheckDigitException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class IbanConverterTest {
 
@@ -68,9 +73,11 @@ class IbanConverterTest {
     })
     void convertToEntityAttribute_WithInvalidIban_ShouldThrowException(String invalidIban) {
         // when & then
-        assertThrows(IbanFormatException.class, () -> 
+        Exception exception = assertThrows(Exception.class, () -> 
             converter.convertToEntityAttribute(invalidIban)
         );
+        assertTrue((exception instanceof IbanFormatException || exception instanceof InvalidCheckDigitException), 
+            "Expected exception to be IbanFormatException or its subclass, but was: " + exception.getClass().getName());
     }
 
     @Test

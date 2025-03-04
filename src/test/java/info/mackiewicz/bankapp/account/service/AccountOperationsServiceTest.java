@@ -70,17 +70,18 @@ class AccountOperationsServiceTest {
     @Test
     void withdraw_WithValidAmount_ShouldDecreaseBalance() {
         // given
+        BigDecimal initialBalance = account.getBalance(); // 1000.00
         BigDecimal withdrawalAmount = new BigDecimal("500.00");
         BigDecimal expectedBalance = new BigDecimal("500.00");
         when(accountRepository.save(any(Account.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        doNothing().when(validationService).validateWithdrawal(account.getBalance(), withdrawalAmount);
+        doNothing().when(validationService).validateWithdrawal(initialBalance, withdrawalAmount);
 
         // when
         Account updatedAccount = operationsService.withdraw(account, withdrawalAmount);
 
         // then
         assertEquals(expectedBalance, updatedAccount.getBalance());
-        verify(validationService).validateWithdrawal(account.getBalance(), withdrawalAmount);
+        verify(validationService).validateWithdrawal(initialBalance, withdrawalAmount);
         verify(accountRepository).save(account);
     }
 

@@ -1,17 +1,26 @@
 package info.mackiewicz.bankapp.account.model;
 
-import info.mackiewicz.bankapp.user.model.User;
-import org.iban4j.Iban;
-import java.math.BigDecimal;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.List;
+
+import org.iban4j.Iban;
+
+import info.mackiewicz.bankapp.user.model.User;
 
 /**
  * Test utility class for building Account instances in test cases
  */
 public class TestAccountBuilder {
     
-    // Valid IBAN for testing purposes
-    private static final String TEST_IBAN = "PL66485112340000000000000000";
+    private static final List<String> TEST_IBANS = List.of(
+        "PL66485112340000000000000000",
+        "PL52485112340000170000000001",
+        "PL65485112340000340000000001",
+        "PL78485112340000510000000001"
+    );
+    private static int currentIbanIndex = 0;
     
     public static Account createTestAccount() {
         return createTestAccountWithBalance(BigDecimal.ZERO);
@@ -21,7 +30,6 @@ public class TestAccountBuilder {
         try {
             Account account = new Account();
             setField(account, "balance", balance);
-            setField(account, "iban", Iban.valueOf(TEST_IBAN));
             return account;
         } catch (Exception e) {
             throw new RuntimeException("Failed to create test account", e);
@@ -31,13 +39,27 @@ public class TestAccountBuilder {
     public static Account createTestAccountWithId(Integer id) {
         Account account = createTestAccount();
         setField(account, "id", id);
+        String iban = getNextIban();
+        setField(account, "iban", Iban.valueOf(iban));
         return account;
     }
     
     public static Account createTestAccountWithOwner(User owner) {
         Account account = createTestAccount();
+        String iban = getNextIban();
+        setField(account, "iban", Iban.valueOf(iban));
         setField(account, "owner", owner);
+        if (owner.getAccounts() == null) {
+            owner.setAccounts(new HashSet<>());
+        }
+        owner.getAccounts().add(account);
         return account;
+    }
+    
+    private static String getNextIban() {
+        String iban = TEST_IBANS.get(currentIbanIndex);
+        currentIbanIndex = (currentIbanIndex + 1) % TEST_IBANS.size();
+        return iban;
     }
     
     public static void setField(Account account, String fieldName, Object value) {
@@ -51,9 +73,9 @@ public class TestAccountBuilder {
     }
 
     /**
-     * Returns the valid test IBAN string
+     * Returns a valid test IBAN string
      */
     public static String getTestIban() {
-        return TEST_IBAN;
+        return getNextIban();
     }
 }

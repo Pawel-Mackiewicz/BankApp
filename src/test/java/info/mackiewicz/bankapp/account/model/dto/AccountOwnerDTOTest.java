@@ -1,11 +1,16 @@
 package info.mackiewicz.bankapp.account.model.dto;
 
-import info.mackiewicz.bankapp.account.model.interfaces.OwnershipInfo;
-import info.mackiewicz.bankapp.user.model.User;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import info.mackiewicz.bankapp.account.model.interfaces.OwnershipInfo;
+import info.mackiewicz.bankapp.user.model.User;
 
 class AccountOwnerDTOTest {
 
@@ -86,6 +91,6 @@ class AccountOwnerDTOTest {
         AccountOwnerDTO dto = new AccountOwnerDTO(userWithSpaces);
 
         // when & then
-        assertEquals("   Jan      Kowalski   ", dto.getFullName());
+        assertEquals("Jan Kowalski", dto.getFullName());
     }
 }

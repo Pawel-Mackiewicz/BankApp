@@ -29,6 +29,7 @@ class AccountValidationServiceTest {
         user.setId(1);
         user.setFirstname("Jan");
         user.setLastname("Kowalski");
+        user.setAccounts(new HashSet<>());
     }
 
     @Test
@@ -72,10 +73,11 @@ class AccountValidationServiceTest {
         // given
         Set<Account> accounts = new HashSet<>();
         for (int i = 0; i < 3; i++) {
-            accounts.add(TestAccountBuilder.createTestAccountWithOwner(user));
+            Account account = TestAccountBuilder.createTestAccountWithOwner(user);
+            accounts.add(account);
         }
         user.setAccounts(accounts);
-
+        
         // when & then
         Exception exception = assertThrows(IllegalArgumentException.class, 
             () -> validationService.validateNewAccountOwner(user));

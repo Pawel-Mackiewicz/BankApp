@@ -1,15 +1,20 @@
 package info.mackiewicz.bankapp.account.model;
 
-import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
-import info.mackiewicz.bankapp.user.model.User;
-import org.iban4j.Iban;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.iban4j.Iban;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
+import info.mackiewicz.bankapp.user.model.User;
 
 class AccountTest {
 
@@ -67,10 +72,12 @@ class AccountTest {
     void toString_ShouldReturnCorrectFormat() {
         // when
         String accountString = account1.toString();
+        String expectedFormat = String.format("Account IBAN #%s [balance = %.2f]", 
+            account1.getIban().toFormattedString(), 
+            account1.getBalance().doubleValue());
 
         // then
-        assertTrue(accountString.contains(account1.getIban().toFormattedString()));
-        assertTrue(accountString.contains(account1.getBalance()));
+        assertEquals(expectedFormat, accountString);
     }
 
     @Test
