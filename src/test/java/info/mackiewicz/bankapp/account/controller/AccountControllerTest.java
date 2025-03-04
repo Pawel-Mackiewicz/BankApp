@@ -17,18 +17,14 @@ import org.iban4j.Iban;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
-import info.mackiewicz.bankapp.account.model.dto.CreateAccountRequest;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.config.TestConfig;
 import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
@@ -41,10 +37,7 @@ class AccountControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean
+    @MockitoBean
     private AccountService accountService;
 
     private Account createTestAccount(int id) {
@@ -149,18 +142,14 @@ class AccountControllerTest {
 
     @Test
     @WithMockUser
-    void createAccount_WithValidRequest_ShouldReturnCreatedAccount() throws Exception {
+    void createAccount_WithUserId_ShouldReturnCreatedAccount() throws Exception {
         // given
-        CreateAccountRequest request = new CreateAccountRequest();
-        request.setUserId(1);
         Account createdAccount = createTestAccount(1);
         when(accountService.createAccount(1)).thenReturn(createdAccount);
 
         // when & then
-        mockMvc.perform(post("/api/accounts")
-                .with(SecurityMockMvcRequestPostProcessors.csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+        mockMvc.perform(post("/api/accounts/createFor/1")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1));
     }

@@ -8,14 +8,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.model.dto.CreateAccountRequest;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -61,6 +58,7 @@ public class AccountController {
      * @return ResponseEntity containing a list of accounts owned by the person
      * @throws info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException if no accounts found
      */
+    //GET /api/accounts/owner/{pesel}
     @GetMapping("/owner/{pesel}")
     public ResponseEntity<List<Account>> getAccountsByOwnerPesel(@PathVariable String pesel) {
         List<Account> accounts = accountService.getAccountsByOwnersPESEL(pesel);
@@ -69,10 +67,12 @@ public class AccountController {
 
     /**
      * Creates a new bank account for a specified user.
+     * Endpoint: POST /api/accounts/createFor/{userId}
      *
      * @param userId user ID for whom to create the account
      * @return ResponseEntity containing the newly created account
      */
+    //POST /api/accounts/createFor/{userId}
     @PostMapping("/createFor/{userId}")
     public ResponseEntity<Account> createAccount(@PathVariable int userId) {
         Account account = accountService.createAccount(userId);
