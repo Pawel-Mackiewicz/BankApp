@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 public class TestAccountBuilder {
     
     // Valid IBAN for testing purposes
-    private static final String TEST_IBAN = "PL34109010140000071219812874";
+    private static final String TEST_IBAN = "PL66485112340000000000000000";
     
     public static Account createTestAccount() {
         return createTestAccountWithBalance(BigDecimal.ZERO);

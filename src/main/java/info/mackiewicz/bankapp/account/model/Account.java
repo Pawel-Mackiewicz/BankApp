@@ -112,7 +112,7 @@ public class Account {
      */
     @Override
     public String toString() {
-        return String.format("Account #%d [balance = %.2f]", userAccountNumber, balance);
+        return String.format("Account IBAN #%s [balance = %.2f]", iban.toFormattedString(), balance);
     }
 
     /**

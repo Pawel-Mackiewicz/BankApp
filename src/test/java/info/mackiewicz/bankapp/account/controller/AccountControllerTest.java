@@ -1,34 +1,37 @@
 package info.mackiewicz.bankapp.account.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import info.mackiewicz.bankapp.config.TestConfig;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
-import org.iban4j.Iban;
 import info.mackiewicz.bankapp.account.model.dto.CreateAccountRequest;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
+import org.iban4j.Iban;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AccountController.class)
+@Import(TestConfig.class)
 class AccountControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -59,7 +62,7 @@ class AccountControllerTest {
 
         // when & then
         mockMvc.perform(get("/api/accounts/1"))
-                .andExpect(status().isOk())
+                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.owner.fullName").value("Jan Kowalski"));
     }
@@ -136,6 +139,7 @@ class AccountControllerTest {
 
         // when & then
         mockMvc.perform(post("/api/accounts")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -148,7 +152,8 @@ class AccountControllerTest {
         doNothing().when(accountService).deleteAccountById(1);
 
         // when & then
-        mockMvc.perform(delete("/api/accounts/1"))
+        mockMvc.perform(delete("/api/accounts/1")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().isNoContent());
     }
 
@@ -159,7 +164,8 @@ class AccountControllerTest {
                 .when(accountService).deleteAccountById(999);
 
         // when & then
-        mockMvc.perform(delete("/api/accounts/999"))
+        mockMvc.perform(delete("/api/accounts/999")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().isNotFound());
     }
 }

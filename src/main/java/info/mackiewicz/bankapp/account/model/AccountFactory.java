@@ -32,6 +32,9 @@ public class AccountFactory {
      * @throws IllegalArgumentException if the user cannot own a new account
      */
     public Account createAccount(User owner) {
+        if (owner == null) {
+            throw new NullPointerException("Owner cannot be null");
+        }
         validationService.validateNewAccountOwner(owner);
         Integer userAccountNumber = owner.getNextAccountNumber();
         String iban = IbanGenerator.generateIban(owner.getId(), userAccountNumber);

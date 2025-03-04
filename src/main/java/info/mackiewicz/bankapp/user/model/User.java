@@ -163,6 +163,8 @@ public class User implements UserDetails {
     }
 
     public String getFullName() {   
-        return firstname + " " + lastname;
+        String first = firstname == null ? "" : firstname.trim();
+        String last = lastname == null ? "" : lastname.trim();
+        return first + " " + last;
     }
 }

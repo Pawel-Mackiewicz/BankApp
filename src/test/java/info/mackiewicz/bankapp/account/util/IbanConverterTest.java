@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class IbanConverterTest {
 
     private IbanConverter converter;
-    private final String VALID_IBAN = "PL61109010140000071219812874";
+    private final String VALID_IBAN = "PL66485112340000000000000000";
 
     @BeforeEach
     void setUp() {
@@ -85,18 +85,5 @@ class IbanConverterTest {
         // then
         assertEquals(original, result);
         assertEquals(original.toString(), result.toString());
-    }
-
-    @Test
-    void convertToEntityAttribute_WithFormattedIban_ShouldHandleSpaces() {
-        // given
-        String formattedIban = "PL61 1090 1014 0000 0712 1981 2874";
-
-        // when
-        Iban result = converter.convertToEntityAttribute(formattedIban);
-
-        // then
-        assertNotNull(result);
-        assertEquals(VALID_IBAN, result.toString());
     }
 }

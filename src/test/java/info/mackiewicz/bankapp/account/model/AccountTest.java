@@ -16,8 +16,8 @@ class AccountTest {
     private Account account1;
     private Account account2;
     private User owner;
-    private final String IBAN1 = "PL61109010140000071219812874";
-    private final String IBAN2 = "PL61109010140000071219812875";
+    private final String IBAN1 = "PL52485112340000170000000001";
+    private final String IBAN2 = "PL65485112340000340000000001";
 
     @BeforeEach
     void setUp() {
@@ -69,8 +69,8 @@ class AccountTest {
         String accountString = account1.toString();
 
         // then
-        assertTrue(accountString.contains(account1.getUserAccountNumber().toString()));
-        assertTrue(accountString.contains(account1.getBalance().toString()));
+        assertTrue(accountString.contains(account1.getIban().toFormattedString()));
+        assertTrue(accountString.contains(account1.getBalance()));
     }
 
     @Test
