@@ -36,9 +36,10 @@ public class AccountFactory {
         
         // Log the current state before account creation
         System.out.println("DEBUG - Starting account creation for user: " + owner.getId());
-        System.out.println("DEBUG - Current nextAccountNumber: " + owner.getNextAccountNumber());
         
+        // Get next account number
         Integer userAccountNumber = owner.getNextAccountNumber();
+        System.out.println("DEBUG - Got account number: " + userAccountNumber);
         String iban = IbanGenerator.generateIban(owner.getId(), userAccountNumber);
         
         System.out.println("DEBUG - Generated IBAN: " + iban + " for accountNumber: " + userAccountNumber);

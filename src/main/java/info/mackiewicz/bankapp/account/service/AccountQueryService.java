@@ -68,12 +68,12 @@ class AccountQueryService {
     }
 
     Account findAccountByIban(String iban) {
-
-        return accountRepository.findByIban(iban)
-                .orElseThrow(() -> new AccountNotFoundByIbanException("Account with IBAN " + iban + " not found."));
+        return findAccountByIban(Iban.valueOf(iban));
     }
 
     Account findAccountByIban(Iban iban) {
-        return findAccountByIban(iban.toString());
+        log.debug("Finding account by IBAN: {}", iban.toFormattedString());
+        return accountRepository.findByIban(iban)
+        .orElseThrow(() -> new AccountNotFoundByIbanException("Account with IBAN " + iban.toFormattedString() + " not found."));
     }
 }

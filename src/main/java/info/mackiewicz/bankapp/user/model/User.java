@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,7 @@ import info.mackiewicz.bankapp.account.model.Account;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,7 +36,6 @@ import lombok.Data;
 @Table(name = "users")
 public class User implements UserDetails {
 
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -76,7 +77,7 @@ public class User implements UserDetails {
     private boolean enabled;
 
     @Column(name = "account_counter")
-    private Integer accountCounter = 0;
+    private Integer accountCounter;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -99,13 +100,13 @@ public class User implements UserDetails {
     }
 
     public synchronized Integer getNextAccountNumber() {
-        accountCounter++;
-        return accountCounter;
+        return ++accountCounter;
     }
 
     private void addDefaultRole() {
         roles.add("ROLE_USER");
     }
+
     @JsonProperty
     public void setPassword(String password) {
         this.password = password;
@@ -113,12 +114,14 @@ public class User implements UserDetails {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         User user = (User) o;
         return Objects.equals(id, user.id) && Objects.equals(PESEL, user.PESEL);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(id, PESEL);
@@ -145,7 +148,7 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return !expired;
     }
-    
+
     @Override
     public boolean isEnabled() {
         return enabled;
@@ -154,15 +157,15 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return "User(id=" + id +
-               ", PESEL=" + PESEL +
-               ", firstname=" + firstname +
-               ", lastname=" + lastname +
-               ", username=" + username +
-               ", email=" + email +
-               ")";
+                ", PESEL=" + PESEL +
+                ", firstname=" + firstname +
+                ", lastname=" + lastname +
+                ", username=" + username +
+                ", email=" + email +
+                ")";
     }
 
-    public String getFullName() {   
+    public String getFullName() {
         String first = firstname == null ? "" : firstname.trim();
         String last = lastname == null ? "" : lastname.trim();
         return first + " " + last;

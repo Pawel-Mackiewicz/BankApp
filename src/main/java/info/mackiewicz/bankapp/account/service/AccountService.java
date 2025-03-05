@@ -98,6 +98,7 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     public Account findAccountByIban(String iban) {
+        log.debug("inside AccountService findAccountByIban");
         return accountQueryService.findAccountByIban(iban);
     }
 
