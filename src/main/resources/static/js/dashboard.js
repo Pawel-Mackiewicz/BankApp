@@ -192,29 +192,65 @@ document.addEventListener('DOMContentLoaded', function() {
     function validateAmount(input) {
         const amount = parseFloat(input.value);
         const form = input.closest('form');
-        let sourceAccountSelect = form.querySelector('select[id$="SourceAccountId"]') || 
+        let sourceAccountSelect = form.querySelector('select[id$="SourceAccountId"]') ||
                                 form.querySelector('select[name="sourceIban"]');
         
-        const selectedOption = sourceAccountSelect.selectedOptions[0];
-        
-        if (!selectedOption.value) {
+        // Validate if source account is selected
+        if (!sourceAccountSelect || !sourceAccountSelect.value) {
             setInvalid(input, 'Please select source account first');
             return false;
         }
 
-        const balance = parseFloat(selectedOption.textContent.match(/Balance: ([\d,.]+)/)[1].replace(',', ''));
+        const selectedOption = sourceAccountSelect.selectedOptions[0];
+        if (!selectedOption) {
+            setInvalid(input, 'Invalid source account selection');
+            return false;
+        }
+
+        // Extract and parse balance
+        const balanceMatch = selectedOption.textContent.match(/Balance: ([\d,.]+)/);
+        if (!balanceMatch) {
+            console.error('Could not find balance in account text:', selectedOption.textContent);
+            setInvalid(input, 'Error reading account balance');
+            return false;
+        }
+
+        const balance = parseFloat(balanceMatch[1].replace(/,/g, '')); // Handle multiple commas in balance
         
-        if (isNaN(amount) || amount <= 0) {
+        // Validate amount format
+        if (!input.value.trim()) {
+            setInvalid(input, 'Amount is required');
+            return false;
+        }
+
+        if (isNaN(amount)) {
+            setInvalid(input, 'Please enter a valid number');
+            return false;
+        }
+
+        // Validate amount value
+        if (amount <= 0) {
             setInvalid(input, 'Amount must be greater than 0');
             return false;
         }
 
+        if (amount > 1000000) {
+            setInvalid(input, 'Maximum transfer amount is 1,000,000 PLN');
+            return false;
+        }
+
+        // Validate against balance
         if (amount > balance) {
-            setInvalid(input, 'Insufficient funds');
+            const formattedBalance = new Intl.NumberFormat('pl-PL', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(balance);
+            setInvalid(input, `Insufficient funds. Available balance: ${formattedBalance} PLN`);
             return false;
         }
 
         setValid(input);
+        console.log('Amount validation passed:', { amount, balance });
         return true;
     }
 
@@ -284,9 +320,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const inputs = form.querySelectorAll ? form.querySelectorAll('input, select') : [form];
         inputs.forEach(input => {
             input.classList.remove('is-valid', 'is-invalid');
-            const feedback = input.nextElementSibling;
+            
+            // First try to find invalid-feedback in input-group
+            const inputGroup = input.closest('.input-group') || input.parentElement;
+            let feedback = inputGroup.querySelector('.invalid-feedback');
+            
+            // If not found in input-group, try next sibling
+            if (!feedback) {
+                feedback = input.nextElementSibling;
+            }
+            
             if (feedback && feedback.classList.contains('invalid-feedback')) {
                 feedback.style.display = 'none';
+                feedback.style.visibility = 'hidden';
+                feedback.style.opacity = '0';
+                feedback.textContent = '';
             }
         });
     }
@@ -294,19 +342,46 @@ document.addEventListener('DOMContentLoaded', function() {
     function setValid(input) {
         input.classList.remove('is-invalid');
         input.classList.add('is-valid');
-        const feedback = input.nextElementSibling;
+        
+        // First try to find invalid-feedback in input-group
+        const inputGroup = input.closest('.input-group') || input.parentElement;
+        let feedback = inputGroup.querySelector('.invalid-feedback');
+        
+        // If not found in input-group, try next sibling
+        if (!feedback) {
+            feedback = input.nextElementSibling;
+        }
+        
         if (feedback && feedback.classList.contains('invalid-feedback')) {
             feedback.style.display = 'none';
+            feedback.style.visibility = 'hidden';
+            feedback.style.opacity = '0';
         }
     }
 
     function setInvalid(input, message) {
         input.classList.remove('is-valid');
         input.classList.add('is-invalid');
-        const feedback = input.nextElementSibling;
+        
+        // First try to find invalid-feedback in input-group
+        const inputGroup = input.closest('.input-group') || input.parentElement;
+        let feedback = inputGroup.querySelector('.invalid-feedback');
+        
+        // If not found in input-group, try next sibling
+        if (!feedback) {
+            feedback = input.nextElementSibling;
+        }
+        
         if (feedback && feedback.classList.contains('invalid-feedback')) {
             feedback.textContent = message;
             feedback.style.display = 'block';
+            feedback.style.visibility = 'visible';
+            feedback.style.opacity = '1';
+            
+            // Add some spacing for better visibility
+            feedback.style.marginTop = '0.25rem';
+        } else {
+            console.error('No invalid-feedback element found for:', input);
         }
     }
 
