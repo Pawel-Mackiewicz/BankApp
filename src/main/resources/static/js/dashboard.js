@@ -478,7 +478,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             const accountNumber = card.querySelector('h3 span').textContent;
                             const balance = card.querySelector('.details div span').textContent;
                             const iban = card.querySelector('.iban-text').getAttribute('data-iban');
-                            return { accountNumber, balance, iban };
+                            const id = card.getAttribute('data-id');
+                            return { accountNumber, balance, iban, id };
                         });
                         
                         // Update all source account selects in transfer forms
@@ -489,12 +490,18 @@ document.addEventListener('DOMContentLoaded', function() {
                                 let options = '<option value="">Select account</option>';
                                 
                                 accountData.forEach(account => {
-                                    const value = formType === 'own' ?
-                                        select.querySelector(`option[data-account-number="${account.accountNumber}"]`)?.value :
-                                        account.iban;
+                                    console.log('Processing account:', {
+                                        formType,
+                                        accountNumber: account.accountNumber,
+                                        iban: account.iban
+                                    });
+                                    
+                                    // For own transfers use account ID, for others use IBAN
+                                    const value = formType === 'own' ? account.id : account.iban;
+
                                     if (value) {
                                         const text = `Account ${account.accountNumber} - ${account.iban.replace(/(.{4})/g, '$1 ')} (Balance: ${account.balance})`;
-                                        options += `<option value="${value}" data-account-number="${account.accountNumber}" ${value === selectedValue ? 'selected' : ''}>${text}</option>`;
+                                        options += `<option value="${value}" ${value === selectedValue ? 'selected' : ''}>${text}</option>`;
                                     }
                                 });
                                 

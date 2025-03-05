@@ -67,7 +67,7 @@
         <div th:if="${#lists.isEmpty(dashboard.accounts)}" class="alert alert-info">
             <p>No accounts found. Create your first account!</p>
         </div>
-        <div th:each="account : ${dashboard.accounts}" class="account-card">
+        <div th:each="account : ${dashboard.accounts}" class="account-card" th:attr="data-id=${account.id}">
             <h3>Account #<span th:text="${account.userAccountNumber}">Number</span></h3>
             <div class="details">
                 <div>Balance: <span th:text="${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT') + ' ' + dashboard.currency}">0.00 PLN</span></div>
