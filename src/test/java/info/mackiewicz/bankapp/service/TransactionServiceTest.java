@@ -101,6 +101,12 @@ class TransactionServiceTest {
     @Test
     void testSaveTransaction() {
         logger.info("testSaveTransaction: Starting test");
+        
+        // Create test accounts
+        Account sourceAccount = TestAccountBuilder.createTestAccountWithId(1);
+        Account destinationAccount = TestAccountBuilder.createTestAccountWithId(2);
+        
+        // Create and set up transaction
         Transaction transaction = new Transaction();
         try {
             Field idField = Transaction.class.getDeclaredField("id");
@@ -109,12 +115,18 @@ class TransactionServiceTest {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             fail("Failed to set transaction id using reflection: " + e.getMessage());
         }
+        
+        transaction.setSourceAccount(sourceAccount);
+        transaction.setDestinationAccount(destinationAccount);
+        transaction.setStatus(TransactionStatus.NEW);
 
         when(transactionRepository.save(transaction)).thenReturn(transaction);
 
         Transaction result = transactionService.createTransaction(transaction);
 
         assertEquals(transaction.getId(), result.getId());
+        assertEquals(sourceAccount, result.getSourceAccount());
+        assertEquals(destinationAccount, result.getDestinationAccount());
         logger.info("testSaveTransaction: Test passed");
     }
 

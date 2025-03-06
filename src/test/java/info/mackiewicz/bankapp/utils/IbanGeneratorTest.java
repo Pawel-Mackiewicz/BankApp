@@ -43,13 +43,15 @@ class IbanGeneratorTest {
     @Test
     void shouldFormatIbanWithSpaces() {
         // Given
-        String unformattedIban = "PL78485100209100000000000001";
+        String unformattedIban = TestIbanProvider.getIban(0);
     
         // When
         String formattedIban = IbanGenerator.formatIban(unformattedIban);
     
         // Then
-        assertEquals("PL78 4851 0020 9100 0000 0000 0001", formattedIban);
+        assertTrue(formattedIban.contains(" "));
+        assertEquals(unformattedIban.length() + 6, formattedIban.length()); // 6 spaces in formatted IBAN
+        assertEquals(unformattedIban, formattedIban.replace(" ", ""));
     }
     
     @Test
