@@ -1,11 +1,8 @@
 package info.mackiewicz.bankapp.account.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.model.AccountFactory;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.service.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.DecimalMin;
@@ -24,11 +21,9 @@ import java.util.List;
 public class AccountService implements AccountServiceInterface {
 
     private final AccountRepository accountRepository;
-    private final UserService userService;
     private final AccountOperationsService accountOperationsService;
     private final AccountQueryService accountQueryService;
-    private final AccountValidationService validationService;
-    private final AccountFactory accountFactory;
+    private final AccountCreationService accountCreationService;
 
     /**
      * Creates a new account for the specified user.
@@ -44,19 +39,8 @@ public class AccountService implements AccountServiceInterface {
     @Override
     @Transactional
     public Account createAccount(@NotNull Integer userId) {
-        log.debug("Starting account creation process for user ID: {}", userId);
-        
-        User owner = userService.getUserById(userId);
-        validationService.validateNewAccountOwner(owner);
-        
-        Account account = accountFactory.createAccountWithRetry(
-            () -> userService.getUserByIdWithPessimisticLock(userId),
-            userId
-        );
-        
-        Account savedAccount = accountRepository.save(account);
-        log.debug("Account created successfully with ID: {}", savedAccount.getId());
-        return savedAccount;
+        log.debug("Delegating account creation to AccountCreationService for user ID: {}", userId);
+        return accountCreationService.createAccount(userId);
     }
 
     @Override
