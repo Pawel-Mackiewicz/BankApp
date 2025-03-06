@@ -7,12 +7,12 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -112,7 +112,6 @@ public class TransactionService {
         processTransaction(transaction);
     }
 
-    @Async
     public void processAllNewTransactions() {
         log.info("Starting batch processing of new transactions");
         List<Transaction> transactions = getAllNewTransactions();

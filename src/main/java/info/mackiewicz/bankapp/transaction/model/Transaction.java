@@ -3,6 +3,8 @@ package info.mackiewicz.bankapp.transaction.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import info.mackiewicz.bankapp.account.model.Account;
@@ -65,6 +67,7 @@ public class Transaction {
         }
     }
 
+    @Transactional
     public boolean execute() {
         return strategy.execute(this);
     }
