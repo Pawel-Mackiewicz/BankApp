@@ -81,15 +81,6 @@ public class Account {
     }
 
     /**
-     * Creates a new AccountFactory instance.
-     * 
-     * @return A new instance of AccountFactory
-     */
-    public static AccountFactory factory() {
-        return new AccountFactory();
-    }
-
-    /**
      * Sets the balance of the account.
      * This method is protected by {@link AccountServiceAccessManager} and can only be called
      * from {@link info.mackiewicz.bankapp.account.service.AccountOperationsService}.
