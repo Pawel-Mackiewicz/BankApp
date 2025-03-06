@@ -18,19 +18,14 @@ public class AccountFactory {
     /**
      * Creates a standard bank account for the specified user.
      * <p>
-     * This method validates the owner, generates a unique account number and IBAN,
+     * This method generates a unique account number and IBAN,
      * and creates a new Account instance.
      * </p>
      *
      * @param owner The user who will own the account
      * @return A newly created Account instance
-     * @throws IllegalArgumentException if the user cannot own a new account
      */
     public Account createAccount(User owner) {
-        if (owner == null) {
-            throw new NullPointerException("Owner cannot be null");
-        }
-        
         log.debug("Starting account creation for user: {}", owner.getId());
         Integer userAccountNumber = owner.getNextAccountNumber();
         log.debug("Got account number: {} for user: {}", userAccountNumber, owner.getId());
