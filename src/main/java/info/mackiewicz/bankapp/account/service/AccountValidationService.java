@@ -49,12 +49,16 @@ class AccountValidationService {
      * @throws IllegalArgumentException if validation fails
      */
     void validateWithdrawal(BigDecimal balance, BigDecimal amount) {
+        log.debug("Validating withdrawal: balance={}, amount={}", balance, amount);
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            log.debug("Validation fail. Amount is null or not positive: {}", amount);
             throw new IllegalArgumentException("Amount must be positive");
         }
         if (balance.compareTo(amount) < 0) {
+            log.debug("Validation fail. Insufficient funds: balance={}, amount={}", balance, amount);
             throw new IllegalArgumentException("Insufficient funds for withdrawal");
         }
+        log.debug("Withdrawal validation successful");
     }
 
     /**
@@ -64,8 +68,11 @@ class AccountValidationService {
      * @throws IllegalArgumentException if validation fails
      */
     void validateDeposit(BigDecimal amount) {
+        log.debug("Validating deposit amount: {}", amount);
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            log.debug("Validation fail. Amount is null or not positive: {}", amount);
             throw new IllegalArgumentException("Amount must be positive");
         }
+        log.debug("Deposit validation successful");
     }
 }
