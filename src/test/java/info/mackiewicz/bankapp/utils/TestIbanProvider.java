@@ -43,7 +43,7 @@ public class TestIbanProvider {
      * Generates a new IBAN using IbanGenerator
      */
     public static String generateIban(int userId, int accountNumber) {
-        return IbanGenerator.generateIban(userId, accountNumber);
+        return IbanGenerator.generateIban(userId, accountNumber).toString();
     }
 
     /**

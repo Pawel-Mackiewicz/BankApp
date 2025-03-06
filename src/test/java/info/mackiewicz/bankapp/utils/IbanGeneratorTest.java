@@ -34,7 +34,7 @@ class IbanGeneratorTest {
         Integer accountCounter = 1;
     
         // When
-        String iban = IbanGenerator.generateIban(userId, accountCounter);
+        String iban = IbanGenerator.generateIban(userId, accountCounter).toString();
     
         // Then
         assertTrue(IbanValidationUtil.isValid(iban));
@@ -61,7 +61,7 @@ class IbanGeneratorTest {
         Integer accountCounter = 1;
     
         // When
-        String iban = IbanGenerator.generateIban(userId, accountCounter);
+        String iban = IbanGenerator.generateIban(userId, accountCounter).toString();
     
         // Then
         assertEquals(28, iban.length());
@@ -70,9 +70,9 @@ class IbanGeneratorTest {
     @Test
     void shouldGenerateUniqueIbansForDifferentAccounts() {
         // Given
-        String iban1 = IbanGenerator.generateIban(123, 1);
-        String iban2 = IbanGenerator.generateIban(123, 2);
-        String iban3 = IbanGenerator.generateIban(456, 1);
+        String iban1 = IbanGenerator.generateIban(123, 1).toString();
+        String iban2 = IbanGenerator.generateIban(123, 2).toString();
+        String iban3 = IbanGenerator.generateIban(456, 1).toString();
     
         // Then
         assertNotEquals(iban1, iban2);
