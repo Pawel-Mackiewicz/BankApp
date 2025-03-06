@@ -9,10 +9,13 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionBuilder;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class TransactionAssembler {
@@ -21,28 +24,44 @@ public class TransactionAssembler {
     private final TransactionBuilder transactionBuilder;
 
     public Transaction assembleExternalTransfer(TransferRequest request) {
+        log.info("Assembling external transfer from IBAN: {} to IBAN: {}, amount: {}",
+                request.getSourceIban(), request.getRecipientIban(), request.getAmount());
 
-        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban())
-                .orElseThrow(() -> new IllegalArgumentException("Source account not found"));
-        Account destinationAccount = accountService.findAccountByIban(request.getRecipientIban())
-                .orElseThrow(() -> new IllegalArgumentException("Destination account not found"));
+        log.debug("Finding source account by IBAN: {}", request.getSourceIban());
+        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban());
+        log.debug("Source account found: {}", sourceAccount.getId());
 
-        return transactionBuilder
+        log.debug("Finding destination account by IBAN: {}", request.getRecipientIban());
+        Account destinationAccount = accountService.findAccountByIban(request.getRecipientIban());
+        log.debug("Destination account found: {}", destinationAccount.getId());
+
+        log.debug("Building transaction with amount: {}", request.getAmount());
+        Transaction transaction = transactionBuilder
                 .withSourceAccount(sourceAccount)
                 .withDestinationAccount(destinationAccount)
                 .withAmount(new BigDecimal(request.getAmount()))
                 .withTransactionTitle(request.getTitle())
                 .withType(resolveTransactionType(request))
                 .build();
+        
+        log.info("External transfer transaction assembled successfully with ID: {}", transaction.getId());
+        return transaction;
     }
 
     public Transaction assembleInternalTransfer(InternalTransferRequest request) {
+        log.info("Assembling internal transfer from IBAN: {}, amount: {}",
+                request.getSourceIban(), request.getAmount());
 
-        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban())
-                .orElseThrow(() -> new IllegalArgumentException("Source account not found"));
+        log.debug("Finding source account by IBAN: {}", request.getSourceIban());
+        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban());
+        log.debug("Source account found: {}", sourceAccount.getId());
+
+        log.debug("Resolving destination account");
         Account destinationAccount = resolveDestinationAccount(request);
+        log.debug("Destination account resolved: {}", destinationAccount.getId());
 
-        return transactionBuilder
+        log.debug("Building transaction with amount: {}", request.getAmount());
+        Transaction transaction = transactionBuilder
                 .withSourceAccount(sourceAccount)
                 .withDestinationAccount(destinationAccount)
                 .withAmount(new BigDecimal(request.getAmount()))
@@ -50,42 +69,60 @@ public class TransactionAssembler {
                 .withType(resolveTransactionType(request))
                 .build();
 
+        log.info("Internal transfer transaction assembled successfully with ID: {}", transaction.getId());
+        return transaction;
     }
 
     public Transaction assembleOwnTransfer(OwnTransferRequest request) {
+        log.info("Assembling own transfer from account ID: {} to account ID: {}, amount: {}",
+                request.getSourceAccountId(), request.getDestinationAccountId(), request.getAmount());
 
+        log.debug("Finding source account by ID: {}", request.getSourceAccountId());
         Account sourceAccount = accountService.getAccountById(request.getSourceAccountId());
-        Account destinationAccount = accountService.getAccountById(request.getDestinationAccountId());
+        log.debug("Source account found: {}", sourceAccount.getId());
 
-        return transactionBuilder
+        log.debug("Finding destination account by ID: {}", request.getDestinationAccountId());
+        Account destinationAccount = accountService.getAccountById(request.getDestinationAccountId());
+        log.debug("Destination account found: {}", destinationAccount.getId());
+
+        log.debug("Building transaction with amount: {}", request.getAmount());
+        Transaction transaction = transactionBuilder
                 .withSourceAccount(sourceAccount)
                 .withDestinationAccount(destinationAccount)
                 .withAmount(new BigDecimal(request.getAmount()))
                 .withTransactionTitle(request.getTitle())
                 .withType(TransactionType.TRANSFER_OWN)
                 .build();
+
+        log.info("Own transfer transaction assembled successfully with ID: {}", transaction.getId());
+        return transaction;
     }
 
     private TransactionType resolveTransactionType(TransferRequest request) {
+        log.debug("Resolving transaction type for request with source IBAN: {}", request.getSourceIban());
         
-        //TODO: IMPLEMENT LOGIC WHEN TRANSACTION IS THROUGH EMAIL
         if (request.getRecipientIban() == null) {
+            log.debug("Recipient IBAN is null, resolving as TRANSFER_INTERNAL");
             return TransactionType.TRANSFER_INTERNAL;
         }
 
-        return request.getSourceIban().regionMatches(5, request.getRecipientIban(), 5, 20)
-                ? TransactionType.TRANSFER_OWN :
-                request.getTransactionType();
+        boolean isOwnTransfer = request.getSourceIban().regionMatches(5, request.getRecipientIban(), 5, 20);
+        TransactionType resolvedType = isOwnTransfer ? TransactionType.TRANSFER_OWN : request.getTransactionType();
+        log.debug("Transaction type resolved as: {}", resolvedType);
+        return resolvedType;
     }
 
     private Account resolveDestinationAccount(InternalTransferRequest request) {
-        
         if (request.getRecipientEmail() != null) {
-            return accountService.findAccountByOwnersEmail(request.getRecipientEmail())
-                    .orElseThrow(() -> new IllegalArgumentException("Destination account not found by email"));
+            log.debug("Resolving destination account by email: {}", request.getRecipientEmail());
+            Account account = accountService.findAccountByOwnersEmail(request.getRecipientEmail());
+            log.debug("Destination account found by email with ID: {}", account.getId());
+            return account;
         } else {
-            return accountService.findAccountByIban(request.getRecipientIban())
-                    .orElseThrow(() -> new IllegalArgumentException("Destination account not found by IBAN"));
+            log.debug("Resolving destination account by IBAN: {}", request.getRecipientIban());
+            Account account = accountService.findAccountByIban(request.getRecipientIban());
+            log.debug("Destination account found by IBAN with ID: {}", account.getId());
+            return account;
         }
     }
 }

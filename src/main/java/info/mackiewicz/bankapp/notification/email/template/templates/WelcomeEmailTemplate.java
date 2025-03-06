@@ -21,7 +21,7 @@ public class WelcomeEmailTemplate extends EmailTemplate {
             
             <p>Dear %s,</p>
             
-            <p>We're excited to have you join BankApp! We're here to help you manage your finances effectively.</p>
+            <p>We're excited to have you join BankApp! Your username is <strong>%s</strong>. We're here to help you manage your finances effectively.</p>
             
             <h2 class="header" style="font-size: 1.5em;">What's next?</h2>
             <ul>
@@ -39,7 +39,8 @@ public class WelcomeEmailTemplate extends EmailTemplate {
             
             <p style="margin-top: 30px;">Best regards,<br>The BankApp Team</p>
             """,
-            variables.get("userName")
+            variables.get("userName"),
+            variables.get("username")
         );
     }
 }

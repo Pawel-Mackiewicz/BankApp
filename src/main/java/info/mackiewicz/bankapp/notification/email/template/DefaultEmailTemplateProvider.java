@@ -24,9 +24,10 @@ public class DefaultEmailTemplateProvider implements EmailTemplateProvider {
     }
 
     @Override
-    public EmailContent getWelcomeEmail(String userName) {
+    public EmailContent getWelcomeEmail(String userName, String username) {
         TemplateVariables variables = TemplateVariables.builder()
             .withUserName(userName)
+            .withUsername(username)
             .build();
 
         return new EmailContent(
