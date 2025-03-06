@@ -15,14 +15,15 @@ import org.junit.jupiter.api.Test;
 
 import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.utils.TestIbanProvider;
 
 class AccountTest {
 
     private Account account1;
     private Account account2;
     private User owner;
-    private final String IBAN1 = "PL52485112340000170000000001";
-    private final String IBAN2 = "PL65485112340000340000000001";
+    private Iban testIban1;
+    private Iban testIban2;
 
     @BeforeEach
     void setUp() {
@@ -30,16 +31,20 @@ class AccountTest {
         owner.setId(1);
         owner.setFirstname("Jan");
         owner.setLastname("Kowalski");
+
+        // Initialize test IBANs
+        testIban1 = TestIbanProvider.getIbanObject(0);
+        testIban2 = TestIbanProvider.getIbanObject(1);
         
         account1 = TestAccountBuilder.createTestAccountWithOwner(owner);
-        TestAccountBuilder.setField(account1, "iban", Iban.valueOf(IBAN1));
+        TestAccountBuilder.setField(account1, "iban", testIban1);
         TestAccountBuilder.setField(account1, "id", 1);
         TestAccountBuilder.setField(account1, "userAccountNumber", 1001);
         TestAccountBuilder.setField(account1, "balance", new BigDecimal("1000.00"));
         TestAccountBuilder.setField(account1, "creationDate", LocalDateTime.now());
 
         account2 = TestAccountBuilder.createTestAccountWithOwner(owner);
-        TestAccountBuilder.setField(account2, "iban", Iban.valueOf(IBAN2));
+        TestAccountBuilder.setField(account2, "iban", testIban2);
         TestAccountBuilder.setField(account2, "id", 2);
         TestAccountBuilder.setField(account2, "userAccountNumber", 1002);
         TestAccountBuilder.setField(account2, "balance", new BigDecimal("2000.00"));
@@ -50,11 +55,12 @@ class AccountTest {
     void getFormattedIban_ShouldReturnFormattedIbanString() {
         // when
         String formattedIban = account1.getFormattedIban();
+        String unformattedIban = testIban1.toString();
 
         // then
         assertTrue(formattedIban.contains(" "));
-        assertEquals(IBAN1.length() + 6, formattedIban.length()); // 6 spaces in formatted IBAN
-        assertTrue(formattedIban.replace(" ", "").equals(IBAN1));
+        assertEquals(unformattedIban.length() + 6, formattedIban.length()); // 6 spaces in formatted IBAN
+        assertTrue(formattedIban.replace(" ", "").equals(unformattedIban));
     }
 
     @Test
@@ -137,7 +143,7 @@ class AccountTest {
     void getters_ShouldReturnCorrectValues() {
         // when & then
         assertEquals(1, account1.getId());
-        assertEquals(Iban.valueOf(IBAN1), account1.getIban());
+        assertEquals(testIban1, account1.getIban());
         assertEquals(1001, account1.getUserAccountNumber());
         assertEquals(new BigDecimal("1000.00"), account1.getBalance());
         assertNotNull(account1.getCreationDate());

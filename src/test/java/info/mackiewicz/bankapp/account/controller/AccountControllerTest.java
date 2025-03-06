@@ -30,6 +30,7 @@ import info.mackiewicz.bankapp.config.TestConfig;
 import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.utils.TestIbanProvider;
 
 @WebMvcTest(AccountController.class)
 @Import(TestConfig.class)
@@ -49,7 +50,7 @@ class AccountControllerTest {
         Account account = TestAccountBuilder.createTestAccountWithOwner(owner);
         TestAccountBuilder.setField(account, "id", id);
         TestAccountBuilder.setField(account, "userAccountNumber", 1001);
-        TestAccountBuilder.setField(account, "iban", Iban.valueOf("PL61109010140000071219812874"));
+        TestAccountBuilder.setField(account, "iban", TestIbanProvider.getIbanObject(0));
         return account;
     }
 

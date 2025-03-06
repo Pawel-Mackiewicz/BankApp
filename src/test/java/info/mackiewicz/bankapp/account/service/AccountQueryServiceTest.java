@@ -25,6 +25,7 @@ import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.utils.TestIbanProvider;
 
 @ExtendWith(MockitoExtension.class)
 class AccountQueryServiceTest {
@@ -49,8 +50,8 @@ class AccountQueryServiceTest {
         owner.setPESEL("12345678901");
 
         testAccount = TestAccountBuilder.createTestAccountWithOwner(owner);
-        String ibanNumber = "PL61109010140000071219812874";
-        TestAccountBuilder.setField(testAccount, "iban", Iban.valueOf(ibanNumber));
+        Iban testIban = TestIbanProvider.getIbanObject(0);
+        TestAccountBuilder.setField(testAccount, "iban", testIban);
         TestAccountBuilder.setField(testAccount, "id", 1);
     }
 
@@ -156,28 +157,28 @@ class AccountQueryServiceTest {
     @Test
     void findAccountByIban_WhenAccountExists_ShouldReturnAccount() {
         // given
-        String iban = "PL61109010140000071219812874";
-        when(accountRepository.findByIban(iban)).thenReturn(Optional.of(testAccount));
+        Iban testIban = TestIbanProvider.getIbanObject(0);
+        when(accountRepository.findByIban(testIban)).thenReturn(Optional.of(testAccount));
 
         // when
-        Account result = accountQueryService.findAccountByIban(iban);
+        Account result = accountQueryService.findAccountByIban(testIban.toString());
 
         // then
         assertNotNull(result);
         assertEquals(testAccount, result);
-        verify(accountRepository).findByIban(iban);
+        verify(accountRepository).findByIban(testIban);
     }
 
     @Test
     void findAccountByIban_WhenAccountDoesNotExist_ShouldThrowException() {
         // given
-        String iban = "PL61109010140000071219812875";
-        when(accountRepository.findByIban(iban)).thenReturn(Optional.empty());
+        Iban testIban = TestIbanProvider.getIbanObject(1);
+        when(accountRepository.findByIban(testIban)).thenReturn(Optional.empty());
 
         // when & then
-        assertThrows(AccountNotFoundByIbanException.class, 
-            () -> accountQueryService.findAccountByIban(iban));
-        verify(accountRepository).findByIban(iban);
+        assertThrows(AccountNotFoundByIbanException.class,
+            () -> accountQueryService.findAccountByIban(testIban.toString()));
+        verify(accountRepository).findByIban(testIban);
     }
 
     @Test
