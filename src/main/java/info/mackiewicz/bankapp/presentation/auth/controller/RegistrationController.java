@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.presentation.auth.controller;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.service.UserRegistrationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
