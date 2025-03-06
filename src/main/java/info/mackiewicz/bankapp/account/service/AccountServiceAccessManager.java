@@ -1,33 +1,38 @@
 package info.mackiewicz.bankapp.account.service;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * Klasa kontrolująca dostęp do wewnętrznych operacji konta.
- * Tylko AccountService może korzystać z tych operacji.
+ * Class controlling access to internal account operations.
+ * Only AccountService can use these operations.
  */
+@Slf4j
 @UtilityClass
 public final class AccountServiceAccessManager {
     
     private static final String ACCOUNT_OPERATIONS_SERVICE = AccountOperationsService.class.getName();
     /**
-     * Sprawdza, czy wywołanie pochodzi z dozwolonego pakietu.
-     * Używa StackTrace do weryfikacji pochodzenia wywołania.
+     * Checks if the call comes from an authorized package.
+     * Uses StackTrace to verify the origin of the call.
      */
     public static void checkServiceAccess() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         boolean authorized = false;
         
-        // Sprawdzamy, czy wywołanie pochodzi z pakietu service
-        for (int i = 2; i < stackTrace.length; i++) { // zaczynamy od 2, bo 0 to getStackTrace, 1 to checkServiceAccess
+        // Check if the call comes from the service package
+        for (int i = 2; i < stackTrace.length; i++) { // start from 2, because 0 is getStackTrace, 1 is checkServiceAccess
             String callerClass = stackTrace[i].getClassName();
             if (callerClass.equals(ACCOUNT_OPERATIONS_SERVICE)) {
                 authorized = true;
+                log.debug("Access authorized for caller: {}", callerClass);
                 break;
             }
         }
         
         if (!authorized) {
+            String caller = stackTrace.length > 2 ? stackTrace[2].getClassName() : "unknown";
+            log.warn("Unauthorized access attempt from class: {}", caller);
             throw new SecurityException("Unauthorized access to service operations");
         }
     }
