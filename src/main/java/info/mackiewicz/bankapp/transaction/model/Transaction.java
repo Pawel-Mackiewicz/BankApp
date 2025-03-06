@@ -74,7 +74,7 @@ public class Transaction {
         if (this.type == TransactionType.DEPOSIT) {
             return this.destinationAccount != null;
         } else {
-            return this.sourceAccount != null && this.sourceAccount.canWithdraw(this.amount);
+            return this.sourceAccount != null;
         }
     }
 
@@ -85,10 +85,10 @@ public class Transaction {
             return "Deposit";
         } else if (this.type == TransactionType.WITHDRAWAL) {
             return "Withdrawal";
-        } else if (this.destinationAccount.getOwnerId().equals(userId)) {  // If the transaction is a transfer and the user is the owner of the destination account, return the source account owner's username
-            return this.sourceAccount.getOwner().getUsername();
+        } else if (this.destinationAccount.getOwner().getId().equals(userId)) {  // If the transaction is a transfer and the user is the owner of the destination account, return the source account owner's username
+            return this.sourceAccount.getOwner().getFullName();
         } else {                                                           // If the transaction is a transfer and the user is the owner of the source account, return the destination account owner's username     
-            return this.destinationAccount.getOwner().getUsername();
+            return this.destinationAccount.getOwner().getFullName();
         }
     }
 }

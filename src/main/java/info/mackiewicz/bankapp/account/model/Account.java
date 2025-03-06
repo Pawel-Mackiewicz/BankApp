@@ -3,16 +3,18 @@ package info.mackiewicz.bankapp.account.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.concurrent.locks.ReentrantLock;
 
+import org.iban4j.Iban;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
-import info.mackiewicz.bankapp.account.util.IbanGenerator;
+import info.mackiewicz.bankapp.account.service.AccountServiceAccessManager;
+import info.mackiewicz.bankapp.account.util.IbanConverter;
 import info.mackiewicz.bankapp.user.model.User;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,106 +22,142 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor
+/**
+ * Entity representing a bank account in the system.
+ */
 @Entity
 @Table(name = "accounts")
 public class Account {
 
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Integer id;
+
+    @Getter
+    @Convert(converter = IbanConverter.class)
+    @Column(unique = true, nullable = false)
+    private Iban iban;
 
     @Getter
     @Column(name = "user_account_number", nullable = false)
     private Integer userAccountNumber;
 
     @Getter
-    @Setter
-    @Column(unique = true, nullable = false)
-    private String iban;
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
+
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 
     @Getter
     private BigDecimal balance;
 
-    @Getter
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
+    /**
+     * Default constructor for JPA.
+     */
+    Account() {
+    }
 
-    @Getter
-    @Setter
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "owner_id")
-    private User owner;
-
-    @Transient
-    private final ReentrantLock lock = new ReentrantLock();
-
-    public Account(User owner) {
-        this.owner = owner;
-        this.balance = BigDecimal.ZERO;
+    /**
+     * Creates a new account with specified owner, account number and IBAN.
+     * This constructor is package-private to enforce creation through
+     * AccountFactory.
+     *
+     * @param owner             The user who owns this account
+     * @param userAccountNumber The user-specific account number
+     * @param iban              The International Bank Account Number
+     */
+    Account(User owner, int userAccountNumber, Iban iban) {
         this.creationDate = LocalDateTime.now();
-        this.userAccountNumber = owner.getNextAccountNumber();  
+        this.balance = BigDecimal.ZERO;
+        this.owner = owner;
+        this.userAccountNumber = userAccountNumber;
+        this.iban = iban;
     }
 
-    @JsonProperty("owner")
-    public AccountOwnerDTO getOwnerDTO() {
-        return owner != null ? new AccountOwnerDTO(owner) : null;
+    /**
+     * Creates a new AccountFactory instance.
+     * 
+     * @return A new instance of AccountFactory
+     */
+    public static AccountFactory factory() {
+        return new AccountFactory();
     }
 
-    @JsonProperty("owner_id")
-    public Integer getOwnerId() {
-        return owner != null ? owner.getId() : null;
+    /**
+     * Sets the balance of the account.
+     * This method is protected by {@link AccountServiceAccessManager} and can only be called
+     * from {@link info.mackiewicz.bankapp.account.service.AccountOperationsService}.
+     * Any unauthorized access will result in a {@link SecurityException} being thrown.
+     *
+     * @param newBalance The new balance to set
+     * @throws SecurityException if called from an unauthorized context
+     */
+    public void setBalance(BigDecimal newBalance) {
+        AccountServiceAccessManager.checkServiceAccess();
+        this.balance = newBalance;
     }
 
-    public void lock() {
-        lock.lock();
+    /**
+     * Returns the IBAN in a formatted, human-readable form.
+     *
+     * @return The formatted IBAN string
+     */
+    public String getFormattedIban() {
+        return iban.toFormattedString();
     }
 
-    public void unlock() throws IllegalMonitorStateException {
-        lock.unlock();
+    /**
+     * Returns DTO with account owner's ID and full name.
+     *
+     * @return The owner's DTO
+     */
+    @JsonGetter("owner")
+    public AccountOwnerDTO getOwner() {
+        return new AccountOwnerDTO(owner);
     }
 
-    public void deposit(BigDecimal amount) {
-        balance = balance.add(amount);
-    }
 
-    public void withdraw(BigDecimal amount) {
-        balance = balance.subtract(amount);
-    }
-
-    public boolean canWithdraw(BigDecimal amount) {
-        return (balance.compareTo(amount) >= 0);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        Account account = (Account) o;
-        return Objects.equals(id, account.id) && balance.equals(account.balance);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Long.hashCode(id);
-        result = (31 * result) + (balance != null ? balance.hashCode() : 0);
-        return result;
-    }
-
+    /**
+     * Returns a string representation of this account.
+     *
+     * @return A string containing the account number and balance
+     */
     @Override
     public String toString() {
-        return String.format("Account #%d [balance = %.2f]", userAccountNumber, balance);
+        return String.format("Account IBAN #%s [balance = %.2f]", iban.toFormattedString(), balance);
     }
 
-    public String getFormattedIban() {
-        return IbanGenerator.formatIban(this.iban);
+    /**
+     * Compares this account to another object for equality.
+     * Two accounts are considered equal if they have the same ID or the same IBAN.
+     *
+     * @param o The object to compare with
+     * @return true if the objects are equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Account account = (Account) o;
+        return iban.equals(account.iban);
+    }
+
+    /**
+     * Returns a hash code value for this account.
+     * The hash code is based on the account ID and IBAN.
+     *
+     * @return A hash code value for this account
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(iban);
     }
 }

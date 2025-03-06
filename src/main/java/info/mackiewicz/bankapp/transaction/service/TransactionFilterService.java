@@ -59,9 +59,9 @@ public class TransactionFilterService {
                 .map(String::valueOf)
                 .map(id -> id.contains(query))
                 .orElse(false) ||
-                Optional.ofNullable(account.getOwner())
+                Optional.ofNullable(account.getOwner().getFullName())
                 .map(owner -> {
-                    String fullName = owner.getFullName().toLowerCase();
+                    String fullName = owner.toLowerCase();
                     return fullName.contains(query);
                 })
                 .orElse(false);

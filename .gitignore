@@ -12,6 +12,7 @@ BankApp.git/
 .clinerules-git-master
 .clinerules-ask
 .clinerules-code
+.memory-bank/
 
 # Database files
 *.db
@@ -64,3 +65,4 @@ key.pub
 release.properties
 pom.xml.releaseBackup
 update-dockerfile-version.sh
+

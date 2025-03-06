@@ -28,9 +28,11 @@ public class EmailService {
     /**
      * Sends welcome email to new user.
      * @param email recipient's email address
+     * @param fullNameOfUser full name of user for personalization
+     * @param username username of the user for personalization
      */
-    public void sendWelcomeEmail(String email, String fullNameOfUser) {
-        EmailContent content = templateProvider.getWelcomeEmail(fullNameOfUser);
+    public void sendWelcomeEmail(String email, String fullNameOfUser, String username) {
+        EmailContent content = templateProvider.getWelcomeEmail(fullNameOfUser, username);
         emailSender.send(email, content.subject(), content.htmlContent());
     }
 

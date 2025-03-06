@@ -1,10 +1,10 @@
 package info.mackiewicz.bankapp.user.controller;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
-import info.mackiewicz.bankapp.user.service.UserRegistrationService;
 import info.mackiewicz.bankapp.user.service.UserService;
 import info.mackiewicz.bankapp.user.validation.RequestValidator;
 import jakarta.validation.Valid;
