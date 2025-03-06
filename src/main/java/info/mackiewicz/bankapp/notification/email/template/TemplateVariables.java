@@ -48,6 +48,13 @@ public class TemplateVariables {
         }
 
         /**
+         * Common variable: Username
+         */
+        public Builder withUsername(String username) {
+            return with("username", username);
+        }
+
+        /**
          * Common variable: Reset password link
          */
         public Builder withResetLink(String resetLink) {

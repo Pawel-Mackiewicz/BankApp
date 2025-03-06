@@ -9,9 +9,10 @@ public interface EmailTemplateProvider {
     /**
      * Gets welcome email template.
      * @param userName user's name for personalization
+     * @param username user's username for personalization
      * @return email content and subject
      */
-    EmailContent getWelcomeEmail(String userName);
+    EmailContent getWelcomeEmail(String userName, String username);
 
     /**
      * Gets password reset email template.

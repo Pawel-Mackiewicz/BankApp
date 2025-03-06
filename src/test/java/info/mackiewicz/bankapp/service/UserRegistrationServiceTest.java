@@ -75,6 +75,7 @@ class UserRegistrationServiceTest {
         user.setLastname("Doe");
         user.setEmail("john.doe@example.com");
         user.setPassword("password");
+        user.setUsername("johndoe");
 
         Account userAccount = TestAccountBuilder.createTestAccount();
         TestAccountBuilder.setField(userAccount, "id", 1);
@@ -102,7 +103,7 @@ class UserRegistrationServiceTest {
         verify(userService).createUser(user);
         verify(accountService).createAccount(user.getId());
         verify(transactionService).createTransaction(any(Transaction.class));
-        verify(emailService).sendWelcomeEmail(anyString(), anyString());
+        verify(emailService).sendWelcomeEmail(anyString(), anyString(), anyString());
 
         logger.info("testRegisterUser: Test passed");
     }

@@ -55,7 +55,7 @@ public class UserRegistrationService {
 
         transactionService.createTransaction(transaction);
 
-        emailService.sendWelcomeEmail(createdUser.getEmail(), createdUser.getFullName());
+        emailService.sendWelcomeEmail(createdUser.getEmail(), createdUser.getFullName(), createdUser.getUsername());
 
         return createdUser;
     }
