@@ -80,10 +80,24 @@ public class Account {
         this.iban = iban;
     }
 
+    /**
+     * Creates a new AccountFactory instance.
+     * 
+     * @return A new instance of AccountFactory
+     */
     public static AccountFactory factory() {
         return new AccountFactory();
     }
 
+    /**
+     * Sets the balance of the account.
+     * This method is protected by {@link AccountServiceAccessManager} and can only be called
+     * from {@link info.mackiewicz.bankapp.account.service.AccountOperationsService}.
+     * Any unauthorized access will result in a {@link SecurityException} being thrown.
+     *
+     * @param newBalance The new balance to set
+     * @throws SecurityException if called from an unauthorized context
+     */
     public void setBalance(BigDecimal newBalance) {
         AccountServiceAccessManager.checkServiceAccess();
         this.balance = newBalance;
