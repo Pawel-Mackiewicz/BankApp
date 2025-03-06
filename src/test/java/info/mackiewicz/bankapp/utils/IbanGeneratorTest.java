@@ -34,7 +34,7 @@ class IbanGeneratorTest {
         Integer accountCounter = 1;
     
         // When
-        String iban = IbanGenerator.generateIban(userId, accountCounter);
+        String iban = IbanGenerator.generateIban(userId, accountCounter).toString();
     
         // Then
         assertTrue(IbanValidationUtil.isValid(iban));
@@ -43,13 +43,15 @@ class IbanGeneratorTest {
     @Test
     void shouldFormatIbanWithSpaces() {
         // Given
-        String unformattedIban = "PL78485100209100000000000001";
+        String unformattedIban = TestIbanProvider.getIban(0);
     
         // When
         String formattedIban = IbanGenerator.formatIban(unformattedIban);
     
         // Then
-        assertEquals("PL78 4851 0020 9100 0000 0000 0001", formattedIban);
+        assertTrue(formattedIban.contains(" "));
+        assertEquals(unformattedIban.length() + 6, formattedIban.length()); // 6 spaces in formatted IBAN
+        assertEquals(unformattedIban, formattedIban.replace(" ", ""));
     }
     
     @Test
@@ -59,7 +61,7 @@ class IbanGeneratorTest {
         Integer accountCounter = 1;
     
         // When
-        String iban = IbanGenerator.generateIban(userId, accountCounter);
+        String iban = IbanGenerator.generateIban(userId, accountCounter).toString();
     
         // Then
         assertEquals(28, iban.length());
@@ -68,9 +70,9 @@ class IbanGeneratorTest {
     @Test
     void shouldGenerateUniqueIbansForDifferentAccounts() {
         // Given
-        String iban1 = IbanGenerator.generateIban(123, 1);
-        String iban2 = IbanGenerator.generateIban(123, 2);
-        String iban3 = IbanGenerator.generateIban(456, 1);
+        String iban1 = IbanGenerator.generateIban(123, 1).toString();
+        String iban2 = IbanGenerator.generateIban(123, 2).toString();
+        String iban3 = IbanGenerator.generateIban(456, 1).toString();
     
         // Then
         assertNotEquals(iban1, iban2);

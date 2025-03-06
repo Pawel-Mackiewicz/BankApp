@@ -1,16 +1,21 @@
 package info.mackiewicz.bankapp.account.validation;
 
-import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
-import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import info.mackiewicz.bankapp.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
+import lombok.RequiredArgsConstructor;
 
+/**
+ * Controller responsible for handling validation-related requests.
+ * Provides endpoints for validating IBANs and checking email existence in the system.
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -18,6 +23,12 @@ public class ValidationController {
 
     private final AccountRepository accountRepository;
 
+    /**
+     * Validates the format of an IBAN (International Bank Account Number).
+     *
+     * @param iban The IBAN to validate
+     * @return ResponseEntity containing validation result and a message
+     */
     @GetMapping("/validate-iban")
     public ResponseEntity<Map<String, Object>> validateIban(@RequestParam String iban) {
         try {
@@ -34,10 +45,17 @@ public class ValidationController {
         }
     }
 
+    /**
+     * Validates if an email is associated with any existing account in the system.
+     * Checks both the email field and username field (which might contain an email).
+     *
+     * @param email The email address to validate
+     * @return ResponseEntity containing validation result and a message
+     */
     @GetMapping("/validate-email")
     public ResponseEntity<Map<String, Object>> validateEmail(@RequestParam String email) {
         try {
-            // Szukamy pierwszego konta dla użytkownika o podanym emailu
+            // Check if an account exists with the provided email
             boolean hasAccount = accountRepository.findFirstByOwner_email(email).isPresent();
             if (!hasAccount) {
                 // Try to find by username as email

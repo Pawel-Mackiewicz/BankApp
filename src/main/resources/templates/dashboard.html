@@ -32,7 +32,7 @@
 <!-- Main section -->
 <main>
     <!-- Column 1: Transaction History -->
-    <div class="column">
+    <div class="column recent-transactions">
         <h2>Recent Transactions</h2>
         <div th:if="${#lists.isEmpty(dashboard.recentTransactions)}" class="text-center mt-3">
             <p>No recent transactions</p>
@@ -55,9 +55,12 @@
     <div class="column account-summary">
         <h2>My Accounts</h2>
 
-        <!-- Account creation messages -->
+        <!-- Account messages -->
         <div th:if="${successMessage != null && successMessage.contains('account')}" class="alert alert-success">
             <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage != null && errorMessage.contains('account')}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
         </div>
 
         <!-- Account List -->
@@ -93,7 +96,7 @@
         <div th:if="${transferSuccessMessage != null}" class="alert alert-success mb-3">
             <p th:text="${transferSuccessMessage}"></p>
         </div>
-        <div th:if="${errorMessage}" class="alert alert-danger mb-3">
+        <div th:if="${errorMessage != null && errorMessage.contains('transaction')}" class="alert alert-danger">
             <p th:text="${errorMessage}"></p>
         </div>
         
@@ -144,8 +147,8 @@
                             <div class="input-group-append">
                                 <span class="input-group-text">PLN</span>
                             </div>
+                            <div class="invalid-feedback"></div>
                         </div>
-                        <div class="invalid-feedback"></div>
                     </div>
                     <div class="form-group">
                         <label for="ownTitle">Title:</label>
@@ -197,8 +200,8 @@
                             <div class="input-group-append">
                                 <span class="input-group-text">PLN</span>
                             </div>
+                            <div class="invalid-feedback"></div>
                         </div>
-                        <div class="invalid-feedback">Please enter a valid amount greater than 0</div>
                     </div>
                     <div class="form-group">
                         <label for="internalTitle">Title:</label>
@@ -234,12 +237,12 @@
                     <div class="form-group">
                         <label for="externalAmount">Amount:</label>
                         <div class="input-group">
-                            <input type="number" id="externalAmount" name="amount" class="form-control" step="1" min="0.01" required/>
+                            <input type="number" id="externalAmount" name="amount" class="form-control" step="0.01" min="0.01" required/>
                             <div class="input-group-append">
                                 <span class="input-group-text">PLN</span>
                             </div>
+                            <div class="invalid-feedback"></div>
                         </div>
-                        <div class="invalid-feedback"></div>
                     </div>
                     <div class="form-group">
                         <label for="externalTitle">Title:</label>
@@ -264,6 +267,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="/js/dashboard.js"></script>
+<script type="module" src="/js/dashboard.js"></script>
 </body>
 </html>

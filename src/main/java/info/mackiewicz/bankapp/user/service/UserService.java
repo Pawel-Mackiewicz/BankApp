@@ -54,6 +54,12 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
+    @Transactional
+    public User getUserByIdWithPessimisticLock(Integer id) {
+        return userRepository.findByIdWithPessimisticLock(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+    }
+
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)

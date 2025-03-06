@@ -60,12 +60,13 @@ const TransactionAPI = {
         TransactionUI.showLoadingSpinner();
 
         try {
-            const response = await fetch(this.buildUrl());
+            const url = this.buildUrl();
+            console.log('Requesting URL:', url);
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-
             TransactionState.totalElements = data.totalElements;
             
             if (!append) {
