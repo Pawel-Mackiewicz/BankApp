@@ -4,6 +4,7 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.AccountFactory;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
+import info.mackiewicz.bankapp.shared.util.RetryUtil;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
 import jakarta.transaction.Transactional;
@@ -32,38 +33,35 @@ public class AccountService implements AccountServiceInterface {
     private static final int MAX_RETRIES = 3;
     private static final long RETRY_DELAY_MS = 100;
 
+    /**
+     * Creates a new account for the specified user.
+     * <p>
+     * This method attempts to create an account and will retry if it fails,
+     * up to a maximum number of retries with increasing delays between attempts.
+     * </p>
+     *
+     * @param userId The ID of the user who will own the account
+     * @return The newly created account
+     * @throws RuntimeException if account creation fails after all retry attempts
+     */
     @Override
     @Transactional
     public Account createAccount(@NotNull Integer userId) {
         log.debug("Creating account for user ID: {}", userId);
-        int attempts = 0;
         
-        while (attempts < MAX_RETRIES) {
-            try {
-                // Używamy blokady pesymistycznej do pobrania i aktualizacji użytkownika
+        return RetryUtil.executeWithRetry(
+            () -> {
+                // Use pessimistic lock to fetch and update the user
                 User user = userService.getUserByIdWithPessimisticLock(userId);
                 Account account = accountFactory.createAccount(user);
                 account = accountRepository.save(account);
-                user = userService.save(user); // Zapisujemy zaktualizowany accountCounter
                 return account;
-            } catch (Exception e) {
-                attempts++;
-                if (attempts == MAX_RETRIES) {
-                    log.error("Failed to create account after {} retries for user ID: {}", MAX_RETRIES, userId, e);
-                    throw e;
-                }
-                log.warn("Attempt {} failed, retrying after delay. User ID: {}", attempts, userId, e);
-                try {
-                    Thread.sleep(RETRY_DELAY_MS * attempts);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    throw new RuntimeException("Interrupted while waiting to retry", ie);
-                }
-            }
-        }
-        
-        // This should never be reached due to the throw in the catch block
-        throw new RuntimeException("Unexpected error in create account retry loop");
+            },
+            MAX_RETRIES,
+            RETRY_DELAY_MS,
+            "create account",
+            "userId: " + userId
+        );
     }
 
     @Override
