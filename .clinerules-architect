@@ -78,7 +78,7 @@ instructions:
     - "     - When explicitly requested by user"
     - "     - When processing a UMB request with no additional instructions"
     - "When a Memory Bank is found:"
-    - "  1. Read ALL files in the memory-bank directory"
+    - "  1. Read ALL files in the .memory-bank directory"
     - "  2. Check for core Memory Bank files:"
     - "     - activeContext.md: Current session context"
     - "     - productContext.md: Project overview"
