@@ -1,11 +1,13 @@
 package info.mackiewicz.bankapp.account.model;
 
+import org.iban4j.Iban;
 import org.springframework.stereotype.Component;
 
 import info.mackiewicz.bankapp.account.service.AccountValidationService;
 import info.mackiewicz.bankapp.account.util.IbanGenerator;
 import info.mackiewicz.bankapp.user.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Factory responsible for creating Account objects.
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
  * and ensures all necessary validations are performed during account creation.
  * </p>
  */
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class AccountFactory {
@@ -35,14 +38,14 @@ public class AccountFactory {
         validationService.validateNewAccountOwner(owner);
         
         // Log the current state before account creation
-        System.out.println("DEBUG - Starting account creation for user: " + owner.getId());
+        log.debug("Starting account creation for user: {}", owner.getId());
         
         // Get next account number
         Integer userAccountNumber = owner.getNextAccountNumber();
-        System.out.println("DEBUG - Got account number: " + userAccountNumber);
-        String iban = IbanGenerator.generateIban(owner.getId(), userAccountNumber);
+        log.debug("Got account number: {} for user: {}", userAccountNumber, owner.getId());
         
-        System.out.println("DEBUG - Generated IBAN: " + iban + " for accountNumber: " + userAccountNumber);
+        Iban iban = IbanGenerator.generateIban(owner.getId(), userAccountNumber);
+        log.debug("Generated IBAN: {} for accountNumber: {}", iban, userAccountNumber);
         
         return new Account(owner, userAccountNumber, iban);
     }

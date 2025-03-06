@@ -72,12 +72,12 @@ public class Account {
      * @param userAccountNumber The user-specific account number
      * @param iban              The International Bank Account Number
      */
-    Account(User owner, int userAccountNumber, String iban) {
+    Account(User owner, int userAccountNumber, Iban iban) {
         this.creationDate = LocalDateTime.now();
         this.balance = BigDecimal.ZERO;
         this.owner = owner;
         this.userAccountNumber = userAccountNumber;
-        this.iban = Iban.valueOf(iban);
+        this.iban = iban;
     }
 
     public void setBalance(BigDecimal newBalance) {

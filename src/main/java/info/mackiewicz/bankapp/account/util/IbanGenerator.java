@@ -19,16 +19,15 @@ public class IbanGenerator {
      * @param userAccountNumber The sequential number of this account for the user
      * @return A String containing the generated IBAN
      */
-    public String generateIban(Integer userId, Integer userAccountNumber) {
+    public Iban generateIban(Integer userId, Integer userAccountNumber) {
         return new Iban.Builder()
                 .countryCode(CountryCode.PL)
                 .bankCode("485")
                 .branchCode("1123")
                 .nationalCheckDigit("4")
                 .accountNumber(generateAccountNumber(userId, userAccountNumber))
-                .build()
-                .toString();
-    }
+                .build();
+                }
 
     /**
      * Formats an IBAN string into the standard presentation format with spaces.
