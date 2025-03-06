@@ -80,6 +80,10 @@ public class Account {
         this.iban = iban;
     }
 
+    public static AccountFactory factory() {
+        return new AccountFactory();
+    }
+
     public void setBalance(BigDecimal newBalance) {
         AccountServiceAccessManager.checkServiceAccess();
         this.balance = newBalance;

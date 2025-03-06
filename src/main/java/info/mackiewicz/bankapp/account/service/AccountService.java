@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.account.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.model.AccountFactory;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.shared.util.RetryUtil;
@@ -26,9 +25,10 @@ public class AccountService implements AccountServiceInterface {
 
     private final AccountRepository accountRepository;
     private final UserService userService;
-    private final AccountFactory accountFactory;
     private final AccountOperationsService accountOperationsService;
     private final AccountQueryService accountQueryService;
+    private final AccountValidationService validationService;
+
 
     private static final int MAX_RETRIES = 3;
     private static final long RETRY_DELAY_MS = 100;
@@ -47,14 +47,19 @@ public class AccountService implements AccountServiceInterface {
     @Override
     @Transactional
     public Account createAccount(@NotNull Integer userId) {
+        User owner = userService.getUserById(userId);
+
+        log.debug("Validating account owner: {}", owner.getId());
+        validationService.validateNewAccountOwner(owner);
+
         log.debug("Creating account for user ID: {}", userId);
-        
         return RetryUtil.executeWithRetry(
             () -> {
                 // Use pessimistic lock to fetch and update the user
                 User user = userService.getUserByIdWithPessimisticLock(userId);
-                Account account = accountFactory.createAccount(user);
+                Account account = Account.factory().createAccount(user);
                 account = accountRepository.save(account);
+                log.debug("Account created successfully: {}", account.getId());
                 return account;
             },
             MAX_RETRIES,
