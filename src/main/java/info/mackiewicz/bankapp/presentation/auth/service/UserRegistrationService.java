@@ -1,11 +1,19 @@
-package info.mackiewicz.bankapp.user.service;
+package info.mackiewicz.bankapp.presentation.auth.service;
+
+import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 
+import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionBuilder;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -15,6 +23,9 @@ public class UserRegistrationService {
     private final UserService userService;
     private final UserMapper userMapper;
     private final AccountService accountService;
+    private final TransactionService transactionService;
+    private final TransactionBuilder transactionBuilder;
+    private final EmailService emailService;
 
     // Only allow letters (English and Polish)
     private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
@@ -32,7 +43,19 @@ public class UserRegistrationService {
         }
         
         User createdUser = userService.createUser(user);
-        accountService.createAccount(createdUser.getId());
+        Account newAccount = accountService.createAccount(createdUser.getId());
+        Account bankAccount = accountService.getAccountById(-1);
+
+        Transaction transaction = transactionBuilder.withSourceAccount(bankAccount)
+                .withDestinationAccount(newAccount)
+                .withType("TRANSFER_INTERNAL")
+                .withAmount(new BigDecimal(500))
+                .withTransactionTitle("Welcoming Bonus")
+                .build();
+
+        transactionService.createTransaction(transaction);
+
+        emailService.sendWelcomeEmail(createdUser.getEmail(), createdUser.getFullName());
 
         return createdUser;
     }

@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import org.iban4j.Iban;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import info.mackiewicz.bankapp.account.model.Account;
 
@@ -19,4 +17,5 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Optional<Account> findFirstByOwner_email(String email);
     
     Optional<Account> findByIban(Iban iban);
+
 }
