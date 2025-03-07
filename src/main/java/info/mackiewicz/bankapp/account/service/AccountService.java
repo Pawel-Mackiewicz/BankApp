@@ -3,7 +3,6 @@ package info.mackiewicz.bankapp.account.service;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
-import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -88,14 +89,14 @@ public class AccountService implements AccountServiceInterface {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Account deposit(Account account,
             @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
         return accountOperationsService.deposit(account, amount);
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Account withdraw(Account account,
             @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
         return accountOperationsService.withdraw(account, amount);
