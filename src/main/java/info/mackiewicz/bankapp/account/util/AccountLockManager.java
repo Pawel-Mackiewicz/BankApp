@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.account.util;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -104,10 +105,73 @@ public class AccountLockManager {
         }
     }
 
+    public static class AccountLockException extends RuntimeException {
+        private final Integer accountId;
+        private final int attempts;
+        private final long totalWaitTime;
+        private final boolean wasInterrupted;
+
+        public AccountLockException(String message, Integer accountId, int attempts, long totalWaitTime, boolean wasInterrupted) {
+            super(message);
+            this.accountId = accountId;
+            this.attempts = attempts;
+            this.totalWaitTime = totalWaitTime;
+            this.wasInterrupted = wasInterrupted;
+        }
+
+        public Integer getAccountId() { return accountId; }
+        public int getAttempts() { return attempts; }
+        public long getTotalWaitTime() { return totalWaitTime; }
+        public boolean wasInterrupted() { return wasInterrupted; }
+    }
+
     private void lockAccount(Account account) {
         log.debug("Acquiring lock for account ID: {}", account.getId());
-        getOrCreateLock(account.getId()).lock();
-        accountLockCounter.incrementAndGet();
+        ReentrantLock lock = getOrCreateLock(account.getId());
+        final int MAX_ATTEMPTS = 5;
+        final long startTime = System.currentTimeMillis();
+        
+        int attempts = 0;
+        
+        while (attempts < MAX_ATTEMPTS) {
+            try {
+                if (lock.tryLock(200, TimeUnit.MILLISECONDS)) {
+                    accountLockCounter.incrementAndGet();
+                    log.debug("Successfully acquired lock for account ID: {} after {} attempts",
+                        account.getId(), attempts + 1);
+                    return;
+                }
+                attempts++;
+                if (attempts < MAX_ATTEMPTS) {
+                    log.debug("Failed to acquire lock for account ID: {} (attempt {}), waiting 500ms before retry",
+                        account.getId(), attempts);
+                    Thread.sleep(500);
+                }
+            } catch (InterruptedException e) {
+                long totalTime = System.currentTimeMillis() - startTime;
+                log.error("Thread interrupted while acquiring lock for account ID: {} after {} attempts and {}ms",
+                    account.getId(), attempts + 1, totalTime);
+                Thread.currentThread().interrupt();
+                throw new AccountLockException(
+                    "Thread was interrupted while trying to acquire lock",
+                    account.getId(),
+                    attempts + 1,
+                    totalTime,
+                    true
+                );
+            }
+        }
+        
+        long totalTime = System.currentTimeMillis() - startTime;
+        log.error("Failed to acquire lock for account ID: {} after {} attempts and {}ms",
+            account.getId(), MAX_ATTEMPTS, totalTime);
+        throw new AccountLockException(
+            "Failed to acquire lock after maximum attempts",
+            account.getId(),
+            MAX_ATTEMPTS,
+            totalTime,
+            false
+        );
     }
 
     private void unlockTwoAccounts(Account acc1, Account acc2) {
