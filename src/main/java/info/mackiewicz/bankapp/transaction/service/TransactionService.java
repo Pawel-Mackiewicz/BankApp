@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,20 +24,16 @@ public class TransactionService {
     private final TransactionRepository repository;
     private final TransactionProcessor processor;
     private final AccountService accountService;
+    
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Transaction createTransaction(Transaction transaction) {
-        log.info("Creating new transaction: source={}, destination={}, amount={}, type={}",
-                transaction.getSourceAccount().getId(),
-                transaction.getDestinationAccount().getId(),
-                transaction.getAmount(),
-                transaction.getType());
+        log.debug("AccountService.createTransaction invoked with: {}", transaction);
         
         Transaction savedTransaction = repository.save(transaction);
         log.debug("Transaction saved with ID: {}", savedTransaction.getId());
         
         processOwnTransfer(savedTransaction);
-        log.info("Transaction created successfully with ID: {}", savedTransaction.getId());
         
         return savedTransaction;
     }
@@ -46,6 +43,8 @@ public class TransactionService {
         if (TransactionType.TRANSFER_OWN.equals(savedTransaction.getType())) {
             log.info("Processing own transfer transaction: {}", savedTransaction.getId());
             processTransaction(savedTransaction);
+        } else {
+            log.debug("Transaction {} is not an own transfer", savedTransaction.getId());
         }
     }
 
@@ -74,7 +73,7 @@ public class TransactionService {
 
     public List<Transaction> getAllNewTransactions() {
         log.debug("Retrieving all NEW status transactions");
-        List<Transaction> transactions = repository.findByStatus(TransactionStatus.NEW);
+        List<Transaction> transactions = new CopyOnWriteArrayList<>(repository.findByStatus(TransactionStatus.NEW));
         log.debug("Found {} new transactions", transactions.size());
         return transactions;
     }
@@ -105,13 +104,13 @@ public class TransactionService {
     }
 
     // *********** TRANSACTION PROCESSING ************
-    @Async
     public void processTransactionById(int transactionId) {
-        log.info("Processing single transaction asynchronously: {}", transactionId);
+        log.info("Processing single transaction: {}", transactionId);
         Transaction transaction = getTransactionById(transactionId);
         processTransaction(transaction);
     }
 
+    @Async
     public void processAllNewTransactions() {
         log.info("Starting batch processing of new transactions");
         List<Transaction> transactions = getAllNewTransactions();

@@ -35,6 +35,18 @@
             </encoder>
         </appender>
 
+        <!-- System plików: logi debugowe -->
+        <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>logs/debug.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>logs/debug.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
         <!-- System plików: logi frameworka -->
         <appender name="FRAMEWORK_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>logs/framework.log</file>
@@ -56,6 +68,7 @@
         <!-- W środowisku nieprodukcyjnym dodatkowo logujemy do pliku -->
         <springProfile name="!prod">
             <appender-ref ref="APP_FILE" />
+            <appender-ref ref="DEBUG_FILE" />
         </springProfile>
     </logger>
 
@@ -86,6 +99,7 @@
         <appender-ref ref="CONSOLE" />
         <springProfile name="!prod">
             <appender-ref ref="APP_FILE" />
+            <appender-ref ref="DEBUG_FILE" />
         </springProfile>
     </logger>
 
@@ -94,6 +108,7 @@
         <appender-ref ref="CONSOLE" />
         <springProfile name="!prod">
             <appender-ref ref="APP_FILE" />
+            <appender-ref ref="DEBUG_FILE" />
         </springProfile>
     </logger>
 
@@ -105,11 +120,32 @@
         </springProfile>
     </logger>
 
+    <!-- Specjalny marker "SQL" dla logów SQL -->
+    <appender name="SQL_MARKER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] SQL %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="SQL_MARKER" />
+        <springProfile name="!prod">
+            <appender-ref ref="APP_FILE" />
+        </springProfile>
+    </logger>
+    
+    <logger name="org.hibernate.type.descriptor.sql" level="TRACE" additivity="false">
+        <appender-ref ref="SQL_MARKER" />
+        <springProfile name="!prod">
+            <appender-ref ref="APP_FILE" />
+        </springProfile>
+    </logger>
+
     <!-- Root logger -->
     <root level="DEBUG">
         <appender-ref ref="CONSOLE" />
-        <!-- Tylko w środowisku nieprodukcyjnym dodajemy plik z logami frameworka -->
         <springProfile name="!prod">
+            <appender-ref ref="APP_FILE" />
             <appender-ref ref="FRAMEWORK_FILE" />
         </springProfile>
     </root>

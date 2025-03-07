@@ -2,13 +2,11 @@ package info.mackiewicz.bankapp.transaction.service;
 
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
 import info.mackiewicz.bankapp.shared.util.LoggingService;
-import info.mackiewicz.bankapp.shared.util.Util;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +18,7 @@ public class TransactionProcessor {
     private final TransactionRepository repository;
     private final AccountLockManager accountLockManager;
 
-    @Async
+    @Transactional(rollbackFor = Exception.class)
     public void processTransaction(Transaction transaction) {
         lockAndLogAccounts(transaction);
         try {
@@ -38,10 +36,10 @@ public class TransactionProcessor {
     private void attemptTransaction(Transaction transaction) {
         LoggingService.logTransactionAttempt(transaction);
 
-        if (transaction.isTransactionPossible()) {
+        try {
             changeTransactionStatus(transaction, TransactionStatus.PENDING);
             executeTransaction(hydrateTransaction(transaction));
-        } else {
+        } catch (IllegalArgumentException e) {
             LoggingService.logFailedTransactionDueToInsufficientFunds(transaction);
             changeTransactionStatus(transaction, TransactionStatus.FAULTY);
         }
