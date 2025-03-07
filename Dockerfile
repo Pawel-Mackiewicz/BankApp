@@ -6,7 +6,12 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
-COPY --from=builder /app/target/BankApp-0.1.9-SNAPSHOT.jar app.jar
+ARG APP_VERSION=0.1.9-SNAPSHOT
+COPY --from=builder /app/target/BankApp-${APP_VERSION}.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
+LABEL maintainer="pawel@mackiewicz.info"
+LABEL version="${APP_VERSION}"
+LABEL description="BankApp"

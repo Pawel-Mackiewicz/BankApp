@@ -65,4 +65,4 @@ key.pub
 release.properties
 pom.xml.releaseBackup
 update-dockerfile-version.sh
-
+fly.toml
