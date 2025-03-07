@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.utils;
 
-import info.mackiewicz.bankapp.dto.ExternalTransferRequest;
-import info.mackiewicz.bankapp.dto.InternalTransferRequest;
-import info.mackiewicz.bankapp.dto.TransferRequest;
-import info.mackiewicz.bankapp.validation.DifferentAccountsValidator;
+import info.mackiewicz.bankapp.account.validation.DifferentAccountsValidator;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.ExternalTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,13 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for DifferentAccountsValidator ensuring correct validation
+ * of source and recipient IBANs in transfer requests
+ */
 class DifferentAccountsValidatorTest {
+
+    private static final String EXTERNAL_TEST_IBAN = "DE89370400440532013000";
 
     private DifferentAccountsValidator validator;
 
@@ -29,8 +35,8 @@ class DifferentAccountsValidatorTest {
     void isValid_InternalTransfer_DifferentIbans_ReturnsTrue() {
         // Given
         InternalTransferRequest request = new InternalTransferRequest();
-        request.setSourceIban("PL14485112340002210000000001");
-        request.setRecipientIban("PL84485112340002210000000002");
+        request.setSourceIban(TestIbanProvider.getIban(0));
+        request.setRecipientIban(TestIbanProvider.getIban(1));
 
         // When
         boolean isValid = validator.isValid(request, context);
@@ -43,8 +49,9 @@ class DifferentAccountsValidatorTest {
     void isValid_InternalTransfer_SameIbans_ReturnsFalse() {
         // Given
         InternalTransferRequest request = new InternalTransferRequest();
-        request.setSourceIban("PL14485112340002210000000001");
-        request.setRecipientIban("PL14485112340002210000000001");
+        String sameIban = TestIbanProvider.getIban(0);
+        request.setSourceIban(sameIban);
+        request.setRecipientIban(sameIban);
 
         // When
         boolean isValid = validator.isValid(request, context);
@@ -57,8 +64,8 @@ class DifferentAccountsValidatorTest {
     void isValid_ExternalTransfer_DifferentIbans_ReturnsTrue() {
         // Given
         TransferRequest request = new ExternalTransferRequest();
-        request.setSourceIban("PL14485112340002210000000001");
-        request.setRecipientIban("DE89370400440532013000");
+        request.setSourceIban(TestIbanProvider.getIban(0));
+        request.setRecipientIban(EXTERNAL_TEST_IBAN);
 
         // When
         boolean isValid = validator.isValid(request, context);
@@ -71,8 +78,9 @@ class DifferentAccountsValidatorTest {
     void isValid_ExternalTransfer_SameIbans_ReturnsFalse() {
         // Given
         TransferRequest request = new ExternalTransferRequest();
-        request.setSourceIban("PL14485112340002210000000001");
-        request.setRecipientIban("PL14485112340002210000000001");
+        String sameIban = TestIbanProvider.getIban(0);
+        request.setSourceIban(sameIban);
+        request.setRecipientIban(sameIban);
 
         // When
         boolean isValid = validator.isValid(request, context);
@@ -85,7 +93,7 @@ class DifferentAccountsValidatorTest {
     void isValid_InternalTransfer_NullSourceIban_ReturnsTrue() {
         // Given
         InternalTransferRequest request = new InternalTransferRequest();
-        request.setRecipientIban("PL84485112340002210000000002");
+        request.setRecipientIban(TestIbanProvider.getIban(0));
 
         // When
         boolean isValid = validator.isValid(request, context);
@@ -98,7 +106,7 @@ class DifferentAccountsValidatorTest {
     void isValid_InternalTransfer_NullRecipientIban_ReturnsTrue() {
         // Given
         InternalTransferRequest request = new InternalTransferRequest();
-        request.setSourceIban("PL14485112340002210000000001");
+        request.setSourceIban(TestIbanProvider.getIban(0));
 
         // When
         boolean isValid = validator.isValid(request, context);

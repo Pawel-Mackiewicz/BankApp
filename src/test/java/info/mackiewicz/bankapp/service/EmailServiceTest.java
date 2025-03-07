@@ -1,8 +1,9 @@
 package info.mackiewicz.bankapp.service;
 
-import info.mackiewicz.bankapp.service.email.EmailSender;
-import info.mackiewicz.bankapp.service.email.template.EmailTemplateProvider;
-import info.mackiewicz.bankapp.service.email.template.api.EmailContent;
+import info.mackiewicz.bankapp.notification.email.EmailContent;
+import info.mackiewicz.bankapp.notification.email.EmailSender;
+import info.mackiewicz.bankapp.notification.email.EmailService;
+import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,14 +40,14 @@ class EmailServiceTest {
         String email = "test@example.com";
         String userName = "test";
         EmailContent mockContent = new EmailContent("Test Subject", "<p>Test content</p>");
-        when(templateProvider.getWelcomeEmail(userName))
+        when(templateProvider.getWelcomeEmail(userName, userName))
             .thenReturn(mockContent);
 
         // Act
-        emailService.sendWelcomeEmail(email, userName);
+        emailService.sendWelcomeEmail(email, userName, userName);
 
         // Assert
-        verify(templateProvider).getWelcomeEmail(userName);
+        verify(templateProvider).getWelcomeEmail(userName, userName);
         verify(emailSender).send(email, mockContent.subject(), mockContent.htmlContent());
     }
 
@@ -95,13 +96,13 @@ class EmailServiceTest {
         String email = "user.name@example.com";
         String expectedUsername = "user.name";
         EmailContent mockContent = new EmailContent("Test Subject", "<p>Test content</p>");
-        when(templateProvider.getWelcomeEmail(expectedUsername))
+        when(templateProvider.getWelcomeEmail(expectedUsername, expectedUsername))
             .thenReturn(mockContent);
 
         // Act
-        emailService.sendWelcomeEmail(email, expectedUsername);
+        emailService.sendWelcomeEmail(email, expectedUsername, expectedUsername);
 
         // Assert
-        verify(templateProvider).getWelcomeEmail(expectedUsername);
+        verify(templateProvider).getWelcomeEmail(expectedUsername, expectedUsername);
     }
 }

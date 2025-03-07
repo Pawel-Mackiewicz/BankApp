@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BankApp - Transaction History</title>
+    <!-- External CSS dependencies -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Application CSS -->
+    <link href="/css/transactions/transactions-main.css" rel="stylesheet">
+    <link href="/css/transactions/transactions-forms.css" rel="stylesheet">
+    <link href="/css/transactions/transactions-responsive.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">BankApp</div>
+        <nav>
+            <ul>
+                <li><a th:href="@{/dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/transactions}" class="active">History</a></li>
+                <li><a th:href="@{/settings}">Settings</a></li>
+            </ul>
+        </nav>
+        <div class="user-panel">
+            <span th:text="${userName}">User Name</span>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Filters Section -->
+        <section class="filters-panel">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Transaction History</h4>
+                <div class="export-buttons">
+                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportTransactions('csv')">
+                        Export to CSV
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="exportTransactions('pdf')">
+                        Export to PDF
+                    </button>
+                </div>
+            </div>
+            
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="accountId">Account</label>
+                    <select id="accountId" name="accountId" class="filter-input">
+                        <option th:each="account : ${accounts}" 
+                                th:value="${account.id}"
+                                th:text="${account.iban + ' (' + #numbers.formatDecimal(account.balance, 1, 2) + ' PLN)'}"
+                                th:selected="${account.id == selectedAccountId}">
+                        </option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="dateFrom">From Date</label>
+                    <input type="date" id="dateFrom" name="dateFrom" class="filter-input">
+                </div>
+                <div class="filter-group">
+                    <label for="dateTo">To Date</label>
+                    <input type="date" id="dateTo" name="dateTo" class="filter-input">
+                </div>
+                <div class="filter-group">
+                    <label for="type">Transaction Type</label>
+                    <select id="type" name="type" class="filter-input">
+                        <option value="">All</option>
+                        <option value="TRANSFER_OWN">Own Account Transfer</option>
+                        <option value="TRANSFER_INTERNAL">Internal Transfer</option>
+                        <option value="TRANSFER_EXTERNAL">External Transfer</option>
+                        <option value="DEPOSIT">Deposit</option>
+                        <option value="WITHDRAWAL">Withdrawal</option>
+                        <option value="FEE">Fee</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="amountFrom">Min Amount</label>
+                    <input type="number" id="amountFrom" name="amountFrom" class="filter-input" step="0.01">
+                </div>
+                <div class="filter-group">
+                    <label for="amountTo">Max Amount</label>
+                    <input type="number" id="amountTo" name="amountTo" class="filter-input" step="0.01">
+                </div>
+                <div class="filter-group">
+                    <label for="searchQuery">Search</label>
+                    <input type="text" id="searchQuery" name="searchQuery" class="filter-input" 
+                           placeholder="Search by person name, title...">
+                </div>
+            </div>
+        </section>
+
+        <!-- Transactions Table Section -->
+        <section>
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th class="sort-header" data-column="date">Date</th>
+                        <th class="sort-header" data-column="amount">Amount</th>
+                        <th class="sort-header" data-column="type">Type</th>
+                        <th>From → To</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamically populated by JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="transaction-cards">
+                <!-- Mobile view cards, dynamically populated by JavaScript -->
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-3">
+        <p>&copy; 2024 BankApp. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/transactions-history.js"></script>
+</body>
+</html>

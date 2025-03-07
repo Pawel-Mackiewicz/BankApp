@@ -6,6 +6,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import info.mackiewicz.bankapp.shared.util.SchedulerService;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
+
 import static org.mockito.Mockito.*;
 
 class SchedulerServiceTest {

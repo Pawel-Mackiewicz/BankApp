@@ -7,13 +7,10 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
-import info.mackiewicz.bankapp.exception.NoTransactionsForAccountException;
-import info.mackiewicz.bankapp.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.exception.TransactionCannotBeProcessedException;
-import info.mackiewicz.bankapp.exception.TransactionNotFoundException;
-import info.mackiewicz.bankapp.model.Account;
-import info.mackiewicz.bankapp.model.Transaction;
-import info.mackiewicz.bankapp.model.TransactionStatus;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.account.service.AccountService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -23,7 +20,15 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import info.mackiewicz.bankapp.repository.TransactionRepository;
+import info.mackiewicz.bankapp.shared.exception.NoTransactionsForAccountException;
+import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedException;
+import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedException;
+import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
+import info.mackiewicz.bankapp.transaction.service.TransactionProcessor;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
 
 class TransactionServiceTest {
 
@@ -96,6 +101,12 @@ class TransactionServiceTest {
     @Test
     void testSaveTransaction() {
         logger.info("testSaveTransaction: Starting test");
+        
+        // Create test accounts
+        Account sourceAccount = TestAccountBuilder.createTestAccountWithId(1);
+        Account destinationAccount = TestAccountBuilder.createTestAccountWithId(2);
+        
+        // Create and set up transaction
         Transaction transaction = new Transaction();
         try {
             Field idField = Transaction.class.getDeclaredField("id");
@@ -104,12 +115,18 @@ class TransactionServiceTest {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             fail("Failed to set transaction id using reflection: " + e.getMessage());
         }
+        
+        transaction.setSourceAccount(sourceAccount);
+        transaction.setDestinationAccount(destinationAccount);
+        transaction.setStatus(TransactionStatus.NEW);
 
         when(transactionRepository.save(transaction)).thenReturn(transaction);
 
         Transaction result = transactionService.createTransaction(transaction);
 
         assertEquals(transaction.getId(), result.getId());
+        assertEquals(sourceAccount, result.getSourceAccount());
+        assertEquals(destinationAccount, result.getDestinationAccount());
         logger.info("testSaveTransaction: Test passed");
     }
 
@@ -154,14 +171,7 @@ class TransactionServiceTest {
     void testGetTransactionsByAccountId() {
         logger.info("testGetTransactionsByAccountId: Starting test");
         Integer accountId = 1;
-        Account account = new Account();
-        try {
-            Field idField = Account.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(account, accountId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            fail("Failed to set account id using reflection: " + e.getMessage());
-        }
+        Account account = TestAccountBuilder.createTestAccountWithId(accountId);
         Transaction transaction1 = new Transaction();
         transaction1.setSourceAccount(account);
         Transaction transaction2 = new Transaction();
@@ -184,14 +194,7 @@ class TransactionServiceTest {
     void testGetTransactionsByAccountIdNotFound() {
         logger.info("testGetTransactionsByAccountIdNotFound: Starting test");
         Integer accountId = 1;
-        Account account = new Account();
-        try {
-            Field idField = Account.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(account, accountId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            fail("Failed to set account id using reflection: " + e.getMessage());
-        }
+        Account account = TestAccountBuilder.createTestAccountWithId(accountId);
 
         when(accountService.getAccountById(accountId)).thenReturn(account);
         when(transactionRepository.findByAccountId(accountId)).thenReturn(Optional.empty());
@@ -205,14 +208,7 @@ class TransactionServiceTest {
         logger.info("testGetRecentTransactions: Starting test");
         Integer accountId = 1;
         int count = 2;
-        Account account = new Account();
-        try {
-            Field idField = Account.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(account, accountId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            fail("Failed to set account id using reflection: " + e.getMessage());
-        }
+        Account account = TestAccountBuilder.createTestAccountWithId(accountId);
         Transaction transaction1 = new Transaction();
         transaction1.setSourceAccount(account);
         Transaction transaction2 = new Transaction();

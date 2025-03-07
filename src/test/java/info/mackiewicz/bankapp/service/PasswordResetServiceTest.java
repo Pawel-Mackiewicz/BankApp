@@ -8,10 +8,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import info.mackiewicz.bankapp.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.exception.UserNotFoundException;
-import info.mackiewicz.bankapp.model.User;
-import info.mackiewicz.bankapp.model.PasswordResetToken;
+import info.mackiewicz.bankapp.notification.email.EmailService;
+import info.mackiewicz.bankapp.security.model.PasswordResetToken;
+import info.mackiewicz.bankapp.security.service.PasswordResetService;
+import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.shared.exception.TooManyPasswordResetAttemptsException;
+import info.mackiewicz.bankapp.shared.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.service.UserService;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
