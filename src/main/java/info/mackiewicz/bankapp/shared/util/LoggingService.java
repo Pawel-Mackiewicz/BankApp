@@ -23,6 +23,14 @@ public class LoggingService {
         log.error(message);
     }
 
+    public static void logLockingAccounts(Transaction transaction) {
+        Account from = transaction.getSourceAccount();
+        Account to = transaction.getDestinationAccount();
+        String message = String.format("Transaction ID: %s, Locked accounts: %s, %s, Thread: %s",
+                transaction.getId(), formatAccountInfo(from), formatAccountInfo(to), Thread.currentThread().getName());
+        log.info(message);
+    }
+
     public static void logUnlockingAccounts(Transaction transaction) {
         Account from = transaction.getSourceAccount();
         Account to = transaction.getDestinationAccount();
