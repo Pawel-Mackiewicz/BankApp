@@ -7,8 +7,8 @@ import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -18,7 +18,7 @@ public class TransactionProcessor {
     private final TransactionRepository repository;
     private final AccountLockManager accountLockManager;
 
-    @Transactional(rollbackFor = Exception.class)
+    @Async
     public void processTransaction(Transaction transaction) {
         lockAndLogAccounts(transaction);
         try {

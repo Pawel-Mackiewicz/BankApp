@@ -10,7 +10,6 @@ import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,7 +109,6 @@ public class TransactionService {
         processTransaction(transaction);
     }
 
-    @Async
     public void processAllNewTransactions() {
         log.info("Starting batch processing of new transactions");
         List<Transaction> transactions = getAllNewTransactions();

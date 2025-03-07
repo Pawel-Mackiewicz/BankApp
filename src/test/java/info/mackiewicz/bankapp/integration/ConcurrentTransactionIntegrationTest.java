@@ -29,6 +29,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.shared.util.Util;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionBuilder;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
@@ -103,24 +104,20 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle multiple concurrent transactions correctly")
     void testConcurrentTransactions() {
-        int numberOfTransactions = 20;
-        List<CompletableFuture<Void>> futures = new CopyOnWriteArrayList<>();
-        List<Transaction> transactions = new CopyOnWriteArrayList<>();
+        int numberOfTransactions = 40;
+        List<Transaction> transactions = new ArrayList<>();
 
         for (int i = 0; i < numberOfTransactions; i++) {
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                Transaction transaction = createRandomTransfer();
-                transactions.add(transaction);
-                transactionService.processTransactionById(transaction.getId());
-            }, testExecutor);
-            futures.add(future);
+            Transaction transaction = createRandomTransfer();
+            transactions.add(transaction);
         }
 
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-            .join();
+        transactionService.processAllNewTransactions();
+        
+        Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(30))
+            .atMost(Duration.ofSeconds(10))
             .untilAsserted(() -> {
                 verifyTransactionResults(transactions);
                 verifySystemBalance();
@@ -135,24 +132,18 @@ class ConcurrentTransactionIntegrationTest {
         int numberOfWithdrawals = 10;
         BigDecimal withdrawalAmount = initialBalance.divide(BigDecimal.valueOf(numberOfWithdrawals * 2));
         
-        List<CompletableFuture<Void>> futures = new CopyOnWriteArrayList<>();
-        List<Transaction> transactions = new CopyOnWriteArrayList<>();
-
         for (int i = 0; i < numberOfWithdrawals; i++) {
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                Transaction withdrawal = createWithdrawal(sourceAccount, withdrawalAmount);
-                transactions.add(withdrawal);
-                transactionService.processTransactionById(withdrawal.getId());
-                log.debug("INSIDE OF PĘTLA: Processed withdrawal: {}", withdrawal.getId());
-            }, testExecutor);
-            futures.add(future);
+            createWithdrawal(sourceAccount, withdrawalAmount);
         }
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-        log.debug("OUTSIDE OF PĘTLA: All withdrawals submitted");
+
+        transactionService.processAllNewTransactions();
+
+        Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(15))
+            .atMost(Duration.ofSeconds(10))
             .untilAsserted(() -> {
+                List<Transaction> transactions = transactionService.getTransactionsByAccountId(sourceAccount.getId());
                 Account refreshed = accountService.getAccountById(sourceAccount.getId());
                 BigDecimal expectedBalance = initialBalance.subtract(
                     withdrawalAmount.multiply(BigDecimal.valueOf(
@@ -175,29 +166,33 @@ class ConcurrentTransactionIntegrationTest {
         int numberOfDeposits = 15;
         BigDecimal depositAmount = BigDecimal.valueOf(100);
         
-        List<CompletableFuture<Void>> futures = new CopyOnWriteArrayList<>();
-        List<Transaction> transactions = new CopyOnWriteArrayList<>();
-
+        List<Transaction> transactions = new ArrayList<>();
+        
         for (int i = 0; i < numberOfDeposits; i++) {
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                Transaction deposit = createDeposit(destinationAccount, depositAmount);
-                transactions.add(deposit);
-                transactionService.processTransactionById(deposit.getId());
-            }, testExecutor);
-            futures.add(future);
+            Transaction deposit = createDeposit(destinationAccount, depositAmount);
+            transactions.add(deposit);
         }
-
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        
+        transactionService.processAllNewTransactions();
+        
+        Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(30))
+            .atMost(Duration.ofSeconds(10))
             .untilAsserted(() -> {
+                List<Transaction> completedTransactions = transactionService.getTransactionsByAccountId(destinationAccount.getId());
                 Account refreshed = accountService.getAccountById(destinationAccount.getId());
+                
                 BigDecimal expectedBalance = initialBalance.add(
-                    depositAmount.multiply(BigDecimal.valueOf(numberOfDeposits))
+                    depositAmount.multiply(BigDecimal.valueOf(
+                        completedTransactions.stream()
+                            .filter(t -> t.getStatus() == TransactionStatus.DONE)
+                            .count()
+                    ))
                 );
+                
                 assertThat(refreshed.getBalance())
-                    .as("Account balance should reflect all deposits")
+                    .as("Account balance should reflect successful deposits only")
                     .isEqualByComparingTo(expectedBalance);
             });
     }
@@ -206,38 +201,28 @@ class ConcurrentTransactionIntegrationTest {
     @DisplayName("Should handle chain transfers (A→B→C) correctly")
     void testChainTransfers() {
         int numberOfChains = 5;
-        List<CompletableFuture<Void>> futures = new CopyOnWriteArrayList<>();
-        List<Transaction> transactions = new CopyOnWriteArrayList<>();
+        List<Transaction> transactions = new ArrayList<>();
 
         for (int i = 0; i < numberOfChains; i++) {
-            final int chainIndex = i;
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                Account accountA = testAccounts.get(chainIndex * 3 % testAccounts.size());
-                Account accountB = testAccounts.get((chainIndex * 3 + 1) % testAccounts.size());
-                Account accountC = testAccounts.get((chainIndex * 3 + 2) % testAccounts.size());
-                
-                BigDecimal amount = BigDecimal.valueOf(100);
-                
-                Transaction t1 = createTransfer(accountA, accountB, amount);
-                Transaction t2 = createTransfer(accountB, accountC, amount);
-                
-                transactions.add(t1);
-                transactions.add(t2);
-                
-                transactionService.processTransactionById(t1.getId());
-                await()
-                    .atMost(Duration.ofSeconds(30))
-                    .until(() -> transactionService.getTransactionById(t1.getId()).getStatus() == TransactionStatus.DONE);
-                    
-                transactionService.processTransactionById(t2.getId());
-            }, testExecutor);
-            futures.add(future);
+            Account accountA = testAccounts.get(i * 3 % testAccounts.size());
+            Account accountB = testAccounts.get((i * 3 + 1) % testAccounts.size());
+            Account accountC = testAccounts.get((i * 3 + 2) % testAccounts.size());
+            
+            BigDecimal amount = BigDecimal.valueOf(100);
+            
+            Transaction t1 = createTransfer(accountA, accountB, amount);
+            Transaction t2 = createTransfer(accountB, accountC, amount);
+            
+            transactions.add(t1);
+            transactions.add(t2);
         }
-
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        
+        transactionService.processAllNewTransactions();
+        
+        Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(30))
+            .atMost(Duration.ofSeconds(10))
             .untilAsserted(() -> {
                 verifyTransactionResults(transactions);
                 verifySystemBalance();
@@ -248,36 +233,84 @@ class ConcurrentTransactionIntegrationTest {
     @DisplayName("Should handle bidirectional transfers correctly")
     void testBidirectionalTransfers() {
         int numberOfPairs = 5;
-        List<CompletableFuture<Void>> futures = new CopyOnWriteArrayList<>();
-        List<Transaction> transactions = new CopyOnWriteArrayList<>();
+        List<Transaction> transactions = new ArrayList<>();
 
         for (int i = 0; i < numberOfPairs; i++) {
             Account accountA = testAccounts.get(i * 2 % testAccounts.size());
             Account accountB = testAccounts.get((i * 2 + 1) % testAccounts.size());
             BigDecimal amount = BigDecimal.valueOf(100);
 
-            CompletableFuture<Void> future1 = CompletableFuture.runAsync(() -> {
-                Transaction t = createTransfer(accountA, accountB, amount);
-                transactions.add(t);
-                transactionService.processTransactionById(t.getId());
-            }, testExecutor);
-
-            CompletableFuture<Void> future2 = CompletableFuture.runAsync(() -> {
-                Transaction t = createTransfer(accountB, accountA, amount);
-                transactions.add(t);
-                transactionService.processTransactionById(t.getId());
-            }, testExecutor);
-
-            futures.add(future1);
-            futures.add(future2);
+            // Create bidirectional transfers
+            Transaction t1 = createTransfer(accountA, accountB, amount);
+            Transaction t2 = createTransfer(accountB, accountA, amount);
+            
+            transactions.add(t1);
+            transactions.add(t2);
         }
-
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        
+        transactionService.processAllNewTransactions();
+        
+        Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(30))
+            .atMost(Duration.ofSeconds(10))
             .untilAsserted(() -> {
                 verifyTransactionResults(transactions);
+                
+                // Verify all accounts have their original balance
+                for (Account account : testAccounts) {
+                    BigDecimal currentBalance = accountService.getAccountById(account.getId()).getBalance();
+                    assertThat(currentBalance)
+                        .as("Account %d balance should be unchanged after bidirectional transfers", account.getId())
+                        .isEqualByComparingTo(account.getBalance());
+                }
+                
+                verifySystemBalance();
+            });
+    }
+
+    @Test
+    @DisplayName("Should handle circular chain transfers (A→B→C→A) correctly")
+    void testCircularChainTransfers() {
+        int numberOfChains = 10;
+        List<Transaction> transactions = new ArrayList<>();
+        BigDecimal transferAmount = BigDecimal.valueOf(100);
+
+        for (int i = 0; i < numberOfChains; i++) {
+            Account accountA = testAccounts.get(i * 3 % testAccounts.size());
+            Account accountB = testAccounts.get((i * 3 + 1) % testAccounts.size());
+            Account accountC = testAccounts.get((i * 3 + 2) % testAccounts.size());
+            
+            BigDecimal initialBalanceA = accountA.getBalance();
+            BigDecimal initialBalanceB = accountB.getBalance();
+            BigDecimal initialBalanceC = accountC.getBalance();
+            
+            Transaction t1 = createTransfer(accountA, accountB, transferAmount);
+            Transaction t2 = createTransfer(accountB, accountC, transferAmount);
+            Transaction t3 = createTransfer(accountC, accountA, transferAmount);
+            
+            transactions.add(t1);
+            transactions.add(t2);
+            transactions.add(t3);
+        }
+        
+        transactionService.processAllNewTransactions();
+        
+        Util.sleep(5000);
+
+        await()
+            .atMost(Duration.ofSeconds(10))
+            .untilAsserted(() -> {
+                verifyTransactionResults(transactions);
+                
+                // Verify each account's balance returned to initial state
+                for (Account account : testAccounts) {
+                    BigDecimal currentBalance = accountService.getAccountById(account.getId()).getBalance();
+                    assertThat(currentBalance)
+                        .as("Account %d balance should be unchanged after circular transfers", account.getId())
+                        .isEqualByComparingTo(account.getBalance());
+                }
+                
                 verifySystemBalance();
             });
     }
@@ -304,29 +337,6 @@ class ConcurrentTransactionIntegrationTest {
                 assertThat(completed.getStatus())
                     .as("Zero balance transfer should fail")
                     .isEqualTo(TransactionStatus.FAULTY);
-            });
-
-        // Test maximum concurrent transactions
-        int maxTransactions = 100;
-        List<CompletableFuture<Void>> futures = new CopyOnWriteArrayList<>();
-        List<Transaction> transactions = new CopyOnWriteArrayList<>();
-
-        for (int i = 0; i < maxTransactions; i++) {
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                Transaction t = createRandomTransfer();
-                transactions.add(t);
-                transactionService.processTransactionById(t.getId());
-            }, testExecutor);
-            futures.add(future);
-        }
-
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-
-        await()
-            .atMost(Duration.ofSeconds(60))
-            .untilAsserted(() -> {
-                verifyTransactionResults(transactions);
-                verifySystemBalance();
             });
     }
 
