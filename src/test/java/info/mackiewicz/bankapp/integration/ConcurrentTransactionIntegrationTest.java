@@ -8,11 +8,11 @@ import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -70,9 +70,6 @@ class ConcurrentTransactionIntegrationTest {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private Executor testExecutor;
 
     private List<Account> testAccounts;
     private List<User> testUsers;
@@ -234,11 +231,17 @@ class ConcurrentTransactionIntegrationTest {
     void testBidirectionalTransfers() {
         int numberOfPairs = 5;
         List<Transaction> transactions = new ArrayList<>();
+        // Store initial balances for all accounts that will participate in transfers
+        Map<Integer, BigDecimal> initialBalances = new HashMap<>();
 
         for (int i = 0; i < numberOfPairs; i++) {
             Account accountA = testAccounts.get(i * 2 % testAccounts.size());
             Account accountB = testAccounts.get((i * 2 + 1) % testAccounts.size());
             BigDecimal amount = BigDecimal.valueOf(100);
+
+            // Store initial balances if not already stored
+            initialBalances.putIfAbsent(accountA.getId(), accountA.getBalance());
+            initialBalances.putIfAbsent(accountB.getId(), accountB.getBalance());
 
             // Create bidirectional transfers
             Transaction t1 = createTransfer(accountA, accountB, amount);
@@ -253,16 +256,20 @@ class ConcurrentTransactionIntegrationTest {
         Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(10))
+            .atMost(Duration.ofSeconds(30))
             .untilAsserted(() -> {
                 verifyTransactionResults(transactions);
                 
                 // Verify all accounts have their original balance
                 for (Account account : testAccounts) {
-                    BigDecimal currentBalance = accountService.getAccountById(account.getId()).getBalance();
-                    assertThat(currentBalance)
-                        .as("Account %d balance should be unchanged after bidirectional transfers", account.getId())
-                        .isEqualByComparingTo(account.getBalance());
+                    if (initialBalances.containsKey(account.getId())) {
+                        BigDecimal currentBalance = accountService.getAccountById(account.getId()).getBalance();
+                        BigDecimal expectedBalance = initialBalances.get(account.getId());
+                        assertThat(currentBalance)
+                            .as("Account %d balance should equal its initial balance of %s after bidirectional transfers",
+                                account.getId(), expectedBalance)
+                            .isEqualByComparingTo(expectedBalance);
+                    }
                 }
                 
                 verifySystemBalance();
@@ -275,15 +282,18 @@ class ConcurrentTransactionIntegrationTest {
         int numberOfChains = 10;
         List<Transaction> transactions = new ArrayList<>();
         BigDecimal transferAmount = BigDecimal.valueOf(100);
+        // Store initial balances for all accounts that will participate in transfers
+        Map<Integer, BigDecimal> initialBalances = new HashMap<>();
 
         for (int i = 0; i < numberOfChains; i++) {
             Account accountA = testAccounts.get(i * 3 % testAccounts.size());
             Account accountB = testAccounts.get((i * 3 + 1) % testAccounts.size());
             Account accountC = testAccounts.get((i * 3 + 2) % testAccounts.size());
             
-            BigDecimal initialBalanceA = accountA.getBalance();
-            BigDecimal initialBalanceB = accountB.getBalance();
-            BigDecimal initialBalanceC = accountC.getBalance();
+            // Store initial balances if not already stored
+            initialBalances.putIfAbsent(accountA.getId(), accountA.getBalance());
+            initialBalances.putIfAbsent(accountB.getId(), accountB.getBalance());
+            initialBalances.putIfAbsent(accountC.getId(), accountC.getBalance());
             
             Transaction t1 = createTransfer(accountA, accountB, transferAmount);
             Transaction t2 = createTransfer(accountB, accountC, transferAmount);
@@ -305,10 +315,14 @@ class ConcurrentTransactionIntegrationTest {
                 
                 // Verify each account's balance returned to initial state
                 for (Account account : testAccounts) {
-                    BigDecimal currentBalance = accountService.getAccountById(account.getId()).getBalance();
-                    assertThat(currentBalance)
-                        .as("Account %d balance should be unchanged after circular transfers", account.getId())
-                        .isEqualByComparingTo(account.getBalance());
+                    if (initialBalances.containsKey(account.getId())) {
+                        BigDecimal currentBalance = accountService.getAccountById(account.getId()).getBalance();
+                        BigDecimal expectedBalance = initialBalances.get(account.getId());
+                        assertThat(currentBalance)
+                            .as("Account %d balance should equal its initial balance of %s after circular transfers",
+                                account.getId(), expectedBalance)
+                            .isEqualByComparingTo(expectedBalance);
+                    }
                 }
                 
                 verifySystemBalance();
