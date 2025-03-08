@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.service;
+package info.mackiewicz.bankapp.transaction.service.assembler;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;

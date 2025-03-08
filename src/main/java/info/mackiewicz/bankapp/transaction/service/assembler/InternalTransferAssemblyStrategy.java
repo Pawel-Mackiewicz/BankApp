@@ -1,11 +1,10 @@
-package info.mackiewicz.bankapp.transaction.service;
+package info.mackiewicz.bankapp.transaction.service.assembler;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
-import info.mackiewicz.bankapp.transaction.model.builder.TransactionBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,6 @@ import java.math.BigDecimal;
 public class InternalTransferAssemblyStrategy implements TransactionAssemblyStrategy<InternalTransferRequest> {
 
     private final AccountService accountService;
-    private final TransactionBuilder transactionBuilder;
 
     @Override
     public Transaction assembleTransaction(InternalTransferRequest request) {
@@ -36,13 +34,17 @@ public class InternalTransferAssemblyStrategy implements TransactionAssemblyStra
         Account destinationAccount = resolveDestinationAccount(request);
         log.debug("Destination account resolved: {}", destinationAccount.getId());
 
+        log.debug("Resolving transaction type");
+        TransactionType resolvedType = TransactionTypeResolver.resolveTransactionType(request);
+        log.debug("Transaction type resolved as: {}", resolvedType);
+
         log.debug("Building transaction with amount: {}", request.getAmount());
-        Transaction transaction = transactionBuilder
-                .withSourceAccount(sourceAccount)
-                .withDestinationAccount(destinationAccount)
+        Transaction transaction = Transaction.buildTransfer()
+                .from(sourceAccount)
+                .to(destinationAccount)
                 .withAmount(new BigDecimal(request.getAmount()))
-                .withTransactionTitle(request.getTitle())
-                .withType(TransactionType.TRANSFER_INTERNAL)
+                .withTitle(request.getTitle())
+                .withTransactionType(resolvedType)
                 .build();
 
         log.info("Internal transfer transaction assembled successfully with ID: {}", transaction.getId());

@@ -1,11 +1,9 @@
-package info.mackiewicz.bankapp.transaction.controller;
+package info.mackiewicz.bankapp.transaction.service.assembler;
 
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionAssemblyStrategy;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

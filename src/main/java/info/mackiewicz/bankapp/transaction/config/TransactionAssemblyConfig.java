@@ -1,8 +1,9 @@
 package info.mackiewicz.bankapp.transaction.config;
 
-import info.mackiewicz.bankapp.transaction.service.TransactionAssemblyStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import info.mackiewicz.bankapp.transaction.service.assembler.TransactionAssemblyStrategy;
 
 import java.util.List;
 import java.util.Map;

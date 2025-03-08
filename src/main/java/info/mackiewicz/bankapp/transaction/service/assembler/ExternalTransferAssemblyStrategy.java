@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.service;
+package info.mackiewicz.bankapp.transaction.service.assembler;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
@@ -34,13 +34,17 @@ public class ExternalTransferAssemblyStrategy implements TransactionAssemblyStra
         Account destinationAccount = accountService.findAccountByIban(request.getRecipientIban());
         log.debug("Destination account found: {}", destinationAccount.getId());
 
+        log.debug("Resolving transaction type");
+        TransactionType resolvedType = TransactionTypeResolver.resolveTransactionType(request);
+        log.debug("Transaction type resolved as: {}", resolvedType);
+
         log.debug("Building transaction with amount: {}", request.getAmount());
         Transaction transaction = Transaction.buildTransfer()
                 .from(sourceAccount)
                 .to(destinationAccount)
                 .withAmount(new BigDecimal(request.getAmount()))
                 .withTitle(request.getTitle())
-                .withTransactionType(resolveTransactionType(request))
+                .withTransactionType(resolvedType)
                 .build();
 
         log.info("External transfer transaction assembled successfully with ID: {}", transaction.getId());
@@ -52,17 +56,4 @@ public class ExternalTransferAssemblyStrategy implements TransactionAssemblyStra
         return TransferRequest.class;
     }
 
-    private TransactionType resolveTransactionType(TransferRequest request) {
-        log.debug("Resolving transaction type for request with source IBAN: {}", request.getSourceIban());
-        
-        if (request.getRecipientIban() == null) {
-            log.debug("Recipient IBAN is null, resolving as TRANSFER_INTERNAL");
-            return TransactionType.TRANSFER_INTERNAL;
-        }
-
-        boolean isOwnTransfer = request.getSourceIban().regionMatches(5, request.getRecipientIban(), 5, 20);
-        TransactionType resolvedType = isOwnTransfer ? TransactionType.TRANSFER_OWN : request.getTransactionType();
-        log.debug("Transaction type resolved as: {}", resolvedType);
-        return resolvedType;
-    }
 }
