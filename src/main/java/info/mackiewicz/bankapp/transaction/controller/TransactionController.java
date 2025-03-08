@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.transaction.controller;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionBuilder;
+import info.mackiewicz.bankapp.transaction.model.builder.TransactionBuilder;
 import info.mackiewicz.bankapp.transaction.model.dto.CreateTransactionRequest;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;

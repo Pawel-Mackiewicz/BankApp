@@ -31,9 +31,7 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.util.Util;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionBuilder;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -64,9 +62,6 @@ class ConcurrentTransactionIntegrationTest {
 
     @Autowired
     private TransactionService transactionService;
-
-    @Autowired
-    private TransactionBuilder transactionBuilder;
 
     @Autowired
     private UserService userService;
@@ -398,33 +393,31 @@ class ConcurrentTransactionIntegrationTest {
     }
 
     private Transaction createTransfer(Account source, Account destination, BigDecimal amount) {
-        Transaction transaction = transactionBuilder
-            .withSourceAccount(source)
-            .withDestinationAccount(destination)
-            .withTransactionTitle("Test concurrent transfer")
-            .withType(TransactionType.TRANSFER_INTERNAL)
+        Transaction transaction = Transaction.buildTransfer()
+            .asInternalTransfer()
+            .from(source)
+            .to(destination)
             .withAmount(amount)
+            .withTitle("Test concurrent transfer")
             .build();
 
         return transactionService.createTransaction(transaction);
     }
 
     private Transaction createWithdrawal(Account account, BigDecimal amount) {
-        Transaction transaction = transactionBuilder
-            .withSourceAccount(account)
-            .withTransactionTitle("Test concurrent withdrawal")
-            .withType(TransactionType.WITHDRAWAL)
+        Transaction transaction = Transaction.buildWithdrawal()
+            .from(account)
             .withAmount(amount)
+            .withTitle("Test concurrent withdrawal")
             .build();
         return transactionService.createTransaction(transaction);
     }
 
     private Transaction createDeposit(Account account, BigDecimal amount) {
-        Transaction transaction = transactionBuilder
-            .withDestinationAccount(account)
-            .withTransactionTitle("Test concurrent deposit")
-            .withType(TransactionType.DEPOSIT)
+        Transaction transaction = Transaction.buildDeposit()
+            .to(account)
             .withAmount(amount)
+            .withTitle("Test concurrent deposit")
             .build();
         return transactionService.createTransaction(transaction);
     }

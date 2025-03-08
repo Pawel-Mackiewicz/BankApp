@@ -15,7 +15,7 @@ import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionBuilder;
+import info.mackiewicz.bankapp.transaction.model.builder.TransferBuilder;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
@@ -46,10 +46,10 @@ class UserRegistrationServiceTest {
     private TransactionService transactionService;
 
     @Mock
-    private TransactionBuilder transactionBuilder;
+    private EmailService emailService;
 
     @Mock
-    private EmailService emailService;
+    private TransferBuilder transferBuilder;
 
     @InjectMocks
     private UserRegistrationService registrationService;
@@ -89,12 +89,12 @@ class UserRegistrationServiceTest {
         when(userService.createUser(user)).thenReturn(user);
         when(accountService.createAccount(anyInt())).thenReturn(userAccount);
         when(accountService.getAccountById(-1)).thenReturn(bankAccount);
-        when(transactionBuilder.withSourceAccount(any(Account.class))).thenReturn(transactionBuilder);
-        when(transactionBuilder.withDestinationAccount(any(Account.class))).thenReturn(transactionBuilder);
-        when(transactionBuilder.withType(anyString())).thenReturn(transactionBuilder);
-        when(transactionBuilder.withAmount(any(BigDecimal.class))).thenReturn(transactionBuilder);
-        when(transactionBuilder.withTransactionTitle(anyString())).thenReturn(transactionBuilder);
-        when(transactionBuilder.build()).thenReturn(transaction);
+        when(transferBuilder.from(any(Account.class))).thenReturn(transferBuilder);
+        when(transferBuilder.to(any(Account.class))).thenReturn(transferBuilder);
+        when(transferBuilder.asInternalTransfer()).thenReturn(transferBuilder);
+        when(transferBuilder.withAmount(any(BigDecimal.class))).thenReturn(transferBuilder);
+        when(transferBuilder.withTitle(anyString())).thenReturn(transferBuilder);
+        when(transferBuilder.build()).thenReturn(transaction);
 
         // when
         registrationService.registerUser(registrationDto);

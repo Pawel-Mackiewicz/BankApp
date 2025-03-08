@@ -9,7 +9,6 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionBuilder;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
@@ -24,7 +23,6 @@ public class UserRegistrationService {
     private final UserMapper userMapper;
     private final AccountService accountService;
     private final TransactionService transactionService;
-    private final TransactionBuilder transactionBuilder;
     private final EmailService emailService;
 
     // Only allow letters (English and Polish)
@@ -46,12 +44,12 @@ public class UserRegistrationService {
         Account newAccount = accountService.createAccount(createdUser.getId());
         Account bankAccount = accountService.getAccountById(-1);
 
-        Transaction transaction = transactionBuilder.withSourceAccount(bankAccount)
-                .withDestinationAccount(newAccount)
-                .withType("TRANSFER_INTERNAL")
-                .withAmount(new BigDecimal(500))
-                .withTransactionTitle("Welcoming Bonus")
-                .build();
+        Transaction transaction = Transaction.buildTransfer()
+            .from(bankAccount)
+            .to(newAccount)
+            .withAmount(new BigDecimal("1000"))
+            .withTitle("Welcome bonus")
+            .build();
 
         transactionService.createTransaction(transaction);
 
