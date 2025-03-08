@@ -2,7 +2,6 @@ package info.mackiewicz.bankapp.transaction.validation;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 

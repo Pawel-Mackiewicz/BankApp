@@ -1,18 +1,20 @@
 package info.mackiewicz.bankapp.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
-import info.mackiewicz.bankapp.account.service.AccountService;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,6 +22,9 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.exception.NoTransactionsForAccountException;
 import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedException;
 import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedException;
@@ -29,6 +34,7 @@ import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import info.mackiewicz.bankapp.transaction.service.TransactionProcessor;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 
 class TransactionServiceTest {
 
@@ -42,6 +48,9 @@ class TransactionServiceTest {
 
     @Mock
     private AccountService accountService;
+
+    @Mock
+    private TransactionValidator validator;
 
     @InjectMocks
     private TransactionService transactionService;
@@ -254,9 +263,11 @@ class TransactionServiceTest {
 
         when(transactionRepository.findById(transactionId)).thenReturn(Optional.of(transaction));
         doNothing().when(processor).processTransaction(transaction);
+        doNothing().when(validator).validate(transaction);
 
         transactionService.processTransactionById(transactionId);
 
+        verify(validator).validate(transaction);
         verify(processor, times(1)).processTransaction(transaction);
         logger.info("testProcessTransactionById: Test passed");
     }
