@@ -1,10 +1,12 @@
-package info.mackiewicz.bankapp.transaction.service.assembler;
+package info.mackiewicz.bankapp.transaction.service.assembler.strategies;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.transaction.service.assembler.TransactionAssemblyStrategy;
+import info.mackiewicz.bankapp.transaction.service.assembler.TransactionTypeResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
