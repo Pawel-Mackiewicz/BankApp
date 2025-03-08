@@ -3,5 +3,11 @@ package info.mackiewicz.bankapp.transaction.service.strategy;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 
 public interface TransactionStrategy {
-    boolean execute(Transaction currentTransaction);
+    /**
+     * Executes the transaction according to its type and rules.
+     *
+     * @param transaction Transaction to be executed
+     * @return true if the transaction was executed successfully, false otherwise
+     */
+    boolean execute(Transaction transaction);
 }

@@ -318,12 +318,4 @@ class TransactionServiceTest {
         verify(processor, times(2)).processTransaction(any(Transaction.class));
         logger.info("testProcessAllNewTransactions: Test passed");
     }
-
-    @Disabled
-    @Test
-    void testDisabled() {
-        logger.info("testDisabled: Starting test");
-        assertTrue(false);
-        logger.info("testDisabled: Test passed");
-    }
 }

@@ -6,6 +6,18 @@ import lombok.Getter;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum TransactionType {
+    DEPOSIT(
+        TransactionCategory.DEPOSIT,
+        "Deposit",
+        false,   // no IBAN required
+        0.0      // no fee
+    ),
+    WITHDRAWAL(
+        TransactionCategory.WITHDRAWAL,
+        "Withdrawal",
+        false,   // no IBAN required
+        0.0      // no fee
+    ),
     TRANSFER_OWN(
         TransactionCategory.TRANSFER,
         "Own Account Transfer",
@@ -23,18 +35,6 @@ public enum TransactionType {
         "External Transfer",
         true,    // requiresIban
         0.01     // fee
-    ),
-    DEPOSIT(
-        TransactionCategory.DEPOSIT,
-        "Deposit",
-        false,   // no IBAN required
-        0.0      // no fee
-    ),
-    WITHDRAWAL(
-        TransactionCategory.WITHDRAWAL,
-        "Withdrawal",
-        false,   // no IBAN required
-        0.0      // no fee
     ),
     FEE(
         TransactionCategory.FEE,

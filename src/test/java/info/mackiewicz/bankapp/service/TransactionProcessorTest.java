@@ -11,9 +11,10 @@ import info.mackiewicz.bankapp.account.util.AccountLockManager;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
-import info.mackiewicz.bankapp.transaction.service.TransactionHydrator;
 import info.mackiewicz.bankapp.transaction.service.TransactionProcessor;
+import info.mackiewicz.bankapp.transaction.service.strategy.StrategyResolver;
 import info.mackiewicz.bankapp.transaction.service.strategy.TransactionStrategy;
+import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import info.mackiewicz.bankapp.user.model.User;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +30,7 @@ class TransactionProcessorTest {
     private static final Logger logger = LoggerFactory.getLogger(TransactionProcessorTest.class);
 
     @Mock
-    private TransactionHydrator hydrator;
+    private StrategyResolver strategyResolver;
 
     @Mock
     private TransactionRepository repository;
@@ -39,6 +40,9 @@ class TransactionProcessorTest {
 
     @Mock
     private TransactionStrategy strategy;
+
+    @Mock
+    private TransactionValidator validator;
 
     @InjectMocks
     private TransactionProcessor processor;
@@ -62,10 +66,10 @@ class TransactionProcessorTest {
         transaction.setType(TransactionType.DEPOSIT);
         transaction.setDestinationAccount(destinationAccount);
         transaction.setAmount(new BigDecimal("100"));
-        transaction.setStrategy(strategy);
 
-        when(hydrator.hydrate(any(Transaction.class))).thenReturn(transaction);
+        when(strategyResolver.resolveStrategy(any(Transaction.class))).thenReturn(strategy);
         when(strategy.execute(any(Transaction.class))).thenReturn(true);
+        doNothing().when(validator).validate(any(Transaction.class));
 
         // when
         processor.processTransaction(transaction);
@@ -73,10 +77,32 @@ class TransactionProcessorTest {
         // then
         verify(accountLockManager).lockAccounts(transaction.getDestinationAccount(), transaction.getSourceAccount());
         verify(accountLockManager).unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
-        verify(hydrator).hydrate(transaction);
-        verify(repository, atLeastOnce()).save(transaction);
+        verify(strategyResolver).resolveStrategy(transaction);
         verify(strategy).execute(transaction);
+        verify(validator).validate(transaction);
+        verify(repository, atLeastOnce()).save(transaction);
         
         logger.info("testProcessTransaction: Test passed");
+    }
+
+    @Test
+    void testProcessTransaction_FailedExecution() {
+        // given
+        Transaction transaction = new Transaction();
+        transaction.setType(TransactionType.DEPOSIT);
+        transaction.setAmount(new BigDecimal("100"));
+
+        when(strategyResolver.resolveStrategy(any(Transaction.class))).thenReturn(strategy);
+        when(strategy.execute(any(Transaction.class))).thenReturn(false);
+        doNothing().when(validator).validate(any(Transaction.class));
+
+        // when
+        processor.processTransaction(transaction);
+
+        // then
+        verify(strategyResolver).resolveStrategy(transaction);
+        verify(strategy).execute(transaction);
+        verify(validator).validate(transaction);
+        verify(repository, atLeastOnce()).save(transaction);
     }
 }

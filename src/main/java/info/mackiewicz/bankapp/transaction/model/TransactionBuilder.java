@@ -1,15 +1,15 @@
 package info.mackiewicz.bankapp.transaction.model;
 
+import java.math.BigDecimal;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.shared.exception.TransactionAmountNotSpecifiedException;
 import info.mackiewicz.bankapp.shared.exception.TransactionDestinationAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.shared.exception.TransactionSourceAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.shared.exception.TransactionTypeNotSpecifiedException;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
 
 @Component
 @Scope("prototype")

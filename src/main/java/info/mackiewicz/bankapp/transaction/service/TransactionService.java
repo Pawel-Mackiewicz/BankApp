@@ -7,6 +7,7 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
+import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,28 +24,26 @@ public class TransactionService {
     private final TransactionRepository repository;
     private final TransactionProcessor processor;
     private final AccountService accountService;
-    
+    private final TransactionValidator validator;
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public Transaction createTransaction(Transaction transaction) {
-        log.debug("AccountService.createTransaction invoked with: {}", transaction);
+        log.debug("Creating new transaction: {}", transaction);
         
+        // Validate before saving
+        validator.validate(transaction);
+        
+        // Save to repository
         Transaction savedTransaction = repository.save(transaction);
         log.debug("Transaction saved with ID: {}", savedTransaction.getId());
         
-        processOwnTransfer(savedTransaction);
-        
-        return savedTransaction;
-    }
-
-    private void processOwnTransfer(Transaction savedTransaction) {
-        log.debug("Checking if transaction {} is an own transfer", savedTransaction.getId());
+        // Process immediately if it's an own transfer
         if (TransactionType.TRANSFER_OWN.equals(savedTransaction.getType())) {
             log.info("Processing own transfer transaction: {}", savedTransaction.getId());
-            processTransaction(savedTransaction);
-        } else {
-            log.debug("Transaction {} is not an own transfer", savedTransaction.getId());
+            processor.processTransaction(savedTransaction);
         }
+        
+        return savedTransaction;
     }
 
     public void deleteTransactionById(int id) {
@@ -102,41 +101,30 @@ public class TransactionService {
                 });
     }
 
-    // *********** TRANSACTION PROCESSING ************
     public void processTransactionById(int transactionId) {
         log.info("Processing single transaction: {}", transactionId);
         Transaction transaction = getTransactionById(transactionId);
-        processTransaction(transaction);
-    }
-
-    public void processAllNewTransactions() {
-        log.info("Starting batch processing of new transactions");
-        List<Transaction> transactions = getAllNewTransactions();
-        log.debug("Found {} new transactions to process", transactions.size());
-        transactions.forEach(this::processTransaction);
-        log.info("Completed batch processing of {} transactions", transactions.size());
-    }
-
-    private void processTransaction(Transaction transaction) {
-        log.debug("Processing transaction: {} with status: {}", transaction.getId(), transaction.getStatus());
+        
+        // Validate before processing
+        validator.validate(transaction);
         
         switch (transaction.getStatus()) {
             case DONE -> {
-                log.warn("Attempted to process already completed transaction: {}", transaction.getId());
+                log.warn("Attempted to process already completed transaction: {}", transactionId);
                 throw new TransactionAlreadyProcessedException(
-                        "Transaction " + transaction.getId() + " has already been processed");
+                    "Transaction " + transactionId + " has already been processed");
             }
             case FAULTY -> {
-                log.error("Attempted to process faulty transaction: {}", transaction.getId());
+                log.error("Attempted to process faulty transaction: {}", transactionId);
                 throw new TransactionCannotBeProcessedException(
-                        "Transaction " + transaction.getId() + " cannot be processed");
+                    "Transaction " + transactionId + " cannot be processed");
             }
             case NEW -> {
-                log.info("Processing new transaction: {}", transaction.getId());
+                log.info("Processing new transaction: {}", transactionId);
                 processor.processTransaction(transaction);
             }
             case PENDING -> {
-                log.warn("Attempted to process PENDING transaction: {}", transaction.getId());
+                log.warn("Attempted to process PENDING transaction: {}", transactionId);
                 throw new UnsupportedOperationException("Unimplemented case: " + transaction.getStatus());
             }
             default -> {
@@ -144,5 +132,22 @@ public class TransactionService {
                 throw new IllegalArgumentException("Unexpected value: " + transaction.getStatus());
             }
         }
+    }
+
+    public void processAllNewTransactions() {
+        log.info("Starting batch processing of new transactions");
+        List<Transaction> transactions = getAllNewTransactions();
+        log.debug("Found {} new transactions to process", transactions.size());
+        
+        for (Transaction transaction : transactions) {
+            try {
+                validator.validate(transaction);
+                processor.processTransaction(transaction);
+            } catch (Exception e) {
+                log.error("Failed to process transaction {}: {}", transaction.getId(), e.getMessage());
+            }
+        }
+        
+        log.info("Completed batch processing of {} transactions", transactions.size());
     }
 }

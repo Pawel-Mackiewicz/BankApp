@@ -4,24 +4,22 @@ import info.mackiewicz.bankapp.shared.util.LoggingService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class WithdrawalTransaction implements TransactionStrategy {
 
     private final StrategyHelper strategyHelper;
 
-    public WithdrawalTransaction(StrategyHelper strategyHelper) {
-        this.strategyHelper = strategyHelper;
-    }
-
     @Override
-    public boolean execute(Transaction currentTransaction) {
+    public boolean execute(Transaction transaction) {
         try {
-            strategyHelper.withdraw(currentTransaction);
+            strategyHelper.withdraw(transaction);
             return true;
         } catch (Exception e) {
-            LoggingService.logErrorInMakingTransaction(currentTransaction, e.getMessage());
+            LoggingService.logErrorInMakingTransaction(transaction, e.getMessage());
+            return false;
         }
-        return false;
     }
 }

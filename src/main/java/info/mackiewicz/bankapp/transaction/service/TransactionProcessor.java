@@ -5,6 +5,9 @@ import info.mackiewicz.bankapp.shared.util.LoggingService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
+import info.mackiewicz.bankapp.transaction.service.strategy.StrategyResolver;
+import info.mackiewicz.bankapp.transaction.service.strategy.TransactionStrategy;
+import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.scheduling.annotation.Async;
@@ -14,9 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransactionProcessor {
 
-    private final TransactionHydrator hydrator;
+    private final StrategyResolver strategyResolver;
     private final TransactionRepository repository;
     private final AccountLockManager accountLockManager;
+    private final TransactionValidator validator;
 
     @Async
     public void processTransaction(Transaction transaction) {
@@ -37,28 +41,27 @@ public class TransactionProcessor {
         LoggingService.logTransactionAttempt(transaction);
 
         try {
+            // Validate before processing
+            validator.validate(transaction);
+            
+            // Change status to pending
             changeTransactionStatus(transaction, TransactionStatus.PENDING);
-            executeTransaction(hydrateTransaction(transaction));
-        } catch (IllegalArgumentException e) {
+            
+            // Get appropriate strategy and execute
+            TransactionStrategy strategy = strategyResolver.resolveStrategy(transaction);
+            boolean success = strategy.execute(transaction);
+            
+            if (success) {
+                LoggingService.logSuccessfulTransaction(transaction);
+                changeTransactionStatus(transaction, TransactionStatus.DONE);
+            } else {
+                LoggingService.logErrorInMakingTransaction(transaction);
+                changeTransactionStatus(transaction, TransactionStatus.FAULTY);
+            }
+        } catch (Exception e) {
             LoggingService.logFailedTransactionDueToInsufficientFunds(transaction);
             changeTransactionStatus(transaction, TransactionStatus.FAULTY);
-        }
-    }
-
-    private Transaction hydrateTransaction(Transaction transaction) {
-
-        return hydrator.hydrate(transaction);
-    }
-
-    private void executeTransaction(Transaction transaction) {
-
-        boolean success = transaction.execute();
-        if (success) {
-            LoggingService.logSuccessfulTransaction(transaction);
-            changeTransactionStatus(transaction, TransactionStatus.DONE);
-        } else {
-            LoggingService.logErrorInMakingTransaction(transaction);
-            changeTransactionStatus(transaction, TransactionStatus.FAULTY);
+            throw e;
         }
     }
 
@@ -67,7 +70,7 @@ public class TransactionProcessor {
         LoggingService.logUnlockingAccounts(transaction);
     }
 
-    public void changeTransactionStatus(Transaction transaction, TransactionStatus status) {
+    private void changeTransactionStatus(Transaction transaction, TransactionStatus status) {
         transaction.setStatus(status);
         repository.save(transaction);
     }
