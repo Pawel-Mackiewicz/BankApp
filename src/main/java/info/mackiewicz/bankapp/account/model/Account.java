@@ -59,6 +59,8 @@ public class Account {
 
     /**
      * Default constructor for JPA.
+     * This constructor is package-private to prevent direct instantiation.
+     * Use {@link AccountService} to create new accounts.
      */
     Account() {
     }
@@ -66,7 +68,7 @@ public class Account {
     /**
      * Creates a new account with specified owner, account number and IBAN.
      * This constructor is package-private to enforce creation through
-     * AccountFactory.
+     * {@link AccountService}.
      *
      * @param owner             The user who owns this account
      * @param userAccountNumber The user-specific account number
