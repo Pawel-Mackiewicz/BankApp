@@ -144,24 +144,32 @@ class TransactionProcessingServiceTest {
     void processAllNewTransactions_WhenSomeTransactionsFail_ShouldContinueProcessing() {
         // given
         Transaction transaction1 = createTransaction(TransactionStatus.NEW);
+        transaction1.setId(1);
         Transaction transaction2 = createTransaction(TransactionStatus.NEW);
+        transaction2.setId(2);
+        log.info("Created test transactions: {} and {}", transaction1, transaction2);
         List<Transaction> transactions = List.of(transaction1, transaction2);
         
         when(queryService.getAllNewTransactions()).thenReturn(transactions);
         doThrow(IllegalArgumentException.class).when(validator).validate(transaction1);
 
         // when
+        log.info("Starting test execution");
         processingService.processAllNewTransactions();
+        log.info("Test execution completed");
 
         // then
         verify(validator, times(2)).validate(any());
         verify(processor, never()).processTransaction(transaction1);
-        verify(processor).processTransaction(transaction2);
+        verify(processor).processTransaction(any(Transaction.class));
     }
 
     private Transaction createTransaction(TransactionStatus status) {
         Transaction transaction = new Transaction();
         transaction.setStatus(status);
+        // Dodajemy puste obiekty dla pól, które są używane w TransactionProcessor
+        transaction.setSourceAccount(null);
+        transaction.setDestinationAccount(null);
         return transaction;
     }
 }

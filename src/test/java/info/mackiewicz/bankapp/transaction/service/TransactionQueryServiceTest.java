@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.iban4j.Iban;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.exception.NoTransactionsForAccountException;
 import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +42,19 @@ class TransactionQueryServiceTest {
 
     @InjectMocks
     private TransactionQueryService queryService;
+
+    private User createTestUser(Integer id) {
+        User user = new User();
+        user.setId(id);
+        user.setPESEL("12345678901");
+        user.setFirstname("Jan");
+        user.setLastname("Testowy");
+        user.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        user.setUsername("testuser");
+        user.setEmail("test@example.com");
+        user.setPhoneNumber("123456789");
+        return user;
+    }
 
     @BeforeEach
     void setUp() {
@@ -104,7 +120,8 @@ class TransactionQueryServiceTest {
     void getTransactionsByAccountId_WhenAccountExists_ShouldReturnTransactions() {
         // given
         int accountId = 1;
-        Account account = accountService.createAccount(null) ;
+        User owner = createTestUser(1);
+        Account account = Account.factory().createAccount(owner);
         List<Transaction> transactions = List.of(new Transaction(), new Transaction());
         
         when(accountService.getAccountById(accountId)).thenReturn(account);
@@ -123,7 +140,8 @@ class TransactionQueryServiceTest {
     void getTransactionsByAccountId_WhenNoTransactions_ShouldThrowException() {
         // given
         int accountId = 1;
-        Account account = new Account();
+        User owner = createTestUser(2);
+        Account account = Account.factory().createAccount(owner);
         
         when(accountService.getAccountById(accountId)).thenReturn(account);
         when(repository.findByAccountId(accountId)).thenReturn(Optional.empty());
