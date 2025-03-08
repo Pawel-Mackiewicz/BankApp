@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.transaction.model.builder.DepositBuilder;
+import info.mackiewicz.bankapp.transaction.model.builder.TransferBuilder;
+import info.mackiewicz.bankapp.transaction.model.builder.WithdrawalBuilder;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,9 +58,22 @@ public class Transaction {
     private LocalDateTime date;
     
     @PrePersist
-    public void prePersist() {
+    void prePersist() {
         if (date == null) {
             date = LocalDateTime.now();
         }
     }
+
+        // Static fabric methods for creating builders
+        public static TransferBuilder buildTransfer() {
+            return new TransferBuilder();
+        }
+        
+        public static WithdrawalBuilder buildWithdrawal() {
+            return new WithdrawalBuilder();
+        }
+        
+        public static DepositBuilder buildDeposit() {
+            return new DepositBuilder();
+        }
 }
