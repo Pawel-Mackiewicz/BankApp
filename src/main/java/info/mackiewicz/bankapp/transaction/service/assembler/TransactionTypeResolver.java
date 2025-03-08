@@ -7,8 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @UtilityClass
-class TransactionTypeResolver {
+public class TransactionTypeResolver {
 
+    /**
+     * Resolves the transaction type based on the request data.
+     * If the recipient IBAN is null, then recipient email is not null, so it's an TRANSFER_INTERNAL.
+     * Otherwise, it's an TRANSFER_OWN if the recipient IBAN is owned by the same user as the source IBAN.
+     *
+     * @param request the transfer request
+     * @return resolved transaction type
+     */
     public TransactionType resolveTransactionType(TransferRequest request) {
         log.debug("Resolving transaction type for request with source IBAN: {}", request.getSourceIban());
 
