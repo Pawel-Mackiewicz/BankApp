@@ -53,7 +53,9 @@ public class EmailService {
      * @param email recipient's email address
      */
     public void sendPasswordResetConfirmation(String email, String fullNameOfUser) {
+    public void sendPasswordResetConfirmation(String email, String fullNameOfUser) {
         String loginLink = baseUrl + "/login";
+        EmailContent content = templateProvider.getPasswordResetConfirmationEmail(fullNameOfUser, loginLink);
         EmailContent content = templateProvider.getPasswordResetConfirmationEmail(fullNameOfUser, loginLink);
         emailSender.send(email, content.subject(), content.htmlContent());
     }

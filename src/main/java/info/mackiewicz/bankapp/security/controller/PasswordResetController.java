@@ -39,7 +39,9 @@ public class PasswordResetController {
         }
         
         PasswordResetToken token = passwordResetService.validateToken(request.getToken())
+        PasswordResetToken token = passwordResetService.validateToken(request.getToken())
             .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
+        passwordResetService.completeReset(request.getToken(), token.getUserEmail(), token.getFullName(), request.getPassword());
         passwordResetService.completeReset(request.getToken(), token.getUserEmail(), token.getFullName(), request.getPassword());
         return ResponseEntity.ok().build();
     }

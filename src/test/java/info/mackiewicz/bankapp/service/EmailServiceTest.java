@@ -84,6 +84,7 @@ class EmailServiceTest {
 
         // Act
         emailService.sendPasswordResetConfirmation(email, userName);
+        emailService.sendPasswordResetConfirmation(email, userName);
 
         // Assert
         verify(templateProvider).getPasswordResetConfirmationEmail(userName, expectedLoginLink);
