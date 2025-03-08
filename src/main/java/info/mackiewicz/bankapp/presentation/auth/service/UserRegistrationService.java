@@ -47,6 +47,7 @@ public class UserRegistrationService {
         Transaction transaction = Transaction.buildTransfer()
             .from(bankAccount)
             .to(newAccount)
+            .asInternalTransfer()
             .withAmount(new BigDecimal("1000"))
             .withTitle("Welcome bonus")
             .build();

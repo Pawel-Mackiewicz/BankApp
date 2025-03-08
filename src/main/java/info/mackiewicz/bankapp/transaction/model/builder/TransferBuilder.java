@@ -13,6 +13,11 @@ public class TransferBuilder extends AbstractTransactionBuilder<TransferBuilder>
     public TransferBuilder() {
     }
 
+    public TransferBuilder withTransactionType(String type) {
+        this.type = TransactionType.valueOf(type);
+        return this;
+    }
+
     public TransferBuilder withTransactionType(TransactionType type) {
         this.type = type;
         return this;

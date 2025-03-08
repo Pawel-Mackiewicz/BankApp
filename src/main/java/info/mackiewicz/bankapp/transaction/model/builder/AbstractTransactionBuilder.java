@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.transaction.model.builder;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 import info.mackiewicz.bankapp.shared.exception.InvalidTransactionTypeException;
 import info.mackiewicz.bankapp.shared.exception.TransactionAmountNotSpecifiedException;
@@ -35,7 +36,7 @@ public abstract class AbstractTransactionBuilder<T extends AbstractTransactionBu
         if (type == null) {
             throw new TransactionTypeNotSpecifiedException();
         }
-        if(!TransactionType.values().toString().contains(type.toString())) {
+        if(!Arrays.asList(TransactionType.values()).contains(type)) {
             throw new InvalidTransactionTypeException();
         }
     }
