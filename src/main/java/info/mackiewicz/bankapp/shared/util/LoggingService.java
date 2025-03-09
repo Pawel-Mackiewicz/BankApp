@@ -1,19 +1,20 @@
 package info.mackiewicz.bankapp.shared.util;
 
+import org.springframework.stereotype.Service;
+
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@UtilityClass
+@Service
 public class LoggingService {
 
-    private static String formatAccountInfo(Account account) {
+    private String formatAccountInfo(Account account) {
         return account != null ? "ID:" + account.getId() : "N/A";
     }
 
-    public static void logLockingAccounts(Transaction transaction) {
+    public void logLockingAccounts(Transaction transaction) {
         Account from = transaction.getSourceAccount();
         Account to = transaction.getDestinationAccount();
         String message = String.format("Transaction ID: %s, Locked accounts: %s, %s, Thread: %s",
@@ -21,7 +22,7 @@ public class LoggingService {
         log.info(message);
     }
 
-    public static void logUnlockingAccounts(Transaction transaction) {
+    public void logUnlockingAccounts(Transaction transaction) {
         Account from = transaction.getSourceAccount();
         Account to = transaction.getDestinationAccount();
         String message = String.format("Transaction ID: %s, Unlocked accounts: %s, %s, Thread: %s",
@@ -29,7 +30,7 @@ public class LoggingService {
         log.info(message);
     }
 
-    public static void logTransactionAttempt(Transaction transaction) {
+    public void logTransactionAttempt(Transaction transaction) {
         StringBuilder sb = new StringBuilder();
         sb.append("Attempt Transaction\n")
                 .append("\tID: ").append(transaction.getId()).append("\n")
@@ -47,7 +48,7 @@ public class LoggingService {
         log.info(sb.toString());
     }
 
-    public static void logSuccessfulTransaction(Transaction transaction) {
+    public void logSuccessfulTransaction(Transaction transaction) {
         StringBuilder sb = new StringBuilder();
         sb.append("Successful Transaction\n\tID: ").append(transaction.getId());
 
