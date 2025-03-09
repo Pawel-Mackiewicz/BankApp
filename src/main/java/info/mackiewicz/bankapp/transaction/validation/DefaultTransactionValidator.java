@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
-import info.mackiewicz.bankapp.transaction.model.TransactionCategory;
+import info.mackiewicz.bankapp.transaction.model.TransactionTypeCategory;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -56,7 +56,7 @@ public class DefaultTransactionValidator implements TransactionValidator {
 
     private void validateAccounts(Transaction transaction) {
         TransactionType type = transaction.getType();
-        TransactionCategory category = type.getCategory();
+        TransactionTypeCategory category = type.getCategory();
         
         switch (category) {
             case DEPOSIT -> validateDepositAccounts(transaction);

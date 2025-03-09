@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.transaction.service.strategy;
 
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionCategory;
+import info.mackiewicz.bankapp.transaction.model.TransactionTypeCategory;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class StrategyResolver {
             throw new IllegalArgumentException("Transaction type cannot be null");
         }
 
-        TransactionCategory category = transaction.getType().getCategory();
+        TransactionTypeCategory category = transaction.getType().getCategory();
         
         return switch (category) {
             case DEPOSIT -> depositTransaction;
