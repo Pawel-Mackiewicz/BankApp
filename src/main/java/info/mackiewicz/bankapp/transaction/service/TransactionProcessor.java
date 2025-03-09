@@ -1,18 +1,22 @@
 package info.mackiewicz.bankapp.transaction.service;
 
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import info.mackiewicz.bankapp.account.exception.AccountLockException;
+import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
 import info.mackiewicz.bankapp.shared.util.LoggingService;
+import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
-import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
+import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
 import info.mackiewicz.bankapp.transaction.service.strategy.StrategyResolver;
 import info.mackiewicz.bankapp.transaction.service.strategy.TransactionStrategy;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 /**
  * Service responsible for processing financial transactions with proper locking and validation mechanisms.
@@ -22,27 +26,47 @@ import org.springframework.stereotype.Service;
 public class TransactionProcessor {
 
     private final StrategyResolver strategyResolver;
-    private final TransactionRepository repository;
     private final AccountLockManager accountLockManager;
     private final TransactionValidator validator;
+    private final TransactionErrorHandler errorHandler;
+    private final TransactionStatusManager statusManager;
 
     /**
      * Asynchronously processes a financial transaction with proper account locking and error handling.
+     * Errors are handled by the TransactionErrorHandler and propagated to registered observers.
      */
     @Async
     public void processTransaction(Transaction transaction) {
         LoggingService.logTransactionAttempt(transaction);
-        acquireAccountLocks(transaction);
         try {
-            executeTransactionProcess(transaction);
-        } catch (InsufficientFundsException e) {
-            handleInsufficientFundsError(transaction, e);
-        } catch (TransactionValidationException e) {
-            handleValidationError(transaction, e);
+            acquireAccountLocks(transaction);
+            try {
+                executeTransactionProcess(transaction);
+                LoggingService.logSuccessfulTransaction(transaction);
+                statusManager.setTransactionStatus(transaction, TransactionStatus.DONE);
+            } catch (InsufficientFundsException e) {
+                errorHandler.handleInsufficientFundsError(transaction, e);
+            } catch (TransactionValidationException e) {
+                errorHandler.handleValidationError(transaction, e);
+            } catch (TransactionExecutionException e) {
+                errorHandler.handleExecutionError(transaction, e);
+            } catch (Exception e) {
+                errorHandler.handleUnexpectedError(transaction, e);
+            }
+        } catch (AccountLockException e) {
+            // Explicitly handle lock acquisition failures
+            errorHandler.handleLockError(transaction, e);
         } catch (Exception e) {
-            handleUnexpectedError(transaction, e);
+            // Handle any other unexpected errors during lock acquisition
+            errorHandler.handleUnexpectedLockError(transaction, e);
         } finally {
-            releaseAccountLocks(transaction);
+            try {
+                releaseAccountLocks(transaction);
+            } catch (AccountUnlockException e) {
+                errorHandler.handleUnlockError(transaction, e);
+            } catch (Exception e) {
+                errorHandler.handleUnexpectedUnlockError(transaction, e);
+            }
         }
     }
 
@@ -58,48 +82,20 @@ public class TransactionProcessor {
 
     private void validateAndInitialize(Transaction transaction) {
         validator.validate(transaction);
-        setTransactionStatus(transaction, TransactionStatus.PENDING);
+        statusManager.setTransactionStatus(transaction, TransactionStatus.PENDING);
     }
 
     private void executeTransactionStrategy(Transaction transaction) {
         TransactionStrategy strategy = strategyResolver.resolveStrategy(transaction);
         boolean success = strategy.execute(transaction);
         
-        if (success) {
-            LoggingService.logSuccessfulTransaction(transaction);
-            setTransactionStatus(transaction, TransactionStatus.DONE);
-        } else {
-            LoggingService.logErrorInMakingTransaction(transaction);
-            setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
-            throw new RuntimeException("Transaction execution failed");
+        if (!success) {
+            throw new TransactionExecutionException("Transaction execution failed");
         }
     }
 
-    private void handleInsufficientFundsError(Transaction transaction, InsufficientFundsException e) {
-        LoggingService.logFailedTransactionDueToInsufficientFunds(transaction);
-        setTransactionStatus(transaction, TransactionStatus.INSUFFICIENT_FUNDS);
-        throw e;
-    }
-
-    private void handleValidationError(Transaction transaction, TransactionValidationException e) {
-        LoggingService.logErrorInMakingTransaction(transaction, "Validation Error: " + e.getMessage());
-        setTransactionStatus(transaction, TransactionStatus.VALIDATION_ERROR);
-        throw e;
-    }
-
-    private void handleUnexpectedError(Transaction transaction, Exception e) {
-        LoggingService.logErrorInMakingTransaction(transaction, "Unexpected Error: " + e.getMessage());
-        setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
-        throw new RuntimeException("Unexpected error during transaction processing", e);
-    }
-
     private void releaseAccountLocks(Transaction transaction) {
-        accountLockManager.unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
-        LoggingService.logUnlockingAccounts(transaction);
-    }
-
-    private void setTransactionStatus(Transaction transaction, TransactionStatus status) {
-        transaction.setStatus(status);
-        repository.save(transaction);
+            accountLockManager.unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
+            LoggingService.logUnlockingAccounts(transaction);
     }
 }

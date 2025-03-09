@@ -8,6 +8,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.springframework.stereotype.Component;
 
+import info.mackiewicz.bankapp.account.exception.AccountLockException;
+import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.model.Account;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -105,26 +107,6 @@ public class AccountLockManager {
         }
     }
 
-    public static class AccountLockException extends RuntimeException {
-        private final Integer accountId;
-        private final int attempts;
-        private final long totalWaitTime;
-        private final boolean wasInterrupted;
-
-        public AccountLockException(String message, Integer accountId, int attempts, long totalWaitTime, boolean wasInterrupted) {
-            super(message);
-            this.accountId = accountId;
-            this.attempts = attempts;
-            this.totalWaitTime = totalWaitTime;
-            this.wasInterrupted = wasInterrupted;
-        }
-
-        public Integer getAccountId() { return accountId; }
-        public int getAttempts() { return attempts; }
-        public long getTotalWaitTime() { return totalWaitTime; }
-        public boolean wasInterrupted() { return wasInterrupted; }
-    }
-
     private void lockAccount(Account account) {
         log.debug("Acquiring lock for account ID: {}", account.getId());
         ReentrantLock lock = getOrCreateLock(account.getId());
@@ -186,7 +168,14 @@ public class AccountLockManager {
 
     private void unlockAccount(Account account) {
         log.debug("Releasing lock for account ID: {}", account.getId());
-        getOrCreateLock(account.getId()).unlock();
-        accountUnlockCounter.incrementAndGet();
+        try {
+            getOrCreateLock(account.getId()).unlock();
+            accountUnlockCounter.incrementAndGet();
+        } catch (IllegalMonitorStateException e) {
+            throw new AccountUnlockException(
+                "Cannot release lock that is not held",
+                account.getId()
+            );
+        }
     }
 }
