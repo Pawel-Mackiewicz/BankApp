@@ -8,6 +8,7 @@ import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedExcep
 import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedException;
 import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatusCategory;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,12 +76,18 @@ class TransactionProcessingService {
      * Processes the transaction based on its current status.
      */
     private void processBasedOnStatus(Transaction transaction) {
-        switch (transaction.getStatus()) {
-            case DONE -> handleDoneTransaction(transaction);
-            case FAULTY -> handleFaultyTransaction(transaction);
+        var status = transaction.getStatus();
+        switch (status) {
             case NEW -> processNewTransaction(transaction);
             case PENDING -> handlePendingTransaction(transaction);
-            default -> handleInvalidStatus(transaction);
+            case DONE -> handleDoneTransaction(transaction);
+            default -> {
+                if (status.getCategory() == TransactionStatusCategory.FAULTY) {
+                    handleFaultyTransaction(transaction);
+                } else {
+                    handleInvalidStatus(transaction);
+                }
+            }
         }
     }
 

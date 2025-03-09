@@ -32,6 +32,7 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.util.Util;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatusCategory;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -343,9 +344,9 @@ class ConcurrentTransactionIntegrationTest {
             .atMost(Duration.ofSeconds(10))
             .untilAsserted(() -> {
                 Transaction completed = transactionService.getTransactionById(zeroBalanceTransfer.getId());
-                assertThat(completed.getStatus())
+                assertThat(completed.getStatus().getCategory())
                     .as("Zero balance transfer should fail")
-                    .isEqualTo(TransactionStatus.FAULTY);
+                    .isEqualTo(TransactionStatusCategory.FAULTY);
             });
     }
 

@@ -31,6 +31,7 @@ import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedExce
 import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatusCategory;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import info.mackiewicz.bankapp.transaction.service.TransactionProcessor;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
@@ -293,8 +294,8 @@ class TransactionServiceTest {
     }
 
     @Test
-    void testProcessTransactionByIdFaulty() {
-        logger.info("testProcessTransactionByIdFaulty: Starting test");
+    void testCannotProcessFailedTransaction() {
+        logger.info("testCannotProcessFailedTransaction: Starting test");
         Integer transactionId = 1;
         Transaction transaction = new Transaction();
         try {
@@ -304,12 +305,15 @@ class TransactionServiceTest {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             fail("Failed to set transaction id using reflection: " + e.getMessage());
         }
-        transaction.setStatus(TransactionStatus.FAULTY);
+        // Używamy dowolnego statusu z kategorią FAULTY
+        transaction.setStatus(TransactionStatus.INSUFFICIENT_FUNDS);
 
         when(transactionRepository.findById(transactionId)).thenReturn(Optional.of(transaction));
 
         assertThrows(TransactionCannotBeProcessedException.class, () -> transactionService.processTransactionById(transactionId));
-        logger.info("testProcessTransactionByIdFaulty: Test passed");
+        assertTrue(transaction.getStatus().getCategory() == TransactionStatusCategory.FAULTY,
+            "Transaction should have FAULTY category");
+        logger.info("testCannotProcessFailedTransaction: Test passed");
     }
 
     @Test

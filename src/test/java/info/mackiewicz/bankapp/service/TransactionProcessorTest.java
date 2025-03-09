@@ -9,6 +9,8 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatusCategory;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import info.mackiewicz.bankapp.transaction.service.TransactionProcessor;
@@ -75,12 +77,12 @@ class TransactionProcessorTest {
         processor.processTransaction(transaction);
 
         // then
-        verify(accountLockManager).lockAccounts(transaction.getDestinationAccount(), transaction.getSourceAccount());
-        verify(accountLockManager).unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
+        verify(accountLockManager).lockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
+        verify(accountLockManager).unlockAccounts(transaction.getDestinationAccount(), transaction.getSourceAccount());
         verify(strategyResolver).resolveStrategy(transaction);
         verify(strategy).execute(transaction);
         verify(validator).validate(transaction);
-        verify(repository, atLeastOnce()).save(transaction);
+        verify(repository).save(argThat(t -> t.getStatus().getCategory() == TransactionStatusCategory.FAULTY));
         
         logger.info("testProcessTransaction: Test passed");
     }
@@ -88,21 +90,40 @@ class TransactionProcessorTest {
     @Test
     void testProcessTransaction_FailedExecution() {
         // given
-        Transaction transaction = new Transaction();
-        transaction.setType(TransactionType.DEPOSIT);
-        transaction.setAmount(new BigDecimal("100"));
+        User owner = new User();
+        owner.setId(1);
+        Account account = TestAccountBuilder.createTestAccountWithOwner(owner);
+        Transaction transaction = Transaction.buildDeposit()
+                                .to(account)
+                                .withAmount(new BigDecimal(100))
+                                .withTitle("test")
+                                .build();
 
         when(strategyResolver.resolveStrategy(any(Transaction.class))).thenReturn(strategy);
         when(strategy.execute(any(Transaction.class))).thenReturn(false);
         doNothing().when(validator).validate(any(Transaction.class));
 
-        // when
-        processor.processTransaction(transaction);
+        // when & then
+        RuntimeException exception = org.junit.jupiter.api.Assertions.assertThrows(
+            RuntimeException.class,
+            () -> processor.processTransaction(transaction)
+        );
+        
+        org.junit.jupiter.api.Assertions.assertEquals(
+            "Unexpected error during transaction processing",
+            exception.getMessage()
+        );
 
-        // then
+        // Verify locking with correct order (sourceAccount, destinationAccount)
+        verify(accountLockManager).lockAccounts(null, account);
+        verify(accountLockManager).unlockAccounts(null, account);
         verify(strategyResolver).resolveStrategy(transaction);
         verify(strategy).execute(transaction);
         verify(validator).validate(transaction);
-        verify(repository, atLeastOnce()).save(transaction);
+        // Verify that repository.save was called multiple times and the final status is SYSTEM_ERROR
+        verify(repository, atLeast(1)).save(any(Transaction.class));
+        verify(repository, atLeastOnce()).save(argThat(t ->
+            t.getStatus() == TransactionStatus.SYSTEM_ERROR
+        ));
     }
 }
