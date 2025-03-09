@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.user.model.User;
 
 class AccountValidationServiceTest {
@@ -101,7 +102,7 @@ class AccountValidationServiceTest {
         BigDecimal amount = new BigDecimal("500");
 
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(InsufficientFundsException.class, 
             () -> validationService.validateWithdrawal(balance, amount));
         assertEquals("Insufficient funds for withdrawal", exception.getMessage());
     }

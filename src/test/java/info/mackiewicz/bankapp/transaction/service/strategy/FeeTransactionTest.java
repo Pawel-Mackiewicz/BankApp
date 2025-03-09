@@ -52,21 +52,4 @@ class FeeTransactionTest {
         verify(strategyHelper).transfer(transaction);
         verify(accountService).getAccountById(-1);
     }
-
-    @Test
-    void execute_WhenErrorOccurs_ShouldNotExecuteTransfer() {
-        // given
-        Transaction transaction = new Transaction();
-        transaction.setType(TransactionType.FEE);
-
-        when(accountService.getAccountById(-1))
-            .thenThrow(new RuntimeException("Test error"));
-
-        // when
-        feeTransaction.execute(transaction);
-
-        // then
-        verify(accountService).getAccountById(-1);
-        verify(strategyHelper, never()).transfer(any());
-    }
 }

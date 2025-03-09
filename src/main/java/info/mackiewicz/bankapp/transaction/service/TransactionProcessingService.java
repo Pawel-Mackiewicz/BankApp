@@ -38,12 +38,7 @@ class TransactionProcessingService {
     public void processTransactionById(int transactionId) {
         log.info("Processing single transaction: {}", transactionId);
         Transaction transaction = queryService.getTransactionById(transactionId);
-        
-        // Validate before processing
-        validateTransaction(transaction);
-        
-        // Process based on status
-        processBasedOnStatus(transaction);
+        processSafely(transaction);
     }
 
     /**

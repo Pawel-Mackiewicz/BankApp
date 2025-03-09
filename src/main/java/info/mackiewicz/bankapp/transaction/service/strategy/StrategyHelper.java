@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
-public class StrategyHelper {
+class StrategyHelper {
     private final AccountService accountService;
 
     public void withdraw(Transaction transaction) {
