@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import info.mackiewicz.bankapp.shared.exception.NoTransactionsForAccountException;
 import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -118,18 +117,5 @@ public class TransactionService {
      */
     public void processAllNewTransactions() {
         processingService.processAllNewTransactions();
-    }
-
-    /**
-     * Updates only the status of a transaction in a thread-safe manner.
-     * This method performs a direct database update without loading the entire entity.
-     *
-     * @param transaction the transaction whose status needs to be updated
-     * @param status the new status to set
-     * @throws TransactionNotFoundException if no transaction is found with the given ID
-     */
-    @Transactional
-    public void updateTransactionStatus(Transaction transaction, TransactionStatus status) {
-        commandService.updateTransactionStatus(transaction, status);
     }
 }

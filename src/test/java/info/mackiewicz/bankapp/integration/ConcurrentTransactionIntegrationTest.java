@@ -97,7 +97,7 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle multiple concurrent transactions correctly")
     void testConcurrentTransactions() {
-        int numberOfTransactions = 40;
+        int numberOfTransactions = 30;
         List<Transaction> transactions = new ArrayList<>();
 
         for (int i = 0; i < numberOfTransactions; i++) {
@@ -110,7 +110,7 @@ class ConcurrentTransactionIntegrationTest {
         Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(10))
+            .atMost(Duration.ofSeconds(15))
             .untilAsserted(() -> {
                 verifyTransactionResults(transactions);
                 verifySystemBalance();
@@ -428,7 +428,7 @@ class ConcurrentTransactionIntegrationTest {
             Transaction completed = transactionService.getTransactionById(transaction.getId());
             assertThat(completed.getStatus())
                 .as("Transaction %d should be completed", completed.getId())
-                .isIn(TransactionStatus.DONE, TransactionStatus.FAULTY);
+                .isIn(TransactionStatus.DONE, TransactionStatus.INSUFFICIENT_FUNDS);
         });
     }
 

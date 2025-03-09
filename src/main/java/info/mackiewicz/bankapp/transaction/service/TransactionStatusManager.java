@@ -3,8 +3,10 @@ package info.mackiewicz.bankapp.transaction.service;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,12 +19,20 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class TransactionStatusManager {
     
-    private final TransactionService transactionService;
+    private final TransactionRepository repository;
     
 public boolean isStatusTransitionAllowed(TransactionStatus currentStatus, TransactionStatus newStatus) {
-    return (currentStatus.isFinal() && !newStatus.equals(currentStatus));
+    return (!currentStatus.isFinal() && !newStatus.equals(currentStatus));
 }
 
+    /**
+     * Updates only the status of a transaction in a thread-safe manner.
+     * This method performs a direct database update without loading the entire entity.
+     *
+     * @param transaction the transaction whose status needs to be updated
+     * @param status the new status to set
+     * @throws TransactionNotFoundException if no transaction is found with the given ID
+     */
 @Transactional
 public void setTransactionStatus(Transaction transaction, TransactionStatus status) {
     if (transaction.getStatus() == null || status == null) {
@@ -37,8 +47,32 @@ public void setTransactionStatus(Transaction transaction, TransactionStatus stat
     }
     
     log.debug("Setting transaction {} status to {}", transaction.getId(), status);
-    transactionService.updateTransactionStatus(transaction, status);
+    updateTransactionStatus(transaction, status);
 }
+
+    /**
+     * Updates only the status of a transaction in a thread-safe manner.
+     * This method performs a direct database update without loading the entire entity.
+     *
+     * @param transaction the transaction whose status needs to be updated
+     * @param status the new status to set
+     * @throws TransactionNotFoundException if no transaction is found with the given ID
+     */
+    @Transactional
+    private void updateTransactionStatus(Transaction transaction, TransactionStatus status) {
+        int id = transaction.getId();
+        log.debug("Updating status of transaction {} to {}", id, status);
+        
+        int updatedRows = repository.updateTransactionStatus(id, status);
+        if (updatedRows == 0) {
+            log.error("Failed to update status for transaction {}: transaction not found", id);
+            throw new TransactionNotFoundException("Transaction with id " + id + " not found");
+        }
+        
+        // Update the entity's status in memory (important for code that continues to use this entity)
+        transaction.setStatus(status);
+        log.debug("Transaction {} status updated to {}", id, status);
+    }
 
     public boolean canBeProcessed(Transaction transaction) {
         TransactionStatus status = transaction.getStatus();

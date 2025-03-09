@@ -9,5 +9,5 @@ public interface TransactionStrategy {
      * @param transaction Transaction to be executed
      * @return true if the transaction was executed successfully, false otherwise
      */
-    boolean execute(Transaction transaction);
+    void execute(Transaction transaction);
 }

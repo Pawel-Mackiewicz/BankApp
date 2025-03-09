@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.transaction.service;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -80,8 +81,6 @@ class TransactionProcessorTest {
 
     @Test
     void processTransaction_WhenSuccessful_ShouldExecuteAllSteps() {
-        // given
-        when(transactionStrategy.execute(transaction)).thenReturn(true);
 
         // when
         processor.processTransaction(transaction);
@@ -138,7 +137,7 @@ class TransactionProcessorTest {
     @Test
     void processTransaction_WhenExecutionFails_ShouldHandleError() {
         // given
-        when(transactionStrategy.execute(transaction)).thenReturn(false);
+        doThrow(new TransactionExecutionException("Execution failed")).when(transactionStrategy).execute(transaction);
 
         // when
         processor.processTransaction(transaction);
@@ -157,7 +156,7 @@ class TransactionProcessorTest {
     void processTransaction_WhenUnexpectedError_ShouldHandleError() {
         // given
         RuntimeException exception = new RuntimeException("Unexpected error");
-        when(transactionStrategy.execute(transaction)).thenThrow(exception);
+        doThrow(exception).when(transactionStrategy).execute(transaction);
 
         // when
         processor.processTransaction(transaction);
@@ -175,7 +174,7 @@ class TransactionProcessorTest {
     @Test
     void processTransaction_ShouldReleaseLocks_EvenIfStatusUpdateFails() {
         // given
-        when(transactionStrategy.execute(transaction)).thenReturn(true);
+        doNothing().when(transactionStrategy).execute(transaction);
         RuntimeException exception = new RuntimeException("Status update failed");
         doThrow(exception).when(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
 
@@ -196,7 +195,7 @@ class TransactionProcessorTest {
         // given
         transaction.setSourceAccount(null);  // only source is null
         transaction.setDestinationAccount(destinationAccount);
-        when(transactionStrategy.execute(transaction)).thenReturn(true);
+        doNothing().when(transactionStrategy).execute(transaction);
 
         // when
         processor.processTransaction(transaction);
@@ -260,7 +259,7 @@ class TransactionProcessorTest {
     @Test
     void processTransaction_ShouldPreserveExecutionOrder() {
         // given
-        when(transactionStrategy.execute(transaction)).thenReturn(true);
+        doNothing().when(transactionStrategy).execute(transaction);
         
         // Create ordered verifiers for strict order checking
         InOrder orderVerifier = inOrder(

@@ -88,7 +88,7 @@ class TransactionProcessingServiceTest {
         // given
         int transactionId = 1;
         Transaction transaction = new Transaction();
-        transaction.setStatus(TransactionStatus.FAULTY);
+        transaction.setStatus(TransactionStatus.SYSTEM_ERROR);
         when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
         when(statusManager.hasFailed(transaction)).thenReturn(true);
 

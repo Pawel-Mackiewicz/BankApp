@@ -45,17 +45,16 @@ class FeeTransactionTest {
         doNothing().when(strategyHelper).transfer(transaction);
 
         // when
-        boolean result = feeTransaction.execute(transaction);
+        feeTransaction.execute(transaction);
 
         // then
-        assertTrue(result);
         assertEquals(bankAccount, transaction.getDestinationAccount());
         verify(strategyHelper).transfer(transaction);
         verify(accountService).getAccountById(-1);
     }
 
     @Test
-    void execute_WhenErrorOccurs_ShouldReturnFalse() {
+    void execute_WhenErrorOccurs_ShouldNotExecuteTransfer() {
         // given
         Transaction transaction = new Transaction();
         transaction.setType(TransactionType.FEE);
@@ -64,10 +63,9 @@ class FeeTransactionTest {
             .thenThrow(new RuntimeException("Test error"));
 
         // when
-        boolean result = feeTransaction.execute(transaction);
+        feeTransaction.execute(transaction);
 
         // then
-        assertFalse(result);
         verify(accountService).getAccountById(-1);
         verify(strategyHelper, never()).transfer(any());
     }

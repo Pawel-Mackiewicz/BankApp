@@ -87,11 +87,8 @@ public class TransactionProcessor {
 
     private void executeTransactionStrategy(Transaction transaction) {
         TransactionStrategy strategy = strategyResolver.resolveStrategy(transaction);
-        boolean success = strategy.execute(transaction);
-        
-        if (!success) {
-            throw new TransactionExecutionException("Transaction execution failed");
-        }
+        strategy.execute(transaction);
+
     }
 
     private void releaseAccountLocks(Transaction transaction) {
