@@ -32,31 +32,24 @@ public class TransactionProcessor {
     private final AccountLockManager accountLockManager;
     private final TransactionFailureHandler errorHandler;
     private final TransactionStatusManager statusManager;
+    private final LoggingService loggingService;
 
     /**
      * Asynchronously processes a financial transaction with proper account locking
      * and error handling.
      * Assumes the transaction has already passed validation.
      * Errors are handled by the TransactionErrorHandler.
+     * 
      * @param transaction transaction to process
      */
     @Async
     public void processTransaction(Transaction transaction) {
-        LoggingService.logTransactionAttempt(transaction);
+        loggingService.logTransactionAttempt(transaction);
         try {
             acquireAccountLocks(transaction);
             try {
-                // Set status to PENDING before executing
-                updateTransactionStatus(transaction, TransactionStatus.PENDING);
-
-                // Execute the transaction strategy
-                executeTransactionStrategy(transaction);
-
-                // Update status to DONE after successful execution
-                updateTransactionStatus(transaction, TransactionStatus.DONE);
-                LoggingService.logSuccessfulTransaction(transaction);
+                executeWithStatusUpdates(transaction);
             } catch (TransactionExecutionException e) {
-                // This exception is handled inside the method
                 return;
             } catch (Exception e) {
                 errorHandler.handleUnexpectedError(transaction, e);
@@ -66,34 +59,24 @@ public class TransactionProcessor {
         } catch (Exception e) {
             errorHandler.handleUnexpectedLockError(transaction, e);
         } finally {
-            try {
-                releaseAccountLocks(transaction);
-            } catch (AccountUnlockException e) {
-                errorHandler.handleUnlockError(transaction, e);
-            } catch (Exception e) {
-                errorHandler.handleUnexpectedUnlockError(transaction, e);
-            }
+            releaseAccountLocks(transaction);
         }
+    }
+
+    private void executeWithStatusUpdates(Transaction transaction) {
+        updateTransactionStatus(transaction, TransactionStatus.PENDING);
+        executeTransactionStrategy(transaction);
+        updateTransactionStatus(transaction, TransactionStatus.DONE);
+        loggingService.logSuccessfulTransaction(transaction);
     }
 
     private void updateTransactionStatus(Transaction transaction, TransactionStatus status) {
         try {
             statusManager.setTransactionStatus(transaction, status);
-        } catch (TransactionNotFoundException e) {
-            errorHandler.handleTransactionStatusChangeError(transaction, e);
-            throw new TransactionExecutionException();
-        } catch (IllegalArgumentException e) {
-            errorHandler.handleTransactionStatusChangeError(transaction, e);
-            throw new TransactionExecutionException();
-        } catch (IllegalStateException e) {
+        } catch (TransactionNotFoundException | IllegalStateException | IllegalArgumentException e) {
             errorHandler.handleTransactionStatusChangeError(transaction, e);
             throw new TransactionExecutionException();
         }
-    }
-
-    private void acquireAccountLocks(Transaction transaction) {
-        accountLockManager.lockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
-        LoggingService.logLockingAccounts(transaction);
     }
 
     private void executeTransactionStrategy(Transaction transaction) {
@@ -112,8 +95,19 @@ public class TransactionProcessor {
         }
     }
 
+    private void acquireAccountLocks(Transaction transaction) {
+        accountLockManager.lockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
+        loggingService.logLockingAccounts(transaction);
+    }
+
     private void releaseAccountLocks(Transaction transaction) {
-        accountLockManager.unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
-        LoggingService.logUnlockingAccounts(transaction);
+        try {
+            accountLockManager.unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
+            loggingService.logUnlockingAccounts(transaction);
+        } catch (AccountUnlockException e) {
+            errorHandler.handleUnlockError(transaction, e);
+        } catch (Exception e) {
+            errorHandler.handleUnexpectedUnlockError(transaction, e);
+        }
     }
 }
