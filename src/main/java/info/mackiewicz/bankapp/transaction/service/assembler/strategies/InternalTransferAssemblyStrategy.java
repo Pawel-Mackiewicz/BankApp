@@ -36,7 +36,7 @@ public class InternalTransferAssemblyStrategy implements TransactionAssemblyStra
         Account destinationAccount = resolveDestinationAccount(request);
         log.debug("Destination account resolved: {}", destinationAccount.getId());
 
-        log.debug("Resolving transaction type");
+        log.debug("Resolving transaction type (internal transfer or own transfer)");
         TransactionType resolvedType = TransactionTypeResolver.resolveTransactionType(request);
         log.debug("Transaction type resolved as: {}", resolvedType);
 

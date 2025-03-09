@@ -43,6 +43,7 @@ public enum TransactionStatus {
         "System Error"
     ),
     // Legacy status - for backward compatibility
+    @Deprecated
     FAULTY(
         TransactionStatusCategory.FAULTY,
         "Failed"

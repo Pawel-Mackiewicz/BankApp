@@ -52,7 +52,7 @@ public class UserRegistrationService {
             .withTitle("Welcome bonus")
             .build();
 
-        transactionService.createTransaction(transaction);
+        transactionService.registerTransaction(transaction);
 
         emailService.sendWelcomeEmail(createdUser.getEmail(), createdUser.getFullName(), createdUser.getUsername());
 

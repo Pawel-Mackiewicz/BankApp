@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
@@ -33,7 +34,7 @@ class TransactionCommandService {
      * @throws IllegalArgumentException if the transaction fails validation
      */
     @Transactional
-    public Transaction createTransaction(Transaction transaction) {
+    public Transaction registerTransaction(Transaction transaction) {
         log.debug("Creating new transaction: {}", transaction);
         
         // Validate before saving
@@ -63,5 +64,29 @@ class TransactionCommandService {
         Transaction transaction = queryService.getTransactionById(id);
         repository.delete(transaction);
         log.info("Transaction {} deleted successfully", id);
+    }
+    
+    /**
+     * Updates only the status of a transaction in a thread-safe manner.
+     * This method performs a direct database update without loading the entire entity.
+     *
+     * @param transaction the transaction whose status needs to be updated
+     * @param status the new status to set
+     * @throws TransactionNotFoundException if no transaction is found with the given ID
+     */
+    @Transactional
+    public void updateTransactionStatus(Transaction transaction, TransactionStatus status) {
+        int id = transaction.getId();
+        log.debug("Updating status of transaction {} to {}", id, status);
+        
+        int updatedRows = repository.updateTransactionStatus(id, status);
+        if (updatedRows == 0) {
+            log.error("Failed to update status for transaction {}: transaction not found", id);
+            throw new TransactionNotFoundException("Transaction with id " + id + " not found");
+        }
+        
+        // Update the entity's status in memory (important for code that continues to use this entity)
+        transaction.setStatus(status);
+        log.debug("Transaction {} status updated to {}", id, status);
     }
 }

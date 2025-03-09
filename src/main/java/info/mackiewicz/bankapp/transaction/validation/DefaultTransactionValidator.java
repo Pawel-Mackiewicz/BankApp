@@ -19,6 +19,7 @@ public class DefaultTransactionValidator implements TransactionValidator {
         validateNotNull(transaction);
         validateAmount(transaction);
         validateType(transaction);
+        validateBothAccountsNotNull(transaction);
         validateAccounts(transaction);
     }
 
@@ -51,6 +52,12 @@ public class DefaultTransactionValidator implements TransactionValidator {
     private void validateType(Transaction transaction) {
         if (transaction.getType() == null) {
             throw new TransactionValidationException("Transaction type cannot be null");
+        }
+    }
+
+    private void validateBothAccountsNotNull(Transaction transaction) {
+        if (transaction.getSourceAccount() == null && transaction.getDestinationAccount() == null) {
+            throw new TransactionValidationException("Both accounts cannot be null");
         }
     }
 
