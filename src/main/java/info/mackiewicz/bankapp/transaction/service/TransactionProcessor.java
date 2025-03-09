@@ -90,7 +90,7 @@ public class TransactionProcessor {
             errorHandler.handleInsufficientFundsError(transaction, e);
             throw new TransactionExecutionException();
         } catch (Exception e) {
-            errorHandler.handleSystemError(transaction, e);
+            errorHandler.handleUnexpectedError(transaction, e);
             throw new TransactionExecutionException();
         }
     }

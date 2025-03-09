@@ -20,6 +20,7 @@ import info.mackiewicz.bankapp.account.exception.AccountLockException;
 import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
+import info.mackiewicz.bankapp.shared.util.LoggingService;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -47,6 +48,9 @@ class TransactionProcessorTest {
     
     @Mock
     private TransactionStrategy transactionStrategy;
+
+    @Mock
+    private LoggingService loggingService;
 
     @InjectMocks
     private TransactionProcessor processor;
@@ -106,24 +110,6 @@ class TransactionProcessorTest {
     }
 
     @Test
-    void processTransaction_WhenExecutionFails_ShouldHandleError() {
-        // given
-        TransactionExecutionException exception = new TransactionExecutionException("Execution failed");
-        doThrow(exception).when(transactionStrategy).execute(transaction);
-
-        // when
-        processor.processTransaction(transaction);
-
-        // then
-        verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(transactionStrategy).execute(transaction);
-        verify(errorHandler).handleSystemError(transaction, exception);
-        verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
-        verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-    }
-
-    @Test
     void processTransaction_WhenUnexpectedError_ShouldHandleError() {
         // given
         RuntimeException exception = new RuntimeException("Unexpected error");
@@ -136,7 +122,7 @@ class TransactionProcessorTest {
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
         verify(transactionStrategy).execute(transaction);
-        verify(errorHandler).handleUnexpectedError(transaction, exception);
+        verify(errorHandler).handleUnexpectedError(transaction, exception); 
         verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
     }

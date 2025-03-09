@@ -60,32 +60,17 @@ class TransactionProcessingService {
     private void processSafely(Transaction transaction) {
         try {
             // Initial validation
-            validateTransaction(transaction);
+            validator.validate(transaction);
             
             // Status validation
             statusChecker.validateForProcessing(transaction);
             
             // Process the transaction
             executeTransaction(transaction);
-        } catch (Exception e) {
-            log.error("Failed to process transaction {}: {}", transaction.getId(), e.getMessage());
-            // General catch for any unhandled exceptions
-            if (!(e instanceof TransactionValidationException)) {
-                errorHandler.handleUnexpectedError(transaction, e);
-            }
-        }
-    }
-
-    /**
-     * Validates the transaction before processing.
-     * 
-     * @throws TransactionValidationException if validation fails
-     */
-    private void validateTransaction(Transaction transaction) {
-        try {
-            validator.validate(transaction);
         } catch (TransactionValidationException e) {
             errorHandler.handleValidationError(transaction, e);
+        } catch (Exception e) {
+            errorHandler.handleUnexpectedError(transaction, e);
         }
     }
 
