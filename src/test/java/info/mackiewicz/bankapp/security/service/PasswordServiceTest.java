@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.service;
+package info.mackiewicz.bankapp.security.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import info.mackiewicz.bankapp.security.service.PasswordService;
 import info.mackiewicz.bankapp.user.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;

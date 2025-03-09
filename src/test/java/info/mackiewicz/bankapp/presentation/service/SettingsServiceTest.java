@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.service;
+package info.mackiewicz.bankapp.presentation.service;
 
 import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
 import info.mackiewicz.bankapp.user.model.User;

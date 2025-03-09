@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.service;
+package info.mackiewicz.bankapp.presentation.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;

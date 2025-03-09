@@ -1,6 +1,5 @@
-package info.mackiewicz.bankapp.service;
+package info.mackiewicz.bankapp.security.service;
 
-import info.mackiewicz.bankapp.security.service.CustomUserDetailsService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
 

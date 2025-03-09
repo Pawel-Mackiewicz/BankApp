@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.service;
+package info.mackiewicz.bankapp.security.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,8 +10,6 @@ import java.util.Optional;
 
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
-import info.mackiewicz.bankapp.security.service.PasswordResetService;
-import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
 import info.mackiewicz.bankapp.shared.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.shared.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;

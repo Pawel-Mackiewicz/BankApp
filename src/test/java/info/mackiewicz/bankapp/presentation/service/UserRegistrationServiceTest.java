@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.service;
+package info.mackiewicz.bankapp.presentation.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -7,6 +7,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
@@ -21,14 +29,6 @@ import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class UserRegistrationServiceTest {
 
@@ -105,7 +105,7 @@ class UserRegistrationServiceTest {
         // then
         verify(userService).createUser(user);
         verify(accountService).createAccount(user.getId());
-        verify(transactionService).createTransaction(any(Transaction.class));
+        verify(transactionService).registerTransaction(any(Transaction.class));
         verify(emailService).sendWelcomeEmail(anyString(), anyString(), anyString());
 
         logger.info("testRegisterUser: Test passed");

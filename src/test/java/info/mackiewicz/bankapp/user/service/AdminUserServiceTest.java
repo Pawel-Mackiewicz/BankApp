@@ -1,8 +1,7 @@
-package info.mackiewicz.bankapp.service;
+package info.mackiewicz.bankapp.user.service;
 
 import info.mackiewicz.bankapp.user.model.AdminUser;
 import info.mackiewicz.bankapp.user.repository.AdminUserRepository;
-import info.mackiewicz.bankapp.user.service.AdminUserService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,6 @@
-package info.mackiewicz.bankapp.service;
+package info.mackiewicz.bankapp.user.service;
 
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.service.UsernameGeneratorService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -402,7 +402,7 @@ class ConcurrentTransactionIntegrationTest {
             .withTitle("Test concurrent transfer")
             .build();
 
-        return transactionService.createTransaction(transaction);
+        return transactionService.registerTransaction(transaction);
     }
 
     private Transaction createWithdrawal(Account account, BigDecimal amount) {
@@ -411,7 +411,7 @@ class ConcurrentTransactionIntegrationTest {
             .withAmount(amount)
             .withTitle("Test concurrent withdrawal")
             .build();
-        return transactionService.createTransaction(transaction);
+        return transactionService.registerTransaction(transaction);
     }
 
     private Transaction createDeposit(Account account, BigDecimal amount) {
@@ -420,7 +420,7 @@ class ConcurrentTransactionIntegrationTest {
             .withAmount(amount)
             .withTitle("Test concurrent deposit")
             .build();
-        return transactionService.createTransaction(transaction);
+        return transactionService.registerTransaction(transaction);
     }
 
     private void verifyTransactionResults(List<Transaction> transactions) {

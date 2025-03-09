@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.utils;
+package info.mackiewicz.bankapp.account.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import info.mackiewicz.bankapp.account.util.IbanGenerator;
 import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
+import info.mackiewicz.bankapp.utils.TestIbanProvider;
 
 class IbanGeneratorTest {
 

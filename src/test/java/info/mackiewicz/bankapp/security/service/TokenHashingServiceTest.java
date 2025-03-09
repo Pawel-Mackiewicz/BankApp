@@ -1,9 +1,8 @@
-package info.mackiewicz.bankapp.service;
+package info.mackiewicz.bankapp.security.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import info.mackiewicz.bankapp.security.service.TokenHashingService;
 
 import java.util.HashSet;
 import java.util.Set;

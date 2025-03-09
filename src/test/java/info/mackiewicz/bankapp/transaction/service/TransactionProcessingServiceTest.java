@@ -39,6 +39,9 @@ class TransactionProcessingServiceTest {
     @Mock
     private TransactionQueryService queryService;
 
+    @Mock
+    private TransactionStatusManager statusManager;
+
     @InjectMocks
     private TransactionProcessingService processingService;
 
@@ -54,6 +57,7 @@ class TransactionProcessingServiceTest {
         Transaction transaction = new Transaction();
         transaction.setStatus(TransactionStatus.NEW);
         when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
+        when(statusManager.canBeProcessed(transaction)).thenReturn(true);
 
         // when
         processingService.processTransactionById(transactionId);
@@ -70,6 +74,7 @@ class TransactionProcessingServiceTest {
         Transaction transaction = new Transaction();
         transaction.setStatus(TransactionStatus.DONE);
         when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
+        when(statusManager.isCompleted(transaction)).thenReturn(true);
 
         // when/then
         assertThrows(TransactionAlreadyProcessedException.class, 
@@ -85,6 +90,7 @@ class TransactionProcessingServiceTest {
         Transaction transaction = new Transaction();
         transaction.setStatus(TransactionStatus.FAULTY);
         when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
+        when(statusManager.hasFailed(transaction)).thenReturn(true);
 
         // when/then
         assertThrows(TransactionCannotBeProcessedException.class, 
@@ -100,6 +106,7 @@ class TransactionProcessingServiceTest {
         Transaction transaction = new Transaction();
         transaction.setStatus(TransactionStatus.PENDING);
         when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
+        when(statusManager.isInProgress(transaction)).thenReturn(true);
 
         // when/then
         assertThrows(UnsupportedOperationException.class, 
@@ -131,6 +138,7 @@ class TransactionProcessingServiceTest {
             createTransaction(TransactionStatus.NEW)
         );
         when(queryService.getAllNewTransactions()).thenReturn(transactions);
+        transactions.forEach(t -> when(statusManager.canBeProcessed(t)).thenReturn(true));
 
         // when
         processingService.processAllNewTransactions();
@@ -152,6 +160,7 @@ class TransactionProcessingServiceTest {
         
         when(queryService.getAllNewTransactions()).thenReturn(transactions);
         doThrow(IllegalArgumentException.class).when(validator).validate(transaction1);
+        transactions.forEach(t -> when(statusManager.canBeProcessed(t)).thenReturn(true));
 
         // when
         log.info("Starting test execution");

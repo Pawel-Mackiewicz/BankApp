@@ -56,7 +56,7 @@ class TransactionCommandServiceTest {
         when(repository.save(transaction)).thenReturn(transaction);
 
         // when
-        Transaction result = commandService.createTransaction(transaction);
+        Transaction result = commandService.registerTransaction(transaction);
 
         // then
         verify(validator).validate(transaction);
@@ -73,7 +73,7 @@ class TransactionCommandServiceTest {
         when(repository.save(transaction)).thenReturn(transaction);
 
         // when
-        Transaction result = commandService.createTransaction(transaction);
+        Transaction result = commandService.registerTransaction(transaction);
 
         // then
         verify(validator).validate(transaction);
@@ -89,7 +89,7 @@ class TransactionCommandServiceTest {
         doThrow(IllegalArgumentException.class).when(validator).validate(transaction);
 
         // when/then
-        assertThrows(IllegalArgumentException.class, () -> commandService.createTransaction(transaction));
+        assertThrows(IllegalArgumentException.class, () -> commandService.registerTransaction(transaction));
         verify(repository, never()).save(any());
         verify(processor, never()).processTransaction(any());
     }

@@ -43,13 +43,13 @@ class TransactionServiceTest {
     void createTransaction_ShouldDelegateToCommandService() {
         // given
         Transaction transaction = new Transaction();
-        when(commandService.createTransaction(transaction)).thenReturn(transaction);
+        when(commandService.registerTransaction(transaction)).thenReturn(transaction);
 
         // when
-        Transaction result = transactionService.createTransaction(transaction);
+        Transaction result = transactionService.registerTransaction(transaction);
 
         // then
-        verify(commandService).createTransaction(transaction);
+        verify(commandService).registerTransaction(transaction);
         assertEquals(transaction, result);
     }
 
