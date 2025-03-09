@@ -13,25 +13,6 @@ public class LoggingService {
         return account != null ? "ID:" + account.getId() : "N/A";
     }
 
-    public static void logError(String message) {
-        log.error(message);
-    }
-
-    
-    public static void logError(String message, Throwable throwable) {
-        log.error(message, throwable);
-    }
-
-    public static void logErrorInMakingTransaction(Transaction transaction) {
-        String message = String.format("Can't execute transaction ID: %s", transaction.getId());
-        log.error(message);
-    }
-
-    public static void logErrorInMakingTransaction(Transaction transaction, String errorMessage) {
-        String message = String.format("Error in Transaction ID: %s. %s", transaction.getId(), errorMessage);
-        log.error(message);
-    }
-
     public static void logLockingAccounts(Transaction transaction) {
         Account from = transaction.getSourceAccount();
         Account to = transaction.getDestinationAccount();
@@ -91,33 +72,4 @@ public class LoggingService {
         }
         log.info(sb.toString());
     }
-
-    public static void logFailedTransactionDueToInsufficientFunds(Transaction transaction) {
-        String message = String.format("Transaction ID: %s, Insufficient Funds.", transaction.getId());
-        log.warn(message);
-    }
-
-    public static void logErrorInLockingAccounts(int accountId, Transaction transaction, String string) {
-        String message = String.format("Error in locking accounts for transaction ID: %s, Account ID: %s, %s",
-                transaction.getId(), accountId, string);
-        log.error(message);
-    }
-    public static void logUnexpectedErrorInLockingAccounts(Transaction transaction, String string) {
-        String message = String.format("Unexpected error in locking accounts for transaction ID: %s, %s",
-                transaction.getId(), string);
-        log.error(message);
-    }
-    
-    public static void logErrorInUnlockingAccounts(int accountId, Transaction transaction, String string) {
-        String message = String.format("Error in unlocking accounts for transaction ID: %s, Account ID: %s, %s",
-                transaction.getId(), accountId, string);
-        log.error(message);
-    }
-
-    public static void logUnexpectedErrorInUnlockingAccounts(Transaction transaction, String string) {
-        String message = String.format("Unexpected error in unlocking accounts for transaction ID: %s, %s",
-                transaction.getId(), string);
-        log.error(message);
-    }
-
 }

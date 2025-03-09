@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.transaction.service;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -17,15 +17,16 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.transaction.service.error.TransactionFailureHandler;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Unit tests for TransactionProcessingService.
- * Tests focus on transaction processing logic and status handling.
+ * Tests focus on transaction processing logic and centralized error handling.
  */
 @Slf4j
 class TransactionProcessingServiceTest {
@@ -40,7 +41,10 @@ class TransactionProcessingServiceTest {
     private TransactionQueryService queryService;
 
     @Mock
-    private TransactionStatusManager statusManager;
+    private TransactionStatusChecker statusChecker;
+    
+    @Mock
+    private TransactionFailureHandler errorHandler;
 
     @InjectMocks
     private TransactionProcessingService processingService;
@@ -51,84 +55,57 @@ class TransactionProcessingServiceTest {
     }
 
     @Test
-    void processTransactionById_WhenNewTransaction_ShouldProcess() {
+    void processTransactionById_ShouldValidateAndProcess() {
         // given
         int transactionId = 1;
-        Transaction transaction = new Transaction();
-        transaction.setStatus(TransactionStatus.NEW);
+        Transaction transaction = createTransaction(TransactionStatus.NEW);
         when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
-        when(statusManager.canBeProcessed(transaction)).thenReturn(true);
-
+        
         // when
         processingService.processTransactionById(transactionId);
-
+        
         // then
         verify(validator).validate(transaction);
+        verify(statusChecker).validateForProcessing(transaction);
         verify(processor).processTransaction(transaction);
     }
 
     @Test
-    void processTransactionById_WhenDoneTransaction_ShouldThrowException() {
+    void processTransactionById_WhenValidationFails_ShouldHandleError() {
         // given
         int transactionId = 1;
-        Transaction transaction = new Transaction();
-        transaction.setStatus(TransactionStatus.DONE);
+        Transaction transaction = createTransaction(TransactionStatus.NEW);
+        TransactionValidationException exception = new TransactionValidationException("Validation failed");
         when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
-        when(statusManager.isCompleted(transaction)).thenReturn(true);
-
-        // when/then
-        assertThrows(TransactionAlreadyProcessedException.class, 
-            () -> processingService.processTransactionById(transactionId));
-        verify(validator).validate(transaction);
+        doThrow(exception).when(validator).validate(transaction);
+        
+        // when
+        processingService.processTransactionById(transactionId);
+        
+        // then
+        verify(errorHandler).handleValidationError(transaction, exception);
         verify(processor, never()).processTransaction(any());
     }
-
+    
     @Test
-    void processTransactionById_WhenFaultyTransaction_ShouldThrowException() {
+    void processTransactionById_WhenStatusCheckFails_ShouldHandleError() {
         // given
         int transactionId = 1;
-        Transaction transaction = new Transaction();
-        transaction.setStatus(TransactionStatus.SYSTEM_ERROR);
+        Transaction transaction = createTransaction(TransactionStatus.DONE);
+        TransactionAlreadyProcessedException exception = new TransactionAlreadyProcessedException("Already processed");
         when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
-        when(statusManager.hasFailed(transaction)).thenReturn(true);
-
-        // when/then
-        assertThrows(TransactionCannotBeProcessedException.class, 
-            () -> processingService.processTransactionById(transactionId));
-        verify(validator).validate(transaction);
+        doThrow(exception).when(statusChecker).validateForProcessing(transaction);
+        
+        // when
+        processingService.processTransactionById(transactionId);
+        
+        // then
+        verify(errorHandler).handleUnexpectedError(eq(transaction), any(Exception.class));
         verify(processor, never()).processTransaction(any());
     }
 
-    @Test
-    void processTransactionById_WhenPendingTransaction_ShouldThrowException() {
-        // given
-        int transactionId = 1;
-        Transaction transaction = new Transaction();
-        transaction.setStatus(TransactionStatus.PENDING);
-        when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
-        when(statusManager.isInProgress(transaction)).thenReturn(true);
-
-        // when/then
-        assertThrows(UnsupportedOperationException.class, 
-            () -> processingService.processTransactionById(transactionId));
-        verify(validator).validate(transaction);
-        verify(processor, never()).processTransaction(any());
-    }
-
-    @Test
-    void processTransactionById_WhenValidationFails_ShouldThrowException() {
-        // given
-        int transactionId = 1;
-        Transaction transaction = new Transaction();
-        transaction.setStatus(TransactionStatus.NEW);
-        when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
-        doThrow(IllegalArgumentException.class).when(validator).validate(transaction);
-
-        // when/then
-        assertThrows(IllegalArgumentException.class, 
-            () -> processingService.processTransactionById(transactionId));
-        verify(processor, never()).processTransaction(any());
-    }
+    // W obecnej implementacji błędy wykonania transakcji są obsługiwane w TransactionProcessor
+    // a nie w TransactionProcessingService, więc poniższe testy są niepoprawne
 
     @Test
     void processAllNewTransactions_ShouldProcessAllTransactions() {
@@ -138,16 +115,16 @@ class TransactionProcessingServiceTest {
             createTransaction(TransactionStatus.NEW)
         );
         when(queryService.getAllNewTransactions()).thenReturn(transactions);
-        transactions.forEach(t -> when(statusManager.canBeProcessed(t)).thenReturn(true));
-
+        
         // when
         processingService.processAllNewTransactions();
-
+        
         // then
         verify(validator, times(2)).validate(any());
+        verify(statusChecker, times(2)).validateForProcessing(any());
         verify(processor, times(2)).processTransaction(any());
     }
-
+    
     @Test
     void processAllNewTransactions_WhenSomeTransactionsFail_ShouldContinueProcessing() {
         // given
@@ -155,30 +132,73 @@ class TransactionProcessingServiceTest {
         transaction1.setId(1);
         Transaction transaction2 = createTransaction(TransactionStatus.NEW);
         transaction2.setId(2);
-        log.info("Created test transactions: {} and {}", transaction1, transaction2);
         List<Transaction> transactions = List.of(transaction1, transaction2);
         
         when(queryService.getAllNewTransactions()).thenReturn(transactions);
-        doThrow(IllegalArgumentException.class).when(validator).validate(transaction1);
-        transactions.forEach(t -> when(statusManager.canBeProcessed(t)).thenReturn(true));
-
+        doThrow(new TransactionValidationException("Validation error")).when(validator).validate(transaction1);
+        
         // when
-        log.info("Starting test execution");
         processingService.processAllNewTransactions();
-        log.info("Test execution completed");
-
+        
         // then
         verify(validator, times(2)).validate(any());
+        verify(errorHandler).handleValidationError(eq(transaction1), any(TransactionValidationException.class));
+        verify(statusChecker, times(1)).validateForProcessing(transaction2);
         verify(processor, never()).processTransaction(transaction1);
-        verify(processor).processTransaction(any(Transaction.class));
+        verify(processor).processTransaction(transaction2);
+    }
+
+    @Test
+    void processAllNewTransactions_WhenStatusCheckFails_ShouldContinueProcessing() {
+        // given
+        Transaction transaction1 = createTransaction(TransactionStatus.DONE); // Status uniemożliwia przetwarzanie
+        transaction1.setId(1);
+        Transaction transaction2 = createTransaction(TransactionStatus.NEW);
+        transaction2.setId(2);
+        List<Transaction> transactions = List.of(transaction1, transaction2);
+        
+        when(queryService.getAllNewTransactions()).thenReturn(transactions);
+        doThrow(new TransactionAlreadyProcessedException("Already processed")).when(statusChecker)
+            .validateForProcessing(transaction1);
+        
+        // when
+        processingService.processAllNewTransactions();
+        
+        // then
+        verify(validator, times(2)).validate(any());
+        verify(statusChecker, times(2)).validateForProcessing(any());
+        verify(errorHandler).handleUnexpectedError(eq(transaction1), any(Exception.class));
+        verify(processor, never()).processTransaction(transaction1);
+        verify(processor).processTransaction(transaction2);
+    }
+
+    @Test
+    void processAllNewTransactions_WhenProcessorThrowsException_ShouldContinueProcessing() {
+        // given
+        Transaction transaction1 = createTransaction(TransactionStatus.NEW);
+        transaction1.setId(1);
+        Transaction transaction2 = createTransaction(TransactionStatus.NEW);
+        transaction2.setId(2);
+        List<Transaction> transactions = List.of(transaction1, transaction2);
+        
+        when(queryService.getAllNewTransactions()).thenReturn(transactions);
+        doThrow(new RuntimeException("Processor error")).when(processor).processTransaction(transaction1);
+        
+        // when
+        processingService.processAllNewTransactions();
+        
+        // then
+        verify(validator, times(2)).validate(any());
+        verify(statusChecker, times(2)).validateForProcessing(any());
+        verify(processor).processTransaction(transaction1);
+        verify(processor).processTransaction(transaction2);
+        verify(errorHandler).handleUnexpectedError(eq(transaction1), any(Exception.class));
     }
 
     private Transaction createTransaction(TransactionStatus status) {
         Transaction transaction = new Transaction();
+        transaction.setId(1);
         transaction.setStatus(status);
-        // Dodajemy puste obiekty dla pól, które są używane w TransactionProcessor
-        transaction.setSourceAccount(null);
-        transaction.setDestinationAccount(null);
         return transaction;
     }
 }

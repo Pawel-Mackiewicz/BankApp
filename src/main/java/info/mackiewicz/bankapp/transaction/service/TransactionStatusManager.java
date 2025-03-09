@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Component responsible for managing transaction statuses.
+ * Component responsible for managing transaction statuses in the database.
  * This class centralizes status update logic according to Single Responsibility Principle.
  */
 @Slf4j
@@ -21,37 +21,46 @@ public class TransactionStatusManager {
     
     private final TransactionRepository repository;
     
-public boolean isStatusTransitionAllowed(TransactionStatus currentStatus, TransactionStatus newStatus) {
-    return (!currentStatus.isFinal() && !newStatus.equals(currentStatus));
-}
+    /**
+     * Checks if a status transition is allowed based on the state machine rules.
+     * 
+     * @param currentStatus the current status of the transaction
+     * @param newStatus the target status for the transaction
+     * @return true if the transition is valid, false otherwise
+     */
+    public boolean isStatusTransitionAllowed(TransactionStatus currentStatus, TransactionStatus newStatus) {
+        return (!currentStatus.isFinal() && !newStatus.equals(currentStatus));
+    }
 
     /**
-     * Updates only the status of a transaction in a thread-safe manner.
-     * This method performs a direct database update without loading the entire entity.
+     * Updates the status of a transaction in a thread-safe manner.
+     * This method performs validation and delegates to database operations.
      *
      * @param transaction the transaction whose status needs to be updated
      * @param status the new status to set
      * @throws TransactionNotFoundException if no transaction is found with the given ID
+     * @throws IllegalArgumentException if transaction or status is null
+     * @throws IllegalStateException if the status transition is not allowed
      */
-@Transactional
-public void setTransactionStatus(Transaction transaction, TransactionStatus status) {
-    if (transaction.getStatus() == null || status == null) {
-        throw new IllegalArgumentException("Transaction and status must not be null");
+    @Transactional
+    public void setTransactionStatus(Transaction transaction, TransactionStatus status) {
+        if (transaction.getStatus() == null || status == null) {
+            throw new IllegalArgumentException("Transaction and status must not be null");
+        }
+        
+        TransactionStatus currentStatus = transaction.getStatus();
+        
+        if (!isStatusTransitionAllowed(currentStatus, status)) {
+            throw new IllegalStateException(
+                "Cannot change transaction status from " + currentStatus + " to " + status);
+        }
+        
+        log.debug("Setting transaction {} status to {}", transaction.getId(), status);
+        updateTransactionStatus(transaction, status);
     }
-    
-    TransactionStatus currentStatus = transaction.getStatus();
-    
-    if (!isStatusTransitionAllowed(currentStatus, status)) {
-        throw new IllegalStateException(
-            "Cannot change transaction status from " + currentStatus + " to " + status);
-    }
-    
-    log.debug("Setting transaction {} status to {}", transaction.getId(), status);
-    updateTransactionStatus(transaction, status);
-}
 
     /**
-     * Updates only the status of a transaction in a thread-safe manner.
+     * Updates only the status of a transaction in the database.
      * This method performs a direct database update without loading the entire entity.
      *
      * @param transaction the transaction whose status needs to be updated
@@ -72,22 +81,5 @@ public void setTransactionStatus(Transaction transaction, TransactionStatus stat
         // Update the entity's status in memory (important for code that continues to use this entity)
         transaction.setStatus(status);
         log.debug("Transaction {} status updated to {}", id, status);
-    }
-
-    public boolean canBeProcessed(Transaction transaction) {
-        TransactionStatus status = transaction.getStatus();
-        return status == TransactionStatus.NEW;
-    }
-    
-    public boolean isInProgress(Transaction transaction) {
-        return transaction.getStatus() == TransactionStatus.PENDING;
-    }
-    
-    public boolean isCompleted(Transaction transaction) {
-        return transaction.getStatus() == TransactionStatus.DONE;
-    }
-    
-    public boolean hasFailed(Transaction transaction) {
-        return transaction.getStatus().isFailed();
     }
 }

@@ -5,21 +5,24 @@ import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.account.exception.AccountLockException;
 import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
+import info.mackiewicz.bankapp.account.exception.AccountValidationException;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
+import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.shared.util.LoggingService;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
+import info.mackiewicz.bankapp.transaction.service.error.TransactionFailureHandler;
 import info.mackiewicz.bankapp.transaction.service.strategy.StrategyResolver;
 import info.mackiewicz.bankapp.transaction.service.strategy.TransactionStrategy;
-import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Service responsible for processing financial transactions with proper locking and validation mechanisms.
+ * Service responsible for processing financial transactions with proper locking
+ * and validation mechanisms.
+ * Focuses solely on executing transactions with proper locking, without
+ * duplicating validation logic.
  */
 @RequiredArgsConstructor
 @Service
@@ -27,13 +30,15 @@ public class TransactionProcessor {
 
     private final StrategyResolver strategyResolver;
     private final AccountLockManager accountLockManager;
-    private final TransactionValidator validator;
-    private final TransactionErrorHandler errorHandler;
+    private final TransactionFailureHandler errorHandler;
     private final TransactionStatusManager statusManager;
 
     /**
-     * Asynchronously processes a financial transaction with proper account locking and error handling.
-     * Errors are handled by the TransactionErrorHandler and propagated to registered observers.
+     * Asynchronously processes a financial transaction with proper account locking
+     * and error handling.
+     * Assumes the transaction has already passed validation.
+     * Errors are handled by the TransactionErrorHandler.
+     * @param transaction transaction to process
      */
     @Async
     public void processTransaction(Transaction transaction) {
@@ -41,23 +46,24 @@ public class TransactionProcessor {
         try {
             acquireAccountLocks(transaction);
             try {
-                executeTransactionProcess(transaction);
+                // Set status to PENDING before executing
+                updateTransactionStatus(transaction, TransactionStatus.PENDING);
+
+                // Execute the transaction strategy
+                executeTransactionStrategy(transaction);
+
+                // Update status to DONE after successful execution
+                updateTransactionStatus(transaction, TransactionStatus.DONE);
                 LoggingService.logSuccessfulTransaction(transaction);
-                statusManager.setTransactionStatus(transaction, TransactionStatus.DONE);
-            } catch (InsufficientFundsException e) {
-                errorHandler.handleInsufficientFundsError(transaction, e);
-            } catch (TransactionValidationException e) {
-                errorHandler.handleValidationError(transaction, e);
             } catch (TransactionExecutionException e) {
-                errorHandler.handleExecutionError(transaction, e);
+                // This exception is handled inside the method
+                return;
             } catch (Exception e) {
                 errorHandler.handleUnexpectedError(transaction, e);
             }
         } catch (AccountLockException e) {
-            // Explicitly handle lock acquisition failures
             errorHandler.handleLockError(transaction, e);
         } catch (Exception e) {
-            // Handle any other unexpected errors during lock acquisition
             errorHandler.handleUnexpectedLockError(transaction, e);
         } finally {
             try {
@@ -70,29 +76,44 @@ public class TransactionProcessor {
         }
     }
 
+    private void updateTransactionStatus(Transaction transaction, TransactionStatus status) {
+        try {
+            statusManager.setTransactionStatus(transaction, status);
+        } catch (TransactionNotFoundException e) {
+            errorHandler.handleTransactionStatusChangeError(transaction, e);
+            throw new TransactionExecutionException();
+        } catch (IllegalArgumentException e) {
+            errorHandler.handleTransactionStatusChangeError(transaction, e);
+            throw new TransactionExecutionException();
+        } catch (IllegalStateException e) {
+            errorHandler.handleTransactionStatusChangeError(transaction, e);
+            throw new TransactionExecutionException();
+        }
+    }
+
     private void acquireAccountLocks(Transaction transaction) {
         accountLockManager.lockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
         LoggingService.logLockingAccounts(transaction);
     }
 
-    private void executeTransactionProcess(Transaction transaction) {
-        validateAndInitialize(transaction);
-        executeTransactionStrategy(transaction);
-    }
-
-    private void validateAndInitialize(Transaction transaction) {
-        validator.validate(transaction);
-        statusManager.setTransactionStatus(transaction, TransactionStatus.PENDING);
-    }
-
     private void executeTransactionStrategy(Transaction transaction) {
         TransactionStrategy strategy = strategyResolver.resolveStrategy(transaction);
-        strategy.execute(transaction);
-
+        try {
+            strategy.execute(transaction);
+        } catch (AccountValidationException e) {
+            errorHandler.handleValidationError(transaction, e);
+            throw new TransactionExecutionException();
+        } catch (InsufficientFundsException e) {
+            errorHandler.handleInsufficientFundsError(transaction, e);
+            throw new TransactionExecutionException();
+        } catch (Exception e) {
+            errorHandler.handleSystemError(transaction, e);
+            throw new TransactionExecutionException();
+        }
     }
 
     private void releaseAccountLocks(Transaction transaction) {
-            accountLockManager.unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
-            LoggingService.logUnlockingAccounts(transaction);
+        accountLockManager.unlockAccounts(transaction.getSourceAccount(), transaction.getDestinationAccount());
+        LoggingService.logUnlockingAccounts(transaction);
     }
 }

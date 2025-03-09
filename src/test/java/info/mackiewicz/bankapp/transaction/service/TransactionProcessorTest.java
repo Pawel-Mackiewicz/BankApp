@@ -1,9 +1,7 @@
 package info.mackiewicz.bankapp.transaction.service;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -19,18 +17,17 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import info.mackiewicz.bankapp.account.exception.AccountLockException;
+import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
-import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
+import info.mackiewicz.bankapp.transaction.service.error.TransactionFailureHandler;
 import info.mackiewicz.bankapp.transaction.service.strategy.StrategyResolver;
 import info.mackiewicz.bankapp.transaction.service.strategy.TransactionStrategy;
-import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -43,14 +40,11 @@ class TransactionProcessorTest {
     private AccountLockManager accountLockManager;
 
     @Mock
-    private TransactionValidator validator;
-
-    @Mock
-    private TransactionErrorHandler errorHandler;
-
-    @Mock
     private TransactionStatusManager statusManager;
 
+    @Mock
+    private TransactionFailureHandler errorHandler;
+    
     @Mock
     private TransactionStrategy transactionStrategy;
 
@@ -81,75 +75,52 @@ class TransactionProcessorTest {
 
     @Test
     void processTransaction_WhenSuccessful_ShouldExecuteAllSteps() {
-
         // when
         processor.processTransaction(transaction);
 
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(validator).validate(transaction);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
         verify(transactionStrategy).execute(transaction);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-        verify(errorHandler, never()).handleInsufficientFundsError(any(), any());
-        verify(errorHandler, never()).handleValidationError(any(), any());
-        verify(errorHandler, never()).handleExecutionError(any(), any());
-        verify(errorHandler, never()).handleUnexpectedError(any(), any());
-    }
-
-    @Test
-    void processTransaction_WhenValidationFails_ShouldHandleError() {
-        // given
-        TransactionValidationException exception = new TransactionValidationException("Invalid transaction");
-        doThrow(exception).when(validator).validate(transaction);
-
-        // when
-        processor.processTransaction(transaction);
-
-        // then
-        verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(validator).validate(transaction);
-        verify(errorHandler).handleValidationError(transaction, exception);
-        verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-        verify(transactionStrategy, never()).execute(any());
-        verify(statusManager, never()).setTransactionStatus(any(), eq(TransactionStatus.DONE));
+        verifyNoInteractions(errorHandler);
     }
 
     @Test
     void processTransaction_WhenInsufficientFunds_ShouldHandleError() {
         // given
         InsufficientFundsException exception = new InsufficientFundsException("Insufficient funds");
-        doThrow(exception).when(validator).validate(transaction);
+        doThrow(exception).when(transactionStrategy).execute(transaction);
 
         // when
         processor.processTransaction(transaction);
 
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(validator).validate(transaction);
+        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
+        verify(transactionStrategy).execute(transaction);
         verify(errorHandler).handleInsufficientFundsError(transaction, exception);
+        verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-        verify(transactionStrategy, never()).execute(any());
-        verify(statusManager, never()).setTransactionStatus(any(), eq(TransactionStatus.DONE));
     }
 
     @Test
     void processTransaction_WhenExecutionFails_ShouldHandleError() {
         // given
-        doThrow(new TransactionExecutionException("Execution failed")).when(transactionStrategy).execute(transaction);
+        TransactionExecutionException exception = new TransactionExecutionException("Execution failed");
+        doThrow(exception).when(transactionStrategy).execute(transaction);
 
         // when
         processor.processTransaction(transaction);
 
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(validator).validate(transaction);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
         verify(transactionStrategy).execute(transaction);
-        verify(errorHandler).handleExecutionError(eq(transaction), any(TransactionExecutionException.class));
+        verify(errorHandler).handleSystemError(transaction, exception);
+        verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-        verify(statusManager, never()).setTransactionStatus(any(), eq(TransactionStatus.DONE));
     }
 
     @Test
@@ -163,18 +134,16 @@ class TransactionProcessorTest {
 
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(validator).validate(transaction);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
         verify(transactionStrategy).execute(transaction);
         verify(errorHandler).handleUnexpectedError(transaction, exception);
+        verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-        verify(statusManager, never()).setTransactionStatus(any(), eq(TransactionStatus.DONE));
     }
 
     @Test
     void processTransaction_ShouldReleaseLocks_EvenIfStatusUpdateFails() {
         // given
-        doNothing().when(transactionStrategy).execute(transaction);
         RuntimeException exception = new RuntimeException("Status update failed");
         doThrow(exception).when(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
 
@@ -183,51 +152,10 @@ class TransactionProcessorTest {
 
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(validator).validate(transaction);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
         verify(transactionStrategy).execute(transaction);
         verify(errorHandler).handleUnexpectedError(transaction, exception);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-    }
-
-    @Test
-    void processTransaction_WhenOneAccountNull_ShouldSucceed() {
-        // given
-        transaction.setSourceAccount(null);  // only source is null
-        transaction.setDestinationAccount(destinationAccount);
-        doNothing().when(transactionStrategy).execute(transaction);
-
-        // when
-        processor.processTransaction(transaction);
-
-        // then
-        verify(accountLockManager).lockAccounts(null, destinationAccount);
-        verify(validator).validate(transaction);
-        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(transactionStrategy).execute(transaction);
-        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
-        verify(accountLockManager).unlockAccounts(null, destinationAccount);
-        verify(errorHandler, never()).handleUnexpectedError(any(), any());
-    }
-
-    @Test
-    void processTransaction_WhenBothAccountsNull_ShouldThrowError() {
-        // given
-        transaction.setSourceAccount(null);
-        transaction.setDestinationAccount(null);
-        TransactionValidationException expectedException = new TransactionValidationException("Both accounts cannot be null");
-        doThrow(expectedException).when(validator).validate(transaction);
-
-        // when
-        processor.processTransaction(transaction);
-
-        // then
-        verify(accountLockManager).lockAccounts(null, null);
-        verify(validator).validate(transaction);
-        verify(errorHandler).handleValidationError(transaction, expectedException);
-        verify(accountLockManager).unlockAccounts(null, null);
-        verify(transactionStrategy, never()).execute(any());
-        verify(statusManager, never()).setTransactionStatus(any(), any(TransactionStatus.class));
     }
 
     @Test
@@ -241,7 +169,6 @@ class TransactionProcessorTest {
             true  // wasInterrupted
         );
         
-        // Mock the lock acquisition to throw immediately to simulate thread interruption
         doThrow(exception).when(accountLockManager).lockAccounts(any(), any());
 
         // when
@@ -250,24 +177,40 @@ class TransactionProcessorTest {
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         verify(errorHandler).handleLockError(transaction, exception);
-        verify(validator, never()).validate(transaction);
-        verify(transactionStrategy, never()).execute(transaction);
         verify(statusManager, never()).setTransactionStatus(any(), any());
+        verify(transactionStrategy, never()).execute(transaction);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
     }
 
     @Test
-    void processTransaction_ShouldPreserveExecutionOrder() {
+    void processTransaction_WhenUnlockFails_ShouldHandleUnlockError() {
         // given
-        doNothing().when(transactionStrategy).execute(transaction);
-        
-        // Create ordered verifiers for strict order checking
+        AccountUnlockException exception = new AccountUnlockException(
+            "Failed to unlock account", 
+            sourceAccount.getId()
+        );
+        doThrow(exception).when(accountLockManager).unlockAccounts(any(), any());
+
+        // when
+        processor.processTransaction(transaction);
+
+        // then
+        verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
+        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
+        verify(transactionStrategy).execute(transaction);
+        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
+        verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+        verify(errorHandler).handleUnlockError(transaction, exception);
+    }
+
+    @Test
+    void processTransaction_ShouldPreserveExecutionOrder() {
+        // Create ordered verifier for strict order checking
         InOrder orderVerifier = inOrder(
             accountLockManager, 
-            validator, 
             statusManager, 
-            transactionStrategy, 
-            errorHandler
+            transactionStrategy,
+            accountLockManager
         );
 
         // when
@@ -275,32 +218,10 @@ class TransactionProcessorTest {
 
         // then
         orderVerifier.verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        orderVerifier.verify(validator).validate(transaction);
         orderVerifier.verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
         orderVerifier.verify(transactionStrategy).execute(transaction);
         orderVerifier.verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
         orderVerifier.verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
         verifyNoInteractions(errorHandler);
-    }
-
-    @Test
-    void processTransaction_WhenUnlockFails_ShouldStillHandleMainError() {
-        // given
-        TransactionValidationException validationException = new TransactionValidationException("Validation failed");
-        RuntimeException unlockException = new RuntimeException("Unlock failed");
-        
-        doThrow(validationException).when(validator).validate(transaction);
-        doThrow(unlockException).when(accountLockManager).unlockAccounts(any(), any());
-
-        // when
-        processor.processTransaction(transaction);
-
-        // then
-        verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(validator).validate(transaction);
-        verify(errorHandler).handleValidationError(transaction, validationException);
-        verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-        // Should still handle the original validation error even if unlock fails
-        verify(errorHandler, never()).handleUnexpectedError(transaction, unlockException);
     }
 }

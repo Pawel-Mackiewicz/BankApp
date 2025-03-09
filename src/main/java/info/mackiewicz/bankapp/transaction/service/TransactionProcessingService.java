@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedException;
 import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.service.error.TransactionFailureHandler;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Service responsible for processing transactions.
  * Package-private to ensure access only through TransactionService facade.
+ * Centralizes all transaction processing decisions and error handling.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -23,17 +24,14 @@ class TransactionProcessingService {
     private final TransactionProcessor processor;
     private final TransactionValidator validator;
     private final TransactionQueryService queryService;
-    private final TransactionStatusManager statusManager;
+    private final TransactionStatusChecker statusChecker;
+    private final TransactionFailureHandler errorHandler;
 
     /**
      * Processes a transaction by its ID.
      * 
      * @param transactionId ID of the transaction to process
      * @throws TransactionNotFoundException if transaction is not found
-     * @throws TransactionAlreadyProcessedException if transaction is already processed
-     * @throws TransactionCannotBeProcessedException if transaction is faulty
-     * @throws UnsupportedOperationException if transaction is in PENDING status
-     * @throws IllegalArgumentException if transaction has invalid status
      */
     public void processTransactionById(int transactionId) {
         log.info("Processing single transaction: {}", transactionId);
@@ -56,70 +54,47 @@ class TransactionProcessingService {
     }
 
     /**
+     * Processes a transaction safely, catching and handling all types of exceptions.
+     * Centralizes all error handling using TransactionErrorHandler.
+     */
+    private void processSafely(Transaction transaction) {
+        try {
+            // Initial validation
+            validateTransaction(transaction);
+            
+            // Status validation
+            statusChecker.validateForProcessing(transaction);
+            
+            // Process the transaction
+            executeTransaction(transaction);
+        } catch (Exception e) {
+            log.error("Failed to process transaction {}: {}", transaction.getId(), e.getMessage());
+            // General catch for any unhandled exceptions
+            if (!(e instanceof TransactionValidationException)) {
+                errorHandler.handleUnexpectedError(transaction, e);
+            }
+        }
+    }
+
+    /**
      * Validates the transaction before processing.
+     * 
+     * @throws TransactionValidationException if validation fails
      */
     private void validateTransaction(Transaction transaction) {
         try {
             validator.validate(transaction);
-        } catch (Exception e) {
-            log.error("Transaction validation failed: {}", e.getMessage());
-            throw e;
+        } catch (TransactionValidationException e) {
+            errorHandler.handleValidationError(transaction, e);
         }
     }
 
     /**
-     * Processes the transaction based on its current status.
+     * Executes a transaction with proper error handling.
+     * Handles all specific exceptions that may occur during transaction processing.
      */
-    private void processBasedOnStatus(Transaction transaction) {
-        if (statusManager.canBeProcessed(transaction)) {
-            processNewTransaction(transaction);
-        } else if (statusManager.isInProgress(transaction)) {
-            handlePendingTransaction(transaction);
-        } else if (statusManager.isCompleted(transaction)) {
-            handleDoneTransaction(transaction);
-        } else if (statusManager.hasFailed(transaction)) {
-            handleFaultyTransaction(transaction);
-        } else {
-            handleInvalidStatus(transaction);
-        }
-    }
-
-    /**
-     * Processes a transaction safely, catching and logging any exceptions.
-     */
-    private void processSafely(Transaction transaction) {
-        try {
-            validateTransaction(transaction);
-            processNewTransaction(transaction);
-        } catch (Exception e) {
-            log.error("Failed to process transaction {}: {}", transaction.getId(), e.getMessage());
-        }
-    }
-
-    private void handleDoneTransaction(Transaction transaction) {
-        log.warn("Attempted to process already completed transaction: {}", transaction.getId());
-        throw new TransactionAlreadyProcessedException(
-            "Transaction " + transaction.getId() + " has already been processed");
-    }
-
-    private void handleFaultyTransaction(Transaction transaction) {
-        log.error("Attempted to process faulty transaction: {}", transaction.getId());
-        throw new TransactionCannotBeProcessedException(
-            "Transaction " + transaction.getId() + " cannot be processed");
-    }
-
-    private void processNewTransaction(Transaction transaction) {
-        log.info("Processing new transaction: {}", transaction.getId());
-        processor.processTransaction(transaction);
-    }
-
-    private void handlePendingTransaction(Transaction transaction) {
-        log.warn("Attempted to process PENDING transaction: {}", transaction.getId());
-        throw new UnsupportedOperationException("Cannot process transaction in PENDING status: " + transaction.getId());
-    }
-
-    private void handleInvalidStatus(Transaction transaction) {
-        log.error("Invalid transaction status encountered: {}", transaction.getStatus());
-        throw new IllegalArgumentException("Unexpected transaction status: " + transaction.getStatus());
+    private void executeTransaction(Transaction transaction) {
+            log.info("Processing transaction: {}", transaction.getId());
+            processor.processTransaction(transaction);
     }
 }

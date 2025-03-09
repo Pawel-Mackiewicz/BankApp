@@ -5,6 +5,9 @@ package info.mackiewicz.bankapp.transaction.exception;
  */
 public class TransactionExecutionException extends RuntimeException {
     
+    public TransactionExecutionException() {
+        super();
+    }
     public TransactionExecutionException(String message) {
         super(message);
     }
