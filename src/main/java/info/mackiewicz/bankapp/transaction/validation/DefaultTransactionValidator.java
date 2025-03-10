@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.model.TransactionTypeCategory;
+import info.mackiewicz.bankapp.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,6 +22,7 @@ public class DefaultTransactionValidator implements TransactionValidator {
         validateType(transaction);
         validateBothAccountsNotNull(transaction);
         validateAccounts(transaction);
+        validateSameOwnerForOwnTransfer(transaction);
     }
 
     @Override
@@ -58,6 +60,20 @@ public class DefaultTransactionValidator implements TransactionValidator {
     private void validateBothAccountsNotNull(Transaction transaction) {
         if (transaction.getSourceAccount() == null && transaction.getDestinationAccount() == null) {
             throw new TransactionValidationException("Both accounts cannot be null");
+        }
+    }
+
+    private void validateSameOwnerForOwnTransfer(Transaction transaction) {
+        if (transaction.getType() == TransactionType.TRANSFER_OWN) {
+            if (transaction.getSourceAccount() != null && transaction.getDestinationAccount() != null) {
+                // Check if accounts belong to the same owner
+                User sourceOwner = transaction.getSourceAccount().getRawOwner();
+                User destinationOwner = transaction.getDestinationAccount().getRawOwner();
+                if (!sourceOwner.equals(destinationOwner)) {
+                    throw new TransactionValidationException(
+                            "Own transfer must be between accounts of the same owner");
+                }
+            }
         }
     }
 

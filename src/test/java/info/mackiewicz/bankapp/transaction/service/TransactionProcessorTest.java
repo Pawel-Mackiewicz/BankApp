@@ -19,23 +19,23 @@ import org.mockito.MockitoAnnotations;
 import info.mackiewicz.bankapp.account.exception.AccountLockException;
 import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
 import info.mackiewicz.bankapp.shared.util.LoggingService;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
-import info.mackiewicz.bankapp.transaction.service.error.TransactionFailureHandler;
-import info.mackiewicz.bankapp.transaction.service.strategy.StrategyResolver;
-import info.mackiewicz.bankapp.transaction.service.strategy.TransactionStrategy;
+import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionCommandRegistry;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutionCommand;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class TransactionProcessorTest {
 
     @Mock
-    private StrategyResolver strategyResolver;
+    private TransactionCommandRegistry commandRegistry;
 
     @Mock
     private AccountLockManager accountLockManager;
@@ -44,10 +44,13 @@ class TransactionProcessorTest {
     private TransactionStatusManager statusManager;
 
     @Mock
-    private TransactionFailureHandler errorHandler;
+    private TransactionErrorHandler errorHandler;
     
     @Mock
-    private TransactionStrategy transactionStrategy;
+    private TransactionExecutionCommand executionCommand;
+    
+    @Mock
+    private AccountService accountService;
 
     @Mock
     private LoggingService loggingService;
@@ -73,8 +76,8 @@ class TransactionProcessorTest {
         transaction.setSourceAccount(sourceAccount);
         transaction.setDestinationAccount(destinationAccount);
         
-        when(strategyResolver.resolveStrategy(any(Transaction.class)))
-            .thenReturn(transactionStrategy);
+        when(commandRegistry.getCommand(any(TransactionType.class)))
+            .thenReturn(executionCommand);
     }
 
     @Test
@@ -85,7 +88,8 @@ class TransactionProcessorTest {
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(transactionStrategy).execute(transaction);
+        verify(commandRegistry).getCommand(transaction.getType());
+        verify(executionCommand).execute(transaction, accountService);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
         verifyNoInteractions(errorHandler);
@@ -95,7 +99,7 @@ class TransactionProcessorTest {
     void processTransaction_WhenInsufficientFunds_ShouldHandleError() {
         // given
         InsufficientFundsException exception = new InsufficientFundsException("Insufficient funds");
-        doThrow(exception).when(transactionStrategy).execute(transaction);
+        doThrow(exception).when(executionCommand).execute(transaction, accountService);
 
         // when
         processor.processTransaction(transaction);
@@ -103,7 +107,8 @@ class TransactionProcessorTest {
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(transactionStrategy).execute(transaction);
+        verify(commandRegistry).getCommand(transaction.getType());
+        verify(executionCommand).execute(transaction, accountService);
         verify(errorHandler).handleInsufficientFundsError(transaction, exception);
         verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
@@ -113,7 +118,7 @@ class TransactionProcessorTest {
     void processTransaction_WhenUnexpectedError_ShouldHandleError() {
         // given
         RuntimeException exception = new RuntimeException("Unexpected error");
-        doThrow(exception).when(transactionStrategy).execute(transaction);
+        doThrow(exception).when(executionCommand).execute(transaction, accountService);
 
         // when
         processor.processTransaction(transaction);
@@ -121,7 +126,8 @@ class TransactionProcessorTest {
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(transactionStrategy).execute(transaction);
+        verify(commandRegistry).getCommand(transaction.getType());
+        verify(executionCommand).execute(transaction, accountService);
         verify(errorHandler).handleUnexpectedError(transaction, exception); 
         verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
@@ -139,7 +145,8 @@ class TransactionProcessorTest {
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(transactionStrategy).execute(transaction);
+        verify(commandRegistry).getCommand(transaction.getType());
+        verify(executionCommand).execute(transaction, accountService);
         verify(errorHandler).handleUnexpectedError(transaction, exception);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
     }
@@ -164,7 +171,8 @@ class TransactionProcessorTest {
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         verify(errorHandler).handleLockError(transaction, exception);
         verify(statusManager, never()).setTransactionStatus(any(), any());
-        verify(transactionStrategy, never()).execute(transaction);
+        verify(commandRegistry, never()).getCommand(any());
+        verify(executionCommand, never()).execute(transaction, accountService);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
     }
 
@@ -183,7 +191,8 @@ class TransactionProcessorTest {
         // then
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(transactionStrategy).execute(transaction);
+        verify(commandRegistry).getCommand(transaction.getType());
+        verify(executionCommand).execute(transaction, accountService);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
         verify(errorHandler).handleUnlockError(transaction, exception);
@@ -195,7 +204,9 @@ class TransactionProcessorTest {
         InOrder orderVerifier = inOrder(
             accountLockManager, 
             statusManager, 
-            transactionStrategy,
+            commandRegistry,
+            executionCommand,
+            statusManager,
             accountLockManager
         );
 
@@ -205,7 +216,8 @@ class TransactionProcessorTest {
         // then
         orderVerifier.verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         orderVerifier.verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        orderVerifier.verify(transactionStrategy).execute(transaction);
+        orderVerifier.verify(commandRegistry).getCommand(transaction.getType());
+        orderVerifier.verify(executionCommand).execute(transaction, accountService);
         orderVerifier.verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
         orderVerifier.verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
         verifyNoInteractions(errorHandler);

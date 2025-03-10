@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import info.mackiewicz.bankapp.account.exception.AccountLockException;
 import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.exception.AccountValidationException;
+import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
 import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.shared.util.LoggingService;
@@ -13,26 +14,25 @@ import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.service.error.TransactionFailureHandler;
-import info.mackiewicz.bankapp.transaction.service.strategy.StrategyResolver;
-import info.mackiewicz.bankapp.transaction.service.strategy.TransactionStrategy;
+import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionCommandRegistry;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutionCommand;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Service responsible for processing financial transactions with proper locking
- * and validation mechanisms.
- * Focuses solely on executing transactions with proper locking, without
- * duplicating validation logic.
+ * Service responsible for processing financial transactions with proper
+ * locking and validation mechanisms.
  */
 @RequiredArgsConstructor
 @Service
 public class TransactionProcessor {
 
-    private final StrategyResolver strategyResolver;
+    private final AccountService accountService;
     private final AccountLockManager accountLockManager;
-    private final TransactionFailureHandler errorHandler;
+    private final TransactionErrorHandler errorHandler;
     private final TransactionStatusManager statusManager;
     private final LoggingService loggingService;
+    private final TransactionCommandRegistry commandRegistry;
 
     /**
      * Asynchronously processes a financial transaction with proper account locking
@@ -65,7 +65,7 @@ public class TransactionProcessor {
 
     private void executeWithStatusUpdates(Transaction transaction) {
         updateTransactionStatus(transaction, TransactionStatus.PENDING);
-        executeTransactionStrategy(transaction);
+        executeTransaction(transaction);
         updateTransactionStatus(transaction, TransactionStatus.DONE);
         loggingService.logSuccessfulTransaction(transaction);
     }
@@ -79,10 +79,13 @@ public class TransactionProcessor {
         }
     }
 
-    private void executeTransactionStrategy(Transaction transaction) {
-        TransactionStrategy strategy = strategyResolver.resolveStrategy(transaction);
+    private void executeTransaction(Transaction transaction) {
         try {
-            strategy.execute(transaction);
+            // Get command based on transaction type
+            TransactionExecutionCommand command = commandRegistry.getCommand(transaction.getType());
+            
+            // Execute the transaction using the appropriate command
+            command.execute(transaction, accountService);
         } catch (AccountValidationException e) {
             errorHandler.handleValidationError(transaction, e);
             throw new TransactionExecutionException();

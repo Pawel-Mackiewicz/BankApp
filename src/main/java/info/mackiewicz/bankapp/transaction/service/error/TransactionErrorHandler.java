@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class TransactionFailureHandler {
+public class TransactionErrorHandler {
     private final TransactionStatusManager statusManager;
     private final TransactionErrorNotifier errorNotifier;
 

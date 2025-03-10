@@ -1,7 +1,9 @@
 package info.mackiewicz.bankapp.transaction.validation;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 
@@ -9,8 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.user.model.User;
 
 class DefaultTransactionValidatorTest {
 
@@ -23,8 +28,8 @@ class DefaultTransactionValidatorTest {
     void setUp() {
         validator = new DefaultTransactionValidator();
         transaction = new Transaction();
-        sourceAccount = mock(Account.class);
-        destinationAccount = mock(Account.class);
+        sourceAccount = TestAccountBuilder.createTestAccountWithRandomOwner();
+        destinationAccount = TestAccountBuilder.createTestAccountWithRandomOwner();
     }
 
     @Test
@@ -146,8 +151,15 @@ class DefaultTransactionValidatorTest {
         // Given
         transaction.setType(TransactionType.TRANSFER_OWN);
         transaction.setAmount(BigDecimal.TEN);
+
+        User owner = TestUserBuilder.createTestUser();
+        
+        // Create two accounts with the same owner for own transfer
+        sourceAccount = TestAccountBuilder.createTestAccountWithOwner(owner);
+        destinationAccount = TestAccountBuilder.createTestAccountWithOwner(owner);
+      
         transaction.setSourceAccount(sourceAccount);
-        transaction.setDestinationAccount(sourceAccount);
+        transaction.setDestinationAccount(destinationAccount);
 
         // When & Then
         assertDoesNotThrow(() -> validator.validate(transaction));

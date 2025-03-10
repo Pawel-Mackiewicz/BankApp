@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.error.TransactionFailureHandler;
+import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ class TransactionProcessingService {
     private final TransactionValidator validator;
     private final TransactionQueryService queryService;
     private final TransactionStatusChecker statusChecker;
-    private final TransactionFailureHandler errorHandler;
+    private final TransactionErrorHandler errorHandler;
 
     /**
      * Processes a transaction by its ID.

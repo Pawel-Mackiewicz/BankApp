@@ -20,7 +20,7 @@ import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedExcep
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.service.error.TransactionFailureHandler;
+import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,7 +44,7 @@ class TransactionProcessingServiceTest {
     private TransactionStatusChecker statusChecker;
     
     @Mock
-    private TransactionFailureHandler errorHandler;
+    private TransactionErrorHandler errorHandler;
 
     @InjectMocks
     private TransactionProcessingService processingService;
