@@ -15,8 +15,8 @@ import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionExcepti
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
-import info.mackiewicz.bankapp.transaction.service.execution.TransactionCommandRegistry;
-import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutionCommand;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutorRegistry;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutor;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -25,14 +25,14 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @Service
-public class TransactionProcessor {
+class TransactionProcessor {
 
     private final AccountService accountService;
     private final AccountLockManager accountLockManager;
     private final TransactionErrorHandler errorHandler;
     private final TransactionStatusManager statusManager;
     private final LoggingService loggingService;
-    private final TransactionCommandRegistry commandRegistry;
+    private final TransactionExecutorRegistry commandRegistry;
 
     /**
      * Asynchronously processes a financial transaction with proper account locking
@@ -82,7 +82,7 @@ public class TransactionProcessor {
     private void executeTransaction(Transaction transaction) {
         try {
             // Get command based on transaction type
-            TransactionExecutionCommand command = commandRegistry.getCommand(transaction.getType());
+            TransactionExecutor command = commandRegistry.getCommand(transaction.getType());
             
             // Execute the transaction using the appropriate command
             command.execute(transaction, accountService);

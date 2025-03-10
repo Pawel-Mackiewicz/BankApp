@@ -1,12 +1,12 @@
 package info.mackiewicz.bankapp.presentation.dashboard.controller;
 
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionFilterService;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
+import info.mackiewicz.bankapp.presentation.dashboard.service.TransactionFilterService;
 import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

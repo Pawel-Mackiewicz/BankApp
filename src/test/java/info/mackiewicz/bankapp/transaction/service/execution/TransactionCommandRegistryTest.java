@@ -24,12 +24,12 @@ import info.mackiewicz.bankapp.transaction.model.TransactionType;
 class TransactionCommandRegistryTest {
 
     @Mock
-    private TransactionExecutionCommand depositCommand;
+    private TransactionExecutor depositCommand;
 
     @Mock
-    private TransactionExecutionCommand withdrawalCommand;
+    private TransactionExecutor withdrawalCommand;
 
-    private TransactionCommandRegistry registry;
+    private TransactionExecutorRegistry registry;
 
     @BeforeEach
     void setUp() {
@@ -38,14 +38,14 @@ class TransactionCommandRegistryTest {
         when(withdrawalCommand.getTransactionType()).thenReturn(TransactionType.WITHDRAWAL);
 
         // Create a registry with our mock commands
-        List<TransactionExecutionCommand> commands = Arrays.asList(depositCommand, withdrawalCommand);
-        registry = new TransactionCommandRegistry(commands);
+        List<TransactionExecutor> commands = Arrays.asList(depositCommand, withdrawalCommand);
+        registry = new TransactionExecutorRegistry(commands);
     }
 
     @Test
     void getCommand_WithRegisteredType_ShouldReturnCorrectCommand() {
         // Act
-        TransactionExecutionCommand result = registry.getCommand(TransactionType.DEPOSIT);
+        TransactionExecutor result = registry.getCommand(TransactionType.DEPOSIT);
         
         // Assert
         assertSame(depositCommand, result);
@@ -67,17 +67,17 @@ class TransactionCommandRegistryTest {
     @Test
     void constructor_WithDuplicateTransactionTypes_ShouldUseLastRegisteredCommand() {
         // Arrange
-        TransactionExecutionCommand anotherDepositCommand = mock(TransactionExecutionCommand.class);
+        TransactionExecutor anotherDepositCommand = mock(TransactionExecutor.class);
         when(anotherDepositCommand.getTransactionType()).thenReturn(TransactionType.DEPOSIT);
         
         // Create a registry with duplicate commands for the same type
-        List<TransactionExecutionCommand> commands = Arrays.asList(
+        List<TransactionExecutor> commands = Arrays.asList(
             depositCommand, withdrawalCommand, anotherDepositCommand
         );
         
         // Act
-        TransactionCommandRegistry newRegistry = new TransactionCommandRegistry(commands);
-        TransactionExecutionCommand result = newRegistry.getCommand(TransactionType.DEPOSIT);
+        TransactionExecutorRegistry newRegistry = new TransactionExecutorRegistry(commands);
+        TransactionExecutor result = newRegistry.getCommand(TransactionType.DEPOSIT);
         
         // Assert - the last registered command should win
         assertSame(anotherDepositCommand, result);

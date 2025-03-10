@@ -33,12 +33,12 @@ class WithdrawalTransactionCommandTest {
     @Mock
     private Transaction transaction;
 
-    private WithdrawalTransactionCommand command;
+    private WithdrawalTransactionExecutor command;
     private BigDecimal amount;
 
     @BeforeEach
     void setUp() {
-        command = new WithdrawalTransactionCommand();
+        command = new WithdrawalTransactionExecutor();
         amount = new BigDecimal("100.00");
     }
 

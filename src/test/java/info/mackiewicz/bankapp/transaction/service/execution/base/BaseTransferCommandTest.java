@@ -40,7 +40,7 @@ class BaseTransferCommandTest {
     private BigDecimal amount;
 
     // Concrete implementation of BaseTransferCommand for testing
-    static class TestableBaseTransferCommand extends BaseTransferCommand {
+    static class TestableBaseTransferCommand extends BaseTransferExecutor {
         private TransactionType type = TransactionType.TRANSFER_INTERNAL;
         
         @Override

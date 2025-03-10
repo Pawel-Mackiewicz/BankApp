@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class TransactionStatusChecker {
+class TransactionStatusChecker {
     
     /**
      * Checks if transaction can be processed based on its status.

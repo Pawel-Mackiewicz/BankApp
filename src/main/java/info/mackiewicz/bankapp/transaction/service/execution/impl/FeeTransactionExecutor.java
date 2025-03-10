@@ -8,14 +8,14 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
-import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutionCommand;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutor;
 
 /**
  * Service for executing FEE transactions.
  * Withdraws a fee from the source account and transfers it to the bank account.
  */
 @Service
-public class FeeTransactionCommand implements TransactionExecutionCommand {
+public class FeeTransactionExecutor implements TransactionExecutor {
     private static final Integer BANK_ACCOUNT_ID = -1;
 
     @Override

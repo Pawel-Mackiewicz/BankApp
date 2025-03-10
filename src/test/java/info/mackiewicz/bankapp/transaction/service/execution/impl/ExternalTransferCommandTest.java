@@ -35,12 +35,12 @@ class ExternalTransferCommandTest {
     @Mock
     private Transaction transaction;
 
-    private ExternalTransferCommand command;
+    private ExternalTransferExecutor command;
     private BigDecimal amount;
 
     @BeforeEach
     void setUp() {
-        command = new ExternalTransferCommand();
+        command = new ExternalTransferExecutor();
         amount = new BigDecimal("100.00");
     }
 

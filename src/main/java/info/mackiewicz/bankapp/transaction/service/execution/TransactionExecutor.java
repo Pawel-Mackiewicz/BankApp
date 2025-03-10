@@ -8,7 +8,7 @@ import info.mackiewicz.bankapp.transaction.model.TransactionType;
  * Interface for transaction execution commands.
  * Implementations define how to execute specific transaction types.
  */
-public interface TransactionExecutionCommand {
+public interface TransactionExecutor {
     /**
      * Executes a financial transaction.
      *

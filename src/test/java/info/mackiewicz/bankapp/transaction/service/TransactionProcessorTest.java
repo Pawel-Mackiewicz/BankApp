@@ -27,15 +27,15 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
-import info.mackiewicz.bankapp.transaction.service.execution.TransactionCommandRegistry;
-import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutionCommand;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutorRegistry;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class TransactionProcessorTest {
 
     @Mock
-    private TransactionCommandRegistry commandRegistry;
+    private TransactionExecutorRegistry commandRegistry;
 
     @Mock
     private AccountLockManager accountLockManager;
@@ -47,7 +47,7 @@ class TransactionProcessorTest {
     private TransactionErrorHandler errorHandler;
     
     @Mock
-    private TransactionExecutionCommand executionCommand;
+    private TransactionExecutor executionCommand;
     
     @Mock
     private AccountService accountService;

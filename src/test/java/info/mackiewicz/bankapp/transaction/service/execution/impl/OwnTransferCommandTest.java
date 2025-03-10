@@ -35,12 +35,12 @@ class OwnTransferCommandTest {
     @Mock
     private Transaction transaction;
 
-    private OwnTransferCommand command;
+    private OwnTransferExecutor command;
     private BigDecimal amount;
 
     @BeforeEach
     void setUp() {
-        command = new OwnTransferCommand();
+        command = new OwnTransferExecutor();
         amount = new BigDecimal("100.00");
     }
 

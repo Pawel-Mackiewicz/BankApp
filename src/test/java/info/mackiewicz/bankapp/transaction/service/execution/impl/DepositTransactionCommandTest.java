@@ -33,12 +33,12 @@ class DepositTransactionCommandTest {
     @Mock
     private Transaction transaction;
 
-    private DepositTransactionCommand command;
+    private DepositTransactionExecutor command;
     private BigDecimal amount;
 
     @BeforeEach
     void setUp() {
-        command = new DepositTransactionCommand();
+        command = new DepositTransactionExecutor();
         amount = new BigDecimal("100.00");
     }
 

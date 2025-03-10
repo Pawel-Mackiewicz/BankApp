@@ -43,12 +43,12 @@ class FeeTransactionCommandTest {
     @Mock
     private Transaction transaction;
 
-    private FeeTransactionCommand command;
+    private FeeTransactionExecutor command;
     private BigDecimal amount;
 
     @BeforeEach
     void setUp() {
-        command = new FeeTransactionCommand();
+        command = new FeeTransactionExecutor();
         amount = new BigDecimal("10.00");
     }
 

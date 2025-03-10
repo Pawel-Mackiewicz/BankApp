@@ -40,6 +40,16 @@ class TransactionProcessingService {
     }
 
     /**
+     * Processes a single transaction.
+     * 
+     * @param transaction the transaction to process
+     */
+    public void processTransaction(Transaction transaction) {
+        log.info("Processing single transaction: {}", transaction.getId());
+        processSafely(transaction);
+    }
+
+    /**
      * Processes all transactions with NEW status.
      * Failed transactions will be logged but won't stop the processing of remaining transactions.
      */

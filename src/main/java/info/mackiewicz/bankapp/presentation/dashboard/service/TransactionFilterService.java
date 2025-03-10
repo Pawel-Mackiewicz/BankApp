@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.service;
+package info.mackiewicz.bankapp.presentation.dashboard.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.transaction.model.Transaction;

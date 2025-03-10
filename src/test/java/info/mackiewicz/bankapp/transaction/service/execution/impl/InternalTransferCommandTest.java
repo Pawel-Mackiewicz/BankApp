@@ -35,12 +35,12 @@ class InternalTransferCommandTest {
     @Mock
     private Transaction transaction;
 
-    private InternalTransferCommand command;
+    private InternalTransferExecutor command;
     private BigDecimal amount;
 
     @BeforeEach
     void setUp() {
-        command = new InternalTransferCommand();
+        command = new InternalTransferExecutor();
         amount = new BigDecimal("100.00");
     }
 

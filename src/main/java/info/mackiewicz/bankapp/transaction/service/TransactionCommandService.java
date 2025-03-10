@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 class TransactionCommandService {
     private final TransactionRepository repository;
-    private final TransactionProcessor processor;
+    private final TransactionProcessingService processingService;
     private final TransactionValidator validator;
     private final TransactionQueryService queryService;
 
@@ -46,7 +46,7 @@ class TransactionCommandService {
         // Process immediately if it's an own transfer
         if (TransactionType.TRANSFER_OWN.equals(savedTransaction.getType())) {
             log.info("Processing own transfer transaction: {}", savedTransaction.getId());
-            processor.processTransaction(savedTransaction);
+            processingService.processTransaction(savedTransaction);
         }
         
         return savedTransaction;

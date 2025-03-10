@@ -16,9 +16,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
-public class TransactionCommandRegistry {
+public class TransactionExecutorRegistry {
     
-    private final Map<TransactionType, TransactionExecutionCommand> commandMap;
+    private final Map<TransactionType, TransactionExecutor> commandMap;
     
     /**
      * Creates the command registry from the list of available implementations.
@@ -27,10 +27,10 @@ public class TransactionCommandRegistry {
      *
      * @param commands list of commands to register
      */
-    public TransactionCommandRegistry(List<TransactionExecutionCommand> commands) {
+    public TransactionExecutorRegistry(List<TransactionExecutor> commands) {
         this.commandMap = commands.stream()
                 .collect(Collectors.toMap(
-                    TransactionExecutionCommand::getTransactionType,
+                    TransactionExecutor::getTransactionType,
                     Function.identity(),
                     (existing, replacement) -> replacement  // Keep the last command for duplicate types
                 ));
@@ -47,8 +47,8 @@ public class TransactionCommandRegistry {
      * @return execution command for the specified type
      * @throws IllegalArgumentException if no command is registered for the given type
      */
-    public TransactionExecutionCommand getCommand(TransactionType type) {
-        TransactionExecutionCommand command = commandMap.get(type);
+    public TransactionExecutor getCommand(TransactionType type) {
+        TransactionExecutor command = commandMap.get(type);
         if (command == null) {
             throw new IllegalArgumentException("No command registered for transaction type: " + type);
         }
