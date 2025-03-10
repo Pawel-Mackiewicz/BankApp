@@ -124,6 +124,18 @@ public class Account {
         return new AccountOwnerDTO(owner);
     }
 
+    /**
+     * Returns the actual User object that owns this account.
+     * This method is for internal use only, for JSON serialization use getOwner()
+     * which returns AccountOwnerDTO.
+     *
+     * @return The User object that owns this account
+     */
+    @JsonIgnore
+    public User getRawOwner() {
+        return owner;
+    }
+
 
     /**
      * Returns a string representation of this account.
