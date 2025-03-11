@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp.user.service;
 
+import java.text.Normalizer;
+
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.user.model.User;
@@ -22,15 +24,9 @@ public class UsernameGeneratorService {
     }
 
     private String removeDiacritics(String text) {
-        return text.replace("ą", "a")
-                .replace("ć", "c")
-                .replace("ę", "e")
-                .replace("ł", "l")
-                .replace("ń", "n")
-                .replace("ó", "o")
-                .replace("ś", "s")
-                .replace("ź", "z")
-                .replace("ż", "z");
+        String normalized = Normalizer.normalize(text, Normalizer.Form.NFD);
+
+        return normalized.replaceAll("\\p{M}", "");
     }
 
     private String generateUniqueID(String email) {

@@ -22,8 +22,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * Represents a regular bank user.
@@ -33,8 +32,7 @@ import lombok.Setter;
  * @see UserService UserService for business logic.
  */
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "users")
 public class User extends BaseUser implements PersonalInfo, AccountOwner {
 
@@ -72,11 +70,14 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
      */
     public User() {
         super(); // Initialize base fields
-        addDefaultRole();
+        addDefaultRoles();
         accounts = new HashSet<>();
         accountCounter = 0;
     }
-
+    private void addDefaultRoles() {
+        roles.add("ROLE_USER");
+    }
+    
     User(String password, Pesel pesel, String firstname, String lastname, LocalDate dateOfBirth,
             Email email, PhoneNumber phoneNumber) {
         this();
@@ -106,10 +107,6 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
         return UserBuilder.builder();
     }
 
-    private void addDefaultRole() {
-        roles.add("ROLE_USER");
-    }
-
     public synchronized Integer getNextAccountNumber() {
         return ++accountCounter;
     }
@@ -119,58 +116,58 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
         String last = lastname == null ? "" : lastname.trim();
         return first + " " + last;
     }
-
-    @Override
-    public String toString() {
-        return "User(id=" + id +
-                ", pesel=" + pesel +
-                ", firstname=" + firstname +
-                ", lastname=" + lastname +
-                ", username=" + username +
-                ", email=" + email +
-                ")";
-    }
-
+    
     public void setPesel(Pesel pesel) {
         this.pesel = pesel;
     }
-
-
+    
     public void setEmail(Email email) {
         this.email = email;
     }
-
+    
     public void setPhoneNumber(PhoneNumber phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    
+    
+    @Deprecated
+    public void setPesel(String pesel) {
+        this.pesel = new Pesel(pesel);
+    }
+    
+    @Deprecated
+    public void setEmail(String email) {
+        this.email = new Email(email);
+    }
+    
+    @Deprecated
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = new PhoneNumber(phoneNumber);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
-            return true;
+        return true;
         if (o == null || getClass() != o.getClass())
-            return false;
+        return false;
         User user = (User) o;
         return Objects.equals(id, user.id) && Objects.equals(pesel, user.pesel);
     }
-
+    
     @Override
     public int hashCode() {
         return Objects.hash(id, pesel);
     }
 
-    @Deprecated
-    public void setPesel(String pesel) {
-        this.pesel = new Pesel(pesel);
-    }
-
-    @Deprecated
-    public void setEmail(String email) {
-        this.email = new Email(email);
-    }
-
-    @Deprecated
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = new PhoneNumber(phoneNumber);
+    @Override
+    public String toString() {
+        return "User(id=" + id +
+        ", pesel=" + pesel +
+        ", firstname=" + firstname +
+        ", lastname=" + lastname +
+        ", username=" + username +
+        ", email=" + email +
+        ")";
     }
 }
