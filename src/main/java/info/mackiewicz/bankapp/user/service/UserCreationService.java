@@ -23,6 +23,7 @@ public class UserCreationService {
 
     @Transactional
     public User createUser(User user) {
+        log.debug("Creating user: {}", user);
         // Generate username only if not already set
         if (!StringUtils.hasText(user.getUsername())) {
             user = usernameGeneratorService.generateUsername(user);
@@ -33,7 +34,7 @@ public class UserCreationService {
         
         // Save user
         User savedUser = userRepository.save(user);
-        log.info("Created user with ID: {}", savedUser.getId());
+        log.debug("Created user with ID: {}", savedUser.getId());
         
         return savedUser;
     }
