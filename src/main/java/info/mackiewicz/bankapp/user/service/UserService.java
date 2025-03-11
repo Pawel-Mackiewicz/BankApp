@@ -1,98 +1,78 @@
 package info.mackiewicz.bankapp.user.service;
 
-import info.mackiewicz.bankapp.security.service.PasswordService;
-import info.mackiewicz.bankapp.shared.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Facade service that coordinates all user-related operations
+ */
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class UserService implements UserServiceInterface {
 
-    private final UserRepository userRepository;
-    private final PasswordService passwordService;
-    private final UsernameGeneratorService usernameGeneratorService;
+    private final UserCreationService userCreationService;
+    private final UserQueryService userQueryService;
+    private final UserOperationsService userOperationsService;
+    private final UserValidationService userValidationService;
 
     @Override
-    @Transactional
     public User createUser(User user) {
-        user = passwordService.ensurePasswordEncoded(user);
-        user = usernameGeneratorService.generateUsername(user);
-        User savedUser = userRepository.save(user);
-        log.info("Created user with ID: {}", user.getId());
-        return savedUser;
+        userValidationService.validateNewUser(user);
+        return userCreationService.createUser(user);
     }
 
     @Override
-    @Transactional
     public User updateUser(User user) {
-        // Verify user exists
-        getUserById(user.getId());
-
-        user = passwordService.ensurePasswordEncoded(user);
-        User saved = userRepository.save(user);
-        log.info("Updated user with ID: {}", user.getId());
-
-        return saved;
-    }
-
-    public void changeUsersPassword(String email, String newPassword) {
-        userRepository.updatePasswordByEmail(email, passwordService.encodePassword(newPassword));
-        log.info("Changed password for user with email: {}", email);
+        userValidationService.validateUserExists(user.getId());
+        return userOperationsService.updateUser(user);
     }
 
     @Override
     public User getUserById(Integer id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+        return userQueryService.getUserById(id);
     }
 
-    @Transactional
+    @Override
     public User getUserByIdWithPessimisticLock(Integer id) {
-        return userRepository.findByIdWithPessimisticLock(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+        return userQueryService.getUserByIdWithPessimisticLock(id);
     }
 
     @Override
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        return userQueryService.getUserByUsername(username);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userQueryService.getAllUsers();
     }
-    
+
     @Override
-    @Transactional
     public void deleteUser(Integer id) {
-        User user = getUserById(id);
-        userRepository.delete(user);
-        log.info("Deleted user with ID: {}", id);
+        userOperationsService.deleteUser(id);
     }
-    
+
     @Override
     public boolean checkUsernameExists(String username) {
-        return userRepository.existsByUsername(username);
+        return userQueryService.checkUsernameExists(username);
     }
 
     @Override
     public boolean userExistsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return userQueryService.userExistsByEmail(email);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+        return userQueryService.getUserByEmail(email);
     }
-    
+
+    public void changeUsersPassword(String email, String newPassword) {
+        userOperationsService.changeUsersPassword(email, newPassword);
+    }
 }

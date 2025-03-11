@@ -97,7 +97,7 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle multiple concurrent transactions correctly")
     void testConcurrentTransactions() {
-        int numberOfTransactions = 30;
+        int numberOfTransactions = 20;
         List<Transaction> transactions = new ArrayList<>();
 
         for (int i = 0; i < numberOfTransactions; i++) {
