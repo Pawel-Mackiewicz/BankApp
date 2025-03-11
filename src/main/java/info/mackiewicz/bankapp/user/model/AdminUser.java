@@ -54,4 +54,24 @@ public class AdminUser extends BaseUser {
                ", username=" + username + 
                ")";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(!(o instanceof AdminUser)) {
+            return false;
+        }
+        AdminUser adminUser = (AdminUser) o;
+        return id != null && id.equals(adminUser.id);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 31 * id.hashCode() + 31 * username.hashCode();
+        return result;
+    }
+
+    
 }
