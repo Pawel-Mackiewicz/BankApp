@@ -24,6 +24,7 @@ class AccountCreationService {
     private final UserService userService;
     private final AccountRepository accountRepository;
     private final AccountValidationService validationService;
+    
 
     private static final int MAX_RETRIES = 3;
     private static final long RETRY_DELAY_MS = 100;

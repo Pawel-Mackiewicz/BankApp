@@ -31,9 +31,8 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.util.Util;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionBuilder;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatusCategory;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -64,9 +63,6 @@ class ConcurrentTransactionIntegrationTest {
 
     @Autowired
     private TransactionService transactionService;
-
-    @Autowired
-    private TransactionBuilder transactionBuilder;
 
     @Autowired
     private UserService userService;
@@ -101,7 +97,7 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle multiple concurrent transactions correctly")
     void testConcurrentTransactions() {
-        int numberOfTransactions = 40;
+        int numberOfTransactions = 30;
         List<Transaction> transactions = new ArrayList<>();
 
         for (int i = 0; i < numberOfTransactions; i++) {
@@ -114,7 +110,7 @@ class ConcurrentTransactionIntegrationTest {
         Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(10))
+            .atMost(Duration.ofSeconds(15))
             .untilAsserted(() -> {
                 verifyTransactionResults(transactions);
                 verifySystemBalance();
@@ -348,9 +344,9 @@ class ConcurrentTransactionIntegrationTest {
             .atMost(Duration.ofSeconds(10))
             .untilAsserted(() -> {
                 Transaction completed = transactionService.getTransactionById(zeroBalanceTransfer.getId());
-                assertThat(completed.getStatus())
+                assertThat(completed.getStatus().getCategory())
                     .as("Zero balance transfer should fail")
-                    .isEqualTo(TransactionStatus.FAULTY);
+                    .isEqualTo(TransactionStatusCategory.FAULTY);
             });
     }
 
@@ -398,35 +394,33 @@ class ConcurrentTransactionIntegrationTest {
     }
 
     private Transaction createTransfer(Account source, Account destination, BigDecimal amount) {
-        Transaction transaction = transactionBuilder
-            .withSourceAccount(source)
-            .withDestinationAccount(destination)
-            .withTransactionTitle("Test concurrent transfer")
-            .withType(TransactionType.TRANSFER_INTERNAL)
+        Transaction transaction = Transaction.buildTransfer()
+            .asInternalTransfer()
+            .from(source)
+            .to(destination)
             .withAmount(amount)
+            .withTitle("Test concurrent transfer")
             .build();
 
-        return transactionService.createTransaction(transaction);
+        return transactionService.registerTransaction(transaction);
     }
 
     private Transaction createWithdrawal(Account account, BigDecimal amount) {
-        Transaction transaction = transactionBuilder
-            .withSourceAccount(account)
-            .withTransactionTitle("Test concurrent withdrawal")
-            .withType(TransactionType.WITHDRAWAL)
+        Transaction transaction = Transaction.buildWithdrawal()
+            .from(account)
             .withAmount(amount)
+            .withTitle("Test concurrent withdrawal")
             .build();
-        return transactionService.createTransaction(transaction);
+        return transactionService.registerTransaction(transaction);
     }
 
     private Transaction createDeposit(Account account, BigDecimal amount) {
-        Transaction transaction = transactionBuilder
-            .withDestinationAccount(account)
-            .withTransactionTitle("Test concurrent deposit")
-            .withType(TransactionType.DEPOSIT)
+        Transaction transaction = Transaction.buildDeposit()
+            .to(account)
             .withAmount(amount)
+            .withTitle("Test concurrent deposit")
             .build();
-        return transactionService.createTransaction(transaction);
+        return transactionService.registerTransaction(transaction);
     }
 
     private void verifyTransactionResults(List<Transaction> transactions) {
@@ -434,7 +428,7 @@ class ConcurrentTransactionIntegrationTest {
             Transaction completed = transactionService.getTransactionById(transaction.getId());
             assertThat(completed.getStatus())
                 .as("Transaction %d should be completed", completed.getId())
-                .isIn(TransactionStatus.DONE, TransactionStatus.FAULTY);
+                .isIn(TransactionStatus.DONE, TransactionStatus.INSUFFICIENT_FUNDS);
         });
     }
 

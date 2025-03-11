@@ -3,12 +3,10 @@ package info.mackiewicz.bankapp.transaction.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import org.springframework.transaction.annotation.Transactional;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.transaction.service.strategy.TransactionStrategy;
+import info.mackiewicz.bankapp.transaction.model.builder.DepositBuilder;
+import info.mackiewicz.bankapp.transaction.model.builder.TransferBuilder;
+import info.mackiewicz.bankapp.transaction.model.builder.WithdrawalBuilder;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,10 +19,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a financial transaction between accounts.
+ * To create a new transaction, use one of the static builder methods.
+ * @see #buildTransfer()
+ * @see #buildWithdrawal()
+ * @see #buildDeposit()
+ */
 @NoArgsConstructor
 @Data
 @Entity
@@ -42,11 +46,8 @@ public class Transaction {
     @JoinColumn(name = "destination_id")
     private Account destinationAccount;
     
-    @JsonIgnore
-    @Transient
-    private TransactionStrategy strategy;
-    
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)  // Longest enum value is INSUFFICIENT_FUNDS (18 chars) + margin
     private TransactionStatus status;
     
     @Enumerated(EnumType.STRING)
@@ -57,42 +58,26 @@ public class Transaction {
     @Column(length = 100)
     private String title;
 
-        @Column(name = "date")
+    @Column(name = "date")
     private LocalDateTime date;
-
     
     @PrePersist
-    public void prePersist() {
+    void prePersist() {
         if (date == null) {
             date = LocalDateTime.now();
         }
     }
 
-    @Transactional
-    public boolean execute() {
-        return strategy.execute(this);
-    }
-
-    @JsonIgnore
-    public boolean isTransactionPossible() {
-        if (this.type == TransactionType.DEPOSIT) {
-            return this.destinationAccount != null;
-        } else {
-            return this.sourceAccount != null;
+        // Static fabric methods for creating builders
+        public static TransferBuilder buildTransfer() {
+            return new TransferBuilder();
         }
-    }
-
-    public String getOtherPartyName(Integer userId) {
-        if (this.type == TransactionType.FEE) {
-            return "Fee";
-        } else if (this.type == TransactionType.DEPOSIT) {
-            return "Deposit";
-        } else if (this.type == TransactionType.WITHDRAWAL) {
-            return "Withdrawal";
-        } else if (this.destinationAccount.getOwner().getId().equals(userId)) {  // If the transaction is a transfer and the user is the owner of the destination account, return the source account owner's username
-            return this.sourceAccount.getOwner().getFullName();
-        } else {                                                           // If the transaction is a transfer and the user is the owner of the source account, return the destination account owner's username     
-            return this.destinationAccount.getOwner().getFullName();
+        
+        public static WithdrawalBuilder buildWithdrawal() {
+            return new WithdrawalBuilder();
         }
-    }
+        
+        public static DepositBuilder buildDeposit() {
+            return new DepositBuilder();
+        }
 }

@@ -9,6 +9,7 @@ import org.iban4j.Iban;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
 import info.mackiewicz.bankapp.account.service.AccountServiceAccessManager;
 import info.mackiewicz.bankapp.account.util.IbanConverter;
@@ -26,6 +27,9 @@ import lombok.Getter;
 
 /**
  * Entity representing a bank account in the system.
+ * Each account is associated with a single user and has a unique IBAN.
+ * To create a new account, use {@link AccountService#createAccount}.
+ * @see AccountService
  */
 @Entity
 @Table(name = "accounts")
@@ -59,6 +63,8 @@ public class Account {
 
     /**
      * Default constructor for JPA.
+     * This constructor is package-private to prevent direct instantiation.
+     * Use {@link AccountService} to create new accounts.
      */
     Account() {
     }
@@ -66,7 +72,7 @@ public class Account {
     /**
      * Creates a new account with specified owner, account number and IBAN.
      * This constructor is package-private to enforce creation through
-     * AccountFactory.
+     * {@link AccountService}.
      *
      * @param owner             The user who owns this account
      * @param userAccountNumber The user-specific account number
@@ -120,6 +126,18 @@ public class Account {
     @JsonGetter("owner")
     public AccountOwnerDTO getOwner() {
         return new AccountOwnerDTO(owner);
+    }
+
+    /**
+     * Returns the actual User object that owns this account.
+     * This method is for internal use only, for JSON serialization use getOwner()
+     * which returns AccountOwnerDTO.
+     *
+     * @return The User object that owns this account
+     */
+    @JsonIgnore
+    public User getRawOwner() {
+        return owner;
     }
 
 
