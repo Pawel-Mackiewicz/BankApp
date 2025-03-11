@@ -32,7 +32,7 @@ class TransactionCommandServiceTest {
     private TransactionRepository repository;
 
     @Mock
-    private TransactionProcessor processor;
+    private TransactionProcessingService processingService;
 
     @Mock
     private TransactionValidator validator;
@@ -61,7 +61,7 @@ class TransactionCommandServiceTest {
         // then
         verify(validator).validate(transaction);
         verify(repository).save(transaction);
-        verify(processor, never()).processTransaction(any());
+        verify(processingService, never()).processTransaction(any());
         assertEquals(transaction, result);
     }
 
@@ -78,7 +78,7 @@ class TransactionCommandServiceTest {
         // then
         verify(validator).validate(transaction);
         verify(repository).save(transaction);
-        verify(processor).processTransaction(transaction);
+        verify(processingService).processTransaction(transaction);
         assertEquals(transaction, result);
     }
 
@@ -91,7 +91,7 @@ class TransactionCommandServiceTest {
         // when/then
         assertThrows(IllegalArgumentException.class, () -> commandService.registerTransaction(transaction));
         verify(repository, never()).save(any());
-        verify(processor, never()).processTransaction(any());
+        verify(processingService, never()).processTransaction(any());
     }
 
     @Test

@@ -3,13 +3,13 @@ package info.mackiewicz.bankapp.transaction.service.assembler.strategies;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.assembler.TransactionAssemblyStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
 
 /**
  * Strategy for assembling own transfer transactions (between user's own accounts).
@@ -17,34 +17,44 @@ import java.math.BigDecimal;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OwnTransferAssemblyStrategy implements TransactionAssemblyStrategy<OwnTransferRequest> {
+public class OwnTransferAssemblyStrategy extends BaseTransactionAssemblyStrategy implements TransactionAssemblyStrategy<OwnTransferRequest> {
 
     private final AccountService accountService;
 
     @Override
     public Transaction assembleTransaction(OwnTransferRequest request) {
+        logTransferRequest(request);
+        
+        Account sourceAccount = getSourceAccount(request);
+        Account destinationAccount = getDestinationAccount(request);
+        TransactionType resolvedType = TransactionType.TRANSFER_OWN;
+        
+        return super.assembleTransaction((TransferRequest) request, sourceAccount, destinationAccount, resolvedType);
+    }
+
+    @Override
+    protected <T extends TransferRequest> void logTransferRequest(T request) {
+        OwnTransferRequest ownRequest = (OwnTransferRequest) request;
         log.info("Assembling own transfer from account ID: {} to account ID: {}, amount: {}",
-                request.getSourceAccountId(), request.getDestinationAccountId(), request.getAmount());
+                ownRequest.getSourceAccountId(), ownRequest.getDestinationAccountId(), ownRequest.getAmount());
+    }
 
-        log.debug("Finding source account by ID: {}", request.getSourceAccountId());
-        Account sourceAccount = accountService.getAccountById(request.getSourceAccountId());
-        log.debug("Source account found: {}", sourceAccount.getId());
+    @Override
+    protected <T extends TransferRequest> Account getSourceAccount(T request) {
+        OwnTransferRequest ownRequest = (OwnTransferRequest) request;
+        log.debug("Finding source account by ID: {}", ownRequest.getSourceAccountId());
+        Account sourceAccount = accountService.getAccountById(ownRequest.getSourceAccountId());
+        log.debug("Source account found with ID: {}", sourceAccount.getId());
+        return sourceAccount;
+    }
 
-        log.debug("Finding destination account by ID: {}", request.getDestinationAccountId());
-        Account destinationAccount = accountService.getAccountById(request.getDestinationAccountId());
-        log.debug("Destination account found: {}", destinationAccount.getId());
-
-        log.debug("Building transaction with amount: {}", request.getAmount());
-        Transaction transaction = Transaction.buildTransfer()
-                .from(sourceAccount)
-                .to(destinationAccount)
-                .withAmount(new BigDecimal(request.getAmount()))
-                .withTitle(request.getTitle())
-                .asOwnTransfer()
-                .build();
-
-        log.info("Own transfer transaction assembled successfully with ID: {}", transaction.getId());
-        return transaction;
+    @Override
+    protected <T extends TransferRequest> Account getDestinationAccount(T request) {
+        OwnTransferRequest ownRequest = (OwnTransferRequest) request;
+        log.debug("Finding destination account by ID: {}", ownRequest.getDestinationAccountId());
+        Account destinationAccount = accountService.getAccountById(ownRequest.getDestinationAccountId());
+        log.debug("Destination account found with ID: {}", destinationAccount.getId());
+        return destinationAccount;
     }
 
     @Override
