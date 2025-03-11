@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import info.mackiewicz.bankapp.user.service.UserService;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
@@ -24,6 +25,8 @@ import lombok.Setter;
 /**
  * Represents a regular bank user.
  * Contains personal information and account relationships.
+ * For new user creation use static factory method {@link User#builder()}.
+ * @see UserService UserService for business logic.
  */
 @Entity
 @Getter
@@ -59,6 +62,10 @@ public class User extends BaseUser {
     @JsonIgnore
     private Set<Account> accounts;
 
+    /** 
+     * Default constructor for JPA.
+     * For new user creation use static factory method {@link User#builder()}.
+     */
     public User() {
         super(); // Initialize base fields
         addDefaultRole();
@@ -66,7 +73,7 @@ public class User extends BaseUser {
         accountCounter = 0;
     }
 
-    public User(String username, String password, Pesel pesel, String firstname, String lastname, LocalDate dateOfBirth, Email email, PhoneNumber phoneNumber) {
+    User(String username, String password, Pesel pesel, String firstname, String lastname, LocalDate dateOfBirth, Email email, PhoneNumber phoneNumber) {
         this();
         this.username = username;
         this.password = password;   
