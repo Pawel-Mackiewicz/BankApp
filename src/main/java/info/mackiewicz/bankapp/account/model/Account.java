@@ -9,6 +9,7 @@ import org.iban4j.Iban;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
 import info.mackiewicz.bankapp.account.service.AccountServiceAccessManager;
 import info.mackiewicz.bankapp.account.util.IbanConverter;
@@ -26,6 +27,9 @@ import lombok.Getter;
 
 /**
  * Entity representing a bank account in the system.
+ * Each account is associated with a single user and has a unique IBAN.
+ * To create a new account, use {@link AccountService#createAccount}.
+ * @see AccountService
  */
 @Entity
 @Table(name = "accounts")
