@@ -13,8 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import info.mackiewicz.bankapp.account.exception.AccountValidationException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.user.model.User;
 
 class AccountValidationServiceTest {
@@ -41,7 +43,7 @@ class AccountValidationServiceTest {
     @Test
     void validateNewAccountOwner_WithNullUser_ShouldThrowException() {
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(AccountValidationException.class, 
             () -> validationService.validateNewAccountOwner(null));
         assertEquals("Owner cannot be null", exception.getMessage());
     }
@@ -52,7 +54,7 @@ class AccountValidationServiceTest {
         user.setLocked(true);
 
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(AccountValidationException.class, 
             () -> validationService.validateNewAccountOwner(user));
         assertEquals("User is locked", exception.getMessage());
     }
@@ -63,7 +65,7 @@ class AccountValidationServiceTest {
         user.setExpired(true);
 
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(AccountValidationException.class, 
             () -> validationService.validateNewAccountOwner(user));
         assertEquals("User is expired", exception.getMessage());
     }
@@ -79,7 +81,7 @@ class AccountValidationServiceTest {
         user.setAccounts(accounts);
         
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(AccountValidationException.class, 
             () -> validationService.validateNewAccountOwner(user));
         assertEquals("User account limit: Please contact us if You need more accounts", exception.getMessage());
     }
@@ -101,7 +103,7 @@ class AccountValidationServiceTest {
         BigDecimal amount = new BigDecimal("500");
 
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(InsufficientFundsException.class, 
             () -> validationService.validateWithdrawal(balance, amount));
         assertEquals("Insufficient funds for withdrawal", exception.getMessage());
     }
@@ -114,7 +116,7 @@ class AccountValidationServiceTest {
         BigDecimal withdrawalAmount = new BigDecimal(amount);
 
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(AccountValidationException.class, 
             () -> validationService.validateWithdrawal(balance, withdrawalAmount));
         assertEquals("Amount must be positive", exception.getMessage());
     }
@@ -125,7 +127,7 @@ class AccountValidationServiceTest {
         BigDecimal balance = new BigDecimal("1000");
 
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(AccountValidationException.class, 
             () -> validationService.validateWithdrawal(balance, null));
         assertEquals("Amount must be positive", exception.getMessage());
     }
@@ -146,7 +148,7 @@ class AccountValidationServiceTest {
         BigDecimal depositAmount = new BigDecimal(amount);
 
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(AccountValidationException.class, 
             () -> validationService.validateDeposit(depositAmount));
         assertEquals("Amount must be positive", exception.getMessage());
     }
@@ -154,7 +156,7 @@ class AccountValidationServiceTest {
     @Test
     void validateDeposit_WithNullAmount_ShouldThrowException() {
         // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, 
+        Exception exception = assertThrows(AccountValidationException.class, 
             () -> validationService.validateDeposit(null));
         assertEquals("Amount must be positive", exception.getMessage());
     }

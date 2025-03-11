@@ -6,45 +6,45 @@ import lombok.Getter;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum TransactionType {
-    TRANSFER_OWN(
-        TransactionCategory.TRANSFER,
-        "Own Account Transfer",
-        true,    // requiresIban
-        0.0      // fee
-    ),
-    TRANSFER_INTERNAL(
-        TransactionCategory.TRANSFER,
-        "Internal Transfer",
-        true,    // requiresIban
-        0.0      // fee
-    ),
-    TRANSFER_EXTERNAL(
-        TransactionCategory.TRANSFER,
-        "External Transfer",
-        true,    // requiresIban
-        0.01     // fee
-    ),
     DEPOSIT(
-        TransactionCategory.DEPOSIT,
+        TransactionTypeCategory.DEPOSIT,
         "Deposit",
         false,   // no IBAN required
         0.0      // no fee
     ),
     WITHDRAWAL(
-        TransactionCategory.WITHDRAWAL,
+        TransactionTypeCategory.WITHDRAWAL,
         "Withdrawal",
         false,   // no IBAN required
         0.0      // no fee
     ),
+    TRANSFER_OWN(
+        TransactionTypeCategory.TRANSFER,
+        "Own Account Transfer",
+        true,    // requiresIban
+        0.0      // fee
+    ),
+    TRANSFER_INTERNAL(
+        TransactionTypeCategory.TRANSFER,
+        "Internal Transfer",
+        true,    // requiresIban
+        0.0      // fee
+    ),
+    TRANSFER_EXTERNAL(
+        TransactionTypeCategory.TRANSFER,
+        "External Transfer",
+        true,    // requiresIban
+        0.01     // fee
+    ),
     FEE(
-        TransactionCategory.FEE,
+        TransactionTypeCategory.FEE,
         "Fee",
         false,   // no IBAN required
         0.0      // no fee
     );
 
     @Getter
-    private final TransactionCategory category;
+    private final TransactionTypeCategory category;
     
     @Getter
     private final String displayName;
@@ -55,7 +55,7 @@ public enum TransactionType {
     @Getter
     private final double feePercentage;
 
-    TransactionType(TransactionCategory category, String displayName, boolean requiresIban, double feePercentage) {
+    TransactionType(TransactionTypeCategory category, String displayName, boolean requiresIban, double feePercentage) {
         this.category = category;
         this.displayName = displayName;
         this.requiresIban = requiresIban;
