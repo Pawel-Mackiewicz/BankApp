@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
+import info.mackiewicz.bankapp.user.model.vo.Email;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -56,7 +57,7 @@ public class ValidationController {
     public ResponseEntity<Map<String, Object>> validateEmail(@RequestParam String email) {
         try {
             // Check if an account exists with the provided email
-            boolean hasAccount = accountRepository.findFirstByOwner_email(email).isPresent();
+            boolean hasAccount = accountRepository.findFirstByOwner_email(new Email(email)).isPresent();
             if (!hasAccount) {
                 // Try to find by username as email
                 hasAccount = accountRepository.findAccountsByOwner_username(email)

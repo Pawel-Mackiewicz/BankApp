@@ -49,7 +49,7 @@ class UserMapperTest {
     void updateUserFromRequest_shouldUpdatePhoneNumberCorrectly() {
         // given
         User existingUser = new User();
-        existingUser.setPhoneNumber("+48111111111");
+        existingUser.setPhoneNumber(new PhoneNumber("+48111111111"));
         
         UpdateUserRequest request = new UpdateUserRequest();
         request.setPhoneNumber(TEST_PHONE);
@@ -67,7 +67,7 @@ class UserMapperTest {
         // given
         String originalPhone = "+48111111111";
         User existingUser = new User();
-        existingUser.setPhoneNumber(originalPhone);
+        existingUser.setPhoneNumber(new PhoneNumber(originalPhone));
         
         UpdateUserRequest request = new UpdateUserRequest();
         request.setPhoneNumber(null);

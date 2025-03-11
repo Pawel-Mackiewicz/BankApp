@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.user.service;
 
-import info.mackiewicz.bankapp.security.service.PasswordService;
 import info.mackiewicz.bankapp.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 

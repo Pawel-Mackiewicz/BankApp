@@ -24,6 +24,9 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -45,13 +48,13 @@ class TransactionQueryServiceTest {
     private User createTestUser(Integer id) {
         User user = new User();
         user.setId(id);
-        user.setPesel("12345678901");
+        user.setPesel(new Pesel("12345678901"));
         user.setFirstname("Jan");
         user.setLastname("Testowy");
         user.setDateOfBirth(LocalDate.of(1990, 1, 1));
         user.setUsername("testuser");
-        user.setEmail("test@example.com");
-        user.setPhoneNumber("123456789");
+        user.setEmail(new Email("test@example.com"));
+        user.setPhoneNumber(new PhoneNumber("123456789"));
         return user;
     }
 

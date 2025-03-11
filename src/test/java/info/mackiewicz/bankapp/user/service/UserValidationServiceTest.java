@@ -170,8 +170,8 @@ class UserValidationServiceTest {
                     () -> userValidationService.validateNewUser(user));
 
             verify(userQueryService).checkUsernameExists(user.getUsername());
-            verify(userQueryService, never()).userExistsByEmail(any());
-            verify(userQueryService, never()).userExistsByPesel(any());
+            verify(userQueryService, never()).userExistsByEmail(any(Email.class));
+            verify(userQueryService, never()).userExistsByPesel(any(Pesel.class));
         }
 
         @Test
@@ -192,7 +192,7 @@ class UserValidationServiceTest {
 
             verify(userQueryService).checkUsernameExists(user.getUsername());
             verify(userQueryService).userExistsByEmail(user.getEmail());
-            verify(userQueryService, never()).userExistsByPesel(any());
+            verify(userQueryService, never()).userExistsByPesel(any(Pesel.class));
         }
 
         @Test
