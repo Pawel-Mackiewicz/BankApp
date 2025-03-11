@@ -34,9 +34,6 @@ class AccountCreationServiceTest {
     private UserService userService;
 
     @Mock
-    private AccountRepository accountRepository;
-
-    @Mock
     private AccountValidationService validationService;
 
     @InjectMocks
