@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception;
+package info.mackiewicz.bankapp.transaction.exception;
 
 public class TransactionDestinationAccountNotSpecifiedException extends RuntimeException {
     private static final String DEFAULT_MESSAGE = "Transaction destination account must be specified";

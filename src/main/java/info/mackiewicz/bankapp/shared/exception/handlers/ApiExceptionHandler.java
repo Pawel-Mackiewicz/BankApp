@@ -7,19 +7,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.shared.exception.DuplicatedUserException;
-import info.mackiewicz.bankapp.shared.exception.InvalidUserException;
-import info.mackiewicz.bankapp.shared.exception.NoTransactionsForAccountException;
-import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
-import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionAmountNotSpecifiedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionDestinationAccountNotSpecifiedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
-import info.mackiewicz.bankapp.shared.exception.TransactionSourceAccountNotSpecifiedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionTypeNotSpecifiedException;
-import info.mackiewicz.bankapp.shared.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
+import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
+import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionAlreadyProcessedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionAmountNotSpecifiedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionCannotBeProcessedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionDestinationAccountNotSpecifiedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionSourceAccountNotSpecifiedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionTypeNotSpecifiedException;
+import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 
 @RestControllerAdvice(basePackages = "info.mackiewicz.bankapp.api")
 public class ApiExceptionHandler {

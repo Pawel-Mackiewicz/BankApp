@@ -1,6 +1,6 @@
-package info.mackiewicz.bankapp.shared.exception;
+package info.mackiewicz.bankapp.transaction.exception;
 
-public class TransactionIsNotInternalException extends RuntimeException {
+public class `TransactionIsNotInternalException extends RuntimeException {
     public TransactionIsNotInternalException(String message) {
         super(message);
     }

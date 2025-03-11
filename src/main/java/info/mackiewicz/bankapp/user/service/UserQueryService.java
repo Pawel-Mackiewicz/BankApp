@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.user.service;
 
-import info.mackiewicz.bankapp.shared.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;

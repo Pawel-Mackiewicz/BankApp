@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception;
+package info.mackiewicz.bankapp.transaction.exception;
 
 public class NoTransactionsForAccountException extends RuntimeException {
     private static final String DEFAULT_MESSAGE = "No transactions found for the given account";

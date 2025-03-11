@@ -1,7 +1,7 @@
-package info.mackiewicz.bankapp.shared.exception;
+package info.mackiewicz.bankapp.transaction.exception;
 
 /**
- * Wyjątek rzucany gdy operacja finansowa jest nieprawidłowa.
+ * Exception thrown when an financial operation is not allowed.
  */
 public class InvalidOperationException extends RuntimeException {
     public InvalidOperationException(String message) {

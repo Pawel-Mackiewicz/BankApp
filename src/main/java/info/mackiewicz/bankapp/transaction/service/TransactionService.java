@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import info.mackiewicz.bankapp.shared.exception.NoTransactionsForAccountException;
-import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

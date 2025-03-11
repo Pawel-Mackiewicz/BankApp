@@ -7,11 +7,11 @@ import java.util.function.Function;
 import org.iban4j.Iban;
 import org.springframework.stereotype.Service;
 
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIbanException;
-import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

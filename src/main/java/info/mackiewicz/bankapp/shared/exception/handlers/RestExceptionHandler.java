@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.shared.exception.InvalidUserException;
-import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
+import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {

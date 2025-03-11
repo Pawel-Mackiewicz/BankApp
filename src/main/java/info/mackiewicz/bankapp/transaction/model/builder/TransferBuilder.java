@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.transaction.model.builder;
 
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.shared.exception.TransactionDestinationAccountNotSpecifiedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionSourceAccountNotSpecifiedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionDestinationAccountNotSpecifiedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionSourceAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 

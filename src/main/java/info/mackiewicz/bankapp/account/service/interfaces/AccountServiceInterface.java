@@ -26,7 +26,7 @@ public interface AccountServiceInterface {
      *
      * @param id The unique identifier of the account to retrieve
      * @return The {@link Account} matching the specified id
-     * @throws info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException if no account is found with the given id
+     * @throws info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException if no account is found with the given id
      */
     Account getAccountById(int id);
 
@@ -87,7 +87,7 @@ public interface AccountServiceInterface {
      * Deletes an account with the specified ID.
      *
      * @param id The unique identifier of the account to delete
-     * @throws info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException if no account is found with the given id
+     * @throws info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException if no account is found with the given id
      */
     void deleteAccountById(int id);
 

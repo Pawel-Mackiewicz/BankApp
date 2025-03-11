@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception;
+package info.mackiewicz.bankapp.user.exception;
 
 public class DuplicatedUserException extends RuntimeException {
     private static final String DEFAULT_MESSAGE = "User with the same PESEL already exists";

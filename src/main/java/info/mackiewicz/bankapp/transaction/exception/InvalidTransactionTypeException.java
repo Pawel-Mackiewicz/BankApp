@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception;
+package info.mackiewicz.bankapp.transaction.exception;
 
 public class InvalidTransactionTypeException extends RuntimeException {
     private final static String DEFAULT_MESSAGE = "Invalid transaction type";

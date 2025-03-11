@@ -32,7 +32,7 @@ public class AccountController {
      *
      * @param id The unique identifier of the account
      * @return ResponseEntity containing the account if found
-     * @throws info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException if account not found
+     * @throws info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException if account not found
      */
     @GetMapping("/{id}")
     public ResponseEntity<Account> getAccountById(@PathVariable int id) {
@@ -56,7 +56,7 @@ public class AccountController {
      *
      * @param pesel The PESEL number of the account owner
      * @return ResponseEntity containing a list of accounts owned by the person
-     * @throws info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException if no accounts found
+     * @throws info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException if no accounts found
      */
     //GET /api/accounts/owner/{pesel}
     @GetMapping("/owner/{pesel}")
@@ -84,7 +84,7 @@ public class AccountController {
      *
      * @param id The unique identifier of the account to delete
      * @return ResponseEntity with no content on successful deletion
-     * @throws info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException if account not found
+     * @throws info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException if account not found
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable int id) {

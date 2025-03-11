@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception;
+package info.mackiewicz.bankapp.security.exception;
 
 /**
  * Exception thrown when a user has too many active password reset tokens
