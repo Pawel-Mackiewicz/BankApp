@@ -1,102 +1,57 @@
 package info.mackiewicz.bankapp.user.model;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+/**
+ * Represents an administrative user with elevated privileges.
+ * Inherits common user functionality from BaseUser.
+ */
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "admins")
-public class AdminUser implements UserDetails {
+public class AdminUser extends BaseUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String username;
-    
-    @Column(nullable = false)
-    private String password;
-    
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "admin_roles", joinColumns = @JoinColumn(name = "admin_id"))
-    @Column(name = "role")
-    private Set<String> roles;
-    
-    // ...existing or additional fields if necessary...
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+    public AdminUser(String username, String password) {
+        super();
+        this.username = username;
+        this.password = password;
+        addAdminRole();
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
+    private void addAdminRole() {
+        roles.add("ROLE_ADMIN");
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return true; // Admin accounts never expire
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return true; // Admin accounts are never locked
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return true; // Admin credentials never expire
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
-    }
-    
-    // Getters and setters
-    public Long getId() {
-        return id;
+        return true; // Admin accounts are always enabled
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-  
-    public void setPassword(String password) {
-        this.password = password;
-    }
-  
-    public Set<String> getRoles() {
-        return roles;
-    }
-  
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
+    @Override
+    public String toString() {
+        return "AdminUser(id=" + id + 
+               ", username=" + username + 
+               ")";
     }
 }

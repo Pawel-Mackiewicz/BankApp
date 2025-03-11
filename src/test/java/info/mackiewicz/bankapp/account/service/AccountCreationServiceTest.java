@@ -3,6 +3,9 @@ package info.mackiewicz.bankapp.account.service;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,13 +43,13 @@ class AccountCreationServiceTest {
     void setUp() {
         testUser = new User();
         testUser.setId(1);
-        testUser.setPESEL("12345678901");
+        testUser.setPESEL(new Pesel("12345678901"));
         testUser.setFirstname("John");
         testUser.setLastname("Doe");
         testUser.setDateOfBirth(LocalDate.of(1990, 1, 1));
         testUser.setUsername("johndoe");
-        testUser.setEmail("john@example.com");
-        testUser.setPhoneNumber("+48123456789");
+        testUser.setEmail(new Email("john@example.com"));
+        testUser.setPhoneNumber(new PhoneNumber("+48123456789"));
         
         testAccount = Account.factory().createAccount(testUser);
     }

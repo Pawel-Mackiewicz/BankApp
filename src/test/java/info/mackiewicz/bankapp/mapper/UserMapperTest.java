@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
@@ -41,7 +42,7 @@ class UserMapperTest {
 
         // then
         assertNotNull(user);
-        assertEquals(TEST_PHONE, user.getPhoneNumber());
+        assertEquals(new PhoneNumber(TEST_PHONE), user.getPhoneNumber());
     }
 
     @Test
@@ -58,7 +59,7 @@ class UserMapperTest {
 
         // then
         assertNotNull(updatedUser);
-        assertEquals(TEST_PHONE, updatedUser.getPhoneNumber());
+        assertEquals(new PhoneNumber(TEST_PHONE), updatedUser.getPhoneNumber());
     }
 
     @Test
@@ -76,6 +77,6 @@ class UserMapperTest {
 
         // then
         assertNotNull(updatedUser);
-        assertEquals(originalPhone, updatedUser.getPhoneNumber());
+        assertEquals(new PhoneNumber(originalPhone), updatedUser.getPhoneNumber());
     }
 }

@@ -8,7 +8,7 @@ import info.mackiewicz.bankapp.user.model.User;
 public class UsernameGeneratorService {
 
     public User generateUsername(User user) {
-        user.setUsername(generateUsername(user.getFirstname(), user.getLastname(), user.getEmail()));
+        user.setUsername(generateUsername(user.getFirstname(), user.getLastname(), user.getEmail().toString()));
         return user;
     }
     
