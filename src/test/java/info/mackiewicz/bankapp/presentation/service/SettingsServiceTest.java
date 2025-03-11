@@ -1,9 +1,10 @@
 package info.mackiewicz.bankapp.presentation.service;
 
-import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.repository.UserRepository;
-import info.mackiewicz.bankapp.user.service.UserService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,11 +14,13 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
+import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
+import info.mackiewicz.bankapp.user.repository.UserRepository;
+import info.mackiewicz.bankapp.user.service.UserService;
 
 class SettingsServiceTest {
 
@@ -44,33 +47,22 @@ class SettingsServiceTest {
         User user = new User();
         user.setId(userId);
         user.setUsername("testuser");
+        user.setFirstname("Test");
+        user.setLastname("User");
+        user.setEmail(new Email("test@example.com"));
+        user.setPhoneNumber(new PhoneNumber("123456789"));
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(userService.getUserById(userId)).thenReturn(user);
 
-        User settings = settingsService.getUserSettings(userId);
+        UserSettingsDTO settings = settingsService.getUserSettings(userId);
 
         assertNotNull(settings);
         assertEquals("testuser", settings.getUsername());
+        assertEquals("test@example.com", settings.getEmail());
+        assertEquals("+48123456789", settings.getPhoneNumber());
+        assertEquals("Test", settings.getFirstname());
+        assertEquals("User", settings.getLastname());
+        
         logger.info("testGetSettingsByUserId: Test passed");
-    }
-
-    @Test
-    void testUpdateSettings() {
-        logger.info("testUpdateSettings: Starting test");
-        Integer userId = 1;
-        User user = new User();
-        user.setId(userId);
-        user.setUsername("testuser");
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(userService.updateUser(user)).thenReturn(user);
-        when(userService.getUserById(userId)).thenReturn(user);
-
-        User updatedSettings = userService.updateUser(user);
-
-        assertNotNull(updatedSettings);
-        assertEquals("testuser", updatedSettings.getUsername());
-        logger.info("testUpdateSettings: Test passed");
     }
 }

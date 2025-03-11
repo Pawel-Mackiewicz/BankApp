@@ -27,9 +27,9 @@ public class PhoneNumber {
             throw new IllegalArgumentException("Phone number cannot be empty");
         }
 
-        String normalized = normalizePhoneNumber(phoneNumber);
-
         // Polish phone number validation is not required for the portfolio project
+        // String normalized = normalizePhoneNumber(phoneNumber);
+
         // if (!isValidPolishPhoneNumber(normalized)) {
         //     throw new IllegalArgumentException("Invalid Polish phone number format");
         // } 

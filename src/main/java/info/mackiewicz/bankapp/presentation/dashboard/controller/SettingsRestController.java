@@ -1,16 +1,21 @@
 package info.mackiewicz.bankapp.presentation.dashboard.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
 import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
 import info.mackiewicz.bankapp.user.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,14 +25,8 @@ public class SettingsRestController {
     private final SettingsService settingsService;
 
     @GetMapping("/user")
-    public ResponseEntity<User> getUserSettings(@AuthenticationPrincipal User user) {
-        User requestedUser = settingsService.getUserSettings(user.getId());
-        
-        if (!requestedUser.getId().equals(user.getId())) {
-            return ResponseEntity.status(403).build();
-        }
-        
-        return ResponseEntity.ok(requestedUser);
+    public ResponseEntity<UserSettingsDTO> getUserSettings(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(settingsService.getUserSettings(user.getId()));
     }
 
     @PostMapping("/change-password")

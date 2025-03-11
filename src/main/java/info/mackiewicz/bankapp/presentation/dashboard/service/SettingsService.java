@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.presentation.dashboard.service;
 
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
 import info.mackiewicz.bankapp.security.service.PasswordService;
 import info.mackiewicz.bankapp.shared.exception.InvalidUserException;
 import info.mackiewicz.bankapp.user.model.User;
@@ -20,8 +21,13 @@ public class SettingsService implements SettingsServiceInterface {
     private final PasswordService passwordService;
 
     @Override
-    public User getUserSettings(Integer userId) {
-        return userService.getUserById(userId);
+    public UserSettingsDTO getUserSettings(Integer userId) {
+        User requestedUser = userService.getUserById(userId);
+        if (!requestedUser.getId().equals(userId)) {
+            throw new InvalidUserException("Access denied");
+        }
+        UserSettingsDTO dto = UserSettingsDTO.fromUser(requestedUser);
+        return dto;
     }
 
     @Override
