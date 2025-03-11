@@ -25,7 +25,7 @@ public class TestUserBuilder {
         user.setFirstname("Test");
         user.setLastname("User");
         user.setEmail(generateRandomEmail());
-        user.setPESEL(PESEL);
+        user.setPesel(PESEL);
         user.setPhoneNumber(PHONE_NUMBER);
         user.setPassword(PASSWORD);
         user.setUsername(generateRandomUsername(user.getFirstname()));
@@ -42,7 +42,7 @@ public class TestUserBuilder {
         user.setFirstname("Test");
         user.setLastname("User");
         user.setEmail("test" + "@" + DOMAIN);
-        user.setPESEL(PESEL);
+        user.setPesel(PESEL);
         user.setPhoneNumber(PHONE_NUMBER);
         user.setPassword(PASSWORD);
         user.setUsername("testUser");

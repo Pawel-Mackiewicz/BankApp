@@ -61,7 +61,7 @@ public class AccountController {
     //GET /api/accounts/owner/{pesel}
     @GetMapping("/owner/{pesel}")
     public ResponseEntity<List<Account>> getAccountsByOwnerPesel(@PathVariable String pesel) {
-        List<Account> accounts = accountService.getAccountsByOwnersPESEL(pesel);
+        List<Account> accounts = accountService.getAccountsByOwnersPesel(pesel);
         return ResponseEntity.ok(accounts);
     }
 

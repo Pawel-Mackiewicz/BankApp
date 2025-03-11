@@ -30,7 +30,7 @@ public class UserRegistrationDto {
 
     @NotBlank(message = "PESEL is required")
     @Pattern(regexp = "\\d{11}", message = "PESEL must be exactly 11 digits")
-    private String PESEL;
+    private String pesel;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Please provide a valid email address")

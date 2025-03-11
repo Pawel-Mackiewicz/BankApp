@@ -19,8 +19,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.testutils.TestUserRegistrationDtoBuilder;
@@ -33,9 +31,6 @@ class UserRegistrationIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
-    
-    @Autowired
-    private ObjectMapper objectMapper;
     
     @MockitoBean
     private EmailService emailService;
@@ -53,7 +48,7 @@ class UserRegistrationIntegrationTest {
                 .param("email", dto.getEmail())
                 .param("password", dto.getPassword())
                 .param("confirmPassword", dto.getConfirmPassword())
-                .param("PESEL", dto.getPESEL())
+                .param("PESEL", dto.getPesel())
                 .param("phoneNumber", dto.getPhoneNumber())
                 .param("dateOfBirth", dto.getDateOfBirth().toString()))
                 .andExpect(status().is2xxSuccessful())
@@ -62,7 +57,7 @@ class UserRegistrationIntegrationTest {
         verify(emailService).sendWelcomeEmail(
             eq(dto.getEmail()),
             eq(dto.getFirstname() + " " + dto.getLastname()),
-            eq("user" + dto.getPESEL())
+            eq("user" + dto.getPesel())
         );
     }
     
@@ -80,7 +75,7 @@ class UserRegistrationIntegrationTest {
                 .param("email", dto.getEmail())
                 .param("password", dto.getPassword())
                 .param("confirmPassword", dto.getConfirmPassword())
-                .param("PESEL", dto.getPESEL())
+                .param("PESEL", dto.getPesel())
                 .param("phoneNumber", dto.getPhoneNumber())
                 .param("dateOfBirth", dto.getDateOfBirth().toString()))
                 .andExpect(status().is2xxSuccessful())
@@ -94,7 +89,7 @@ class UserRegistrationIntegrationTest {
                 .param("email", dto.getEmail())
                 .param("password", dto.getPassword())
                 .param("confirmPassword", dto.getConfirmPassword())
-                .param("PESEL", dto.getPESEL())
+                .param("PESEL", dto.getPesel())
                 .param("phoneNumber", dto.getPhoneNumber())
                 .param("dateOfBirth", dto.getDateOfBirth().toString()))
                 .andExpect(status().is4xxClientError())
@@ -117,7 +112,7 @@ class UserRegistrationIntegrationTest {
                 .param("email", dto.getEmail())
                 .param("password", dto.getPassword())
                 .param("confirmPassword", dto.getConfirmPassword())
-                .param("PESEL", dto.getPESEL())
+                .param("PESEL", dto.getPesel())
                 .param("phoneNumber", dto.getPhoneNumber())
                 .param("dateOfBirth", dto.getDateOfBirth().toString()))
                 .andExpect(status().isOk())
@@ -140,7 +135,7 @@ class UserRegistrationIntegrationTest {
                 .param("email", dto.getEmail())
                 .param("password", dto.getPassword())
                 .param("confirmPassword", dto.getConfirmPassword())
-                .param("PESEL", dto.getPESEL())
+                .param("PESEL", dto.getPesel())
                 .param("phoneNumber", dto.getPhoneNumber())
                 .param("dateOfBirth", dto.getDateOfBirth().toString()))
                 .andExpect(status().isOk())
@@ -163,7 +158,7 @@ class UserRegistrationIntegrationTest {
                 .param("email", dto.getEmail())
                 .param("password", dto.getPassword())
                 .param("confirmPassword", dto.getConfirmPassword())
-                .param("PESEL", dto.getPESEL())
+                .param("PESEL", dto.getPesel())
                 .param("phoneNumber", dto.getPhoneNumber())
                 .param("dateOfBirth", dto.getDateOfBirth().toString()))
                 .andExpect(status().isOk())

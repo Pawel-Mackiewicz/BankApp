@@ -46,8 +46,8 @@ class AccountQueryService {
                         String.format("User with %s %s does not have any account.", criteriaName, value)));
     }
 
-    List<Account> getAccountsByOwnersPESEL(String pesel) {
-        return getAccountsByOwnerCriteria(pesel, accountRepository::findAccountsByOwner_PESEL, "PESEL");
+    List<Account> getAccountsByOwnersPesel(String pesel) {
+        return getAccountsByOwnerCriteria(pesel, accountRepository::findAccountsByOwner_pesel, "PESEL");
     }
 
     List<Account> getAccountsByOwnersUsername(String username) {

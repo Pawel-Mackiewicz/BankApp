@@ -362,7 +362,7 @@ class ConcurrentTransactionIntegrationTest {
         String day = String.format("%02d", (index % 28) + 1); // Day between 1-28
         String pesel = yearMonth + day + uniqueSequence;
 
-        user.setPESEL(pesel);
+        user.setPesel(pesel);
         user.setFirstname("Test");
         user.setLastname("User" + uniqueSuffix);
         user.setEmail("test.user" + uniqueSuffix + "@test.com");

@@ -38,7 +38,7 @@ public interface AccountServiceInterface {
      * @return A list of {@link Account}s belonging to the owner with the specified PESEL
      * @throws IllegalArgumentException if pesel is null or invalid
      */
-    List<Account> getAccountsByOwnersPESEL(String pesel);
+    List<Account> getAccountsByOwnersPesel(String pesel);
 
     /**
      * Retrieves accounts based on the owner's username.

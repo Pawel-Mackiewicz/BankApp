@@ -1,7 +1,8 @@
 package info.mackiewicz.bankapp.testutils;
 
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import java.time.LocalDate;
+
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 
 public class TestUserRegistrationDtoBuilder {
     
@@ -10,7 +11,7 @@ public class TestUserRegistrationDtoBuilder {
         dto.setFirstname("Jan");
         dto.setLastname("Kowalski");
         dto.setDateOfBirth(LocalDate.of(1990, 1, 1));
-        dto.setPESEL("90010112345");
+        dto.setPesel("90010112345");
         dto.setEmail("jan.kowalski@example.com");
         dto.setPhoneNumber("+48123456789");
         dto.setPassword("Test123!@#");
@@ -32,7 +33,7 @@ public class TestUserRegistrationDtoBuilder {
     
     public static UserRegistrationDto createWithInvalidPesel() {
         UserRegistrationDto dto = createValid();
-        dto.setPESEL("1234"); // Za krótki PESEL
+        dto.setPesel("1234"); // Za krótki PESEL
         return dto;
     }
     

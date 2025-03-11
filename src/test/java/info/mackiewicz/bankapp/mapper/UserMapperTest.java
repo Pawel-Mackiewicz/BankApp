@@ -9,10 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
-import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
 class UserMapperTest {
 
@@ -32,7 +32,7 @@ class UserMapperTest {
         dto.setFirstname("Jan");
         dto.setLastname("Kowalski");
         dto.setEmail("jan@example.com");
-        dto.setPESEL("12345678901");
+        dto.setPesel("12345678901");
         dto.setDateOfBirth(LocalDate.of(1990, 1, 1));
         dto.setPassword("Password123!");
         dto.setConfirmPassword("Password123!");

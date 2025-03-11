@@ -47,7 +47,7 @@ class AccountQueryServiceTest {
         owner.setLastname("Kowalski");
         owner.setEmail("jan.kowalski@example.com");
         owner.setUsername("jkowalski");
-        owner.setPESEL("12345678901");
+        owner.setPesel("12345678901");
 
         testAccount = TestAccountBuilder.createTestAccountWithOwner(owner);
         Iban testIban = TestIbanProvider.getIbanObject(0);
@@ -99,28 +99,28 @@ class AccountQueryServiceTest {
     void getAccountsByOwnersPESEL_WhenAccountsExist_ShouldReturnAccounts() {
         // given
         List<Account> accounts = Arrays.asList(testAccount);
-        when(accountRepository.findAccountsByOwner_PESEL("12345678901"))
+        when(accountRepository.findAccountsByOwner_pesel("12345678901"))
             .thenReturn(Optional.of(accounts));
 
         // when
-        List<Account> result = accountQueryService.getAccountsByOwnersPESEL("12345678901");
+        List<Account> result = accountQueryService.getAccountsByOwnersPesel("12345678901");
 
         // then
         assertEquals(1, result.size());
         assertEquals(testAccount, result.get(0));
-        verify(accountRepository).findAccountsByOwner_PESEL("12345678901");
+        verify(accountRepository).findAccountsByOwner_pesel("12345678901");
     }
 
     @Test
     void getAccountsByOwnersPESEL_WhenNoAccountsExist_ShouldThrowException() {
         // given
-        when(accountRepository.findAccountsByOwner_PESEL("99999999999"))
+        when(accountRepository.findAccountsByOwner_pesel("99999999999"))
             .thenReturn(Optional.empty());
 
         // when & then
         assertThrows(OwnerAccountsNotFoundException.class, 
-            () -> accountQueryService.getAccountsByOwnersPESEL("99999999999"));
-        verify(accountRepository).findAccountsByOwner_PESEL("99999999999");
+            () -> accountQueryService.getAccountsByOwnersPesel("99999999999"));
+        verify(accountRepository).findAccountsByOwner_pesel("99999999999");
     }
 
     @Test

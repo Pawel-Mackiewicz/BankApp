@@ -13,13 +13,14 @@ public class UserMapper {
     
     public User toUser(UserRegistrationDto dto) {
         User user = User.builder()
-            .withFirstname(capitalize(dto.getFirstname()))
-            .withLastname(capitalize(dto.getLastname()))
-            .withEmail(dto.getEmail().toLowerCase())
-            .withPesel(dto.getPESEL())
-            .withPhoneNumber(new PhoneNumber(dto.getPhoneNumber()))
-            .withPassword(dto.getPassword())
-            .build();
+                .withFirstname(capitalize(dto.getFirstname()))
+                .withLastname(capitalize(dto.getLastname()))
+                .withPesel(dto.getPesel())
+                .withDateOfBirth(dto.getDateOfBirth())
+                .withEmail(dto.getEmail())
+                .withPhoneNumber(dto.getPhoneNumber())
+                .withPassword(dto.getPassword())
+                .build();
         return user;
     }
 

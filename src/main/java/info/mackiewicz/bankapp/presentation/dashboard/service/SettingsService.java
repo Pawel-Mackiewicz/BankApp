@@ -15,12 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class SettingsService implements SettingsServiceInterface {
+public class SettingsService {
 
     private final UserService userService;
     private final PasswordService passwordService;
 
-    @Override
     public UserSettingsDTO getUserSettings(Integer userId) {
         User requestedUser = userService.getUserById(userId);
         if (!requestedUser.getId().equals(userId)) {
@@ -30,7 +29,6 @@ public class SettingsService implements SettingsServiceInterface {
         return dto;
     }
 
-    @Override
     @Transactional
     public boolean changePassword(User user, ChangePasswordRequest request) {
 
@@ -49,7 +47,6 @@ public class SettingsService implements SettingsServiceInterface {
         return true;
     }
 
-    @Override
     @Transactional
     public void changeUsername(User user, ChangeUsernameRequest request) {
         String oldUsername = user.getUsername();

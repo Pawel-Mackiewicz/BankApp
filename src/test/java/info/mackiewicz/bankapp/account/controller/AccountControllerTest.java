@@ -16,10 +16,10 @@ import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import info.mackiewicz.bankapp.account.model.Account;
@@ -116,7 +116,7 @@ class AccountControllerTest {
     void getAccountsByOwnerPesel_WhenAccountsExist_ShouldReturnAccounts() throws Exception {
         // given
         Account account = createTestAccount(1);
-        when(accountService.getAccountsByOwnersPESEL("12345678901"))
+        when(accountService.getAccountsByOwnersPesel("12345678901"))
                 .thenReturn(Collections.singletonList(account));
 
         // when & then
@@ -131,7 +131,7 @@ class AccountControllerTest {
     @WithMockUser
     void getAccountsByOwnerPesel_WhenNoAccounts_ShouldReturn404() throws Exception {
         // given
-        when(accountService.getAccountsByOwnersPESEL("99999999999"))
+        when(accountService.getAccountsByOwnersPesel("99999999999"))
                 .thenThrow(new OwnerAccountsNotFoundException("No accounts found"));
 
         // when & then

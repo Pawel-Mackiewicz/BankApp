@@ -21,10 +21,10 @@ public class AdminUser extends BaseUser {
         super();
         this.username = username;
         this.password = password;
-        addAdminRole();
+        addDefaultRole();
     }
 
-    private void addAdminRole() {
+    private void addDefaultRole() {
         roles.add("ROLE_ADMIN");
     }
 

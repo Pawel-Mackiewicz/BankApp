@@ -1,8 +1,14 @@
 package info.mackiewicz.bankapp.account.service;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.user.model.User;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,13 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.user.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
@@ -48,7 +50,7 @@ class AccountServiceTest {
         // Create test user
         testUser = new User();
         testUser.setId(TEST_USER_ID);
-        testUser.setPESEL(TEST_PESEL);
+        testUser.setPesel(TEST_PESEL);
         testUser.setFirstname("John");
         testUser.setLastname("Doe");
         testUser.setDateOfBirth(LocalDate.of(1990, 1, 1));
@@ -104,14 +106,14 @@ class AccountServiceTest {
     void getAccountsByOwnersPESEL_ShouldDelegateToQueryService() {
         // Arrange
         List<Account> accounts = Arrays.asList(testAccount);
-        when(accountQueryService.getAccountsByOwnersPESEL(TEST_PESEL)).thenReturn(accounts);
+        when(accountQueryService.getAccountsByOwnersPesel(TEST_PESEL)).thenReturn(accounts);
 
         // Act
-        List<Account> result = accountService.getAccountsByOwnersPESEL(TEST_PESEL);
+        List<Account> result = accountService.getAccountsByOwnersPesel(TEST_PESEL);
 
         // Assert
         assertThat(result).isEqualTo(accounts);
-        verify(accountQueryService).getAccountsByOwnersPESEL(TEST_PESEL);
+        verify(accountQueryService).getAccountsByOwnersPesel(TEST_PESEL);
     }
 
     @Test
