@@ -72,6 +72,4 @@ public class AdminUser extends BaseUser {
         int result = 31 * id.hashCode() + 31 * username.hashCode();
         return result;
     }
-
-    
 }
