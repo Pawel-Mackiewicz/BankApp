@@ -29,7 +29,7 @@ public class ExternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
         
         Account sourceAccount = getSourceAccount(request);
         Account destinationAccount = getDestinationAccount(request);
-        TransactionType resolvedType = resolveTransactionType(request, transactionTypeResolver);
+        TransactionType resolvedType = transactionTypeResolver.resolveTransactionType(request);
         
         return super.assembleTransaction(request, sourceAccount, destinationAccount, resolvedType);
     }
@@ -54,10 +54,6 @@ public class ExternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
         Account destinationAccount = accountService.findAccountByIban(request.getRecipientIban());
         log.debug("Destination account found with ID: {}", destinationAccount.getId());
         return destinationAccount;
-    }
-
-    protected <T extends TransferRequest> TransactionType resolveTransactionType(T request, TransactionTypeResolver resolver) {
-        return resolver.resolveTransactionType((ExternalTransferRequest) request);
     }
 
     @Override

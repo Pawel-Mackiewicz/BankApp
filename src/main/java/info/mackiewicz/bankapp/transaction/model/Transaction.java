@@ -24,7 +24,10 @@ import lombok.NoArgsConstructor;
 
 /**
  * Represents a financial transaction between accounts.
- * Pure entity class without any business logic.
+ * To create a new transaction, use one of the static builder methods.
+ * @see #buildTransfer()
+ * @see #buildWithdrawal()
+ * @see #buildDeposit()
  */
 @NoArgsConstructor
 @Data
@@ -44,6 +47,7 @@ public class Transaction {
     private Account destinationAccount;
     
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)  // Longest enum value is INSUFFICIENT_FUNDS (18 chars) + margin
     private TransactionStatus status;
     
     @Enumerated(EnumType.STRING)

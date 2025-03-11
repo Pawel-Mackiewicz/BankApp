@@ -30,7 +30,7 @@ public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
         
         Account sourceAccount = getSourceAccount(request);
         Account destinationAccount = getDestinationAccount(request);
-        TransactionType resolvedType = resolveTransactionType(request, transactionTypeResolver);
+        TransactionType resolvedType = transactionTypeResolver.resolveTransactionType(request);
         
         return super.assembleTransaction(request, sourceAccount, destinationAccount, resolvedType);
     }
@@ -77,9 +77,6 @@ public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
         Account account = accountService.findAccountByOwnersEmail(request.getRecipientEmail());
         log.debug("Destination account found by email with ID: {}", account.getId());
         return account;
-    }
-    protected <T extends TransferRequest> TransactionType resolveTransactionType(T request, TransactionTypeResolver resolver) {
-        return resolver.resolveTransactionType((InternalTransferRequest) request);
     }
 
     @Override
