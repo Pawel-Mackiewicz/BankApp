@@ -1,17 +1,23 @@
 package info.mackiewicz.bankapp.transaction.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionBuilder;
 import info.mackiewicz.bankapp.transaction.model.dto.CreateTransactionRequest;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,7 +25,6 @@ import java.util.List;
 public class TransactionController {
 
     private final TransactionService transactionService;
-    private final TransactionBuilder transactionBuilder;
     private final AccountService accountService;
 
     @PostMapping
@@ -29,15 +34,15 @@ public class TransactionController {
         Account destinationAccount = request.getDestinationAccountId() != null ? 
             accountService.getAccountById(request.getDestinationAccountId()) : null;
 
-        Transaction transaction = transactionBuilder
-                .withSourceAccount(sourceAccount)
-                .withDestinationAccount(destinationAccount)
-                .withAmount(request.getAmount())
-                .withType(request.getType())
-                .withTransactionTitle(request.getTitle())
-                .build();
+        Transaction transaction = Transaction.buildTransfer()
+            .from(sourceAccount)
+            .to(destinationAccount)
+            .withAmount(request.getAmount())
+            .withTitle(request.getTitle())
+            .withTransactionType(request.getType())
+            .build();
 
-        Transaction savedTransaction = transactionService.createTransaction(transaction);
+        Transaction savedTransaction = transactionService.registerTransaction(transaction);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
     }
 

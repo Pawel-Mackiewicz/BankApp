@@ -13,13 +13,15 @@ import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferReques
 import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionAssembler;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.transaction.service.assembler.TransactionAssembler;
 import info.mackiewicz.bankapp.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
+//TODO: REFACTOR. USE TransactionAssembler and dedicated validators
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -48,7 +50,7 @@ public class TransferController {
             Transaction transaction = transactionAssembler.assembleOwnTransfer(request);
 
             log.debug("Creating transaction in service");
-            transactionService.createTransaction(transaction);
+            transactionService.registerTransaction(transaction);
             
             log.info("Successfully created own transfer transaction with ID: {}", transaction.getId());
             redirectAttributes.addFlashAttribute("transferSuccessMessage",
@@ -93,7 +95,7 @@ public class TransferController {
             Transaction transaction = transactionAssembler.assembleInternalTransfer(request);
             
             log.debug("Creating transaction in service with amount: {}", request.getAmount());
-            transactionService.createTransaction(transaction);
+            transactionService.registerTransaction(transaction);
             
             log.info("Successfully created internal transfer transaction with ID: {}", transaction.getId());
             redirectAttributes.addFlashAttribute("transferSuccessMessage", "Internal bank transfer created successfully");
@@ -120,7 +122,7 @@ public class TransferController {
             Transaction transaction = transactionAssembler.assembleExternalTransfer(request);
 
             log.debug("Creating transaction in service");
-            transactionService.createTransaction(transaction);
+            transactionService.registerTransaction(transaction);
             
             log.info("Successfully created external transfer transaction with ID: {}", transaction.getId());
             redirectAttributes.addFlashAttribute("transferSuccessMessage", "External transfer created successfully");
