@@ -1,15 +1,21 @@
 package info.mackiewicz.bankapp.user.service;
 
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@DisplayName("UserValidationService Tests")
 class UserValidationServiceTest {
 
     @Mock
@@ -23,91 +29,192 @@ class UserValidationServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void validateUsernameUnique_whenUsernameExists_shouldThrowException() {
-        String username = "existingUsername";
-        when(userQueryService.checkUsernameExists(username)).thenReturn(true);
+    @Nested
+    @DisplayName("validateUsernameUnique tests")
+    class ValidateUsernameUniqueTests {
 
-        assertThrows(IllegalArgumentException.class,
-                () -> userValidationService.validateUsernameUnique(username));
+        @Test
+        @DisplayName("Should throw exception when username exists")
+        void validateUsernameUnique_whenUsernameExists_shouldThrowException() {
+            // given
+            String username = "existingUsername";
+            when(userQueryService.checkUsernameExists(username)).thenReturn(true);
 
-        verify(userQueryService).checkUsernameExists(username);
+            // when & then
+            assertThrows(IllegalArgumentException.class,
+                    () -> userValidationService.validateUsernameUnique(username));
+
+            verify(userQueryService).checkUsernameExists(username);
+        }
+
+        @Test
+        @DisplayName("Should not throw exception when username does not exist")
+        void validateUsernameUnique_whenUsernameDoesNotExist_shouldNotThrowException() {
+            // given
+            String username = "newUsername";
+            when(userQueryService.checkUsernameExists(username)).thenReturn(false);
+
+            // when
+            userValidationService.validateUsernameUnique(username);
+
+            // then
+            verify(userQueryService).checkUsernameExists(username);
+        }
     }
 
-    @Test
-    void validateUsernameUnique_whenUsernameDoesNotExist_shouldNotThrowException() {
-        String username = "newUsername";
-        when(userQueryService.checkUsernameExists(username)).thenReturn(false);
+    @Nested
+    @DisplayName("validateEmailUnique tests")
+    class ValidateEmailUniqueTests {
 
-        userValidationService.validateUsernameUnique(username);
+        @Test
+        @DisplayName("Should throw exception when email exists")
+        void validateEmailUnique_whenEmailExists_shouldThrowException() {
+            // given
+            Email email = new Email("existing@example.com");
+            when(userQueryService.userExistsByEmail(email)).thenReturn(true);
 
-        verify(userQueryService).checkUsernameExists(username);
+            // when & then
+            assertThrows(IllegalArgumentException.class,
+                    () -> userValidationService.validateEmailUnique(email));
+
+            verify(userQueryService).userExistsByEmail(email);
+        }
+
+        @Test
+        @DisplayName("Should not throw exception when email does not exist")
+        void validateEmailUnique_whenEmailDoesNotExist_shouldNotThrowException() {
+            // given
+            Email email = new Email("new@example.com");
+            when(userQueryService.userExistsByEmail(email)).thenReturn(false);
+
+            // when
+            userValidationService.validateEmailUnique(email);
+
+            // then
+            verify(userQueryService).userExistsByEmail(email);
+        }
     }
 
-    @Test
-    void validateEmailUnique_whenEmailExists_shouldThrowException() {
-        String email = "existing@example.com";
-        when(userQueryService.userExistsByEmail(email)).thenReturn(true);
+    @Nested
+    @DisplayName("validatePeselUnique tests")
+    class ValidatePeselUniqueTests {
 
-        assertThrows(IllegalArgumentException.class,
-                () -> userValidationService.validateEmailUnique(email));
+        @Test
+        @DisplayName("Should throw exception when PESEL exists")
+        void validatePeselUnique_whenPeselExists_shouldThrowException() {
+            // given
+            Pesel pesel = new Pesel("12345678901");
+            when(userQueryService.userExistsByPesel(pesel)).thenReturn(true);
 
-        verify(userQueryService).userExistsByEmail(email);
+            // when & then
+            assertThrows(IllegalArgumentException.class,
+                    () -> userValidationService.validatePeselUnique(pesel));
+
+            verify(userQueryService).userExistsByPesel(pesel);
+        }
+
+        @Test
+        @DisplayName("Should not throw exception when PESEL does not exist")
+        void validatePeselUnique_whenPeselDoesNotExist_shouldNotThrowException() {
+            // given
+            Pesel pesel = new Pesel("12345678901");
+            when(userQueryService.userExistsByPesel(pesel)).thenReturn(false);
+
+            // when
+            userValidationService.validatePeselUnique(pesel);
+
+            // then
+            verify(userQueryService).userExistsByPesel(pesel);
+        }
     }
 
-    @Test
-    void validateEmailUnique_whenEmailDoesNotExist_shouldNotThrowException() {
-        String email = "new@example.com";
-        when(userQueryService.userExistsByEmail(email)).thenReturn(false);
+    @Nested
+    @DisplayName("validateNewUser tests")
+    class ValidateNewUserTests {
 
-        userValidationService.validateEmailUnique(email);
+        @Test
+        @DisplayName("Should not throw exception when all fields are unique")
+        void validateNewUser_whenAllFieldsAreUnique_shouldNotThrowException() {
+            // given
+            User user = new User();
+            user.setUsername("newUsername");
+            user.setEmail(new Email("new@example.com"));
+            user.setPesel(new Pesel("12345678901"));
 
-        verify(userQueryService).userExistsByEmail(email);
-    }
+            when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(false);
+            when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(false);
+            when(userQueryService.userExistsByPesel(user.getPesel())).thenReturn(false);
 
-    @Test
-    void validateNewUser_whenBothUsernameAndEmailAreUnique_shouldNotThrowException() {
-        User user = new User();
-        user.setUsername("newUsername");
-        user.setEmail("new@example.com");
+            // when
+            userValidationService.validateNewUser(user);
 
-        when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(false);
-        when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(false);
+            // then
+            verify(userQueryService).checkUsernameExists(user.getUsername());
+            verify(userQueryService).userExistsByEmail(user.getEmail());
+            verify(userQueryService).userExistsByPesel(user.getPesel());
+        }
 
-        userValidationService.validateNewUser(user);
+        @Test
+        @DisplayName("Should throw exception when username exists")
+        void validateNewUser_whenUsernameExists_shouldThrowException() {
+            // given
+            User user = new User();
+            user.setUsername("existingUsername");
+            user.setEmail(new Email("new@example.com"));
+            user.setPesel(new Pesel("12345678901"));
 
-        verify(userQueryService).checkUsernameExists(user.getUsername());
-        verify(userQueryService).userExistsByEmail(user.getEmail());
-    }
+            when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(true);
 
-    @Test
-    void validateNewUser_whenUsernameExists_shouldThrowException() {
-        User user = new User();
-        user.setUsername("existingUsername");
-        user.setEmail("new@example.com");
+            // when & then
+            assertThrows(IllegalArgumentException.class,
+                    () -> userValidationService.validateNewUser(user));
 
-        when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(true);
+            verify(userQueryService).checkUsernameExists(user.getUsername());
+            verify(userQueryService, never()).userExistsByEmail(any());
+            verify(userQueryService, never()).userExistsByPesel(any());
+        }
 
-        assertThrows(IllegalArgumentException.class,
-                () -> userValidationService.validateNewUser(user));
+        @Test
+        @DisplayName("Should throw exception when email exists")
+        void validateNewUser_whenEmailExists_shouldThrowException() {
+            // given
+            User user = new User();
+            user.setUsername("newUsername");
+            user.setEmail(new Email("existing@example.com"));
+            user.setPesel(new Pesel("12345678901"));
 
-        verify(userQueryService).checkUsernameExists(user.getUsername());
-        verify(userQueryService, never()).userExistsByEmail(any());
-    }
+            when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(false);
+            when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(true);
 
-    @Test
-    void validateNewUser_whenEmailExists_shouldThrowException() {
-        User user = new User();
-        user.setUsername("newUsername");
-        user.setEmail("existing@example.com");
+            // when & then
+            assertThrows(IllegalArgumentException.class,
+                    () -> userValidationService.validateNewUser(user));
 
-        when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(false);
-        when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(true);
+            verify(userQueryService).checkUsernameExists(user.getUsername());
+            verify(userQueryService).userExistsByEmail(user.getEmail());
+            verify(userQueryService, never()).userExistsByPesel(any());
+        }
 
-        assertThrows(IllegalArgumentException.class,
-                () -> userValidationService.validateNewUser(user));
+        @Test
+        @DisplayName("Should throw exception when PESEL exists")
+        void validateNewUser_whenPeselExists_shouldThrowException() {
+            // given
+            User user = new User();
+            user.setUsername("newUsername");
+            user.setEmail(new Email("new@example.com"));
+            user.setPesel(new Pesel("12345678901"));
 
-        verify(userQueryService).checkUsernameExists(user.getUsername());
-        verify(userQueryService).userExistsByEmail(user.getEmail());
+            when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(false);
+            when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(false);
+            when(userQueryService.userExistsByPesel(user.getPesel())).thenReturn(true);
+
+            // when & then
+            assertThrows(IllegalArgumentException.class,
+                    () -> userValidationService.validateNewUser(user));
+
+            verify(userQueryService).checkUsernameExists(user.getUsername());
+            verify(userQueryService).userExistsByEmail(user.getEmail());
+            verify(userQueryService).userExistsByPesel(user.getPesel());
+        }
     }
 }

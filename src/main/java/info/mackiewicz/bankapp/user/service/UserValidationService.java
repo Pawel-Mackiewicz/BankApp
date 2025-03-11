@@ -1,6 +1,8 @@
 package info.mackiewicz.bankapp.user.service;
 
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,13 +23,13 @@ public class UserValidationService {
         }
     }
 
-    public void validateEmailUnique(String email) {
+    public void validateEmailUnique(Email email) {
         if (userQueryService.userExistsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists: " + email);
         }
     }
 
-    public void validatePeselUnique(String pesel) {
+    public void validatePeselUnique(Pesel pesel) {
         if (userQueryService.userExistsByPesel(pesel)) {
             throw new IllegalArgumentException("PESEL already exists: " + pesel);
         }
