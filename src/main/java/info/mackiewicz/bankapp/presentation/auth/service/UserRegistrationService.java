@@ -28,6 +28,7 @@ public class UserRegistrationService {
     // Only allow letters (English and Polish)
     private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
 
+    //
     public User registerUser(UserRegistrationDto registrationDto) {
         User user = userMapper.toUser(registrationDto);
 

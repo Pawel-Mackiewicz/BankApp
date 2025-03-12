@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
+import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
@@ -35,6 +36,18 @@ public class UserMapper {
             existingUser.setPassword(request.getPassword());
         }
         return existingUser;
+    }
+
+    public UserResponseDto toResponseDto(User user) {
+        return UserResponseDto.builder()
+                .withId(user.getId())
+                .withFirstname(user.getFirstname())
+                .withLastname(user.getLastname())
+                .withEmail(user.getEmail().toString())
+                .withPhoneNumber(user.getPhoneNumber().toString())
+                .withDateOfBirth(user.getDateOfBirth())
+                .withUsername(user.getUsername())
+                .build();
     }
 
     private String capitalize(String str) {

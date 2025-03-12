@@ -2,21 +2,27 @@ package info.mackiewicz.bankapp.user.controller;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
+import info.mackiewicz.bankapp.shared.dto.ApiResponse;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
+import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;
 import info.mackiewicz.bankapp.user.service.UserService;
 import info.mackiewicz.bankapp.user.validation.RequestValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * REST controller for managing user operations.
+ * Handles user creation, retrieval, update and deletion.
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
@@ -28,47 +34,77 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDto registrationDto, BindingResult bindingResult) {
-        ResponseEntity<?> validationError = requestValidator.validateRequest(bindingResult);
-        if (validationError != null) {
-            return validationError;
+    public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
+            @Valid @RequestBody UserRegistrationDto registrationDto,
+            BindingResult bindingResult) {
+        
+        if (bindingResult.hasErrors()) {
+            String errorMessage = requestValidator.getValidationErrorMessage(bindingResult);
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.<UserResponseDto>error(errorMessage, HttpStatus.BAD_REQUEST));
         }
 
         try {
             User created = registrationService.registerUser(registrationDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+            UserResponseDto responseDto = userMapper.toResponseDto(created);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(ApiResponse.created(responseDto));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.<UserResponseDto>error(e.getMessage(), HttpStatus.BAD_REQUEST));
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(@PathVariable Integer id) {
+        try {
+            User user = userService.getUserById(id);
+            return ResponseEntity.ok(ApiResponse.success(userMapper.toResponseDto(user)));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.<UserResponseDto>error(e.getMessage(), HttpStatus.NOT_FOUND));
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers() {
+        List<UserResponseDto> users = userService.getAllUsers().stream()
+                .map(userMapper::toResponseDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.success(users));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Integer id, @Valid @RequestBody UpdateUserRequest updateRequest, BindingResult bindingResult) {
-        ResponseEntity<?> validationError = requestValidator.validateRequest(bindingResult);
-        if (validationError != null) {
-            return validationError;
+    public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(
+            @PathVariable Integer id,
+            @Valid @RequestBody UpdateUserRequest updateRequest,
+            BindingResult bindingResult) {
+        
+        if (bindingResult.hasErrors()) {
+            String errorMessage = requestValidator.getValidationErrorMessage(bindingResult);
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.<UserResponseDto>error(errorMessage, HttpStatus.BAD_REQUEST));
         }
 
-        User existingUser = userService.getUserById(id);
-        existingUser = userMapper.updateUserFromRequest(existingUser, updateRequest);
-        
-        
-        return ResponseEntity.ok(userService.updateUser(existingUser));
+        try {
+            User existingUser = userService.getUserById(id);
+            existingUser = userMapper.updateUserFromRequest(existingUser, updateRequest);
+            User updatedUser = userService.updateUser(existingUser);
+            return ResponseEntity.ok(ApiResponse.success(userMapper.toResponseDto(updatedUser)));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.<UserResponseDto>error(e.getMessage(), HttpStatus.NOT_FOUND));
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Integer id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok(ApiResponse.<Void>success(null));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.<Void>error(e.getMessage(), HttpStatus.NOT_FOUND));
+        }
     }
 }
