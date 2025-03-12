@@ -26,7 +26,7 @@ public class UserMapper {
 
     public User updateUserFromRequest(User existingUser, UpdateUserRequest request) {
         if (request.getEmail() != null) {
-            existingUser.setEmail(new Email(request.getEmail().toLowerCase()));
+            existingUser.setEmail(new Email(request.getEmail()));
         }
         if (request.getPhoneNumber() != null) {
             existingUser.setPhoneNumber(new PhoneNumber(request.getPhoneNumber()));
