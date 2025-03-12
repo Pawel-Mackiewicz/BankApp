@@ -51,19 +51,23 @@ public class UserCreationService {
      */
     @Transactional
     User createUser(User user) {
+        log.info("Starting user creation process for email: {}", user.getEmail());
         userValidationService.validateNewUser(user);
 
         // Generate username only if not already set
         if (!StringUtils.hasText(user.getUsername())) {
+            log.debug("Generating username for user with email: {}", user.getEmail());
             user = usernameGeneratorService.generateUsername(user);
+            log.debug("Generated username: {}", user.getUsername());
         }
         
         // Ensure password is encoded
+        log.debug("Encoding password for user: {}", user.getUsername());
         user = passwordService.ensurePasswordEncoded(user);
         
         // Save user
         User savedUser = userRepository.save(user);
-        log.debug("Created user with ID: {}", savedUser.getId());
+        log.info("Successfully created user. ID: {}, username: {}", savedUser.getId(), savedUser.getUsername());
         
         return savedUser;
     }

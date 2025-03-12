@@ -41,8 +41,12 @@ public class UserQueryService {
      * @see User
      */
     User getUserById(Integer id) {
+        log.debug("Querying user by ID: {}", id);
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> {
+                    log.warn("Failed to find user with ID: {}", id);
+                    return new UserNotFoundException("User not found with id: " + id);
+                });
     }
 
     /**
@@ -56,8 +60,17 @@ public class UserQueryService {
      */
     @Transactional
     User getUserByIdWithPessimisticLock(Integer id) {
-        return userRepository.findByIdWithPessimisticLock(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+        log.debug("Querying user by ID with pessimistic lock: {}", id);
+        try {
+            return userRepository.findByIdWithPessimisticLock(id)
+                    .orElseThrow(() -> {
+                        log.warn("Failed to find user with ID (pessimistic lock): {}", id);
+                        return new UserNotFoundException("User not found with id: " + id);
+                    });
+        } catch (Exception e) {
+            log.error("Error while acquiring pessimistic lock for user ID: {}", id, e);
+            throw e;
+        }
     }
 
     /**
@@ -69,8 +82,12 @@ public class UserQueryService {
      * @see User
      */
     User getUserByUsername(String username) {
+        log.debug("Querying user by username: {}", username);
         return userRepository.findByUsername(username)
-        .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+            .orElseThrow(() -> {
+                log.warn("Failed to find user with username: {}", username);
+                return new UserNotFoundException("User not found with username: " + username);
+            });
     }
 
     /**
@@ -83,6 +100,7 @@ public class UserQueryService {
      * @see Email
      */
     User getUserByEmail(String email) {
+        log.debug("Querying user by email string: {}", email);
         return getUserByEmail(new Email(email));
     }
 
@@ -95,8 +113,12 @@ public class UserQueryService {
      * @see Email
      */
     User getUserByEmail(Email email) {
+        log.debug("Querying user by email object: {}", email);
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> {
+                    log.warn("Failed to find user with email: {}", email);
+                    return new UserNotFoundException("User not found with email: " + email);
+                });
     }
 
     /**
@@ -106,7 +128,10 @@ public class UserQueryService {
      * @see User
      */
     List<User> getAllUsers() {
-        return userRepository.findAll();
+        log.debug("Querying all users from database");
+        List<User> users = userRepository.findAll();
+        log.debug("Found {} users in database", users.size());
+        return users;
     }
 
     /**
@@ -116,6 +141,7 @@ public class UserQueryService {
      * @return true if the username exists, false otherwise
      */
     boolean userExistsByUsername(String username) {
+        log.debug("Checking if username exists: {}", username);
         return userRepository.existsByUsername(username);
     }
 
@@ -128,6 +154,7 @@ public class UserQueryService {
      * @see Email
      */
     boolean userExistsByEmail(String email) {
+        log.debug("Checking if user exists by email string: {}", email);
         return userExistsByEmail(new Email(email));
     }
 
@@ -139,7 +166,10 @@ public class UserQueryService {
      * @see Email
      */
     public boolean userExistsByEmail(Email email) {
-        return userRepository.existsByEmail(email);
+        log.debug("Checking if user exists by Email object: {}", email);
+        boolean exists = userRepository.existsByEmail(email);
+        log.debug("User with email {} {} in the system", email, exists ? "exists" : "does not exist");
+        return exists;
     }
 
     /**
@@ -151,6 +181,7 @@ public class UserQueryService {
      * @see Pesel
      */
     public boolean userExistsByPesel(String pesel) {
+        log.debug("Checking if user exists by PESEL string: {}", pesel);
         return userExistsByPesel(new Pesel(pesel));
     }
 
@@ -162,6 +193,9 @@ public class UserQueryService {
      * @see Pesel
      */
     public boolean userExistsByPesel(Pesel pesel) {
-        return userRepository.existsByPesel(pesel);
+        log.debug("Checking if user exists by Pesel object: {}", pesel);
+        boolean exists = userRepository.existsByPesel(pesel);
+        log.debug("User with PESEL {} {} in the system", pesel, exists ? "exists" : "does not exist");
+        return exists;
     }
 }

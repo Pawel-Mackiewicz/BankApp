@@ -31,9 +31,12 @@ public class UserValidationService {
      * @throws IllegalArgumentException if the username already exists
      */
     public void validateUsernameUnique(String username) {
+        log.debug("Validating username uniqueness: {}", username);
         if (userQueryService.userExistsByUsername(username)) {
+            log.warn("Attempt to use existing username: {}", username);
             throw new IllegalArgumentException("Username already exists: " + username);
         }
+        log.debug("Username {} is unique", username);
     }
 
     /**
@@ -44,9 +47,12 @@ public class UserValidationService {
      * @see Email
      */
     public void validateEmailUnique(Email email) {
+        log.debug("Validating email uniqueness: {}", email);
         if (userQueryService.userExistsByEmail(email)) {
+            log.warn("Attempt to use existing email: {}", email);
             throw new IllegalArgumentException("Email already exists: " + email);
         }
+        log.debug("Email {} is unique", email);
     }
 
     /**
@@ -57,9 +63,12 @@ public class UserValidationService {
      * @see Pesel
      */
     public void validatePeselUnique(Pesel pesel) {
+        log.debug("Validating PESEL uniqueness: {}", pesel);
         if (userQueryService.userExistsByPesel(pesel)) {
+            log.warn("Attempt to use existing PESEL: {}", pesel);
             throw new IllegalArgumentException("PESEL already exists: " + pesel);
         }
+        log.debug("PESEL {} is unique", pesel);
     }
 
     /**
@@ -70,7 +79,14 @@ public class UserValidationService {
      * @throws UserNotFoundException if no user exists with the given ID
      */
     public void validateUserExists(Integer id) {
-        userQueryService.getUserById(id);
+        log.debug("Validating user existence for ID: {}", id);
+        try {
+            userQueryService.getUserById(id);
+            log.debug("User with ID {} exists", id);
+        } catch (UserNotFoundException e) {
+            log.warn("Validation failed - user with ID {} does not exist", id);
+            throw e;
+        }
     }
 
     /**
@@ -82,6 +98,12 @@ public class UserValidationService {
      * @see User
      */
     public void validateNewUser(User user) {
+        log.info("Starting validation for new user registration");
+        log.debug("Validating user data: username={}, email={}",
+            user.getUsername(),
+            user.getEmail() != null ? user.getEmail().toString() : "null"
+        );
+        
         if (user.getUsername() != null) {
             validateUsernameUnique(user.getUsername());
         }
@@ -91,5 +113,7 @@ public class UserValidationService {
         if (user.getPesel() != null) {
             validatePeselUnique(user.getPesel());
         }
+        
+        log.info("Successfully completed validation for new user registration");
     }
 }

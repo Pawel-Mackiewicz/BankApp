@@ -5,6 +5,7 @@ import java.text.Normalizer;
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.user.model.User;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service responsible for generating unique usernames based on user's personal information.
@@ -17,6 +18,7 @@ import info.mackiewicz.bankapp.user.model.User;
  *
  * @see User
  */
+@Slf4j
 @Service
 public class UsernameGeneratorService {
 
@@ -29,7 +31,10 @@ public class UsernameGeneratorService {
      * @throws IllegalArgumentException if firstname, lastname or email is null
      */
     public User generateUsername(User user) {
-        user.setUsername(generateUsername(user.getFirstname(), user.getLastname(), user.getEmail().toString()));
+        log.debug("Starting username generation for user with email: {}", user.getEmail());
+        String username = generateUsername(user.getFirstname(), user.getLastname(), user.getEmail().toString());
+        user.setUsername(username);
+        log.info("Generated username '{}' for user with email: {}", username, user.getEmail());
         return user;
     }
     
@@ -44,8 +49,14 @@ public class UsernameGeneratorService {
      * @throws IllegalArgumentException if any parameter is null
      */
     public String generateUsername(String firstname, String lastname, String email) {
+        log.debug("Generating username for firstname: {}, lastname: {}", firstname, lastname);
         String baseUsername = generateBaseUsername(firstname, lastname);
-        return baseUsername + generateUniqueID(email);
+        log.debug("Generated base username: {}", baseUsername);
+        String uniqueId = generateUniqueID(email);
+        log.debug("Generated unique ID: {}", uniqueId);
+        String fullUsername = baseUsername + uniqueId;
+        log.debug("Final username: {}", fullUsername);
+        return fullUsername;
     }
 
     /**
@@ -57,7 +68,12 @@ public class UsernameGeneratorService {
      * @return Base username in format "firstname.lastname"
      */
     private String generateBaseUsername(String firstname, String lastname) {
-        return removeDiacritics(firstname.toLowerCase()) + "." + removeDiacritics(lastname.toLowerCase());
+        log.trace("Processing firstname: {}, lastname: {}", firstname, lastname);
+        String processedFirstname = removeDiacritics(firstname.toLowerCase());
+        String processedLastname = removeDiacritics(lastname.toLowerCase());
+        String baseUsername = processedFirstname + "." + processedLastname;
+        log.trace("Generated base username: {} (from {} {})", baseUsername, firstname, lastname);
+        return baseUsername;
     }
 
     /**
@@ -68,8 +84,11 @@ public class UsernameGeneratorService {
      * @return Text with diacritical marks removed
      */
     private String removeDiacritics(String text) {
+        log.trace("Removing diacritics from: {}", text);
         String normalized = Normalizer.normalize(text, Normalizer.Form.NFD);
-        return normalized.replaceAll("\\p{M}", "");
+        String result = normalized.replaceAll("\\p{M}", "");
+        log.trace("Text after removing diacritics: {} -> {}", text, result);
+        return result;
     }
 
     /**
@@ -80,9 +99,11 @@ public class UsernameGeneratorService {
      * @return A string of up to 6 digits
      */
     private String generateUniqueID(String email) {
+        log.trace("Generating unique ID for email: {}", email);
         int hash = email.hashCode();
         String sHash = Integer.toString(hash);
-        
-        return sHash.length() > 6 ? sHash.substring(0, 6) : sHash;
+        String result = sHash.length() > 6 ? sHash.substring(0, 6) : sHash;
+        log.trace("Generated unique ID: {} (from hash: {})", result, hash);
+        return result;
     }
 }

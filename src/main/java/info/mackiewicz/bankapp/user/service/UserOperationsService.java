@@ -38,10 +38,16 @@ public class UserOperationsService {
      */
     @Transactional
     User updateUser(User user) {
+        log.info("Starting user update process for ID: {}", user.getId());
+        log.debug("Validating user existence");
         userValidationService.validateUserExists(user.getId());
+        
+        log.debug("Ensuring password is encoded for user: {}", user.getUsername());
         user = passwordService.ensurePasswordEncoded(user);
+        
+        log.debug("Saving updated user data");
         User saved = userRepository.save(user);
-        log.info("Updated user with ID: {}", user.getId());
+        log.info("Successfully updated user. ID: {}, username: {}", saved.getId(), saved.getUsername());
         return saved;
     }
 
@@ -55,8 +61,13 @@ public class UserOperationsService {
      */
     @Transactional
     void changeUsersPassword(String email, String newPassword) {
-        userRepository.updatePasswordByEmail(email, passwordService.encodePassword(newPassword));
-        log.info("Changed password for user with email: {}", email);
+        log.info("Starting password change process for user with email: {}", email);
+        log.debug("Encoding new password");
+        String encodedPassword = passwordService.encodePassword(newPassword);
+        
+        log.debug("Updating password in database");
+        userRepository.updatePasswordByEmail(email, encodedPassword);
+        log.info("Successfully changed password for user with email: {}", email);
     }
 
     /**
@@ -68,10 +79,14 @@ public class UserOperationsService {
      */
     @Transactional
     void deleteUser(Integer id) {
-        // Ensure user exists before deletion, throws exception if not found
-        User user = userQueryService.getUserById(id);
+        log.info("Starting user deletion process for ID: {}", id);
         
+        log.debug("Validating user existence");
+        User user = userQueryService.getUserById(id);
+        log.debug("Found user to delete: {}", user.getUsername());
+        
+        log.debug("Performing user deletion");
         userRepository.delete(user);
-        log.info("Deleted user with ID: {}", id);
+        log.info("Successfully deleted user. ID: {}, username: {}", id, user.getUsername());
     }
 }
