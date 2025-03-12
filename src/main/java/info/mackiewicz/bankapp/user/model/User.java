@@ -57,13 +57,14 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
     @AttributeOverride(name = "value", column = @Column(name = "phone_number", unique = true, nullable = false))
     private PhoneNumber phoneNumber;
 
-    @Column(name = "account_counter")
-    private Integer accountCounter;
-
+    
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Account> accounts;
-
+    
+    @Column(name = "account_counter")
+    private Integer accountCounter;
+   
     /**
      * Default constructor for JPA.
      * For new user creation use static factory method {@link User#builder()}.
