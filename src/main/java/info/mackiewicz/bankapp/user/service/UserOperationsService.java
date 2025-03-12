@@ -37,7 +37,7 @@ public class UserOperationsService {
      * @see User
      */
     @Transactional
-    public User updateUser(User user) {
+    User updateUser(User user) {
         userValidationService.validateUserExists(user.getId());
         user = passwordService.ensurePasswordEncoded(user);
         User saved = userRepository.save(user);
@@ -54,7 +54,7 @@ public class UserOperationsService {
      * @throws IllegalArgumentException if the email format is invalid
      */
     @Transactional
-    public void changeUsersPassword(String email, String newPassword) {
+    void changeUsersPassword(String email, String newPassword) {
         userRepository.updatePasswordByEmail(email, passwordService.encodePassword(newPassword));
         log.info("Changed password for user with email: {}", email);
     }
@@ -67,8 +67,10 @@ public class UserOperationsService {
      * @throws UserNotFoundException if the user does not exist
      */
     @Transactional
-    public void deleteUser(Integer id) {
+    void deleteUser(Integer id) {
+        // Ensure user exists before deletion, throws exception if not found
         User user = userQueryService.getUserById(id);
+        
         userRepository.delete(user);
         log.info("Deleted user with ID: {}", id);
     }

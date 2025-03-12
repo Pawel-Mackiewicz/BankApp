@@ -1,5 +1,12 @@
 package info.mackiewicz.bankapp.user.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
+import info.mackiewicz.bankapp.user.exception.InvalidPeselFormatException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
@@ -7,10 +14,6 @@ import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Service responsible for querying user data from the database. Provides methods for retrieving
@@ -37,7 +40,7 @@ public class UserQueryService {
      * @throws UserNotFoundException if no user is found with the given ID
      * @see User
      */
-    public User getUserById(Integer id) {
+    User getUserById(Integer id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
@@ -52,7 +55,7 @@ public class UserQueryService {
      * @see User
      */
     @Transactional
-    public User getUserByIdWithPessimisticLock(Integer id) {
+    User getUserByIdWithPessimisticLock(Integer id) {
         return userRepository.findByIdWithPessimisticLock(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
@@ -65,7 +68,7 @@ public class UserQueryService {
      * @throws UserNotFoundException if no user is found with the given username
      * @see User
      */
-    public User getUserByUsername(String username) {
+    User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
         .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
     }
@@ -79,7 +82,7 @@ public class UserQueryService {
      * @throws IllegalArgumentException if the email format is invalid
      * @see Email
      */
-    public User getUserByEmail(String email) {
+    User getUserByEmail(String email) {
         return getUserByEmail(new Email(email));
     }
 
@@ -91,7 +94,7 @@ public class UserQueryService {
      * @throws UserNotFoundException if no user is found with the given email
      * @see Email
      */
-    public User getUserByEmail(Email email) {
+    User getUserByEmail(Email email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
     }
@@ -102,7 +105,7 @@ public class UserQueryService {
      * @return A list of all users
      * @see User
      */
-    public List<User> getAllUsers() {
+    List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -112,7 +115,7 @@ public class UserQueryService {
      * @param username The username to check
      * @return true if the username exists, false otherwise
      */
-    public boolean checkUsernameExists(String username) {
+    boolean userExistsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
@@ -121,10 +124,10 @@ public class UserQueryService {
      *
      * @param email The email to check as a string
      * @return true if a user exists with the email, false otherwise
-     * @throws IllegalArgumentException if the email format is invalid
+     * @throws InvalidEmailFormatException if the email format is invalid
      * @see Email
      */
-    public boolean userExistsByEmail(String email) {
+    boolean userExistsByEmail(String email) {
         return userExistsByEmail(new Email(email));
     }
 
@@ -144,7 +147,7 @@ public class UserQueryService {
      *
      * @param pesel The PESEL number to check as a string
      * @return true if a user exists with the PESEL, false otherwise
-     * @throws IllegalArgumentException if the PESEL format is invalid
+     * @throws InvalidPeselFormatException if the PESEL format is invalid
      * @see Pesel
      */
     public boolean userExistsByPesel(String pesel) {

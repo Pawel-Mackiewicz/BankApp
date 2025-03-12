@@ -1,6 +1,11 @@
 package info.mackiewicz.bankapp.user.service;
 
-import info.mackiewicz.bankapp.user.model.User;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -9,9 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
-import static org.mockito.Mockito.*;
+import info.mackiewicz.bankapp.user.model.User;
 
 class UserServiceTest {
 
@@ -133,11 +136,11 @@ class UserServiceTest {
         logger.info("testCheckUsernameExists: Starting test");
         String username = "testuser";
 
-        when(userQueryService.checkUsernameExists(username)).thenReturn(true);
+        when(userQueryService.userExistsByUsername(username)).thenReturn(true);
 
-        userService.checkUsernameExists(username);
+        userService.userExistsByUsername(username);
 
-        verify(userQueryService).checkUsernameExists(username);
+        verify(userQueryService).userExistsByUsername(username);
         logger.info("testCheckUsernameExists: Test passed");
     }
 }

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.regex.Pattern;
 
+import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
+
 /**
  * Value Object representing an email address.
  * Ensures proper email format validation.
@@ -30,15 +32,15 @@ public class Email {
 
     private void validate(String email) {
         if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty");
+            throw new InvalidEmailFormatException("Email cannot be empty");
         }
 
         if (email.length() > 255) {
-            throw new IllegalArgumentException("Email is too long (max 255 characters)");
+            throw new InvalidEmailFormatException("Email is too long (max 255 characters)");
         }
 
         if (!EMAIL_PATTERN.matcher(email).matches()) {
-            throw new IllegalArgumentException("Invalid email format");
+            throw new InvalidEmailFormatException("Invalid email format");
         }
 
         // Additional validations could be added here:

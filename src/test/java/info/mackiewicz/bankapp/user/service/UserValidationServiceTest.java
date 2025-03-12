@@ -1,8 +1,11 @@
 package info.mackiewicz.bankapp.user.service;
 
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
 
 @DisplayName("UserValidationService Tests")
 class UserValidationServiceTest {
@@ -38,13 +41,13 @@ class UserValidationServiceTest {
         void validateUsernameUnique_whenUsernameExists_shouldThrowException() {
             // given
             String username = "existingUsername";
-            when(userQueryService.checkUsernameExists(username)).thenReturn(true);
+            when(userQueryService.userExistsByUsername(username)).thenReturn(true);
 
             // when & then
             assertThrows(IllegalArgumentException.class,
                     () -> userValidationService.validateUsernameUnique(username));
 
-            verify(userQueryService).checkUsernameExists(username);
+            verify(userQueryService).userExistsByUsername(username);
         }
 
         @Test
@@ -52,13 +55,13 @@ class UserValidationServiceTest {
         void validateUsernameUnique_whenUsernameDoesNotExist_shouldNotThrowException() {
             // given
             String username = "newUsername";
-            when(userQueryService.checkUsernameExists(username)).thenReturn(false);
+            when(userQueryService.userExistsByUsername(username)).thenReturn(false);
 
             // when
             userValidationService.validateUsernameUnique(username);
 
             // then
-            verify(userQueryService).checkUsernameExists(username);
+            verify(userQueryService).userExistsByUsername(username);
         }
     }
 
@@ -141,7 +144,7 @@ class UserValidationServiceTest {
             user.setEmail(new Email("new@example.com"));
             user.setPesel(new Pesel("12345678901"));
 
-            when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(false);
+            when(userQueryService.userExistsByUsername(user.getUsername())).thenReturn(false);
             when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(false);
             when(userQueryService.userExistsByPesel(user.getPesel())).thenReturn(false);
 
@@ -149,7 +152,7 @@ class UserValidationServiceTest {
             userValidationService.validateNewUser(user);
 
             // then
-            verify(userQueryService).checkUsernameExists(user.getUsername());
+            verify(userQueryService).userExistsByUsername(user.getUsername());
             verify(userQueryService).userExistsByEmail(user.getEmail());
             verify(userQueryService).userExistsByPesel(user.getPesel());
         }
@@ -163,13 +166,13 @@ class UserValidationServiceTest {
             user.setEmail(new Email("new@example.com"));
             user.setPesel(new Pesel("12345678901"));
 
-            when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(true);
+            when(userQueryService.userExistsByUsername(user.getUsername())).thenReturn(true);
 
             // when & then
             assertThrows(IllegalArgumentException.class,
                     () -> userValidationService.validateNewUser(user));
 
-            verify(userQueryService).checkUsernameExists(user.getUsername());
+            verify(userQueryService).userExistsByUsername(user.getUsername());
             verify(userQueryService, never()).userExistsByEmail(any(Email.class));
             verify(userQueryService, never()).userExistsByPesel(any(Pesel.class));
         }
@@ -183,14 +186,14 @@ class UserValidationServiceTest {
             user.setEmail(new Email("existing@example.com"));
             user.setPesel(new Pesel("12345678901"));
 
-            when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(false);
+            when(userQueryService.userExistsByUsername(user.getUsername())).thenReturn(false);
             when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(true);
 
             // when & then
             assertThrows(IllegalArgumentException.class,
                     () -> userValidationService.validateNewUser(user));
 
-            verify(userQueryService).checkUsernameExists(user.getUsername());
+            verify(userQueryService).userExistsByUsername(user.getUsername());
             verify(userQueryService).userExistsByEmail(user.getEmail());
             verify(userQueryService, never()).userExistsByPesel(any(Pesel.class));
         }
@@ -204,7 +207,7 @@ class UserValidationServiceTest {
             user.setEmail(new Email("new@example.com"));
             user.setPesel(new Pesel("12345678901"));
 
-            when(userQueryService.checkUsernameExists(user.getUsername())).thenReturn(false);
+            when(userQueryService.userExistsByUsername(user.getUsername())).thenReturn(false);
             when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(false);
             when(userQueryService.userExistsByPesel(user.getPesel())).thenReturn(true);
 
@@ -212,7 +215,7 @@ class UserValidationServiceTest {
             assertThrows(IllegalArgumentException.class,
                     () -> userValidationService.validateNewUser(user));
 
-            verify(userQueryService).checkUsernameExists(user.getUsername());
+            verify(userQueryService).userExistsByUsername(user.getUsername());
             verify(userQueryService).userExistsByEmail(user.getEmail());
             verify(userQueryService).userExistsByPesel(user.getPesel());
         }

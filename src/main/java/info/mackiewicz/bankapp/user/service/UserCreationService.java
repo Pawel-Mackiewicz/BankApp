@@ -50,7 +50,7 @@ public class UserCreationService {
      * @throws IllegalStateException if required fields are missing or invalid
      */
     @Transactional
-    public User createUser(User user) {
+    User createUser(User user) {
         userValidationService.validateNewUser(user);
 
         // Generate username only if not already set

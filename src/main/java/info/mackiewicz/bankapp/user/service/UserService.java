@@ -1,11 +1,14 @@
 package info.mackiewicz.bankapp.user.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Facade service that coordinates all user-related operations by delegating to specialized services.
@@ -33,6 +36,7 @@ public class UserService {
      *
      * @param user The user object containing the information for the new user
      * @return The created user with generated ID
+     * @throws IllegalStateException if required fields are missing or invalid   
      * @throws IllegalArgumentException if any unique fields (username, email, PESEL) already exist
      */
     public User createUser(User user) {
@@ -109,8 +113,8 @@ public class UserService {
      * @param username The username to check
      * @return true if the username exists, false otherwise
      */
-    public boolean checkUsernameExists(String username) {
-        return userQueryService.checkUsernameExists(username);
+    public boolean userExistsByUsername(String username) {
+        return userQueryService.userExistsByUsername(username);
     }
 
     /**
@@ -118,7 +122,7 @@ public class UserService {
      *
      * @param email The email to check
      * @return true if a user exists with the email, false otherwise
-     * @throws IllegalArgumentException if the email format is invalid
+     * @throws InvalidEmailFormatException if the email format is invalid
      */
     public boolean userExistsByEmail(String email) {
         return userQueryService.userExistsByEmail(email);
@@ -130,7 +134,7 @@ public class UserService {
      * @param email The email address of the user
      * @return The user with the specified email
      * @throws UserNotFoundException if no user is found with the given email
-     * @throws IllegalArgumentException if the email format is invalid
+     * @throws InvalidEmailFormatException if the email format is invalid
      */
     public User getUserByEmail(String email) {
         return userQueryService.getUserByEmail(email);

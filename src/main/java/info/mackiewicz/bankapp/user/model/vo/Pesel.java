@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.user.model.vo;
 
+import info.mackiewicz.bankapp.user.exception.InvalidPeselFormatException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -27,11 +28,11 @@ public class Pesel {
 
     private void validate(String pesel) {
         if (pesel == null || pesel.length() != PESEL_LENGTH) {
-            throw new IllegalArgumentException("PESEL must be exactly 11 digits");
+            throw new InvalidPeselFormatException("PESEL must be exactly 11 digits");
         }
 
         if (!pesel.matches("\\d{11}")) {
-            throw new IllegalArgumentException("PESEL must contain only digits");
+            throw new InvalidPeselFormatException("PESEL must contain only digits");
         }
 
        // validateChecksum(pesel); // It's not required for portfolio project
@@ -48,7 +49,7 @@ public class Pesel {
         int lastDigit = Integer.parseInt(String.valueOf(pesel.charAt(10)));
 
         if (checksum != lastDigit) {
-            throw new IllegalArgumentException("Invalid PESEL checksum");
+            throw new InvalidPeselFormatException("Invalid PESEL checksum");
         }
     }
 

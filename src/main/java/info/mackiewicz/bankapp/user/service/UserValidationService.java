@@ -1,11 +1,13 @@
 package info.mackiewicz.bankapp.user.service;
 
+import org.springframework.stereotype.Service;
+
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 /**
  * Service responsible for validating user data before operations like creation or update.
@@ -29,7 +31,7 @@ public class UserValidationService {
      * @throws IllegalArgumentException if the username already exists
      */
     public void validateUsernameUnique(String username) {
-        if (userQueryService.checkUsernameExists(username)) {
+        if (userQueryService.userExistsByUsername(username)) {
             throw new IllegalArgumentException("Username already exists: " + username);
         }
     }
