@@ -14,7 +14,7 @@ import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.exception.UserValidationException;
 
-@ControllerAdvice(basePackages = "info.mackiewicz.bankapp.presentation")
+@ControllerAdvice(basePackages = "info.mackiewicz.bankapp")
 public class WebExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(WebExceptionHandler.class);

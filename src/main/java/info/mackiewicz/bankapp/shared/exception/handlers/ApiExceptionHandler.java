@@ -26,7 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 //TODO: " CO Z TYM ZROBIĆ? =.=" "
-@RestControllerAdvice(basePackages = "info.mackiewicz.bankapp.api")
+@RestControllerAdvice(basePackages = "info.mackiewicz.bankapp.user.controller")
 public class ApiExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
