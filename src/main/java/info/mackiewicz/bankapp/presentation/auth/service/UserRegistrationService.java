@@ -32,7 +32,7 @@ public class UserRegistrationService {
 
     //TODO: ADD VALIDATION FOR NAME AND SURNAME (BUT WHERE?)
     public User registerUser(UserRegistrationDto registrationDto) {
-        log.info("Starting user registration process for username: {}", registrationDto.getUsername());
+        log.info("Starting user registration process for email: {}", registrationDto.getEmail());
         
         User user = userMapper.toUser(registrationDto);
         log.debug("Mapped registration DTO to User entity");
