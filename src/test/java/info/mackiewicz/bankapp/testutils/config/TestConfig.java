@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.config;
+package info.mackiewicz.bankapp.testutils.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.mackiewicz.bankapp.notification.email.EmailSender;

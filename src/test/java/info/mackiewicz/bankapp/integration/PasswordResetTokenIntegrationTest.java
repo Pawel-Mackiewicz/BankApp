@@ -17,11 +17,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import info.mackiewicz.bankapp.config.TestConfig;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
 import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.testutils.config.TestConfig;
 
 @SpringBootTest
 @ActiveProfiles("test")

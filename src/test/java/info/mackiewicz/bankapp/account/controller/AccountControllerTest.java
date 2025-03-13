@@ -27,7 +27,7 @@ import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.config.TestConfig;
+import info.mackiewicz.bankapp.testutils.config.TestConfig;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.utils.TestIbanProvider;
 
