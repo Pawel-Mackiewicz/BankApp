@@ -3,6 +3,8 @@ package info.mackiewicz.bankapp.user.validation;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.stream.Collectors;
 
 /**
@@ -10,6 +12,7 @@ import java.util.stream.Collectors;
  * Provides consistent error message formatting across the application.
  */
 @Component
+@Slf4j
 public class RequestValidator {
 
     /**
@@ -19,6 +22,7 @@ public class RequestValidator {
      * @return formatted error message string
      */
     public String getValidationErrorMessage(BindingResult bindingResult) {
+        log.warn("Validation errors found: {}", bindingResult.getFieldErrors());
         return bindingResult.getFieldErrors().stream()
                 .map(error -> String.format("%s: %s", error.getField(), error.getDefaultMessage()))
                 .collect(Collectors.joining(", "));

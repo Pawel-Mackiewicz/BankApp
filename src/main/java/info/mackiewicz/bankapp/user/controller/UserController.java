@@ -1,9 +1,11 @@
 package info.mackiewicz.bankapp.user.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.shared.dto.ApiResponse;
 import info.mackiewicz.bankapp.user.UserMapper;
+import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
 import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
  * REST controller for managing user operations.
  * Handles user creation, retrieval, update and deletion.
  */
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
@@ -38,8 +41,13 @@ public class UserController {
             @Valid @RequestBody UserRegistrationDto registrationDto,
             BindingResult bindingResult) {
         
+        long startTime = System.currentTimeMillis();
+        log.debug("Received user registration request for email: {}", registrationDto.getEmail());
+        
         if (bindingResult.hasErrors()) {
+            log.warn("User registration validation failed: {}", bindingResult.getFieldErrors());
             String errorMessage = requestValidator.getValidationErrorMessage(bindingResult);
+            log.warn("User registration validation failed: {}", errorMessage);
             return ResponseEntity.badRequest()
                     .body(ApiResponse.<UserResponseDto>error(errorMessage, HttpStatus.BAD_REQUEST));
         }
@@ -47,11 +55,17 @@ public class UserController {
         try {
             User created = registrationService.registerUser(registrationDto);
             UserResponseDto responseDto = userMapper.toResponseDto(created);
+            long executionTime = System.currentTimeMillis() - startTime;
+            log.info("Successfully created new user with ID: {}. Operation took {}ms", created.getId(), executionTime);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(ApiResponse.created(responseDto));
-        } catch (IllegalArgumentException e) {
+        } catch (UserValidationException e) {
+            log.warn("User registration failed due to validation error: {}", e.getMessage());
+            log.debug("Creating error response with message: '{}' and status: {}", e.getMessage(), HttpStatus.BAD_REQUEST);
+            ApiResponse<UserResponseDto> errorResponse = ApiResponse.<UserResponseDto>error(e.getMessage(), HttpStatus.BAD_REQUEST);
+            log.debug("Created error response: message='{}', status={}", errorResponse.getMessage(), errorResponse.getStatus());
             return ResponseEntity.badRequest()
-                    .body(ApiResponse.<UserResponseDto>error(e.getMessage(), HttpStatus.BAD_REQUEST));
+                    .body(errorResponse);
         }
     }
 
@@ -91,7 +105,7 @@ public class UserController {
             existingUser = userMapper.updateUserFromRequest(existingUser, updateRequest);
             User updatedUser = userService.updateUser(existingUser);
             return ResponseEntity.ok(ApiResponse.success(userMapper.toResponseDto(updatedUser)));
-        } catch (IllegalArgumentException e) {
+        } catch (UserValidationException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(ApiResponse.<UserResponseDto>error(e.getMessage(), HttpStatus.NOT_FOUND));
         }
