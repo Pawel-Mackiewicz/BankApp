@@ -18,8 +18,12 @@ import info.mackiewicz.bankapp.transaction.exception.TransactionDestinationAccou
 import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionSourceAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionTypeNotSpecifiedException;
+import info.mackiewicz.bankapp.shared.dto.ApiResponse;
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.exception.UserValidationException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @RestControllerAdvice(basePackages = "info.mackiewicz.bankapp.api")
 public class ApiExceptionHandler {
@@ -107,10 +111,31 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(UserValidationException.class)
+    public ResponseEntity<ApiResponse<?>> handleUserValidationException(UserValidationException ex) {
+        logger.error("User validation error: {}", ex.getMessage(), ex);
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.error(ex.getMessage(), HttpStatus.BAD_REQUEST));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        BindingResult bindingResult = ex.getBindingResult();
+        String errorMessage = bindingResult.getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .reduce((msg1, msg2) -> msg1 + "; " + msg2)
+                .orElse("Validation failed");
+                
+        logger.error("Validation error: {}", errorMessage);
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.error(errorMessage, HttpStatus.BAD_REQUEST));
+    }
+
     // Global Exception Handler for all other exceptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleAllExceptions(Exception ex) {
+    public ResponseEntity<ApiResponse<?>> handleAllExceptions(Exception ex) {
         logger.error("An exception occurred: {}", ex.getMessage(), ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR));
     }
 }
