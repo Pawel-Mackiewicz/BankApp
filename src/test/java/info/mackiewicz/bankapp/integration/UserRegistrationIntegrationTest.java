@@ -9,13 +9,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +28,33 @@ import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.testutils.TestUserRegistrationDtoBuilder;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
-class UserRegistrationIntegrationTest {
+@TestPropertySource(locations = "classpath:application-test.properties")
+public class UserRegistrationIntegrationTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserRegistrationIntegrationTest.class);
 
     @Autowired
     private MockMvc mockMvc;
     
-    @MockitoBean
+    @MockBean
     private EmailService emailService;
+
+    @BeforeAll
+    static void beforeAll() {
+        logger.info("Initializing test suite for UserRegistrationIntegrationTest");
+    }
+
+    @BeforeEach
+    void setUp() {
+        logger.info("Setting up test context for UserRegistrationIntegrationTest");
+        logger.info("MockMvc status: {}", mockMvc != null ? "initialized" : "null");
+        logger.info("EmailService mock status: {}", emailService != null ? "initialized" : "null");
+    }
     
     @Test
     void shouldSuccessfullyRegisterNewUser() throws Exception {

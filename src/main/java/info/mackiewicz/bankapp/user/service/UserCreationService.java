@@ -49,6 +49,7 @@ public class UserCreationService {
      * @throws IllegalArgumentException if any unique fields (username, email, PESEL) already exist
      * @throws IllegalStateException if required fields are missing or invalid
      */
+    //TODO: REFACTOR: This method is too long and should be split into smaller methods
     @Transactional
     User createUser(User user) {
         log.info("Starting user creation process for email: {}", user.getEmail());

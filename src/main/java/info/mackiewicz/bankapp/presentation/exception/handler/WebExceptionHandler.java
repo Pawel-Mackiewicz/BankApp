@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception.handlers;
+package info.mackiewicz.bankapp.presentation.exception.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +12,9 @@ import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.exception.UserValidationException;
 
-@ControllerAdvice(basePackages = "info.mackiewicz.bankapp.web")
+@ControllerAdvice(basePackages = "info.mackiewicz.bankapp.presentation")
 public class WebExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(WebExceptionHandler.class);
@@ -23,6 +24,12 @@ public class WebExceptionHandler {
     public ModelAndView handleUserNotFoundException(UserNotFoundException ex) {
         logger.error("User not found: {}", ex.getMessage(), ex);
         return createErrorModelAndView("User not found", ex.getMessage());
+    }
+
+    @ExceptionHandler(UserValidationException.class)
+    public ModelAndView handleUserValidationException(UserValidationException ex) {
+        logger.error("User validation error: {}", ex.getMessage(), ex);
+        return createErrorModelAndView("User validation error", ex.getMessage());
     }
 
     @ExceptionHandler(DuplicatedUserException.class)

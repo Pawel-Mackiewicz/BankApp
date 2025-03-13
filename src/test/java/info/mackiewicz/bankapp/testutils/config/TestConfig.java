@@ -1,19 +1,21 @@
 package info.mackiewicz.bankapp.testutils.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import info.mackiewicz.bankapp.notification.email.EmailSender;
-import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
-import info.mackiewicz.bankapp.shared.exception.handlers.RestExceptionHandler;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import info.mackiewicz.bankapp.shared.util.ResponseBuilder;
-import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
-import info.mackiewicz.bankapp.shared.interceptor.LoggingInterceptor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import info.mackiewicz.bankapp.notification.email.EmailSender;
+import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
+import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
+import info.mackiewicz.bankapp.shared.exception.handlers.RestExceptionHandler;
+import info.mackiewicz.bankapp.shared.interceptor.LoggingInterceptor;
+import info.mackiewicz.bankapp.shared.util.ApiResponseBuilder;
 
 @TestConfiguration
 @EnableWebMvc
@@ -31,8 +33,8 @@ public class TestConfig {
 
     @Bean
     @Primary
-    public ResponseBuilder responseBuilder() {
-        return new ResponseBuilder();
+    public ApiResponseBuilder responseBuilder() {
+        return new ApiResponseBuilder();
     }
     
     @Bean

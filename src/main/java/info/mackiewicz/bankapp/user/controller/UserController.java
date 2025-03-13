@@ -1,9 +1,22 @@
 package info.mackiewicz.bankapp.user.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.shared.dto.ApiResponse;
-import info.mackiewicz.bankapp.shared.util.ResponseBuilder;
+import info.mackiewicz.bankapp.shared.util.ApiResponseBuilder;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
@@ -11,11 +24,6 @@ import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;
 import info.mackiewicz.bankapp.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing user operations.
@@ -29,7 +37,7 @@ public class UserController {
     private final UserService userService;
     private final UserRegistrationService registrationService;
     private final UserMapper userMapper;
-    private final ResponseBuilder responseBuilder;
+    private final ApiResponseBuilder responseBuilder;
 
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponseDto>> createUser(

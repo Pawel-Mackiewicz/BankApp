@@ -1,10 +1,11 @@
 package info.mackiewicz.bankapp.shared.util;
 
-import info.mackiewicz.bankapp.shared.dto.ApiResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import info.mackiewicz.bankapp.shared.dto.ApiResponse;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Utility class for building consistent HTTP responses across the application.
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class ResponseBuilder {
+public class ApiResponseBuilder {
 
     /**
      * Creates a response entity with CREATED status
