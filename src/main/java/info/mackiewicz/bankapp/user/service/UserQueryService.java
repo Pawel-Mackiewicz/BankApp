@@ -11,6 +11,7 @@ import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -196,6 +197,13 @@ public class UserQueryService {
         log.debug("Checking if user exists by Pesel object: {}", pesel);
         boolean exists = userRepository.existsByPesel(pesel);
         log.debug("User with PESEL {} {} in the system", pesel, exists ? "exists" : "does not exist");
+        return exists;
+    }
+
+    public boolean userExistsByPhoneNumber(PhoneNumber phoneNumber) {
+        log.debug("Checking if user exists by phone number: {}", phoneNumber);
+        boolean exists = userRepository.existsByPhoneNumber(phoneNumber);
+        log.debug("User with phone number {} {} in the system", phoneNumber, exists ? "exists" : "does not exist");
         return exists;
     }
 }

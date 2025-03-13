@@ -12,11 +12,13 @@ import jakarta.persistence.LockModeType;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByPesel(Pesel pesel);
     boolean existsByEmail(Email email);
     boolean existsByUsername(String username);
+    boolean existsByPhoneNumber(PhoneNumber phoneNumber);
         
     Optional<User> getUserById(Integer id);
 

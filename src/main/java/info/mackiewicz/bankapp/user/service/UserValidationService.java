@@ -7,6 +7,7 @@ import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,8 +52,20 @@ public class UserValidationService {
         if (user.getPesel() != null) {
             validatePeselUnique(user.getPesel());
         }
+        if (user.getPhoneNumber() != null) {
+            validatePhoneNumberUnique(user.getPhoneNumber());
+        }
 
         log.info("Successfully completed validation for new user registration");
+    }
+
+    private void validatePhoneNumberUnique(PhoneNumber phoneNumber) {
+        log.debug("Validating phone number uniqueness: {}", phoneNumber);
+        if (userQueryService.userExistsByPhoneNumber(phoneNumber)) {
+            log.warn("Attempt to use existing phone number: {}", phoneNumber);
+            throw new UserValidationException("Phone number already in use: " + phoneNumber);
+        }
+        log.debug("Phone number {} is unique", phoneNumber);
     }
 
     /**

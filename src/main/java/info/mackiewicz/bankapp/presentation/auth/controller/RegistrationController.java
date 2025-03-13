@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.presentation.auth.controller;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
+import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class RegistrationController {
             redirectAttributes.addFlashAttribute("success", "Registration successful! You can now log in. ");
             redirectAttributes.addFlashAttribute("username", String.format("Your username is: %s",createdUser.getUsername()));
             return "redirect:/login";
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | UserValidationException e) {
             logger.error("Registration error: {}", e.getMessage());
             model.addAttribute("error", e.getMessage());
             return "registration";

@@ -1,8 +1,11 @@
 package info.mackiewicz.bankapp.user.service;
 
 import java.text.Normalizer;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
+
+import com.ibm.icu.text.Transliterator;
 
 import info.mackiewicz.bankapp.user.model.User;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +27,14 @@ public class UsernameGeneratorService {
 
     /**
      * Generates and sets a username for the given user based on their personal information.
-     * The username is created using firstname, lastname and email.
+     * The username is created using firstname, lastname and email. Diacritical marks are removed.
      *
      * @param user The user object containing firstname, lastname and email
      * @return The user object with generated username set
      * @throws IllegalArgumentException if firstname, lastname or email is null
      */
     public User generateUsername(User user) {
+        Objects.requireNonNull(user, "User cannot be null");
         log.debug("Starting username generation for user with email: {}", user.getEmail());
         String username = generateUsername(user.getFirstname(), user.getLastname(), user.getEmail().toString());
         user.setUsername(username);
@@ -49,6 +53,9 @@ public class UsernameGeneratorService {
      * @throws IllegalArgumentException if any parameter is null
      */
     public String generateUsername(String firstname, String lastname, String email) {
+        if (firstname == null || lastname == null || email == null) {
+            throw new IllegalArgumentException("Firstname, lastname and email cannot be null");
+        }
         log.debug("Generating username for firstname: {}, lastname: {}", firstname, lastname);
         String baseUsername = generateBaseUsername(firstname, lastname);
         log.debug("Generated base username: {}", baseUsername);
@@ -79,31 +86,39 @@ public class UsernameGeneratorService {
     /**
      * Removes diacritical marks from text while preserving base characters.
      * For example: "żółć" becomes "zolc"
+     * Also handles special characters and spaces:
+     * - Removes apostrophes and other special characters
+     * - Replaces spaces with hyphens
      *
      * @param text The text to process
-     * @return Text with diacritical marks removed
+     * @return Text with diacritical marks and special characters removed
      */
     private String removeDiacritics(String text) {
         log.trace("Removing diacritics from: {}", text);
-        String normalized = Normalizer.normalize(text, Normalizer.Form.NFD);
-        String result = normalized.replaceAll("\\p{M}", "");
-        log.trace("Text after removing diacritics: {} -> {}", text, result);
-        return result;
+        if (text == null) {
+            return "";
+        }
+
+        log.trace("Removing diacritics from: {}", text);
+        Transliterator transliterator = Transliterator.getInstance("Any-Latin; Latin-ASCII");
+        String transformedText = transliterator.transform(text);
+        transformedText = transformedText.replaceAll("[^a-zA-Z0-9]", "");
+        log.trace("Diacritics removed: {}", transformedText);
+        return transformedText;
     }
 
     /**
      * Generates a unique identifier based on email hash.
-     * Returns up to 6 digits to keep usernames reasonably short.
+     * Returns exactly 6 digits, using modulo to ensure consistent length.
      *
      * @param email The email to use for generating unique ID
-     * @return A string of up to 6 digits
+     * @return A string of exactly 6 digits
      */
     private String generateUniqueID(String email) {
         log.trace("Generating unique ID for email: {}", email);
-        int hash = email.hashCode();
-        String sHash = Integer.toString(hash);
-        String result = sHash.length() > 6 ? sHash.substring(0, 6) : sHash;
-        log.trace("Generated unique ID: {} (from hash: {})", result, hash);
-        return result;
+        int hash = Math.abs(email.hashCode());
+        String sHash = String.format("%06d", hash % 1000000);
+        log.trace("Generated unique ID: {} (from hash: {})", sHash, hash);
+        return sHash;
     }
 }
