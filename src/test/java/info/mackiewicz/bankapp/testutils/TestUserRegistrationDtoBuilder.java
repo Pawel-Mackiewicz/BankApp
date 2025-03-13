@@ -13,7 +13,7 @@ public class TestUserRegistrationDtoBuilder {
         dto.setDateOfBirth(LocalDate.of(1990, 1, 1));
         dto.setPesel("90010112345");
         dto.setEmail("jan.kowalski@example.com");
-        dto.setPhoneNumber("+48123456789");
+        dto.setPhoneNumber("123456789");
         dto.setPassword("Test123!@#");
         dto.setConfirmPassword("Test123!@#");
         return dto;
@@ -33,13 +33,13 @@ public class TestUserRegistrationDtoBuilder {
     
     public static UserRegistrationDto createWithInvalidPesel() {
         UserRegistrationDto dto = createValid();
-        dto.setPesel("1234"); // Za krótki PESEL
+        dto.setPesel("1234"); // Too short PESEL
         return dto;
     }
     
     public static UserRegistrationDto createWithInvalidPhoneNumber() {
         UserRegistrationDto dto = createValid();
-        dto.setPhoneNumber("123"); // Nieprawidłowy format
+        dto.setPhoneNumber("123"); // Invalid phone number
         return dto;
     }
     
@@ -51,7 +51,7 @@ public class TestUserRegistrationDtoBuilder {
     
     public static UserRegistrationDto createWithInvalidAge() {
         UserRegistrationDto dto = createValid();
-        dto.setDateOfBirth(LocalDate.now().minusYears(17)); // Osoba niepełnoletnia
+        dto.setDateOfBirth(LocalDate.now().minusYears(17)); // Minor user
         return dto;
     }
 }
