@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.user.service;
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
@@ -31,7 +32,7 @@ public class UserValidationService {
      * Validates uniqueness of username, email and PESEL if they are provided.
      *
      * @param user The user object to validate
-     * @throws IllegalArgumentException if any of the unique fields (username,
+     * @throws UserValidationException if any of the unique fields (username,
      *                                  email, PESEL) already exist
      * @see User
      */
@@ -58,13 +59,13 @@ public class UserValidationService {
      * Validates that the given username is unique in the system.
      *
      * @param username The username to validate
-     * @throws IllegalArgumentException if the username already exists
+     * @throws UserValidationException if the username already exists
      */
     public void validateUsernameUnique(String username) {
         log.debug("Validating username uniqueness: {}", username);
         if (userQueryService.userExistsByUsername(username)) {
             log.warn("Attempt to use existing username: {}", username);
-            throw new IllegalArgumentException("Username already exists: " + username);
+            throw new UserValidationException("Username already in use: " + username);
         }
         log.debug("Username {} is unique", username);
     }
@@ -73,14 +74,14 @@ public class UserValidationService {
      * Validates that the given email address is unique in the system.
      *
      * @param email The email to validate as Email value object
-     * @throws IllegalArgumentException if the email already exists
+     * @throws UserValidationException if the email already exists
      * @see Email
      */
     public void validateEmailUnique(Email email) {
         log.debug("Validating email uniqueness: {}", email);
         if (userQueryService.userExistsByEmail(email)) {
             log.warn("Attempt to use existing email: {}", email);
-            throw new IllegalArgumentException("Email already exists: " + email);
+            throw new UserValidationException("Email already in use");
         }
         log.debug("Email {} is unique", email);
     }
@@ -89,14 +90,14 @@ public class UserValidationService {
      * Validates that the given PESEL number is unique in the system.
      *
      * @param pesel The PESEL to validate as Pesel value object
-     * @throws IllegalArgumentException if the PESEL already exists
+     * @throws UserValidationException if the PESEL already exists
      * @see Pesel
      */
     public void validatePeselUnique(Pesel pesel) {
         log.debug("Validating PESEL uniqueness: {}", pesel);
         if (userQueryService.userExistsByPesel(pesel)) {
             log.warn("Attempt to use existing PESEL: {}", pesel);
-            throw new IllegalArgumentException("PESEL already exists: " + pesel);
+            throw new UserValidationException("PESEL already in use: " + pesel);
         }
         log.debug("PESEL {} is unique", pesel);
     }

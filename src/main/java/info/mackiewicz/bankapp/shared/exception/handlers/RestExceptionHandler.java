@@ -8,12 +8,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
+import info.mackiewicz.bankapp.user.exception.UserValidationException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
 
     @ExceptionHandler(InvalidUserException.class)
     public ResponseEntity<String> handleInvalidUserException(InvalidUserException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+    
+    @ExceptionHandler(UserValidationException.class)
+    public ResponseEntity<String> handleUserValidationException(UserValidationException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
     
