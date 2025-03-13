@@ -24,6 +24,9 @@ class UserOperationsServiceTest {
     @Mock
     private UserQueryService userQueryService;
 
+    @Mock
+    private UserValidationService userValidationService;
+
     @InjectMocks
     private UserOperationsService userOperationsService;
 
@@ -44,6 +47,7 @@ class UserOperationsServiceTest {
         savedUser.setId(1);
         savedUser.setPassword("encodedPassword");
 
+        doNothing().when(userValidationService).validateUserExists(1);
         when(passwordService.ensurePasswordEncoded(user)).thenReturn(encodedUser);
         when(userRepository.save(encodedUser)).thenReturn(savedUser);
 
@@ -76,6 +80,7 @@ class UserOperationsServiceTest {
         User user = new User();
         user.setId(userId);
 
+        doNothing().when(userValidationService).validateUserExists(userId);
         when(userQueryService.getUserById(userId)).thenReturn(user);
         doNothing().when(userRepository).delete(user);
 

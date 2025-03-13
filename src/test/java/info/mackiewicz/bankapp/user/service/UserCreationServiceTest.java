@@ -23,6 +23,9 @@ class UserCreationServiceTest {
 
     @Mock
     private UsernameGeneratorService usernameGeneratorService;
+    
+    @Mock
+    private UserValidationService userValidationService;
 
     @InjectMocks
     private UserCreationService userCreationService;
@@ -52,6 +55,7 @@ class UserCreationServiceTest {
         savedUser.setUsername("generatedUsername");
 
         // When
+        doNothing().when(userValidationService).validateNewUser(inputUser);
         when(usernameGeneratorService.generateUsername(inputUser)).thenReturn(userWithGeneratedUsername);
         when(passwordService.ensurePasswordEncoded(userWithGeneratedUsername)).thenReturn(userWithEncodedPassword);
         when(userRepository.save(userWithEncodedPassword)).thenReturn(savedUser);
@@ -86,6 +90,7 @@ class UserCreationServiceTest {
         savedUser.setPassword("encodedPassword");
 
         // When
+        doNothing().when(userValidationService).validateNewUser(inputUser);
         when(passwordService.ensurePasswordEncoded(inputUser)).thenReturn(userWithEncodedPassword);
         when(userRepository.save(userWithEncodedPassword)).thenReturn(savedUser);
 

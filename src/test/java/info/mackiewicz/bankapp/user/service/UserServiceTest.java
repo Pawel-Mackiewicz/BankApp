@@ -47,12 +47,10 @@ class UserServiceTest {
         User savedUser = new User();
         savedUser.setId(1);
 
-        doNothing().when(userValidationService).validateNewUser(user);
         when(userCreationService.createUser(user)).thenReturn(savedUser);
 
         userService.createUser(user);
 
-        verify(userValidationService).validateNewUser(user);
         verify(userCreationService).createUser(user);
         logger.info("testCreateUser: Test passed");
     }
@@ -65,12 +63,10 @@ class UserServiceTest {
         User updatedUser = new User();
         updatedUser.setId(1);
 
-        doNothing().when(userValidationService).validateUserExists(user.getId());
         when(userOperationsService.updateUser(user)).thenReturn(updatedUser);
 
         userService.updateUser(user);
 
-        verify(userValidationService).validateUserExists(user.getId());
         verify(userOperationsService).updateUser(user);
         logger.info("testUpdateUser: Test passed");
     }
