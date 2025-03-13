@@ -33,5 +33,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Transactional
     @Query("UPDATE User u SET u.password = ?2 WHERE u.email = ?1")
-    void updatePasswordByEmail(String email, String newPassword);
+    void updatePasswordByEmail(Email email, String newPassword);
 }

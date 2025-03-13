@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import info.mackiewicz.bankapp.account.exception.handler.AccountExceptionHandler;
 import info.mackiewicz.bankapp.notification.email.EmailSender;
 import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
 import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
@@ -33,13 +34,18 @@ public class TestConfig {
 
     @Bean
     @Primary
-    public ApiResponseBuilder responseBuilder() {
+    public ApiResponseBuilder apiResponseBuilder() {
         return new ApiResponseBuilder();
     }
     
     @Bean
     public ApiExceptionHandler apiExceptionHandler() {
         return new ApiExceptionHandler();
+    }
+
+    @Bean
+    public AccountExceptionHandler accountExceptionHandler() {
+        return new AccountExceptionHandler();
     }
 
     @Bean

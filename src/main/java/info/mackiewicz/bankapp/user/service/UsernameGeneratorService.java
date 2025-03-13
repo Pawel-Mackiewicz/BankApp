@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.user.service;
 
-import java.text.Normalizer;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;

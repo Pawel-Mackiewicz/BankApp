@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,7 +48,6 @@ import lombok.Setter;
 @Setter
 @MappedSuperclass
 public abstract class BaseUser implements UserDetails {
-
     /**
      * Unique identifier for the user entity.
      */
@@ -105,6 +106,7 @@ public abstract class BaseUser implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     protected Set<String> roles;
 
     /**
@@ -193,7 +195,7 @@ public abstract class BaseUser implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-    
+
     @Override
     public abstract boolean equals(Object o);
 

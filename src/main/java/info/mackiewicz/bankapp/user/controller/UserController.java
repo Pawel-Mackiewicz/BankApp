@@ -37,19 +37,19 @@ public class UserController {
     private final UserService userService;
     private final UserRegistrationService registrationService;
     private final UserMapper userMapper;
-    private final ApiResponseBuilder responseBuilder;
+    private final ApiResponseBuilder apiResponseBuilder;
 
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
             @Valid @RequestBody UserRegistrationDto registrationDto) {
         User created = registrationService.registerUser(registrationDto);
-        return responseBuilder.created(userMapper.toResponseDto(created));
+        return apiResponseBuilder.created(userMapper.toResponseDto(created));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(@PathVariable Integer id) {
         User user = userService.getUserById(id);
-        return responseBuilder.ok(userMapper.toResponseDto(user));
+        return apiResponseBuilder.ok(userMapper.toResponseDto(user));
     }
 
     @GetMapping
@@ -57,7 +57,7 @@ public class UserController {
         List<UserResponseDto> users = userService.getAllUsers().stream()
                 .map(userMapper::toResponseDto)
                 .collect(Collectors.toList());
-        return responseBuilder.ok(users);
+        return apiResponseBuilder.ok(users);
     }
 
     @PutMapping("/{id}")
@@ -67,12 +67,12 @@ public class UserController {
         User existingUser = userService.getUserById(id);
         existingUser = userMapper.updateUserFromRequest(existingUser, updateRequest);
         User updatedUser = userService.updateUser(existingUser);
-        return responseBuilder.ok(userMapper.toResponseDto(updatedUser));
+        return apiResponseBuilder.ok(userMapper.toResponseDto(updatedUser));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
-        return responseBuilder.deleted();
+        return apiResponseBuilder.deleted();
     }
 }
