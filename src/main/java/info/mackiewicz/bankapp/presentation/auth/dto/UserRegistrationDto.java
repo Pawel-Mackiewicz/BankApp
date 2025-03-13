@@ -34,7 +34,7 @@ public class UserRegistrationDto {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Please provide a valid email address")
-    private String email;
+    public String email;
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^(\\+48\\d{9}|0\\d{9}|[1-9]\\d{8})$", 

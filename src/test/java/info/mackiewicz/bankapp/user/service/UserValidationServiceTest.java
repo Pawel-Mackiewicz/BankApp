@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
@@ -44,7 +45,7 @@ class UserValidationServiceTest {
             when(userQueryService.userExistsByUsername(username)).thenReturn(true);
 
             // when & then
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(UserValidationException.class,
                     () -> userValidationService.validateUsernameUnique(username));
 
             verify(userQueryService).userExistsByUsername(username);
@@ -77,7 +78,7 @@ class UserValidationServiceTest {
             when(userQueryService.userExistsByEmail(email)).thenReturn(true);
 
             // when & then
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(UserValidationException.class,
                     () -> userValidationService.validateEmailUnique(email));
 
             verify(userQueryService).userExistsByEmail(email);
@@ -110,7 +111,7 @@ class UserValidationServiceTest {
             when(userQueryService.userExistsByPesel(pesel)).thenReturn(true);
 
             // when & then
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(UserValidationException.class,
                     () -> userValidationService.validatePeselUnique(pesel));
 
             verify(userQueryService).userExistsByPesel(pesel);
@@ -169,7 +170,7 @@ class UserValidationServiceTest {
             when(userQueryService.userExistsByUsername(user.getUsername())).thenReturn(true);
 
             // when & then
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(UserValidationException.class,
                     () -> userValidationService.validateNewUser(user));
 
             verify(userQueryService).userExistsByUsername(user.getUsername());
@@ -190,7 +191,7 @@ class UserValidationServiceTest {
             when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(true);
 
             // when & then
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(UserValidationException.class,
                     () -> userValidationService.validateNewUser(user));
 
             verify(userQueryService).userExistsByUsername(user.getUsername());
@@ -212,7 +213,7 @@ class UserValidationServiceTest {
             when(userQueryService.userExistsByPesel(user.getPesel())).thenReturn(true);
 
             // when & then
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(UserValidationException.class,
                     () -> userValidationService.validateNewUser(user));
 
             verify(userQueryService).userExistsByUsername(user.getUsername());

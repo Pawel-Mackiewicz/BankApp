@@ -1,15 +1,25 @@
 package info.mackiewicz.bankapp.shared.dto;
 
 import lombok.Builder;
-import lombok.Value;
 import org.springframework.http.HttpStatus;
 
-@Value
 @Builder(setterPrefix = "with")
 public class ApiResponse<T> {
-    T data;
-    String message;
-    HttpStatus status;
+    private final T data;
+    private final String message;
+    private final HttpStatus status;
+
+    public T getData() {
+        return data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
 
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
