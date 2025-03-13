@@ -25,16 +25,17 @@ import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-@RestControllerAdvice(basePackages = "info.mackiewicz.bankapp.api")
+@RestControllerAdvice(basePackages = "info.mackiewicz.bankapp")
 public class ApiExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     // Handling User Exceptions
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+    public ResponseEntity<ApiResponse<?>> handleUserNotFoundException(UserNotFoundException ex) {
         logger.error("User not found: {}", ex.getMessage(), ex);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(ex.getMessage(), HttpStatus.NOT_FOUND));
     }
 
     @ExceptionHandler(DuplicatedUserException.class)
@@ -132,6 +133,13 @@ public class ApiExceptionHandler {
     }
 
     // Global Exception Handler for all other exceptions
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<?>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        logger.error("An illegal argument error occurred: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(ex.getMessage(), HttpStatus.NOT_FOUND));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<?>> handleAllExceptions(Exception ex) {
         logger.error("An exception occurred: {}", ex.getMessage(), ex);

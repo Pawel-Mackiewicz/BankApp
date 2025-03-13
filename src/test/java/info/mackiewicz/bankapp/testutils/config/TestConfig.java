@@ -10,11 +10,30 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import info.mackiewicz.bankapp.shared.util.ResponseBuilder;
+import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
+import info.mackiewicz.bankapp.shared.interceptor.LoggingInterceptor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @TestConfiguration
 @EnableWebMvc
 public class TestConfig {
+
+    @Bean
+    public LoggingInterceptor loggingInterceptor() {
+        return new LoggingInterceptor();
+    }
+
+    @Bean
+    public WebMvcConfig webMvcConfig(LoggingInterceptor loggingInterceptor) {
+        return new WebMvcConfig(loggingInterceptor);
+    }
+
+    @Bean
+    @Primary
+    public ResponseBuilder responseBuilder() {
+        return new ResponseBuilder();
+    }
     
     @Bean
     public RestExceptionHandler restExceptionHandler() {
