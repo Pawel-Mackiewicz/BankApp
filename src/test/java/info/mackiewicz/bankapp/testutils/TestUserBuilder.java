@@ -53,6 +53,23 @@ public class TestUserBuilder {
         return user;
     }
 
+    /**
+     * Creates a system user for bank account testing
+     * @return User representing the system/bank
+     */
+    public static User createSystemUser() {
+        User user = new User();
+        user.setId(0);
+        user.setFirstname("System");
+        user.setLastname("Bank");
+        user.setEmail(new Email("system@bank.com"));
+        user.setPesel(new Pesel("00000000000"));
+        user.setPhoneNumber(new PhoneNumber("000000000"));
+        user.setPassword("SystemBank123!");
+        user.setUsername("system");
+        return user;
+    }
+
     public static String generateRandomEmail() {
         String username = generateRandomString(8);
         return username + "@" + DOMAIN;
