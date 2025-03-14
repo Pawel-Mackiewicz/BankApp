@@ -27,10 +27,7 @@ public class UserRegistrationService {
     private final TransactionService transactionService;
     private final EmailService emailService;
 
-    // Only allow letters (English and Polish)
-    private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
 
-    //TODO: ADD VALIDATION FOR NAME AND SURNAME (BUT WHERE?)
     public User registerUser(UserRegistrationDto registrationDto) {
         log.info("Starting user registration process for email: {}", registrationDto.getEmail());
         
@@ -62,9 +59,5 @@ public class UserRegistrationService {
         log.info("Completed user registration process for user: {}", createdUser.getUsername());
 
         return createdUser;
-    }
-
-    private boolean isValidLetters(String input) {
-        return input != null && input.matches(LETTERS_REGEX);
     }
 }
