@@ -29,6 +29,7 @@ public class TransactionErrorHandler {
         log.warn("Transaction {} failed: Insufficient funds - {}", transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.INSUFFICIENT_FUNDS);
         errorNotifier.notifyError(transaction, e);
+        throw e;
     }
 
     /**
@@ -39,18 +40,9 @@ public class TransactionErrorHandler {
         log.warn("Transaction {} validation failed: {}", transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.VALIDATION_ERROR);
         errorNotifier.notifyError(transaction, e);
+        throw new RuntimeException("Validation error for transaction " + transaction.getId(), e);
     }
 
-    /**
-     * Handles transaction execution errors.
-     * These are system errors as they represent unexpected runtime issues.
-     */
-    public void handleSystemError(Transaction transaction, Exception e) {
-        log.error("Transaction {} execution failed: {}", transaction.getId(), e.getMessage());
-        statusManager.setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
-        errorNotifier.notifyError(transaction, e);
-    }
-    
     /**
      * Handles unexpected errors during transaction processing.
      * These are system errors, logged as ERROR.
@@ -58,29 +50,32 @@ public class TransactionErrorHandler {
     public void handleUnexpectedError(Transaction transaction, Exception e) {
         log.error("Transaction {} failed with unexpected error: {}", transaction.getId(), e.getMessage(), e);
         statusManager.setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
-        errorNotifier.notifyError(transaction, new RuntimeException("Unexpected error during transaction processing", e));
+        errorNotifier.notifyError(transaction, e);
+        throw new RuntimeException("Unexpected error during transaction processing", e);
     }
-    
+
     /**
      * Handles account lock acquisition errors.
      * These are concurrency-related errors, logged as WARN.
      */
     public void handleLockError(Transaction transaction, AccountLockException e) {
-        log.warn("Failed to acquire lock for account {} in transaction {}: {}", 
-            e.getAccountId(), transaction.getId(), e.getMessage());
+        log.warn("Failed to acquire lock for account {} in transaction {}: {}",
+                e.getAccountId(), transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
         errorNotifier.notifyError(transaction, e);
+        throw e;
     }
-    
+
     /**
      * Handles unexpected lock-related errors.
      * These are system errors, logged as ERROR.
      */
     public void handleUnexpectedLockError(Transaction transaction, Exception e) {
-        log.error("Unexpected error while acquiring locks for transaction {}: {}", 
-            transaction.getId(), e.getMessage(), e);
+        log.error("Unexpected error while acquiring locks for transaction {}: {}",
+                transaction.getId(), e.getMessage(), e);
         statusManager.setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
         errorNotifier.notifyError(transaction, e);
+        throw new RuntimeException("Unexpected lock error for transaction " + transaction.getId(), e);
     }
 
     /**
@@ -88,10 +83,11 @@ public class TransactionErrorHandler {
      * These are concurrency-related errors, logged as WARN.
      */
     public void handleUnlockError(Transaction transaction, AccountUnlockException e) {
-        log.warn("Failed to release lock for account {} in transaction {}: {}", 
-            e.getAccountId(), transaction.getId(), e.getMessage());
+        log.warn("Failed to release lock for account {} in transaction {}: {}",
+                e.getAccountId(), transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
         errorNotifier.notifyError(transaction, e);
+        throw e;
     }
 
     /**
@@ -99,8 +95,8 @@ public class TransactionErrorHandler {
      * These are system errors, logged as ERROR.
      */
     public void handleUnexpectedUnlockError(Transaction transaction, Exception e) {
-        log.error("Unexpected error while releasing locks for transaction {}: {}", 
-            transaction.getId(), e.getMessage(), e);
+        log.error("Unexpected error while releasing locks for transaction {}: {}",
+                transaction.getId(), e.getMessage(), e);
         statusManager.setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
         errorNotifier.notifyError(transaction, e);
     }
@@ -113,6 +109,7 @@ public class TransactionErrorHandler {
         log.warn("Failed to update status for transaction {}: {}", transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
         errorNotifier.notifyError(transaction, e);
+        throw new RuntimeException("Error while changing transaction status", e);
     }
 
 }
