@@ -2,14 +2,17 @@ package info.mackiewicz.bankapp.presentation.exception.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import info.mackiewicz.bankapp.transaction.exception.*;
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
+import info.mackiewicz.bankapp.presentation.exception.handler.dto.ErrorResponse;
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.exception.UserValidationException;
@@ -19,76 +22,135 @@ public class WebExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(WebExceptionHandler.class);
 
-    // Handling User Exceptions
+    // Handling User Validation Exceptions
+    @ExceptionHandler({
+        UserValidationException.class,
+        InvalidUserException.class,
+        DuplicatedUserException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView handleUserValidationExceptions(Exception ex) {
+        logger.error("User validation error: {}", ex.getMessage(), ex);
+        return createErrorModelAndView(
+            "User Validation Error",
+            ex.getMessage(),
+            HttpStatus.BAD_REQUEST
+        );
+    }
+
+    // Handling User Not Found Exception
     @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleUserNotFoundException(UserNotFoundException ex) {
         logger.error("User not found: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("User not found", ex.getMessage());
+        return createErrorModelAndView(
+            "User Not Found",
+            ex.getMessage(),
+            HttpStatus.NOT_FOUND
+        );
     }
 
-    @ExceptionHandler(UserValidationException.class)
-    public ModelAndView handleUserValidationException(UserValidationException ex) {
-        logger.error("User validation error: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("User validation error", ex.getMessage());
+    // Handling Account Not Found Exceptions
+    @ExceptionHandler({
+        AccountNotFoundByIdException.class,
+        OwnerAccountsNotFoundException.class
+    })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ModelAndView handleAccountNotFoundExceptions(Exception ex) {
+        logger.error("Account not found: {}", ex.getMessage(), ex);
+        return createErrorModelAndView(
+            "Account Not Found",
+            ex.getMessage(),
+            HttpStatus.NOT_FOUND
+        );
     }
 
-    @ExceptionHandler(DuplicatedUserException.class)
-    public ModelAndView handleDuplicatedUserException(DuplicatedUserException ex) {
-        logger.error("Duplicate user error: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("User already exists", ex.getMessage());
-    }
-
-    @ExceptionHandler(InvalidUserException.class)
-    public ModelAndView handleInvalidUserException(InvalidUserException ex) {
-        logger.error("Invalid user error: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("Invalid user data", ex.getMessage());
-    }
-
-    // Handling Account Exceptions
-    @ExceptionHandler(AccountNotFoundByIdException.class)
-    public ModelAndView handleAccountNotFoundByIdException(AccountNotFoundByIdException ex) {
-        logger.error("Account not found by ID: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("Account not found", ex.getMessage());
-    }
-
-    @ExceptionHandler(OwnerAccountsNotFoundException.class)
-    public ModelAndView handleOwnerAccountsNotFoundException(OwnerAccountsNotFoundException ex) {
-        logger.error("Owner accounts not found: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("No accounts found", ex.getMessage());
-    }
-
-    // Handling Transaction Exceptions
+    // Handling Transaction Not Found Exception
     @ExceptionHandler(TransactionNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleTransactionNotFoundException(TransactionNotFoundException ex) {
         logger.error("Transaction not found: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("Transaction not found", ex.getMessage());
+        return createErrorModelAndView(
+            "Transaction Not Found",
+            ex.getMessage(),
+            HttpStatus.NOT_FOUND
+        );
     }
 
+    // Handling Transaction Validation Exceptions
     @ExceptionHandler({
-        NoTransactionsForAccountException.class,
-        TransactionAlreadyProcessedException.class,
-        TransactionCannotBeProcessedException.class,
+        TransactionValidationException.class,
         TransactionAmountNotSpecifiedException.class,
         TransactionTypeNotSpecifiedException.class,
         TransactionSourceAccountNotSpecifiedException.class,
-        TransactionDestinationAccountNotSpecifiedException.class
+        TransactionDestinationAccountNotSpecifiedException.class,
+        InvalidTransactionTypeException.class
     })
-    public ModelAndView handleTransactionExceptions(Exception ex) {
-        logger.error("Transaction error: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("Transaction Error", ex.getMessage());
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView handleTransactionValidationExceptions(Exception ex) {
+        logger.error("Transaction validation error: {}", ex.getMessage(), ex);
+        return createErrorModelAndView(
+            "Transaction Validation Error",
+            ex.getMessage(),
+            HttpStatus.BAD_REQUEST
+        );
+    }
+
+    // Handling Transaction Processing Exceptions
+    @ExceptionHandler({
+        TransactionAlreadyProcessedException.class,
+        TransactionCannotBeProcessedException.class,
+        TransactionExecutionException.class,
+        NoTransactionsForAccountException.class
+    })
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ModelAndView handleTransactionProcessingExceptions(Exception ex) {
+        logger.error("Transaction processing error: {}", ex.getMessage(), ex);
+        return createErrorModelAndView(
+            "Transaction Processing Error",
+            ex.getMessage(),
+            HttpStatus.CONFLICT
+        );
+    }
+
+    // Handling Transaction Business Logic Exceptions
+    @ExceptionHandler({
+        InsufficientFundsException.class,
+        InvalidOperationException.class,
+        TransactionIsNotInternalException.class
+    })
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ModelAndView handleTransactionBusinessExceptions(Exception ex) {
+        logger.error("Transaction business error: {}", ex.getMessage(), ex);
+        return createErrorModelAndView(
+            "Transaction Business Error",
+            ex.getMessage(),
+            HttpStatus.UNPROCESSABLE_ENTITY
+        );
     }
 
     // Global Exception Handler for all other exceptions
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView handleAllExceptions(Exception ex) {
         logger.error("An exception occurred: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("Error", "An unexpected error occurred. Please try again later.");
+        return createErrorModelAndView(
+            "Internal Server Error",
+            "An unexpected error occurred. Please try again later.",
+            HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 
-    private ModelAndView createErrorModelAndView(String title, String message) {
+    private ModelAndView createErrorModelAndView(String title, String message, HttpStatus status) {
         ModelAndView mav = new ModelAndView("error");
-        mav.addObject("title", title);
-        mav.addObject("message", message);
+        ErrorResponse errorResponse = new ErrorResponse(
+            title,
+            message,
+            "/", // TODO: Add request path when available
+            status.value(),
+            status.getReasonPhrase()
+        );
+        mav.addObject("error", errorResponse);
         return mav;
     }
 }
