@@ -28,9 +28,15 @@ public class UserValidationService {
 
     private final UserQueryService userQueryService;
 
+        // Only allow letters (English and Polish)
+        private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
+
     /**
      * Performs all necessary validations for a new user creation.
+     * Validates the user's first name, last name, username, email, PESEL and phone number.
+     * Validates that the first name and last name contain only letters (English and Polish) if they are provided.
      * Validates uniqueness of username, email and PESEL if they are provided.
+     * 
      *
      * @param user The user object to validate
      * @throws UserValidationException if any of the unique fields (username,
@@ -43,6 +49,14 @@ public class UserValidationService {
                 user.getUsername(),
                 user.getEmail() != null ? user.getEmail().toString() : "null");
 
+        if(user.getFirstname() != null) {
+          validateName(user.getFirstname());
+        }
+
+        if(user.getLastname() != null) {
+            validateName(user.getLastname());
+        }
+        
         if (user.getUsername() != null) {
             validateUsernameUnique(user.getUsername());
         }
@@ -57,6 +71,17 @@ public class UserValidationService {
         }
 
         log.info("Successfully completed validation for new user registration");
+    }
+
+    private void validateName(String name) {
+        if (!isValidLetters(name)) {
+            log.warn("Invalid name: {}", name);
+            throw new UserValidationException("Invalid name: " + name);
+        }
+    }
+
+    private boolean isValidLetters(String input) {
+        return input != null && input.matches(LETTERS_REGEX);
     }
 
     private void validatePhoneNumberUnique(PhoneNumber phoneNumber) {
