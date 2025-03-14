@@ -9,10 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
 import info.mackiewicz.bankapp.transaction.exception.*;
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
-import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.exception.UserValidationException;
+import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
 
 @ControllerAdvice(basePackages = "info.mackiewicz.bankapp.presentation")
 public class WebExceptionHandler {
@@ -64,18 +64,41 @@ public class WebExceptionHandler {
         return createErrorModelAndView("Transaction not found", ex.getMessage());
     }
 
+    // Handling Transaction Validation Exceptions
     @ExceptionHandler({
-        NoTransactionsForAccountException.class,
-        TransactionAlreadyProcessedException.class,
-        TransactionCannotBeProcessedException.class,
+        TransactionValidationException.class,
         TransactionAmountNotSpecifiedException.class,
         TransactionTypeNotSpecifiedException.class,
         TransactionSourceAccountNotSpecifiedException.class,
-        TransactionDestinationAccountNotSpecifiedException.class
+        TransactionDestinationAccountNotSpecifiedException.class,
+        InvalidTransactionTypeException.class
     })
-    public ModelAndView handleTransactionExceptions(Exception ex) {
-        logger.error("Transaction error: {}", ex.getMessage(), ex);
-        return createErrorModelAndView("Transaction Error", ex.getMessage());
+    public ModelAndView handleTransactionValidationExceptions(Exception ex) {
+        logger.error("Transaction validation error: {}", ex.getMessage(), ex);
+        return createErrorModelAndView("Transaction Validation Error", ex.getMessage());
+    }
+
+    // Handling Transaction Processing Exceptions
+    @ExceptionHandler({
+        TransactionAlreadyProcessedException.class,
+        TransactionCannotBeProcessedException.class,
+        TransactionExecutionException.class,
+        NoTransactionsForAccountException.class
+    })
+    public ModelAndView handleTransactionProcessingExceptions(Exception ex) {
+        logger.error("Transaction processing error: {}", ex.getMessage(), ex);
+        return createErrorModelAndView("Transaction Processing Error", ex.getMessage());
+    }
+
+    // Handling Transaction Business Logic Exceptions
+    @ExceptionHandler({
+        InsufficientFundsException.class,
+        InvalidOperationException.class,
+        TransactionIsNotInternalException.class
+    })
+    public ModelAndView handleTransactionBusinessExceptions(Exception ex) {
+        logger.error("Transaction business error: {}", ex.getMessage(), ex);
+        return createErrorModelAndView("Transaction Business Error", ex.getMessage());
     }
 
     // Global Exception Handler for all other exceptions
