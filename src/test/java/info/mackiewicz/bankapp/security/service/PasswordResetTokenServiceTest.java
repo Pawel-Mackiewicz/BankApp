@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.security.service;
 
+import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
-import info.mackiewicz.bankapp.shared.exception.TooManyPasswordResetAttemptsException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

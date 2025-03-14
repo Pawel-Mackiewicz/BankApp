@@ -12,6 +12,7 @@ import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
 class UserMapperTest {
 
@@ -31,7 +32,7 @@ class UserMapperTest {
         dto.setFirstname("Jan");
         dto.setLastname("Kowalski");
         dto.setEmail("jan@example.com");
-        dto.setPESEL("12345678901");
+        dto.setPesel("12345678901");
         dto.setDateOfBirth(LocalDate.of(1990, 1, 1));
         dto.setPassword("Password123!");
         dto.setConfirmPassword("Password123!");
@@ -41,14 +42,14 @@ class UserMapperTest {
 
         // then
         assertNotNull(user);
-        assertEquals(TEST_PHONE, user.getPhoneNumber());
+        assertEquals(new PhoneNumber(TEST_PHONE), user.getPhoneNumber());
     }
 
     @Test
     void updateUserFromRequest_shouldUpdatePhoneNumberCorrectly() {
         // given
         User existingUser = new User();
-        existingUser.setPhoneNumber("+48111111111");
+        existingUser.setPhoneNumber(new PhoneNumber("+48111111111"));
         
         UpdateUserRequest request = new UpdateUserRequest();
         request.setPhoneNumber(TEST_PHONE);
@@ -58,7 +59,7 @@ class UserMapperTest {
 
         // then
         assertNotNull(updatedUser);
-        assertEquals(TEST_PHONE, updatedUser.getPhoneNumber());
+        assertEquals(new PhoneNumber(TEST_PHONE), updatedUser.getPhoneNumber());
     }
 
     @Test
@@ -66,7 +67,7 @@ class UserMapperTest {
         // given
         String originalPhone = "+48111111111";
         User existingUser = new User();
-        existingUser.setPhoneNumber(originalPhone);
+        existingUser.setPhoneNumber(new PhoneNumber(originalPhone));
         
         UpdateUserRequest request = new UpdateUserRequest();
         request.setPhoneNumber(null);
@@ -76,6 +77,6 @@ class UserMapperTest {
 
         // then
         assertNotNull(updatedUser);
-        assertEquals(originalPhone, updatedUser.getPhoneNumber());
+        assertEquals(new PhoneNumber(originalPhone), updatedUser.getPhoneNumber());
     }
 }

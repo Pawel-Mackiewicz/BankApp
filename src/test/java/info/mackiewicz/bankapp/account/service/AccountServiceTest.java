@@ -1,8 +1,14 @@
 package info.mackiewicz.bankapp.account.service;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.user.model.User;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,13 +16,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
@@ -39,22 +44,22 @@ class AccountServiceTest {
     private Account testAccount;
     private User testUser;
     private static final Integer TEST_USER_ID = 1;
-    private static final String TEST_PESEL = "12345678901";
+    private static final Pesel TEST_PESEL = new Pesel("12345678901");
     private static final String TEST_USERNAME = "testuser";
-    private static final String TEST_EMAIL = "test@example.com";
+    private static final Email TEST_EMAIL = new Email("test@example.com");
 
     @BeforeEach
     void setUp() {
         // Create test user
         testUser = new User();
         testUser.setId(TEST_USER_ID);
-        testUser.setPESEL(TEST_PESEL);
+        testUser.setPesel(TEST_PESEL);
         testUser.setFirstname("John");
         testUser.setLastname("Doe");
         testUser.setDateOfBirth(LocalDate.of(1990, 1, 1));
         testUser.setUsername(TEST_USERNAME);
         testUser.setEmail(TEST_EMAIL);
-        testUser.setPhoneNumber("+48123456789");
+        testUser.setPhoneNumber(new PhoneNumber("+48123456789"));
 
         // Create test account using factory
         testAccount = Account.factory().createAccount(testUser);
@@ -104,14 +109,14 @@ class AccountServiceTest {
     void getAccountsByOwnersPESEL_ShouldDelegateToQueryService() {
         // Arrange
         List<Account> accounts = Arrays.asList(testAccount);
-        when(accountQueryService.getAccountsByOwnersPESEL(TEST_PESEL)).thenReturn(accounts);
+        when(accountQueryService.getAccountsByOwnersPesel(TEST_PESEL.getValue())).thenReturn(accounts);
 
         // Act
-        List<Account> result = accountService.getAccountsByOwnersPESEL(TEST_PESEL);
+        List<Account> result = accountService.getAccountsByOwnersPesel(TEST_PESEL.getValue());
 
         // Assert
         assertThat(result).isEqualTo(accounts);
-        verify(accountQueryService).getAccountsByOwnersPESEL(TEST_PESEL);
+        verify(accountQueryService).getAccountsByOwnersPesel(TEST_PESEL.getValue());
     }
 
     @Test
@@ -131,14 +136,14 @@ class AccountServiceTest {
     @Test
     void findAccountByOwnersEmail_ShouldDelegateToQueryService() {
         // Arrange
-        when(accountQueryService.findAccountByOwnersEmail(TEST_EMAIL)).thenReturn(testAccount);
+        when(accountQueryService.findAccountByOwnersEmail(TEST_EMAIL.getValue())).thenReturn(testAccount);
 
         // Act
-        Account result = accountService.findAccountByOwnersEmail(TEST_EMAIL);
+        Account result = accountService.findAccountByOwnersEmail(TEST_EMAIL.getValue());
 
         // Assert
         assertThat(result).isEqualTo(testAccount);
-        verify(accountQueryService).findAccountByOwnersEmail(TEST_EMAIL);
+        verify(accountQueryService).findAccountByOwnersEmail(TEST_EMAIL.getValue());
     }
 
     @Test

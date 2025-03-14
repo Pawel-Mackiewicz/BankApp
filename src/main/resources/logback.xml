@@ -60,6 +60,30 @@
         </appender>
     </springProfile>
 
+    <!-- System plików: logi web -->
+    <appender name="WEB_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/web.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/web.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- System plików: logi SQL -->
+    <appender name="SQL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/sql.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/sql.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <!-- Konfiguracja poszczególnych loggerów -->
     <!-- Logger aplikacji -->
     <logger name="info.mackiewicz.bankapp" level="INFO" additivity="false">
@@ -112,11 +136,24 @@
         </springProfile>
     </logger>
 
+    <logger name="org.springframework.web" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <springProfile name="!prod">
+            <appender-ref ref="WEB_FILE" />
+        </springProfile>
+    </logger>
+
     <!-- Logi SQL -->
-    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+    <logger name="org.hibernate.SQL" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE" />
         <springProfile name="!prod">
             <appender-ref ref="APP_FILE" />
+        </springProfile>
+    </logger>
+
+        <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <springProfile name="!prod">
+            <appender-ref ref="SQL_FILE" />
         </springProfile>
     </logger>
 
@@ -133,7 +170,7 @@
             <appender-ref ref="APP_FILE" />
         </springProfile>
     </logger>
-    
+
     <logger name="org.hibernate.type.descriptor.sql" level="TRACE" additivity="false">
         <appender-ref ref="SQL_MARKER" />
         <springProfile name="!prod">

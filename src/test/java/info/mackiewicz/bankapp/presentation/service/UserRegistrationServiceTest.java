@@ -28,6 +28,7 @@ import info.mackiewicz.bankapp.transaction.model.builder.TransferBuilder;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.service.UserService;
 
 class UserRegistrationServiceTest {
@@ -74,7 +75,7 @@ class UserRegistrationServiceTest {
         user.setId(1);
         user.setFirstname("John");
         user.setLastname("Doe");
-        user.setEmail("john.doe@example.com");
+        user.setEmail(new Email("john.doe@example.com"));
         user.setPassword("password");
         user.setUsername("johndoe");
 

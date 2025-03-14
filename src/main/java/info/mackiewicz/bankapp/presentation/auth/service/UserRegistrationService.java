@@ -14,7 +14,9 @@ import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserRegistrationService {
@@ -28,21 +30,21 @@ public class UserRegistrationService {
     // Only allow letters (English and Polish)
     private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
 
+    //TODO: ADD VALIDATION FOR NAME AND SURNAME (BUT WHERE?)
     public User registerUser(UserRegistrationDto registrationDto) {
+        log.info("Starting user registration process for email: {}", registrationDto.getEmail());
+        
         User user = userMapper.toUser(registrationDto);
-
-        // Validate first name
-        if (!isValidLetters(user.getFirstname())) {
-            throw new IllegalArgumentException("Invalid first name: only letters allowed.");
-        }
-        // Validate last name
-        if (!isValidLetters(user.getLastname())) {
-            throw new IllegalArgumentException("Invalid last name: only letters allowed.");
-        }
+        log.debug("Mapped registration DTO to User entity");
         
         User createdUser = userService.createUser(user);
+        log.debug("Created user with ID: {}", createdUser.getId());
+        
         Account newAccount = accountService.createAccount(createdUser.getId());
+        log.debug("Created new account for user with ID: {}", newAccount.getId());
+        
         Account bankAccount = accountService.getAccountById(-1);
+        log.trace("Retrieved bank system account");
 
         Transaction transaction = Transaction.buildTransfer()
             .from(bankAccount)
@@ -51,10 +53,13 @@ public class UserRegistrationService {
             .withAmount(new BigDecimal("1000"))
             .withTitle("Welcome bonus")
             .build();
+        log.debug("Prepared welcome bonus transaction");
 
         transactionService.registerTransaction(transaction);
+        log.debug("Registered welcome bonus transaction");
 
-        emailService.sendWelcomeEmail(createdUser.getEmail(), createdUser.getFullName(), createdUser.getUsername());
+        emailService.sendWelcomeEmail(createdUser.getEmail().toString(), createdUser.getFullName(), createdUser.getUsername());
+        log.info("Completed user registration process for user: {}", createdUser.getUsername());
 
         return createdUser;
     }
