@@ -3,9 +3,9 @@ package info.mackiewicz.bankapp.transaction.model.builder;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import info.mackiewicz.bankapp.shared.exception.InvalidTransactionTypeException;
-import info.mackiewicz.bankapp.shared.exception.TransactionAmountNotSpecifiedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionTypeNotSpecifiedException;
+import info.mackiewicz.bankapp.transaction.exception.InvalidTransactionTypeException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionAmountNotSpecifiedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionTypeNotSpecifiedException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;

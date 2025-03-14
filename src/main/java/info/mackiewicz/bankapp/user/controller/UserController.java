@@ -1,22 +1,34 @@
 package info.mackiewicz.bankapp.user.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
+import info.mackiewicz.bankapp.shared.dto.ApiResponse;
+import info.mackiewicz.bankapp.shared.util.ApiResponseBuilder;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
+import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;
 import info.mackiewicz.bankapp.user.service.UserService;
-import info.mackiewicz.bankapp.user.validation.RequestValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
+/**
+ * REST controller for managing user operations.
+ * Provides endpoints for user CRUD operations with standardized responses.
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
@@ -24,51 +36,43 @@ public class UserController {
 
     private final UserService userService;
     private final UserRegistrationService registrationService;
-    private final RequestValidator requestValidator;
     private final UserMapper userMapper;
+    private final ApiResponseBuilder apiResponseBuilder;
 
     @PostMapping
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDto registrationDto, BindingResult bindingResult) {
-        ResponseEntity<?> validationError = requestValidator.validateRequest(bindingResult);
-        if (validationError != null) {
-            return validationError;
-        }
-
-        try {
-            User created = registrationService.registerUser(registrationDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
+            @Valid @RequestBody UserRegistrationDto registrationDto) {
+        User created = registrationService.registerUser(registrationDto);
+        return apiResponseBuilder.created(userMapper.toResponseDto(created));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(@PathVariable Integer id) {
+        User user = userService.getUserById(id);
+        return apiResponseBuilder.ok(userMapper.toResponseDto(user));
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers() {
+        List<UserResponseDto> users = userService.getAllUsers().stream()
+                .map(userMapper::toResponseDto)
+                .collect(Collectors.toList());
+        return apiResponseBuilder.ok(users);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Integer id, @Valid @RequestBody UpdateUserRequest updateRequest, BindingResult bindingResult) {
-        ResponseEntity<?> validationError = requestValidator.validateRequest(bindingResult);
-        if (validationError != null) {
-            return validationError;
-        }
-
+    public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(
+            @PathVariable Integer id,
+            @Valid @RequestBody UpdateUserRequest updateRequest) {
         User existingUser = userService.getUserById(id);
         existingUser = userMapper.updateUserFromRequest(existingUser, updateRequest);
-        
-        
-        return ResponseEntity.ok(userService.updateUser(existingUser));
+        User updatedUser = userService.updateUser(existingUser);
+        return apiResponseBuilder.ok(userMapper.toResponseDto(updatedUser));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        return apiResponseBuilder.deleted();
     }
 }

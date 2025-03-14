@@ -2,8 +2,8 @@ package info.mackiewicz.bankapp.transaction.service;
 
 import org.springframework.stereotype.Component;
 
-import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionAlreadyProcessedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionCannotBeProcessedException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import lombok.RequiredArgsConstructor;

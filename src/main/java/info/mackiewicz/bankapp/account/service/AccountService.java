@@ -1,20 +1,20 @@
 package info.mackiewicz.bankapp.account.service;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.List;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -55,8 +55,8 @@ public class AccountService implements AccountServiceInterface {
     }
 
     @Override
-    public List<Account> getAccountsByOwnersPESEL(String pesel) {
-        return accountQueryService.getAccountsByOwnersPESEL(pesel);
+    public List<Account> getAccountsByOwnersPesel(String pesel) {
+        return accountQueryService.getAccountsByOwnersPesel(pesel);
     }
 
     @Override

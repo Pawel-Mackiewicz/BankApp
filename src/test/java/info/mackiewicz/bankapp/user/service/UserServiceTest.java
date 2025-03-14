@@ -1,8 +1,10 @@
 package info.mackiewicz.bankapp.user.service;
 
-import info.mackiewicz.bankapp.security.service.PasswordService;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.repository.UserRepository;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,23 +14,23 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.Mockito.when;
+import info.mackiewicz.bankapp.user.model.User;
 
 class UserServiceTest {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class);
 
     @Mock
-    private UserRepository userRepository;
+    private UserCreationService userCreationService;
 
     @Mock
-    private PasswordService passwordService;
+    private UserQueryService userQueryService;
 
     @Mock
-    private UsernameGeneratorService usernameGeneratorService;
+    private UserOperationsService userOperationsService;
+
+    @Mock
+    private UserValidationService userValidationService;
 
     @InjectMocks
     private UserService userService;
@@ -42,13 +44,14 @@ class UserServiceTest {
     void testCreateUser() {
         logger.info("testCreateUser: Starting test");
         User user = new User();
+        User savedUser = new User();
+        savedUser.setId(1);
 
-        when(passwordService.ensurePasswordEncoded(user)).thenReturn(user);
-        when(usernameGeneratorService.generateUsername(user)).thenReturn(user);
-        when(userRepository.save(user)).thenReturn(user);
+        when(userCreationService.createUser(user)).thenReturn(savedUser);
 
         userService.createUser(user);
 
+        verify(userCreationService).createUser(user);
         logger.info("testCreateUser: Test passed");
     }
 
@@ -57,62 +60,70 @@ class UserServiceTest {
         logger.info("testUpdateUser: Starting test");
         User user = new User();
         user.setId(1);
+        User updatedUser = new User();
+        updatedUser.setId(1);
 
-        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-        when(passwordService.ensurePasswordEncoded(user)).thenReturn(user);
-        when(userRepository.save(user)).thenReturn(user);
+        when(userOperationsService.updateUser(user)).thenReturn(updatedUser);
 
         userService.updateUser(user);
 
+        verify(userOperationsService).updateUser(user);
         logger.info("testUpdateUser: Test passed");
     }
 
     @Test
     void testGetUserById() {
         logger.info("testGetUserById: Starting test");
+        Integer userId = 1;
         User user = new User();
-        user.setId(1);
+        user.setId(userId);
 
-        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(userQueryService.getUserById(userId)).thenReturn(user);
 
-        userService.getUserById(user.getId());
+        userService.getUserById(userId);
 
+        verify(userQueryService).getUserById(userId);
         logger.info("testGetUserById: Test passed");
     }
 
     @Test
     void testGetUserByUsername() {
         logger.info("testGetUserByUsername: Starting test");
+        String username = "testuser";
         User user = new User();
-        user.setUsername("testuser");
+        user.setUsername(username);
 
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userQueryService.getUserByUsername(username)).thenReturn(user);
 
-        userService.getUserByUsername(user.getUsername());
+        userService.getUserByUsername(username);
 
+        verify(userQueryService).getUserByUsername(username);
         logger.info("testGetUserByUsername: Test passed");
     }
 
     @Test
     void testGetAllUsers() {
         logger.info("testGetAllUsers: Starting test");
-        when(userRepository.findAll()).thenReturn(List.of(new User()));
+        List<User> users = List.of(new User());
+
+        when(userQueryService.getAllUsers()).thenReturn(users);
 
         userService.getAllUsers();
 
+        verify(userQueryService).getAllUsers();
         logger.info("testGetAllUsers: Test passed");
     }
 
     @Test
     void testDeleteUser() {
         logger.info("testDeleteUser: Starting test");
-        User user = new User();
-        user.setId(1);
+        Integer userId = 1;
 
-        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        doNothing().when(userOperationsService).deleteUser(userId);
 
-        userService.deleteUser(user.getId());
+        userService.deleteUser(userId);
 
+        verify(userOperationsService).deleteUser(userId);
         logger.info("testDeleteUser: Test passed");
     }
 
@@ -121,10 +132,11 @@ class UserServiceTest {
         logger.info("testCheckUsernameExists: Starting test");
         String username = "testuser";
 
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(new User()));
+        when(userQueryService.userExistsByUsername(username)).thenReturn(true);
 
-        userService.checkUsernameExists(username);
+        userService.userExistsByUsername(username);
 
+        verify(userQueryService).userExistsByUsername(username);
         logger.info("testCheckUsernameExists: Test passed");
     }
 }

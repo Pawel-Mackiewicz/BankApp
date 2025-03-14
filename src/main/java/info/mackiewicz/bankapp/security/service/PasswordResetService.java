@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
-import info.mackiewicz.bankapp.shared.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

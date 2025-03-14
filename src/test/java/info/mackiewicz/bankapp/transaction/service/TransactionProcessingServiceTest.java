@@ -16,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionAlreadyProcessedException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;

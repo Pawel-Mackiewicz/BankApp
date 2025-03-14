@@ -35,11 +35,11 @@ $(document).ready(function() {
         return validateField($('#lastname'), regex.test(lastname), 'Last name must contain only letters');
     }
 
-    // PESEL validation
-    function validatePesel() {
-        const pesel = $('#PESEL').val();
+    // pesel validation
+    function validatepesel() {
+        const pesel = $('#pesel').val();
         const peselRegex = /^\d{11}$/;
-        return validateField($('#PESEL'), peselRegex.test(pesel), 'PESEL must be exactly 11 digits');
+        return validateField($('#pesel'), peselRegex.test(pesel), 'PESEL must be exactly 11 digits');
     }
 
     // Email validation
@@ -149,7 +149,7 @@ $(document).ready(function() {
         // Validate all fields
         const isNameValid = validateName();
         const isLastnameValid = validateLastname();
-        const isPeselValid = validatePesel();
+        const ispeselValid = validatepesel();
         const isEmailValid = validateEmail();
         const isPhoneNumberValid = validatePhoneNumber();
         const isPasswordValid = validatePassword();
@@ -157,7 +157,7 @@ $(document).ready(function() {
         const isDateOfBirthValid = validateDateOfBirth();
 
         // If any validation fails, prevent form submission
-        if (!isNameValid || !isLastnameValid || !isPeselValid || !isEmailValid || 
+        if (!isNameValid || !isLastnameValid || !ispeselValid || !isEmailValid || 
             !isPhoneNumberValid || !isPasswordValid || !isConfirmPasswordValid || !isDateOfBirthValid) {
             e.preventDefault();
             e.stopPropagation();
@@ -165,7 +165,7 @@ $(document).ready(function() {
             // Mark all invalid fields
             if (!isNameValid) $('#firstname').addClass('is-invalid');
             if (!isLastnameValid) $('#lastname').addClass('is-invalid');
-            if (!isPeselValid) $('#PESEL').addClass('is-invalid');
+            if (!ispeselValid) $('#pesel').addClass('is-invalid');
             if (!isEmailValid) $('#email').addClass('is-invalid');
             if (!isPhoneNumberValid) $('#phoneNumber').addClass('is-invalid');
             if (!isPasswordValid) $('#password').addClass('is-invalid');
@@ -177,7 +177,7 @@ $(document).ready(function() {
     // Attach validation to input events
     $('#firstname').on('input', validateName);
     $('#lastname').on('input', validateLastname);
-    $('#PESEL').on('input', validatePesel);
+    $('#pesel').on('input', validatepesel);
     $('#email').on('input', validateEmail);
     $('#phoneNumber').on('input', validatePhoneNumber);
     $('#password').on('input', function() {

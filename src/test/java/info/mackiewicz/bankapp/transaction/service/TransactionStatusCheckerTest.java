@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import info.mackiewicz.bankapp.shared.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.shared.exception.TransactionCannotBeProcessedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionAlreadyProcessedException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionCannotBeProcessedException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 
