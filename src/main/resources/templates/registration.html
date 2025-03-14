@@ -53,14 +53,14 @@
         </div>
 
         <div class="form-group">
-            <label for="PESEL">PESEL Number:</label>
+            <label for="pesel">PESEL Number:</label>
             <input type="text" 
-                   id="PESEL" 
-                   th:field="*{PESEL}" 
+                   id="pesel" 
+                   th:field="*{pesel}" 
                    class="form-control"
-                   th:classappend="${#fields.hasErrors('PESEL')} ? 'is-invalid'"
-                   placeholder="Enter your PESEL number"/>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('PESEL')}" th:errors="*{PESEL}"></div>
+                   th:classappend="${#fields.hasErrors('pesel')} ? 'is-invalid'"
+                   placeholder="Enter your pesel number"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}"></div>
         </div>
 
         <div class="form-group">

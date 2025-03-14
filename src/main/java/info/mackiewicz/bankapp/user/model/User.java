@@ -1,45 +1,44 @@
 package info.mackiewicz.bankapp.user.model;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.user.model.interfaces.AccountOwner;
+import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
+import info.mackiewicz.bankapp.user.service.UserService;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-@Data
+/**
+ * Represents a regular bank user.
+ * Contains personal information and account relationships.
+ * For new user creation use static factory method {@link User#builder()}.
+ * 
+ * @see UserService UserService for business logic.
+ */
 @Entity
+@Data
 @Table(name = "users")
-public class User implements UserDetails {
+public class User extends BaseUser implements PersonalInfo, AccountOwner {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(unique = true, nullable = false)
-    private String PESEL;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "pesel", unique = true, nullable = false))
+    private Pesel pesel;
 
     @Column(nullable = false)
     private String firstname;
@@ -50,122 +49,126 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "email", unique = true, nullable = false))
+    private Email email;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "phone_number", unique = true, nullable = false))
+    private PhoneNumber phoneNumber;
 
-    @Column(unique = true, nullable = false)
-    private String phoneNumber;
-
-    @JsonIgnore
-    private String password;
-
-    @Column(nullable = false)
-    private boolean expired;
-
-    @Column(nullable = false)
-    private boolean credentialsExpired;
-
-    @Column(nullable = false)
-    private boolean locked;
-
-    @Column(nullable = false)
-    private boolean enabled;
-
-    @Column(name = "account_counter")
-    private Integer accountCounter;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private Set<String> roles;
-
+    
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Account> accounts;
-
+    
+    @Column(name = "account_counter")
+    private Integer accountCounter;
+   
+    /**
+     * Default constructor for JPA.
+     * For new user creation use static factory method {@link User#builder()}.
+     */
     public User() {
-        expired = false;
-        credentialsExpired = false;
-        locked = false;
-        enabled = true;
-        roles = new HashSet<>();
-        addDefaultRole();
+        super(); // Initialize base fields
+        addDefaultRoles();
         accounts = new HashSet<>();
         accountCounter = 0;
+    }
+    private void addDefaultRoles() {
+        roles.add("ROLE_USER");
+    }
+    
+    User(String password, Pesel pesel, String firstname, String lastname, LocalDate dateOfBirth,
+            Email email, PhoneNumber phoneNumber) {
+        this();
+        this.password = password;
+        this.pesel = pesel;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * Creates a new user builder.
+     * 
+     * @return
+     *         Builder class for creating User instances with a step interface.
+     *         This class simplifies the process of creating new users by providing
+     *         a clean and readable way to set various user attributes.
+     *        <p>
+     *         The builder supports setting both primitive values and value objects
+     *         for user attributes, ensuring proper encapsulation and validation.
+     *
+     * @see UserBuilder UserBuilder for user creation
+     */
+    public static UserBuilder.FirstnameStep builder() {
+        return UserBuilder.builder();
     }
 
     public synchronized Integer getNextAccountNumber() {
         return ++accountCounter;
     }
 
-    private void addDefaultRole() {
-        roles.add("ROLE_USER");
+    public String getFullName() {
+        String first = firstname == null ? "" : firstname.trim();
+        String last = lastname == null ? "" : lastname.trim();
+        return first + " " + last;
     }
-
-    @JsonProperty
-    public void setPassword(String password) {
-        this.password = password;
+    
+    public void setPesel(Pesel pesel) {
+        this.pesel = pesel;
+    }
+    
+    public void setEmail(Email email) {
+        this.email = email;
+    }
+    
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    
+    
+    @Deprecated
+    public void setPesel(String pesel) {
+        this.pesel = new Pesel(pesel);
+    }
+    
+    @Deprecated
+    public void setEmail(String email) {
+        this.email = new Email(email);
+    }
+    
+    @Deprecated
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = new PhoneNumber(phoneNumber);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
-            return true;
+        return true;
         if (o == null || getClass() != o.getClass())
-            return false;
+        return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(PESEL, user.PESEL);
+        return Objects.equals(id, user.id) && Objects.equals(pesel, user.pesel);
     }
-
+    
     @Override
     public int hashCode() {
-        return Objects.hash(id, PESEL);
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role))
-                .collect(Collectors.toSet());
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return !expired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return !expired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
+        return Objects.hash(id, pesel);
     }
 
     @Override
     public String toString() {
         return "User(id=" + id +
-                ", PESEL=" + PESEL +
-                ", firstname=" + firstname +
-                ", lastname=" + lastname +
-                ", username=" + username +
-                ", email=" + email +
-                ")";
-    }
-
-    public String getFullName() {
-        String first = firstname == null ? "" : firstname.trim();
-        String last = lastname == null ? "" : lastname.trim();
-        return first + " " + last;
+        ", pesel=" + pesel +
+        ", firstname=" + firstname +
+        ", lastname=" + lastname +
+        ", username=" + username +
+        ", email=" + email +
+        ")";
     }
 }

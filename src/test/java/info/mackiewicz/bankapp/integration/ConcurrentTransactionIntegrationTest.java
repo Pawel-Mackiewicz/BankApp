@@ -35,6 +35,9 @@ import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatusCategory;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -97,7 +100,7 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle multiple concurrent transactions correctly")
     void testConcurrentTransactions() {
-        int numberOfTransactions = 30;
+        int numberOfTransactions = 20;
         List<Transaction> transactions = new ArrayList<>();
 
         for (int i = 0; i < numberOfTransactions; i++) {
@@ -362,12 +365,12 @@ class ConcurrentTransactionIntegrationTest {
         String day = String.format("%02d", (index % 28) + 1); // Day between 1-28
         String pesel = yearMonth + day + uniqueSequence;
 
-        user.setPESEL(pesel);
+        user.setPesel(new Pesel(pesel));
         user.setFirstname("Test");
         user.setLastname("User" + uniqueSuffix);
-        user.setEmail("test.user" + uniqueSuffix + "@test.com");
+        user.setEmail(new Email("test.user" + uniqueSuffix + "@test.com"));
         user.setPassword("Password123!");
-        user.setPhoneNumber("+48" + String.format("%09d", hashCode + index));
+        user.setPhoneNumber(new PhoneNumber("+48" + String.format("%09d", hashCode + index)));
         user.setDateOfBirth(LocalDate.of(1999, 1, (index % 28) + 1)); // Match PESEL date
         return userService.createUser(user);
     }

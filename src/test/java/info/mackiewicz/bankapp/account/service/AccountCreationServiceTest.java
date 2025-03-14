@@ -1,9 +1,17 @@
 package info.mackiewicz.bankapp.account.service;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.service.UserService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,12 +19,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
+import info.mackiewicz.bankapp.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 class AccountCreationServiceTest {
@@ -40,13 +49,13 @@ class AccountCreationServiceTest {
     void setUp() {
         testUser = new User();
         testUser.setId(1);
-        testUser.setPESEL("12345678901");
+        testUser.setPesel(new Pesel("12345678901"));
         testUser.setFirstname("John");
         testUser.setLastname("Doe");
         testUser.setDateOfBirth(LocalDate.of(1990, 1, 1));
         testUser.setUsername("johndoe");
-        testUser.setEmail("john@example.com");
-        testUser.setPhoneNumber("+48123456789");
+        testUser.setEmail(new Email("john@example.com"));
+        testUser.setPhoneNumber(new PhoneNumber("+48123456789"));
         
         testAccount = Account.factory().createAccount(testUser);
     }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
+import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import info.mackiewicz.bankapp.user.validation.Adult;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -18,6 +19,7 @@ import lombok.Data;
 public class UserRegistrationDto {
 
     @NotBlank(message = "Firstname is required")
+    @Pattern(regexp = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$", message = "Firstname can only contain letters")
     private String firstname;
 
     @NotBlank(message = "Lastname is required")
@@ -30,11 +32,11 @@ public class UserRegistrationDto {
 
     @NotBlank(message = "PESEL is required")
     @Pattern(regexp = "\\d{11}", message = "PESEL must be exactly 11 digits")
-    private String PESEL;
+    private String pesel;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Please provide a valid email address")
-    private String email;
+    public String email;
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^(\\+48\\d{9}|0\\d{9}|[1-9]\\d{8})$", 
@@ -42,9 +44,10 @@ public class UserRegistrationDto {
     private String phoneNumber;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", 
-            message = "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character")
+    @Size(min = ValidationConstants.PASSWORD_MIN_LENGTH, message = "Password must be at least 8 characters long")
+    @Pattern(
+        regexp = ValidationConstants.PASSWORD_PATTERN, 
+        message = ValidationConstants.PASSWORD_DESCRIPTION)
     private String password;
 
     @NotBlank(message = "Password confirmation is required")

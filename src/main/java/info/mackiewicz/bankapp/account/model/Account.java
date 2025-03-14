@@ -4,13 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.iban4j.Iban;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
+import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.service.AccountServiceAccessManager;
 import info.mackiewicz.bankapp.account.util.IbanConverter;
 import info.mackiewicz.bankapp.user.model.User;
@@ -56,6 +58,7 @@ public class Account {
     @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User owner;
 
     @Getter

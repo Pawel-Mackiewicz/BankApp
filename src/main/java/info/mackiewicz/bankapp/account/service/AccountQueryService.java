@@ -7,12 +7,13 @@ import java.util.function.Function;
 import org.iban4j.Iban;
 import org.springframework.stereotype.Service;
 
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIbanException;
-import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
-import jakarta.validation.constraints.Email;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,8 +47,14 @@ class AccountQueryService {
                         String.format("User with %s %s does not have any account.", criteriaName, value)));
     }
 
-    List<Account> getAccountsByOwnersPESEL(String pesel) {
-        return getAccountsByOwnerCriteria(pesel, accountRepository::findAccountsByOwner_PESEL, "PESEL");
+    List<Account> getAccountsByOwnersPesel(Pesel pesel) {
+        return accountRepository.findAccountsByOwner_pesel(pesel)
+                .orElseThrow(() -> new OwnerAccountsNotFoundException(
+                        String.format("User with PESEL %s does not have any account.", pesel)));
+    }
+
+    List<Account> getAccountsByOwnersPesel(String pesel) {
+        return getAccountsByOwnersPesel(new Pesel(pesel));
     }
 
     List<Account> getAccountsByOwnersUsername(String username) {
@@ -60,11 +67,15 @@ class AccountQueryService {
                 "ID");
     }
 
-    Account findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
+    Account findAccountByOwnersEmail(Email recipientEmail) {
         log.debug("Finding account by owner's email: {}", recipientEmail);
         return accountRepository.findFirstByOwner_email(recipientEmail)
                 .orElseThrow(() -> new OwnerAccountsNotFoundException(
                         String.format("User with email %s does not have any account.", recipientEmail)));
+    }
+
+    Account findAccountByOwnersEmail(String email) {
+        return findAccountByOwnersEmail(new Email(email));
     }
 
     Account findAccountByIban(String iban) {

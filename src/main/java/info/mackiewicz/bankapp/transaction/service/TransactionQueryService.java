@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.shared.exception.NoTransactionsForAccountException;
-import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;

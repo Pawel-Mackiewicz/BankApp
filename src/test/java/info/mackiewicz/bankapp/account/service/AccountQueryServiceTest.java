@@ -18,13 +18,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIbanException;
-import info.mackiewicz.bankapp.shared.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.shared.exception.OwnerAccountsNotFoundException;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.utils.TestIbanProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,13 +44,12 @@ class AccountQueryServiceTest {
 
     @BeforeEach
     void setUp() {
-        owner = new User();
+        // Użycie TestUserBuilder do stworzenia użytkownika testowego
+        owner = TestUserBuilder.createTestUser();
         owner.setId(1);
         owner.setFirstname("Jan");
         owner.setLastname("Kowalski");
-        owner.setEmail("jan.kowalski@example.com");
         owner.setUsername("jkowalski");
-        owner.setPESEL("12345678901");
 
         testAccount = TestAccountBuilder.createTestAccountWithOwner(owner);
         Iban testIban = TestIbanProvider.getIbanObject(0);
@@ -99,28 +101,28 @@ class AccountQueryServiceTest {
     void getAccountsByOwnersPESEL_WhenAccountsExist_ShouldReturnAccounts() {
         // given
         List<Account> accounts = Arrays.asList(testAccount);
-        when(accountRepository.findAccountsByOwner_PESEL("12345678901"))
+        when(accountRepository.findAccountsByOwner_pesel(new Pesel("12345678901")))
             .thenReturn(Optional.of(accounts));
 
         // when
-        List<Account> result = accountQueryService.getAccountsByOwnersPESEL("12345678901");
+        List<Account> result = accountQueryService.getAccountsByOwnersPesel("12345678901");
 
         // then
         assertEquals(1, result.size());
         assertEquals(testAccount, result.get(0));
-        verify(accountRepository).findAccountsByOwner_PESEL("12345678901");
+        verify(accountRepository).findAccountsByOwner_pesel(new Pesel("12345678901"));
     }
 
     @Test
     void getAccountsByOwnersPESEL_WhenNoAccountsExist_ShouldThrowException() {
         // given
-        when(accountRepository.findAccountsByOwner_PESEL("99999999999"))
+        when(accountRepository.findAccountsByOwner_pesel(new Pesel("99999999999")))
             .thenReturn(Optional.empty());
 
         // when & then
-        assertThrows(OwnerAccountsNotFoundException.class, 
-            () -> accountQueryService.getAccountsByOwnersPESEL("99999999999"));
-        verify(accountRepository).findAccountsByOwner_PESEL("99999999999");
+        assertThrows(OwnerAccountsNotFoundException.class,
+            () -> accountQueryService.getAccountsByOwnersPesel("99999999999"));
+        verify(accountRepository).findAccountsByOwner_pesel(new Pesel("99999999999"));
     }
 
     @Test
@@ -142,16 +144,18 @@ class AccountQueryServiceTest {
     @Test
     void findAccountByOwnersEmail_WhenAccountExists_ShouldReturnAccount() {
         // given
-        when(accountRepository.findFirstByOwner_email("jan.kowalski@example.com"))
+        String emailStr = "jan.kowalski@example.com";
+        Email email = new Email(emailStr);
+        when(accountRepository.findFirstByOwner_email(email))
             .thenReturn(Optional.of(testAccount));
 
         // when
-        Account result = accountQueryService.findAccountByOwnersEmail("jan.kowalski@example.com");
+        Account result = accountQueryService.findAccountByOwnersEmail(emailStr);
 
         // then
         assertNotNull(result);
         assertEquals(testAccount, result);
-        verify(accountRepository).findFirstByOwner_email("jan.kowalski@example.com");
+        verify(accountRepository).findFirstByOwner_email(email);
     }
 
     @Test

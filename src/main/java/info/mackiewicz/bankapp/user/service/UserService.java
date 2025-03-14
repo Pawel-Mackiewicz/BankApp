@@ -1,98 +1,151 @@
 package info.mackiewicz.bankapp.user.service;
 
-import info.mackiewicz.bankapp.security.service.PasswordService;
-import info.mackiewicz.bankapp.shared.exception.UserNotFoundException;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.model.User;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Facade service that coordinates all user-related operations by delegating to specialized services.
+ * This service provides a high-level interface for user management operations including:
+ * - User creation and updates
+ * - User querying and retrieval
+ * - User deletion
+ * - Password management
+ *
+ * @see UserCreationService
+ * @see UserQueryService
+ * @see UserOperationsService
+ */
 @RequiredArgsConstructor
-@Slf4j
 @Service
-public class UserService implements UserServiceInterface {
+public class UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordService passwordService;
-    private final UsernameGeneratorService usernameGeneratorService;
+    private final UserCreationService userCreationService;
+    private final UserQueryService userQueryService;
+    private final UserOperationsService userOperationsService;
 
-    @Override
-    @Transactional
+    /**
+     * Creates a new user in the system.
+     *
+     * @param user The user object containing the information for the new user
+     * @return The created user with generated ID
+     * @throws IllegalStateException if required fields are missing or invalid   
+     * @throws IllegalArgumentException if any unique fields (username, email, PESEL) already exist
+     */
     public User createUser(User user) {
-        user = passwordService.ensurePasswordEncoded(user);
-        user = usernameGeneratorService.generateUsername(user);
-        User savedUser = userRepository.save(user);
-        log.info("Created user with ID: {}", user.getId());
-        return savedUser;
+        return userCreationService.createUser(user);
     }
 
-    @Override
-    @Transactional
+    /**
+     * Updates an existing user's information.
+     *
+     * @param user The user object containing updated information
+     * @return The updated user entity
+     * @throws UserNotFoundException if the user does not exist
+     */
     public User updateUser(User user) {
-        // Verify user exists
-        getUserById(user.getId());
-
-        user = passwordService.ensurePasswordEncoded(user);
-        User saved = userRepository.save(user);
-        log.info("Updated user with ID: {}", user.getId());
-
-        return saved;
+        return userOperationsService.updateUser(user);
     }
 
-    public void changeUsersPassword(String email, String newPassword) {
-        userRepository.updatePasswordByEmail(email, passwordService.encodePassword(newPassword));
-        log.info("Changed password for user with email: {}", email);
-    }
-
-    @Override
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id The unique identifier of the user
+     * @return The user with the specified ID
+     * @throws UserNotFoundException if no user is found with the given ID
+     */
     public User getUserById(Integer id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+        return userQueryService.getUserById(id);
     }
 
-    @Transactional
+    /**
+     * Retrieves a user by their ID with a pessimistic lock.
+     * This method should be used when updating user data in concurrent scenarios.
+     *
+     * @param id The unique identifier of the user
+     * @return The user with the specified ID
+     * @throws UserNotFoundException if no user is found with the given ID
+     */
     public User getUserByIdWithPessimisticLock(Integer id) {
-        return userRepository.findByIdWithPessimisticLock(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+        return userQueryService.getUserByIdWithPessimisticLock(id);
     }
 
-    @Override
+    /**
+     * Retrieves a user by their username.
+     *
+     * @param username The unique username of the user
+     * @return The user with the specified username
+     * @throws UserNotFoundException if no user is found with the given username
+     */
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        return userQueryService.getUserByUsername(username);
     }
 
-    @Override
+    /**
+     * Retrieves all users from the system.
+     *
+     * @return A list of all users
+     */
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userQueryService.getAllUsers();
     }
-    
-    @Override
-    @Transactional
+
+    /**
+     * Deletes a user from the system.
+     *
+     * @param id The ID of the user to delete
+     * @throws UserNotFoundException if no user exists with the given ID
+     */
     public void deleteUser(Integer id) {
-        User user = getUserById(id);
-        userRepository.delete(user);
-        log.info("Deleted user with ID: {}", id);
-    }
-    
-    @Override
-    public boolean checkUsernameExists(String username) {
-        return userRepository.existsByUsername(username);
+        userOperationsService.deleteUser(id);
     }
 
-    @Override
+    /**
+     * Checks if a username already exists in the system.
+     *
+     * @param username The username to check
+     * @return true if the username exists, false otherwise
+     */
+    public boolean userExistsByUsername(String username) {
+        return userQueryService.userExistsByUsername(username);
+    }
+
+    /**
+     * Checks if a user exists with the given email.
+     *
+     * @param email The email to check
+     * @return true if a user exists with the email, false otherwise
+     * @throws InvalidEmailFormatException if the email format is invalid
+     */
     public boolean userExistsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return userQueryService.userExistsByEmail(email);
     }
 
-    @Override
+    /**
+     * Retrieves a user by their email address.
+     *
+     * @param email The email address of the user
+     * @return The user with the specified email
+     * @throws UserNotFoundException if no user is found with the given email
+     * @throws InvalidEmailFormatException if the email format is invalid
+     */
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+        return userQueryService.getUserByEmail(email);
     }
-    
+
+    /**
+     * Changes the password for a user identified by their email.
+     *
+     * @param email The email of the user whose password should be changed
+     * @param newPassword The new password (in plain text)
+     * @throws IllegalArgumentException if the email format is invalid
+     */
+    public void changeUsersPassword(String email, String newPassword) {
+        userOperationsService.changeUsersPassword(email, newPassword);
+    }
 }

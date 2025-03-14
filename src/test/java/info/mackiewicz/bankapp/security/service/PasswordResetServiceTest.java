@@ -9,9 +9,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import info.mackiewicz.bankapp.notification.email.EmailService;
+import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
-import info.mackiewicz.bankapp.shared.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.shared.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
 

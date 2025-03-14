@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import info.mackiewicz.bankapp.shared.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;

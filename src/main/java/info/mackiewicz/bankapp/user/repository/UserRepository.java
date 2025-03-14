@@ -10,17 +10,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.LockModeType;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-    boolean existsByPESEL(String pesel);
-    boolean existsByEmail(String email);
+    boolean existsByPesel(Pesel pesel);
+    boolean existsByEmail(Email email);
     boolean existsByUsername(String username);
-
-    User getUserById(Integer id);
+    boolean existsByPhoneNumber(PhoneNumber phoneNumber);
+        
+    Optional<User> getUserById(Integer id);
 
     Optional<User> findByUsername(String username);
     
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(Email email);
     
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT u FROM User u WHERE u.id = :id")
@@ -29,5 +33,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Transactional
     @Query("UPDATE User u SET u.password = ?2 WHERE u.email = ?1")
-    void updatePasswordByEmail(String email, String newPassword);
+    void updatePasswordByEmail(Email email, String newPassword);
 }
