@@ -367,7 +367,7 @@ class ConcurrentTransactionIntegrationTest {
 
         user.setPesel(new Pesel(pesel));
         user.setFirstname("Test");
-        user.setLastname("User" + uniqueSuffix);
+        user.setLastname("User");
         user.setEmail(new Email("test.user" + uniqueSuffix + "@test.com"));
         user.setPassword("Password123!");
         user.setPhoneNumber(new PhoneNumber("+48" + String.format("%09d", hashCode + index)));
