@@ -4,8 +4,10 @@ import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.security.exception.InvalidPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
+import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -65,11 +67,7 @@ public class PasswordResetService {
         String newPassword = request.getPassword();
         String fullNameOfUser = token.getFullName();
 
-        boolean tokenConsumed = passwordResetTokenService.consumeToken(request.getToken());
-        if (!tokenConsumed) {
-            log.warn("Password reset failed - invalid or already used token for email: {}", email);
-            throw new IllegalStateException("Token is invalid or already used");
-        }
+        passwordResetTokenService.consumeToken(request.getToken());
         
         log.debug("Token successfully consumed, updating password for email: {}", email);
         userService.changeUsersPassword(email, newPassword);
@@ -86,10 +84,12 @@ public class PasswordResetService {
      * @param token Token to validate
      * @return Optional containing the user's email if token is valid, empty
      *         otherwise
+     * @throws TokenNotFoundException            if token is not found
+     * @throws ExpiredPasswordResetTokenException if token is expired
+     * @throws UsedPasswordResetTokenException    if token has already been used
      */
     public PasswordResetToken validateToken(String token) {
-        return passwordResetTokenService.validateToken(token)
-                .orElseThrow(() -> new InvalidPasswordResetTokenException("Invalid token provided"));
+        return passwordResetTokenService.validateAndGetToken(token);
     }
 
 }

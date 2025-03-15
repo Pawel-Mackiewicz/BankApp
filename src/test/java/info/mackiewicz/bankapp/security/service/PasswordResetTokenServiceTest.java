@@ -1,8 +1,19 @@
 package info.mackiewicz.bankapp.security.service;
 
-import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.security.model.PasswordResetToken;
-import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,13 +22,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
+import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
+import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.model.PasswordResetToken;
+import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PasswordResetTokenServiceTest {
@@ -81,7 +91,7 @@ verify(tokenHashingService, never()).generateToken();
     }
 
     @Test
-    void validateToken_WhenTokenIsValid_ShouldReturnUserEmail() {
+    void validateAndGetToken_WhenTokenIsValid_ShouldReturnToken() {
         // given
         PasswordResetToken validToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL, TEST_FULL_NAME);
         when(tokenHashingService.hashToken(TEST_TOKEN)).thenReturn(TEST_TOKEN_HASH);
@@ -89,15 +99,15 @@ verify(tokenHashingService, never()).generateToken();
                 .thenReturn(Optional.of(validToken));
 
         // when
-        Optional<PasswordResetToken> result = tokenService.validateToken(TEST_TOKEN);
+        PasswordResetToken result = tokenService.validateAndGetToken(TEST_TOKEN);
 
         // then
-        assertTrue(result.isPresent());
-        assertEquals(TEST_EMAIL, result.get().getUserEmail());
+        assertNotNull(result);
+        assertEquals(TEST_EMAIL, result.getUserEmail());
     }
 
     @Test
-    void validateToken_WhenTokenIsExpired_ShouldReturnEmpty() {
+    void validateAndGetToken_WhenTokenIsExpired_ShouldThrowException() {
         // given
         PasswordResetToken expiredToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL, TEST_FULL_NAME);
         expiredToken.setExpiresAt(LocalDateTime.now().minusHours(1));
@@ -106,15 +116,14 @@ verify(tokenHashingService, never()).generateToken();
         when(tokenRepository.findByTokenHash(TEST_TOKEN_HASH))
                 .thenReturn(Optional.of(expiredToken));
 
-        // when
-        Optional<PasswordResetToken> result = tokenService.validateToken(TEST_TOKEN);
-
-        // then
-        assertTrue(result.isEmpty());
+        // when/then
+        assertThrows(ExpiredPasswordResetTokenException.class, () ->
+            tokenService.validateAndGetToken(TEST_TOKEN)
+        );
     }
 
     @Test
-    void validateToken_WhenTokenIsUsed_ShouldReturnEmpty() {
+    void validateAndGetToken_WhenTokenIsUsed_ShouldThrowException() {
         // given
         PasswordResetToken usedToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL, TEST_FULL_NAME);
         usedToken.setUsed(true);
@@ -124,15 +133,14 @@ verify(tokenHashingService, never()).generateToken();
         when(tokenRepository.findByTokenHash(TEST_TOKEN_HASH))
                 .thenReturn(Optional.of(usedToken));
 
-        // when
-        Optional<PasswordResetToken> result = tokenService.validateToken(TEST_TOKEN);
-
-        // then
-        assertTrue(result.isEmpty());
+        // when/then
+        assertThrows(UsedPasswordResetTokenException.class, () ->
+            tokenService.validateAndGetToken(TEST_TOKEN)
+        );
     }
 
     @Test
-    void consumeToken_WhenTokenIsValid_ShouldMarkAsUsedAndReturnTrue() {
+    void consumeToken_WhenTokenIsValid_ShouldMarkAsUsed() {
         // given
         PasswordResetToken validToken = new PasswordResetToken(TEST_TOKEN_HASH, TEST_EMAIL, TEST_FULL_NAME);
         when(tokenHashingService.hashToken(TEST_TOKEN)).thenReturn(TEST_TOKEN_HASH);
@@ -142,13 +150,25 @@ verify(tokenHashingService, never()).generateToken();
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        boolean result = tokenService.consumeToken(TEST_TOKEN);
+        tokenService.consumeToken(TEST_TOKEN);
 
         // then
-        assertTrue(result);
-        verify(tokenRepository).save(argThat(token -> 
+        verify(tokenRepository).save(argThat(token ->
             token.isUsed() && token.getUsedAt() != null
         ));
+    }
+
+    @Test
+    void consumeToken_WhenTokenIsInvalid_ShouldThrowException() {
+        // given
+        when(tokenHashingService.hashToken(TEST_TOKEN)).thenReturn(TEST_TOKEN_HASH);
+        when(tokenRepository.findByTokenHash(TEST_TOKEN_HASH))
+                .thenReturn(Optional.empty());
+
+        // when/then
+        assertThrows(TokenNotFoundException.class, () ->
+            tokenService.consumeToken(TEST_TOKEN)
+        );
     }
 
     @Test

@@ -1,12 +1,22 @@
 package info.mackiewicz.bankapp.security.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
@@ -16,11 +26,6 @@ import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PasswordResetServiceTest {
@@ -111,14 +116,14 @@ class PasswordResetServiceTest {
         PasswordResetToken mockToken = mock(PasswordResetToken.class);
         when(mockToken.getUserEmail()).thenReturn(TEST_EMAIL);
         when(mockToken.getFullName()).thenReturn(TEST_FULL_NAME);
-        when(passwordResetTokenService.validateToken(TEST_TOKEN))
-            .thenReturn(Optional.of(mockToken));
-        when(passwordResetTokenService.consumeToken(TEST_TOKEN)).thenReturn(false);
+        when(passwordResetTokenService.validateAndGetToken(TEST_TOKEN)).thenReturn(mockToken);
+        doThrow(new InvalidPasswordResetTokenException("Token is invalid or already used"))
+            .when(passwordResetTokenService).consumeToken(TEST_TOKEN);
 
         // when/then
         assertThatThrownBy(() ->
             passwordResetService.completeReset(createResetDTO(TEST_TOKEN, NEW_PASSWORD, NEW_PASSWORD)))
-            .isInstanceOf(IllegalStateException.class)
+            .isInstanceOf(InvalidPasswordResetTokenException.class)
             .hasMessage("Token is invalid or already used");
 
         verify(userService, never()).changeUsersPassword(anyString(), anyString());
@@ -131,9 +136,7 @@ class PasswordResetServiceTest {
         PasswordResetToken mockToken = mock(PasswordResetToken.class);
         when(mockToken.getUserEmail()).thenReturn(TEST_EMAIL);
         when(mockToken.getFullName()).thenReturn(TEST_FULL_NAME);
-        when(passwordResetTokenService.validateToken(TEST_TOKEN))
-            .thenReturn(Optional.of(mockToken));
-        when(passwordResetTokenService.consumeToken(TEST_TOKEN)).thenReturn(true);
+        when(passwordResetTokenService.validateAndGetToken(TEST_TOKEN)).thenReturn(mockToken);
         doThrow(new RuntimeException("Password update failed"))
             .when(userService).changeUsersPassword(TEST_EMAIL, NEW_PASSWORD);
 
@@ -153,9 +156,7 @@ class PasswordResetServiceTest {
         PasswordResetToken mockToken = mock(PasswordResetToken.class);
         when(mockToken.getUserEmail()).thenReturn(TEST_EMAIL);
         when(mockToken.getFullName()).thenReturn(TEST_FULL_NAME);
-        when(passwordResetTokenService.validateToken(TEST_TOKEN))
-            .thenReturn(Optional.of(mockToken));
-        when(passwordResetTokenService.consumeToken(TEST_TOKEN)).thenReturn(true);
+        when(passwordResetTokenService.validateAndGetToken(TEST_TOKEN)).thenReturn(mockToken);
 
         // when
         passwordResetService.completeReset(createResetDTO(TEST_TOKEN, NEW_PASSWORD, NEW_PASSWORD));
@@ -171,29 +172,28 @@ class PasswordResetServiceTest {
         // given
         PasswordResetToken mockToken = mock(PasswordResetToken.class);
         when(mockToken.getUserEmail()).thenReturn(TEST_EMAIL);
-        when(passwordResetTokenService.validateToken(TEST_TOKEN))
-            .thenReturn(Optional.of(mockToken));
+        when(passwordResetTokenService.validateAndGetToken(TEST_TOKEN)).thenReturn(mockToken);
 
         // when
         PasswordResetToken result = passwordResetService.validateToken(TEST_TOKEN);
 
         // then
         assertThat(result.getUserEmail()).isEqualTo(TEST_EMAIL);
-        verify(passwordResetTokenService).validateToken(TEST_TOKEN);
+        verify(passwordResetTokenService).validateAndGetToken(TEST_TOKEN);
     }
 
     @Test
     void validateToken_WhenTokenInvalid_ShouldThrowException() {
         // given
-        when(passwordResetTokenService.validateToken(TEST_TOKEN))
-            .thenReturn(Optional.empty());
+        when(passwordResetTokenService.validateAndGetToken(TEST_TOKEN))
+            .thenThrow(new InvalidPasswordResetTokenException("Invalid token provided"));
 
         // when/then
         assertThatThrownBy(() -> passwordResetService.validateToken(TEST_TOKEN))
             .isInstanceOf(InvalidPasswordResetTokenException.class)
             .hasMessage("Invalid token provided");
 
-        verify(passwordResetTokenService).validateToken(TEST_TOKEN);
+        verify(passwordResetTokenService).validateAndGetToken(TEST_TOKEN);
     }
 
     @Test
@@ -202,9 +202,7 @@ class PasswordResetServiceTest {
         PasswordResetToken mockToken = mock(PasswordResetToken.class);
         when(mockToken.getUserEmail()).thenReturn(TEST_EMAIL);
         when(mockToken.getFullName()).thenReturn(TEST_FULL_NAME);
-        when(passwordResetTokenService.validateToken(TEST_TOKEN))
-            .thenReturn(Optional.of(mockToken));
-        when(passwordResetTokenService.consumeToken(TEST_TOKEN)).thenReturn(true);
+        when(passwordResetTokenService.validateAndGetToken(TEST_TOKEN)).thenReturn(mockToken);
         
         var inOrder = inOrder(passwordResetTokenService, userService, emailService);
 
@@ -212,7 +210,7 @@ class PasswordResetServiceTest {
         passwordResetService.completeReset(createResetDTO(TEST_TOKEN, NEW_PASSWORD, NEW_PASSWORD));
 
         // then
-        inOrder.verify(passwordResetTokenService).validateToken(TEST_TOKEN);
+        inOrder.verify(passwordResetTokenService).validateAndGetToken(TEST_TOKEN);
         inOrder.verify(passwordResetTokenService).consumeToken(TEST_TOKEN);
         inOrder.verify(userService).changeUsersPassword(TEST_EMAIL, NEW_PASSWORD);
         inOrder.verify(emailService).sendPasswordResetConfirmation(TEST_EMAIL, TEST_FULL_NAME);

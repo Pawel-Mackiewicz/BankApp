@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,6 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import info.mackiewicz.bankapp.security.exception.InvalidPasswordResetTokenException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
@@ -50,18 +50,16 @@ class PasswordResetTokenIntegrationTest {
                 .findFirst();
         assertTrue(storedToken.isPresent());
         assertNotEquals(token, storedToken.get().getTokenHash());
+
         // Act - Validate token
-        Optional<PasswordResetToken> validatedToken = tokenService.validateToken(token);
+        PasswordResetToken validatedToken = tokenService.validateAndGetToken(token);
 
         // Assert - Token validation successful
-        assertTrue(validatedToken.isPresent());
-        assertEquals(TEST_EMAIL, validatedToken.get().getUserEmail());
+        assertNotNull(validatedToken);
+        assertEquals(TEST_EMAIL, validatedToken.getUserEmail());
 
         // Act - Consume token
-        boolean consumed = tokenService.consumeToken(token);
-        
-        // Assert - Token consumed successfully
-        assertTrue(consumed);
+        tokenService.consumeToken(token);
         
         // Verify token is marked as used
         Optional<PasswordResetToken> usedToken = tokenRepository.findAll().stream()
@@ -103,8 +101,9 @@ class PasswordResetTokenIntegrationTest {
                 });
         
         // Verify token is now invalid
-        Optional<PasswordResetToken> validatedToken = tokenService.validateToken(token);
-        assertFalse(validatedToken.map(PasswordResetToken::getUserEmail).isPresent());
+        assertThrows(InvalidPasswordResetTokenException.class, () -> {
+            tokenService.validateAndGetToken(token);
+        });
         
         // Clean up old tokens
         int deletedCount = tokenService.cleanupOldTokens(0);
@@ -120,14 +119,20 @@ class PasswordResetTokenIntegrationTest {
         String token = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
         
         // Multiple validations should work until consumed
-        assertTrue(tokenService.validateToken(token).map(PasswordResetToken::getUserEmail).isPresent());
-        assertTrue(tokenService.validateToken(token).map(PasswordResetToken::getUserEmail).isPresent());
-        assertTrue(tokenService.validateToken(token).map(PasswordResetToken::getUserEmail).isPresent());
+        PasswordResetToken validToken1 = tokenService.validateAndGetToken(token);
+        PasswordResetToken validToken2 = tokenService.validateAndGetToken(token);
+        PasswordResetToken validToken3 = tokenService.validateAndGetToken(token);
+        
+        assertNotNull(validToken1);
+        assertNotNull(validToken2);
+        assertNotNull(validToken3);
         
         // Consume token
-        assertTrue(tokenService.consumeToken(token));
+        tokenService.consumeToken(token);
         
         // Further validations should fail
-        assertFalse(tokenService.validateToken(token).isPresent());
+        assertThrows(InvalidPasswordResetTokenException.class, () -> {
+            tokenService.validateAndGetToken(token);
+        });
     }
 }
