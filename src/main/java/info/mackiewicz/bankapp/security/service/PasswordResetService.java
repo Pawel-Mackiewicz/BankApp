@@ -58,16 +58,19 @@ public class PasswordResetService {
      * @param email Email of the user
      * @param newPassword New password to set
      * @throws IllegalStateException if token is invalid or already used
+     * @throws UserNotFoundException if user with given email doesn't exist
+     * @throws ExpiredPasswordResetTokenException if token is expired
+     * @throws UsedPasswordResetTokenException if token has already been used
      */
     @Transactional
     public void completeReset(PasswordResetDTO request) {
         
-        PasswordResetToken token = validateToken(request.getToken());
+        PasswordResetToken token = validateAndRetrieveToken(request.getToken());
         String email = token.getUserEmail();
         String newPassword = request.getPassword();
         String fullNameOfUser = token.getFullName();
 
-        passwordResetTokenService.consumeToken(request.getToken());
+        passwordResetTokenService.consumeToken(token);
         
         log.debug("Token successfully consumed, updating password for email: {}", email);
         userService.changeUsersPassword(email, newPassword);
@@ -79,17 +82,18 @@ public class PasswordResetService {
     }
 
     /**
-     * Validates a token and returns associated user's email if valid
-     * 
+     * Validates a password reset token
+     * exception is thrown if token is not found, expired or already used
      * @param token Token to validate
-     * @return Optional containing the user's email if token is valid, empty
-     *         otherwise
+     * @return PasswordResetToken containing the user's email and other details if token is valid
      * @throws TokenNotFoundException            if token is not found
      * @throws ExpiredPasswordResetTokenException if token is expired
      * @throws UsedPasswordResetTokenException    if token has already been used
      */
-    public PasswordResetToken validateToken(String token) {
-        return passwordResetTokenService.validateAndGetToken(token);
+    public PasswordResetToken validateAndRetrieveToken(String token) {
+        PasswordResetToken validatedToken = passwordResetTokenService.validateAndRetrieveToken(token);
+        log.debug("Token successfully validated and retrieved: {}", token);
+        return validatedToken;
     }
 
 }

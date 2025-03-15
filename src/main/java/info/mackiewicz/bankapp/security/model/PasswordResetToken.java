@@ -104,7 +104,7 @@ public class PasswordResetToken {
  */
 public void markAsUsed() {
     if (!isValid()) {
-        throw new InvalidPasswordResetTokenException("Token is not valid");
+        throw new InvalidPasswordResetTokenException("Token is already used or expired");
     }
     this.used = true;
     this.usedAt = LocalDateTime.now();

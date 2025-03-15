@@ -63,7 +63,7 @@ public class PasswordResetTokenService {
      * @throws ExpiredPasswordResetTokenException if token is expired
      * @throws UsedPasswordResetTokenException    if token has already been used
      */
-    public PasswordResetToken validateAndGetToken(String token) {
+    public PasswordResetToken validateAndRetrieveToken(String token) {
         String tokenHash = tokenHashingService.hashToken(token);
 
         PasswordResetToken foundToken = tokenRepository.findByTokenHash(tokenHash)
@@ -86,7 +86,7 @@ public class PasswordResetTokenService {
      * 
      * @param token Token to validate
      * @return PasswordResetToken object if token is valid, empty otherwise
-     * @see #validateAndGetToken(String)
+     * @see #validateAndRetrieveToken(String)
      */
     @Deprecated(forRemoval = true)
     public Optional<PasswordResetToken> validateToken(String token) {
@@ -107,14 +107,9 @@ public class PasswordResetTokenService {
 
         return foundToken;
     }
-
-    public boolean isTokenPresent(String token) {
-        String tokenHash = tokenHashingService.hashToken(token);
-        return tokenRepository.findByTokenHash(tokenHash).isPresent();
-    }
-
+    
     /**
-     * Marks a token as used if it's valid
+     * Marks a token as used and saves it to the database
      * 
      * @param token Token to consume
      * @return true if token was successfully consumed, false otherwise
@@ -122,16 +117,30 @@ public class PasswordResetTokenService {
      * @throws InvalidPasswordResetTokenException if token is not valid (expired or
      *                                            already used)
      */
+    @Deprecated
     @Transactional
     public void consumeToken(String token) {
         String tokenHash = tokenHashingService.hashToken(token);
-
+        
         PasswordResetToken foundToken = tokenRepository.findByTokenHash(tokenHash)
-                .orElseThrow(() -> new TokenNotFoundException("Token not found"));
-
+        .orElseThrow(() -> new TokenNotFoundException("Token not found"));
+        
         consumeToken(foundToken);
     }
-
+    
+        public boolean isTokenPresent(String token) {
+            String tokenHash = tokenHashingService.hashToken(token);
+            return tokenRepository.findByTokenHash(tokenHash).isPresent();
+        }
+    
+        /**
+     * Marks a token as used and saves it to the database
+     * 
+     * @param token Token to consume
+     * @return true if token was successfully consumed, false otherwise
+     * @throws InvalidPasswordResetTokenException if token is not valid (expired or
+     *                                            already used)
+     */
     @Transactional
     public void consumeToken(PasswordResetToken token) {
         token.markAsUsed();

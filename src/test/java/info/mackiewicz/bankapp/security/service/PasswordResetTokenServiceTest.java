@@ -23,8 +23,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
-import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
+import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
@@ -99,7 +99,7 @@ verify(tokenHashingService, never()).generateToken();
                 .thenReturn(Optional.of(validToken));
 
         // when
-        PasswordResetToken result = tokenService.validateAndGetToken(TEST_TOKEN);
+        PasswordResetToken result = tokenService.validateAndRetrieveToken(TEST_TOKEN);
 
         // then
         assertNotNull(result);
@@ -118,7 +118,7 @@ verify(tokenHashingService, never()).generateToken();
 
         // when/then
         assertThrows(ExpiredPasswordResetTokenException.class, () ->
-            tokenService.validateAndGetToken(TEST_TOKEN)
+            tokenService.validateAndRetrieveToken(TEST_TOKEN)
         );
     }
 
@@ -135,7 +135,7 @@ verify(tokenHashingService, never()).generateToken();
 
         // when/then
         assertThrows(UsedPasswordResetTokenException.class, () ->
-            tokenService.validateAndGetToken(TEST_TOKEN)
+            tokenService.validateAndRetrieveToken(TEST_TOKEN)
         );
     }
 
