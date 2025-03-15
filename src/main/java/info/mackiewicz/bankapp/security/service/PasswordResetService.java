@@ -1,13 +1,15 @@
 package info.mackiewicz.bankapp.security.service;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.notification.email.EmailService;
+import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
+import info.mackiewicz.bankapp.security.exception.InvalidPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,16 +31,21 @@ public class PasswordResetService {
     public void requestReset(String email) {
 
         log.info("Password reset requested for email: {}", email);
-        String fullNameOfUser;
 
         try {
-            fullNameOfUser = userService.getUserByEmail(email).getFullName();
+            var user = userService.getUserByEmail(email);
+            String token = passwordResetTokenService.createToken(email, user.getFullName());
+            emailService.sendPasswordResetEmail(email, token, user.getFullName());
         } catch (UserNotFoundException e) {
+            // We don't want to expose the fact that the user doesn't exist for security reasons
             log.info("User with email {} not found", email);
             return;
+        } catch (TooManyPasswordResetAttemptsException e) {
+            log.warn("Too many password reset attempts for email: {}", email);
+            throw e;
+        } catch (Exception e) {
+            log.error("An unexpected error occurred while processing the password reset request for email: {}", email, e);
         }
-        String token = passwordResetTokenService.createToken(email, fullNameOfUser);
-        emailService.sendPasswordResetEmail(email, token, fullNameOfUser);
 
     }
 
@@ -50,10 +57,15 @@ public class PasswordResetService {
      * @param newPassword New password to set
      * @throws IllegalStateException if token is invalid or already used
      */
-    public void completeReset(String token, String email, String fullNameOfUser, String newPassword) {
-        log.info("Attempting to complete password reset for email: {}", email);
+    @Transactional
+    public void completeReset(PasswordResetDTO request) {
         
-        boolean tokenConsumed = passwordResetTokenService.consumeToken(token);
+        PasswordResetToken token = validateToken(request.getToken());
+        String email = token.getUserEmail();
+        String newPassword = request.getPassword();
+        String fullNameOfUser = token.getFullName();
+
+        boolean tokenConsumed = passwordResetTokenService.consumeToken(request.getToken());
         if (!tokenConsumed) {
             log.warn("Password reset failed - invalid or already used token for email: {}", email);
             throw new IllegalStateException("Token is invalid or already used");
@@ -75,8 +87,9 @@ public class PasswordResetService {
      * @return Optional containing the user's email if token is valid, empty
      *         otherwise
      */
-    public Optional<PasswordResetToken> validateToken(String token) {
-        return passwordResetTokenService.validateToken(token);
+    public PasswordResetToken validateToken(String token) {
+        return passwordResetTokenService.validateToken(token)
+                .orElseThrow(() -> new InvalidPasswordResetTokenException("Invalid token provided"));
     }
 
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetRequestDTO;
-import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.service.PasswordResetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +33,7 @@ public class PasswordResetController {
     public ResponseEntity<Void> completeReset(
         @Valid @RequestBody PasswordResetDTO request
     ) {
-        PasswordResetToken token = passwordResetService.validateToken(request.getToken());
-        passwordResetService.completeReset(request.getToken(), token.getUserEmail(), token.getFullName(), request.getPassword());
+        passwordResetService.completeReset(request);
         return ResponseEntity.ok().build();
     }
 }
