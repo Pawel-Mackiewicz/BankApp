@@ -34,12 +34,7 @@ public class PasswordResetController {
     public ResponseEntity<Void> completeReset(
         @Valid @RequestBody PasswordResetDTO request
     ) {
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new IllegalArgumentException("Passwords do not match");
-        }
-        
-        PasswordResetToken token = passwordResetService.validateToken(request.getToken())
-            .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
+        PasswordResetToken token = passwordResetService.validateToken(request.getToken());
         passwordResetService.completeReset(request.getToken(), token.getUserEmail(), token.getFullName(), request.getPassword());
         return ResponseEntity.ok().build();
     }

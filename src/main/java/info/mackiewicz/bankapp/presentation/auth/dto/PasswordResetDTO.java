@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.presentation.auth.dto;
 
+import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -10,6 +11,7 @@ import lombok.Data;
  * DTO for password reset
  */
 @Data
+@PasswordMatches
 public class PasswordResetDTO {
 
     @NotBlank(message = "Token is required")
