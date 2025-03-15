@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TokenHashingService {
 
+    private static final String HASH_ALGORITHM = "SHA-256";
     private static final int TOKEN_LENGTH = 32;
     private final SecureRandom secureRandom;
 
@@ -34,7 +35,7 @@ public class TokenHashingService {
     }
 
     /**
-     * Hashes a token using SHA-256 (deterministyczne hashowanie)
+     * Hashes a token using SHA-256 (deterministic hash)
      * @param token Token to hash
      * @return Hashed token string
      */
@@ -44,7 +45,7 @@ public class TokenHashingService {
         }
         
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
             byte[] hashBytes = digest.digest(token.getBytes(StandardCharsets.UTF_8));
             String hashedToken = Base64.getEncoder().encodeToString(hashBytes);
             
@@ -70,6 +71,10 @@ public class TokenHashingService {
         }
         
         String computedHash = hashToken(token);
-        return computedHash.equals(storedHash);
+        // Use MessageDigest.isEqual to prevent timing attacks
+        return MessageDigest.isEqual(
+            computedHash.getBytes(StandardCharsets.UTF_8),
+            storedHash.getBytes(StandardCharsets.UTF_8)
+        );
     }
 }

@@ -52,7 +52,7 @@ class PasswordResetTokenIntegrationTest {
         assertNotEquals(token, storedToken.get().getTokenHash());
 
         // Act - Validate token
-        PasswordResetToken validatedToken = tokenService.validateAndRetrieveToken(token);
+        PasswordResetToken validatedToken = tokenService.getValidatedToken(token);
 
         // Assert - Token validation successful
         assertNotNull(validatedToken);
@@ -102,7 +102,7 @@ class PasswordResetTokenIntegrationTest {
         
         // Verify token is now invalid
         assertThrows(InvalidPasswordResetTokenException.class, () -> {
-            tokenService.validateAndRetrieveToken(token);
+            tokenService.getValidatedToken(token);
         });
         
         // Clean up old tokens
@@ -119,9 +119,9 @@ class PasswordResetTokenIntegrationTest {
         String token = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
         
         // Multiple validations should work until consumed
-        PasswordResetToken validToken1 = tokenService.validateAndRetrieveToken(token);
-        PasswordResetToken validToken2 = tokenService.validateAndRetrieveToken(token);
-        PasswordResetToken validToken3 = tokenService.validateAndRetrieveToken(token);
+        PasswordResetToken validToken1 = tokenService.getValidatedToken(token);
+        PasswordResetToken validToken2 = tokenService.getValidatedToken(token);
+        PasswordResetToken validToken3 = tokenService.getValidatedToken(token);
         
         assertNotNull(validToken1);
         assertNotNull(validToken2);
@@ -132,7 +132,7 @@ class PasswordResetTokenIntegrationTest {
         
         // Further validations should fail
         assertThrows(InvalidPasswordResetTokenException.class, () -> {
-            tokenService.validateAndRetrieveToken(token);
+            tokenService.getValidatedToken(token);
         });
     }
 }

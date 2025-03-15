@@ -9,6 +9,7 @@ import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
+import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -95,7 +96,7 @@ public class PasswordResetService {
      * @throws UsedPasswordResetTokenException    if token has already been used
      */
     public PasswordResetToken validateAndRetrieveToken(String token) {
-        PasswordResetToken validatedToken = passwordResetTokenService.validateAndRetrieveToken(token);
+        PasswordResetToken validatedToken = passwordResetTokenService.getValidatedToken(token);
         log.debug("Token successfully validated and retrieved: {}", token);
         return validatedToken;
     }

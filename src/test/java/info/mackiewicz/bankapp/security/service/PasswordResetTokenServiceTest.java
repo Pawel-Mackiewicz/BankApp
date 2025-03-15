@@ -99,7 +99,7 @@ verify(tokenHashingService, never()).generateToken();
                 .thenReturn(Optional.of(validToken));
 
         // when
-        PasswordResetToken result = tokenService.validateAndRetrieveToken(TEST_TOKEN);
+        PasswordResetToken result = tokenService.getValidatedToken(TEST_TOKEN);
 
         // then
         assertNotNull(result);
@@ -118,7 +118,7 @@ verify(tokenHashingService, never()).generateToken();
 
         // when/then
         assertThrows(ExpiredPasswordResetTokenException.class, () ->
-            tokenService.validateAndRetrieveToken(TEST_TOKEN)
+            tokenService.getValidatedToken(TEST_TOKEN)
         );
     }
 
@@ -135,7 +135,7 @@ verify(tokenHashingService, never()).generateToken();
 
         // when/then
         assertThrows(UsedPasswordResetTokenException.class, () ->
-            tokenService.validateAndRetrieveToken(TEST_TOKEN)
+            tokenService.getValidatedToken(TEST_TOKEN)
         );
     }
 
