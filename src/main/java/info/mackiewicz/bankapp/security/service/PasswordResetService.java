@@ -10,6 +10,7 @@ import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsEx
 import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,8 @@ public class PasswordResetService {
      * Initiates password reset process for user with given email
      * 
      * @param email Email of user requesting password reset
-     * @throws UserNotFoundException if user with given email doesn't exist
+     * @throws InvalidEmailFormatException if email is not valid
+     * @throws TooManyPasswordResetAttemptsException if too many password reset attempts have been made
      */
     public void requestReset(String email) {
 
@@ -47,6 +49,7 @@ public class PasswordResetService {
             throw e;
         } catch (Exception e) {
             log.error("An unexpected error occurred while processing the password reset request for email: {}", email, e);
+            throw e;
         }
 
     }
@@ -61,12 +64,13 @@ public class PasswordResetService {
      * @throws UserNotFoundException if user with given email doesn't exist
      * @throws ExpiredPasswordResetTokenException if token is expired
      * @throws UsedPasswordResetTokenException if token has already been used
+     * @throws InvalidEmailFormatException if email is not valid
      */
     @Transactional
     public void completeReset(PasswordResetDTO request) {
         
         PasswordResetToken token = validateAndRetrieveToken(request.getToken());
-        String email = token.getUserEmail();
+        Email email = new Email(token.getUserEmail());
         String newPassword = request.getPassword();
         String fullNameOfUser = token.getFullName();
 
@@ -76,7 +80,7 @@ public class PasswordResetService {
         userService.changeUsersPassword(email, newPassword);
         
         log.debug("Password updated successfully, sending confirmation email to: {}", email);
-        emailService.sendPasswordResetConfirmation(email, fullNameOfUser);
+        emailService.sendPasswordResetConfirmation(email.toString(), fullNameOfUser);
         
         log.info("Password reset completed successfully for email: {}", email);
     }
