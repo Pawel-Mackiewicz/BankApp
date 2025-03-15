@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
@@ -50,9 +51,9 @@ public class PasswordResetTokenService {
     }
 
     /**
-     * Validates a token and returns associated user's email if valid
+     * Validates a token and returns PasswordResetToken object if valid
      * @param token Token to validate
-     * @return Optional containing the user's email if token is valid, empty otherwise
+     * @return PasswordResetToken object if token is valid, empty otherwise
      */
     public Optional<PasswordResetToken> validateToken(String token) {
         String tokenHash = tokenHashingService.hashToken(token);
@@ -77,21 +78,20 @@ public class PasswordResetTokenService {
      * Marks a token as used if it's valid
      * @param token Token to consume
      * @return true if token was successfully consumed, false otherwise
+     * @throws TokenNotFoundException if token is not found
      */
     @Transactional
     public boolean consumeToken(String token) {
         String tokenHash = tokenHashingService.hashToken(token);
         
-        Optional<PasswordResetToken> foundToken = tokenRepository.findByTokenHash(tokenHash);
+        PasswordResetToken foundToken = tokenRepository.findByTokenHash(tokenHash)
+            .orElseThrow(() -> new TokenNotFoundException("Token not found"));
         
         if (log.isDebugEnabled()) {
-            log.debug("Consuming token: found={}", foundToken.isPresent());
+            log.debug("Consuming token for email: {}", foundToken.getUserEmail());
             
-            if (foundToken.isPresent()) {
-                PasswordResetToken resetToken = foundToken.get();
-                log.debug("Token status: expired={}, used={}, valid={}",
-                    resetToken.isExpired(), resetToken.isUsed(), resetToken.isValid());
-            }
+            log.debug("Token status: expired={}, used={}, valid={}",
+                foundToken.isExpired(), foundToken.isUsed(), foundToken.isValid());
         }
         
         return tokenRepository.findByTokenHash(tokenHash)
