@@ -37,21 +37,30 @@ public class PasswordResetTokenService {
      */
     @Transactional
     public String createToken(String userEmail, String fullName) {
-        // Check if user hasn't exceeded token limit
-        long activeTokens = tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now());
-        if (activeTokens >= MAX_ACTIVE_TOKENS_PER_USER) {
-            throw new TooManyPasswordResetAttemptsException();
-        }
+
+        validateTokenCreation(userEmail);
 
         // Generate new token and its hash
         String plainToken = tokenHashingService.generateToken();
         String tokenHash = tokenHashingService.hashToken(plainToken);
 
+        saveNewToken(userEmail, fullName, tokenHash);
+
+        return plainToken; // Return plain token to be sent via email
+    }
+
+    private void validateTokenCreation(String userEmail) {
+        // Check if user hasn't exceeded token limit
+        if (!canRequestToken(userEmail)) {
+            log.warn("User {} has exceeded the limit of active tokens", userEmail);
+            throw new TooManyPasswordResetAttemptsException();
+        }
+    }
+
+    private void saveNewToken(String userEmail, String fullName, String tokenHash) {
         // Create and save token entity with hash
         PasswordResetToken resetToken = new PasswordResetToken(tokenHash, userEmail, fullName);
         tokenRepository.save(resetToken);
-
-        return plainToken; // Return plain token to be sent via email
     }
 
     /**
@@ -66,11 +75,16 @@ public class PasswordResetTokenService {
     public PasswordResetToken getValidatedToken(String token) {
         String tokenHash = tokenHashingService.hashToken(token);
 
-        PasswordResetToken foundToken = tokenRepository.findByTokenHash(tokenHash)
-                .orElseThrow(() -> new TokenNotFoundException("Token not found"));
+        PasswordResetToken foundToken = findTokenByHash(tokenHash);
 
         validateToken(foundToken);
 
+        return foundToken;
+    }
+
+    private PasswordResetToken findTokenByHash(String tokenHash) {
+        PasswordResetToken foundToken = tokenRepository.findByTokenHash(tokenHash)
+                .orElseThrow(() -> new TokenNotFoundException("Token not found"));
         return foundToken;
     }
 
@@ -108,7 +122,7 @@ public class PasswordResetTokenService {
      * @return true if user can request new token, false otherwise
      */
     public boolean canRequestToken(String userEmail) {
-                return tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now()) < MAX_ACTIVE_TOKENS_PER_USER;
+        return tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now()) < MAX_ACTIVE_TOKENS_PER_USER;
     }
 
     /**

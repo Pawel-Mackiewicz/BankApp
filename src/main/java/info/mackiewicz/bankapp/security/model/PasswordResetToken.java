@@ -99,8 +99,7 @@ public class PasswordResetToken {
 
 /**
  * Marks the token as used with the current timestamp
- * @throws ExpiredPasswordResetTokenException if the token has expired
- * @throws TokenAlreadyUsedException if the token has already been used
+ * @throws InvalidPasswordResetTokenException if the token is already used or expired
  */
 public void markAsUsed() {
     if (!isValid()) {
