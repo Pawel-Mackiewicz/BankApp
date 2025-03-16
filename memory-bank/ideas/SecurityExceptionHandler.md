@@ -95,7 +95,17 @@ public class ErrorContext {
 }
 ```
 
-b) Create Base Error Translator:
+b) Create Translator Interface:
+```java
+package info.mackiewicz.bankapp.shared.error;
+
+public interface ErrorMessageTranslator {
+    boolean supports(ErrorDomain domain);
+    String translate(ErrorCode code, ErrorContext context);
+}
+```
+
+c) Create Base Error Translator:
 ```java
 public abstract class BaseErrorTranslator implements ErrorMessageTranslator {
     protected static final String DEFAULT_MESSAGE =
@@ -130,16 +140,6 @@ public abstract class BaseErrorTranslator implements ErrorMessageTranslator {
 }
 ```
 
-c) Create Translator Interface:
-```java
-package info.mackiewicz.bankapp.shared.error;
-
-public interface ErrorMessageTranslator {
-    boolean supports(ErrorDomain domain);
-    String translate(ErrorCode code, ErrorContext context);
-}
-```
-
 d) Implement Security Translator:
 ```java
 @Component
@@ -165,17 +165,7 @@ public class SecurityErrorTranslator extends BaseErrorTranslator {
 
 ### 3. Update ApiExceptionHandler
 
-a) Update Class Annotations:
-```java
-@RestControllerAdvice
-@RequiredArgsConstructor
-@Slf4j
-public class ApiExceptionHandler {
-    private final ErrorCodeResolver errorCodeResolver;
-}
-```
-
-b) Create Error Code Resolver:
+a) Create Error Code Resolver:
 ```java
 @Component
 public class ErrorCodeResolver {
@@ -188,6 +178,16 @@ public class ErrorCodeResolver {
             default -> ErrorCode.INTERNAL_ERROR;
         };
     }
+}
+```
+
+b) Update Class Annotations:
+```java
+@RestControllerAdvice
+@RequiredArgsConstructor
+@Slf4j
+public class ApiExceptionHandler {
+    private final ErrorCodeResolver errorCodeResolver;
 }
 ```
 
