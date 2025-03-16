@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.security.service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PasswordResetTokenService {
 
     private static final int MAX_ACTIVE_TOKENS_PER_USER = 2;
+    private static final int DEFAULT_CLEANUP_DAYS = 30;
 
     private final PasswordResetTokenRepository tokenRepository;
     private final TokenHashingService tokenHashingService;
@@ -84,39 +84,9 @@ public class PasswordResetTokenService {
     }
 
     /**
-     * Method is deprecated and will be removed in future versions
-     * Use validateAndGetToken instead
-     * Validates a token and returns PasswordResetToken object if valid
-     * 
-     * @param token Token to validate
-     * @return PasswordResetToken object if token is valid, empty otherwise
-     * @see #getValidatedToken(String)
-     */
-    @Deprecated(forRemoval = true)
-    public Optional<PasswordResetToken> validateToken(String token) {
-        String tokenHash = tokenHashingService.hashToken(token);
-
-        Optional<PasswordResetToken> foundToken = tokenRepository.findByTokenHash(tokenHash)
-                .filter(PasswordResetToken::isValid);
-
-        if (log.isDebugEnabled()) {
-            log.debug("Validating token: found={}", foundToken.isPresent());
-
-            if (foundToken.isPresent()) {
-                PasswordResetToken resetToken = foundToken.get();
-                log.debug("Token status: expired={}, used={}, valid={}",
-                        resetToken.isExpired(), resetToken.isUsed(), resetToken.isValid());
-            }
-        }
-
-        return foundToken;
-    }
-
-    /**
      * Marks a token as used and saves it to the database
      * 
      * @param token Token to consume
-     * @return true if token was successfully consumed, false otherwise
      * @throws InvalidPasswordResetTokenException if token is not valid (expired or
      *                                            already used)
      */
@@ -124,26 +94,6 @@ public class PasswordResetTokenService {
     public void consumeToken(PasswordResetToken token) {
         token.markAsUsed();
         tokenRepository.save(token);
-    }
-
-    /**
-     * Marks a token as used and saves it to the database
-     * 
-     * @param token Token to consume
-     * @return true if token was successfully consumed, false otherwise
-     * @throws TokenNotFoundException             if token is not found
-     * @throws InvalidPasswordResetTokenException if token is not valid (expired or
-     *                                            already used)
-     */
-    @Deprecated
-    @Transactional
-    public void consumeToken(String token) {
-        String tokenHash = tokenHashingService.hashToken(token);
-
-        PasswordResetToken foundToken = tokenRepository.findByTokenHash(tokenHash)
-                .orElseThrow(() -> new TokenNotFoundException("Token not found"));
-
-        consumeToken(foundToken);
     }
 
     public boolean isTokenPresent(String token) {
@@ -158,7 +108,7 @@ public class PasswordResetTokenService {
      * @return true if user can request new token, false otherwise
      */
     public boolean canRequestToken(String userEmail) {
-        return tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now()) < MAX_ACTIVE_TOKENS_PER_USER;
+                return tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now()) < MAX_ACTIVE_TOKENS_PER_USER;
     }
 
     /**
@@ -168,7 +118,7 @@ public class PasswordResetTokenService {
      */
     @Transactional
     public int cleanupOldTokens() {
-        return cleanupOldTokens(30);
+        return cleanupOldTokens(DEFAULT_CLEANUP_DAYS);
     }
 
     /**
