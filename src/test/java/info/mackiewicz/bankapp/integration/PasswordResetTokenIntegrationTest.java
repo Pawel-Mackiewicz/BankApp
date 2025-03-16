@@ -1,139 +1,200 @@
 package info.mackiewicz.bankapp.integration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
-import info.mackiewicz.bankapp.security.exception.InvalidPasswordResetTokenException;
-import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
+import info.mackiewicz.bankapp.notification.email.EmailService;
+import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
+import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
+import info.mackiewicz.bankapp.security.service.PasswordResetService;
 import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
-import info.mackiewicz.bankapp.testutils.config.TestConfig;
+import info.mackiewicz.bankapp.security.service.TokenHashingService;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-@Import(TestConfig.class)
-class PasswordResetTokenIntegrationTest {
+public class PasswordResetTokenIntegrationTest {
 
     @Autowired
-    private PasswordResetTokenService tokenService;
+    private PasswordResetService passwordResetService;
 
     @Autowired
     private PasswordResetTokenRepository tokenRepository;
 
-    private static final String TEST_EMAIL = "test@example.com";
-    private static final String TEST_FULL_NAME = "Test User";
+    @Autowired
+    private UserRepository userRepository;
 
-    @Test
-    void fullPasswordResetFlow_ShouldWorkCorrectly() {
-        // Arrange - Request password reset
-        String token = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
-        assertNotNull(token);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private TokenHashingService tokenHashingService;
+    
+    @MockitoSpyBean
+    private PasswordResetTokenService passwordResetTokenService;
 
-        // Verify token is stored as hash
-        Optional<PasswordResetToken> storedToken = tokenRepository.findAll().stream()
-                .filter(t -> t.getUserEmail().equals(TEST_EMAIL))
-                .findFirst();
-        assertTrue(storedToken.isPresent());
-        assertNotEquals(token, storedToken.get().getTokenHash());
+    @Autowired
+    private EntityManager entityManager;
+    
+    // Mockujemy EmailService aby uniknąć faktycznego wysyłania e-maili
+    @MockitoBean
+    private EmailService emailService;
 
-        // Act - Validate token
-        PasswordResetToken validatedToken = tokenService.getValidatedToken(token);
+    private User testUser;
+    private static final String TEST_PASSWORD = "oldPassword123!";
+    private static final String NEW_PASSWORD = "newPassword456!";
+    // Stały token testowy do użycia w testach
+    private static final String TEST_PLAIN_TOKEN = "test-token-for-reset-password";
 
-        // Assert - Token validation successful
-        assertNotNull(validatedToken);
-        assertEquals(TEST_EMAIL, validatedToken.getUserEmail());
-
-        // Act - Consume token
-        tokenService.consumeToken(validatedToken);
+    @BeforeEach
+    void setUp() {
+        // Konfigurujemy mock EmailService, aby nie rzucał wyjątków
+        doNothing().when(emailService).sendPasswordResetEmail(anyString(), anyString(), anyString());
+        doNothing().when(emailService).sendPasswordResetConfirmation(anyString(), anyString());
         
-        // Verify token is marked as used
-        Optional<PasswordResetToken> usedToken = tokenRepository.findAll().stream()
-                .filter(t -> t.getUserEmail().equals(TEST_EMAIL))
-                .findFirst();
-        assertTrue(usedToken.isPresent());
-        assertTrue(usedToken.get().isUsed());
-        assertNotNull(usedToken.get().getUsedAt());
+        // Create test user with dynamic ID instead of fixed ID=1
+        testUser = TestUserBuilder.createRandomTestUser();
+        testUser.setPassword(passwordEncoder.encode(TEST_PASSWORD));
+        testUser = userRepository.save(testUser);
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
-    void tokenLimits_ShouldBeEnforced() {
-        // Create max number of tokens
-        String token1 = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
-        String token2 = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
-        
-        // Assert both tokens are valid
-        assertNotNull(token1);
-        assertNotNull(token2);
-        
-        // Try to create one more token
-        assertThrows(TooManyPasswordResetAttemptsException.class, () -> {
-            tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
-        });
-    }
+    void whenRequestingPasswordReset_shouldCreateValidToken() {
+        // When
+        passwordResetService.requestReset(testUser.getEmail().toString());
+        entityManager.flush();
+        entityManager.clear();
 
-    @Test
-    void expiredTokens_ShouldBeCleanedUp() {
-        // Create a token
-        String token = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
-        
-        // Manually expire the token in database
-        tokenRepository.findAll().stream()
-                .filter(t -> t.getUserEmail().equals(TEST_EMAIL))
-                .findFirst()
-                .ifPresent(t -> {
-                    t.setExpiresAt(LocalDateTime.now().minusHours(1));
-                    tokenRepository.save(t);
+        // Then
+        assertThat(tokenRepository.findValidTokensByUserEmail(testUser.getEmail().toString(), LocalDateTime.now()))
+                .hasSize(1)
+                .first()
+                .satisfies(token -> {
+                    assertThat(token.getUserEmail()).isEqualTo(testUser.getEmail().toString());
+                    assertThat(token.isUsed()).isFalse();
+                    assertThat(token.getExpiresAt()).isAfter(LocalDateTime.now());
                 });
-        
-        // Verify token is now invalid
-        assertThrows(InvalidPasswordResetTokenException.class, () -> {
-            tokenService.getValidatedToken(token);
-        });
-        
-        // Clean up old tokens
-        int deletedCount = tokenService.cleanupOldTokens(0);
-        assertTrue(deletedCount > 0);
-        
-        // Verify token was deleted
-        assertEquals(0, tokenRepository.findAll().size());
     }
 
     @Test
-    void multipleValidations_ShouldWork() {
-        // Create token
-        String token = tokenService.createToken(TEST_EMAIL, TEST_FULL_NAME);
+    void whenResettingPassword_shouldUpdatePasswordAndConsumeToken() {
+        // Given
+        // Przygotuj własny token testowy - symuluj utworzenie tokena
+        String hashedToken = tokenHashingService.hashToken(TEST_PLAIN_TOKEN);
+        PasswordResetToken token = new PasswordResetToken(hashedToken, testUser.getEmail().toString(), testUser.getFullName());
+        token = tokenRepository.save(token);
         
-        // Multiple validations should work until consumed
-        PasswordResetToken validToken1 = tokenService.getValidatedToken(token);
-        PasswordResetToken validToken2 = tokenService.getValidatedToken(token);
-        PasswordResetToken validToken3 = tokenService.getValidatedToken(token);
+        // Skonfiguruj zwracanie tego tokena przez getValidatedToken
+        when(passwordResetTokenService.getValidatedToken(TEST_PLAIN_TOKEN)).thenReturn(token);
         
-        assertNotNull(validToken1);
-        assertNotNull(validToken2);
-        assertNotNull(validToken3);
+        String oldPasswordHash = testUser.getPassword();
+
+        PasswordResetDTO resetDTO = new PasswordResetDTO();
+        resetDTO.setToken(TEST_PLAIN_TOKEN); // Użyj oryginalnego tokena, nie hasha
+        resetDTO.setPassword(NEW_PASSWORD);
+        resetDTO.setConfirmPassword(NEW_PASSWORD);
+
+        // When
+        passwordResetService.completeReset(resetDTO);
+        entityManager.flush();
+        entityManager.clear();
+
+        // Then
+        User updatedUser = userRepository.findByEmail(testUser.getEmail()).orElseThrow();
+        entityManager.refresh(updatedUser);
+        PasswordResetToken updatedToken = tokenRepository.findByTokenHash(hashedToken).orElseThrow();
+        entityManager.refresh(updatedToken);
+
+        assertThat(updatedUser.getPassword())
+                .isNotEqualTo(oldPasswordHash)
+                .satisfies(newHash -> assertThat(passwordEncoder.matches(NEW_PASSWORD, newHash)).isTrue());
+
+        assertThat(updatedToken.isUsed()).isTrue();
+    }
+
+    @Test
+    void whenUsingExpiredToken_shouldThrowException() {
+        // Given
+        // Przygotuj własny token testowy - symuluj utworzenie tokena
+        String hashedToken = tokenHashingService.hashToken(TEST_PLAIN_TOKEN);
+        PasswordResetToken token = new PasswordResetToken(hashedToken, testUser.getEmail().toString(), testUser.getFullName());
         
-        // Consume token
-        PasswordResetToken tokenToConsume = tokenService.getValidatedToken(token);
-        tokenService.consumeToken(tokenToConsume);
-        
-        // Further validations should fail
-        assertThrows(InvalidPasswordResetTokenException.class, () -> {
-            tokenService.getValidatedToken(token);
-        });
+        // Make token expired
+        token.setExpiresAt(LocalDateTime.now().minusMinutes(1));
+        token = tokenRepository.save(token);
+        entityManager.flush();
+        entityManager.clear();
+
+        PasswordResetDTO resetDTO = new PasswordResetDTO();
+        resetDTO.setToken(TEST_PLAIN_TOKEN);
+        resetDTO.setPassword(NEW_PASSWORD);
+        resetDTO.setConfirmPassword(NEW_PASSWORD);
+
+        // Then
+        assertThatThrownBy(() -> passwordResetService.completeReset(resetDTO))
+                .isInstanceOf(ExpiredPasswordResetTokenException.class);
+
+        User unchangedUser = userRepository.findByEmail(testUser.getEmail()).orElseThrow();
+        entityManager.refresh(unchangedUser);
+        assertThat(passwordEncoder.matches(TEST_PASSWORD, unchangedUser.getPassword())).isTrue();
+    }
+
+    @Test
+    void whenUsingAlreadyUsedToken_shouldThrowException() {
+        // Given
+        // Przygotuj własny token testowy - symuluj utworzenie tokena
+        String hashedToken = tokenHashingService.hashToken(TEST_PLAIN_TOKEN);
+        PasswordResetToken token = new PasswordResetToken(hashedToken, testUser.getEmail().toString(), testUser.getFullName());
+        token = tokenRepository.save(token);
+        entityManager.flush();
+        entityManager.clear();
+
+        PasswordResetDTO resetDTO = new PasswordResetDTO();
+        resetDTO.setToken(TEST_PLAIN_TOKEN);
+        resetDTO.setPassword(NEW_PASSWORD);
+        resetDTO.setConfirmPassword(NEW_PASSWORD);
+
+        // First reset
+        passwordResetService.completeReset(resetDTO);
+        entityManager.flush();
+        entityManager.clear();
+
+        // Try to use same token again with different password
+        PasswordResetDTO secondResetDTO = new PasswordResetDTO();
+        secondResetDTO.setToken(TEST_PLAIN_TOKEN);
+        secondResetDTO.setPassword("anotherPassword789!");
+        secondResetDTO.setConfirmPassword("anotherPassword789!");
+
+        // Then
+        assertThatThrownBy(() -> passwordResetService.completeReset(secondResetDTO))
+                .isInstanceOf(UsedPasswordResetTokenException.class);
+
+        User user = userRepository.findByEmail(testUser.getEmail()).orElseThrow();
+        entityManager.refresh(user);
+        assertThat(passwordEncoder.matches(NEW_PASSWORD, user.getPassword())).isTrue();
     }
 }

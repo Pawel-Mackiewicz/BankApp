@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.testutils;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 import info.mackiewicz.bankapp.user.model.User;
@@ -25,14 +26,14 @@ public class TestUserBuilder {
      */
     public static User createRandomTestUser() {
         User user = new User();
-        user.setId(generateNextId());
         user.setFirstname("Test");
         user.setLastname("User");
         user.setEmail(new Email(generateRandomEmail()));
-        user.setPesel(new Pesel(PESEL));
-        user.setPhoneNumber(new PhoneNumber(PHONE_NUMBER));
+        user.setPesel(new Pesel(generateRandomPesel()));
+        user.setPhoneNumber(new PhoneNumber(generateRandomPhoneNumber()));
         user.setPassword(PASSWORD);
         user.setUsername(generateRandomUsername(user.getFirstname()));
+        user.setDateOfBirth(LocalDate.of(1990, 1, 1));
         return user;
     }
 
@@ -50,6 +51,7 @@ public class TestUserBuilder {
         user.setPhoneNumber(new PhoneNumber(PHONE_NUMBER));
         user.setPassword(PASSWORD);
         user.setUsername("testUser");
+        user.setDateOfBirth(LocalDate.of(1990, 1, 1));
         return user;
     }
 
@@ -67,6 +69,7 @@ public class TestUserBuilder {
         user.setPhoneNumber(new PhoneNumber("000000000"));
         user.setPassword("SystemBank123!");
         user.setUsername("system");
+        user.setDateOfBirth(LocalDate.of(1970, 1, 1));
         return user;
     }
 
@@ -77,6 +80,21 @@ public class TestUserBuilder {
 
     public static int generateNextId() {
         return currentId++;
+    }
+    
+    public static String generateRandomPesel() {
+        // Generujemy unikalny PESEL - 11 losowych cyfr
+        Random random = new Random();
+        StringBuilder pesel = new StringBuilder();
+        for (int i = 0; i < 11; i++) {
+            pesel.append(random.nextInt(10));
+        }
+        return pesel.toString();
+    }
+    
+    public static String generateRandomPhoneNumber() {
+        // Generujemy unikalny numer telefonu - 9 losowych cyfr
+        return String.format("%09d", new Random().nextInt(1000000000));
     }
 
     public static String generateRandomUsername(String name) {
