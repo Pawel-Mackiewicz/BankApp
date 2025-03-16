@@ -11,7 +11,7 @@ public interface ErrorMessageTranslator {
      * @param domain The error domain to check
      * @return true if this translator handles the given domain
      */
-    boolean supports(String domain);
+    boolean supports(ErrorDomain domain);
 
     /**
      * Translates an error code into a user-friendly message

@@ -4,23 +4,23 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
     // Common validation
-    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "common"),
-    RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "common"),
-    TOO_MANY_ATTEMPTS(HttpStatus.TOO_MANY_REQUESTS, "common"),
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, ErrorDomain.COMMON),
+    RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, ErrorDomain.COMMON),
+    TOO_MANY_ATTEMPTS(HttpStatus.TOO_MANY_REQUESTS, ErrorDomain.COMMON),
     
     // Security domain
-    TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "security"),
-    TOKEN_USED(HttpStatus.BAD_REQUEST, "security"),
-    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "security"),
+    TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, ErrorDomain.SECURITY),
+    TOKEN_USED(HttpStatus.BAD_REQUEST, ErrorDomain.SECURITY),
+    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, ErrorDomain.SECURITY),
     
     // Transaction domain
-    INSUFFICIENT_FUNDS(HttpStatus.UNPROCESSABLE_ENTITY, "transaction"),
-    ACCOUNT_LOCKED(HttpStatus.FORBIDDEN, "transaction");
+    INSUFFICIENT_FUNDS(HttpStatus.UNPROCESSABLE_ENTITY, ErrorDomain.TRANSACTION),
+    ACCOUNT_LOCKED(HttpStatus.FORBIDDEN, ErrorDomain.TRANSACTION);
 
     private final HttpStatus status;
-    private final String domain;
+    private final ErrorDomain domain;
     
-    ErrorCode(HttpStatus status, String domain) {
+    ErrorCode(HttpStatus status, ErrorDomain domain) {
         this.status = status;
         this.domain = domain;
     }
@@ -29,7 +29,15 @@ public enum ErrorCode {
         return status;
     }
 
-    public String getDomain() {
+    public ErrorDomain getDomain() {
         return domain;
+    }
+
+    /**
+     * Get the string representation of the domain.
+     * @return domain value as string
+     */
+    public String getDomainValue() {
+        return domain.getValue();
     }
 }

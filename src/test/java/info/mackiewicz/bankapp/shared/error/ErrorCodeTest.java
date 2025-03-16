@@ -34,37 +34,37 @@ class ErrorCodeTest {
 
     @Test
     void shouldHaveCorrectDomainForCommonErrors() {
-        assertEquals("common", ErrorCode.VALIDATION_ERROR.getDomain());
-        assertEquals("common", ErrorCode.RESOURCE_NOT_FOUND.getDomain());
-        assertEquals("common", ErrorCode.TOO_MANY_ATTEMPTS.getDomain());
+        assertEquals(ErrorDomain.COMMON, ErrorCode.VALIDATION_ERROR.getDomain());
+        assertEquals(ErrorDomain.COMMON, ErrorCode.RESOURCE_NOT_FOUND.getDomain());
+        assertEquals(ErrorDomain.COMMON, ErrorCode.TOO_MANY_ATTEMPTS.getDomain());
     }
 
     @Test
     void shouldHaveCorrectDomainForSecurityErrors() {
-        assertEquals("security", ErrorCode.TOKEN_EXPIRED.getDomain());
-        assertEquals("security", ErrorCode.TOKEN_USED.getDomain());
-        assertEquals("security", ErrorCode.TOKEN_NOT_FOUND.getDomain());
+        assertEquals(ErrorDomain.SECURITY, ErrorCode.TOKEN_EXPIRED.getDomain());
+        assertEquals(ErrorDomain.SECURITY, ErrorCode.TOKEN_USED.getDomain());
+        assertEquals(ErrorDomain.SECURITY, ErrorCode.TOKEN_NOT_FOUND.getDomain());
     }
 
     @Test
     void shouldHaveCorrectDomainForTransactionErrors() {
-        assertEquals("transaction", ErrorCode.INSUFFICIENT_FUNDS.getDomain());
-        assertEquals("transaction", ErrorCode.ACCOUNT_LOCKED.getDomain());
+        assertEquals(ErrorDomain.TRANSACTION, ErrorCode.INSUFFICIENT_FUNDS.getDomain());
+        assertEquals(ErrorDomain.TRANSACTION, ErrorCode.ACCOUNT_LOCKED.getDomain());
     }
 
     @Test
     void shouldHaveConsistentDomainGrouping() {
-        Map<String, List<ErrorCode>> errorsByDomain = Arrays.stream(ErrorCode.values())
+        Map<ErrorDomain, List<ErrorCode>> errorsByDomain = Arrays.stream(ErrorCode.values())
                 .collect(Collectors.groupingBy(ErrorCode::getDomain));
 
         // Common domain should have exactly 3 errors
-        assertEquals(3, errorsByDomain.get("common").size());
+        assertEquals(3, errorsByDomain.get(ErrorDomain.COMMON).size());
         
         // Security domain should have exactly 3 errors
-        assertEquals(3, errorsByDomain.get("security").size());
+        assertEquals(3, errorsByDomain.get(ErrorDomain.SECURITY).size());
         
         // Transaction domain should have exactly 2 errors
-        assertEquals(2, errorsByDomain.get("transaction").size());
+        assertEquals(2, errorsByDomain.get(ErrorDomain.TRANSACTION).size());
         
         // Should have exactly 3 domains
         assertEquals(3, errorsByDomain.size());

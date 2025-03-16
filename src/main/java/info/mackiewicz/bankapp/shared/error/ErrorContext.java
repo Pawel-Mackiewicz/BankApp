@@ -10,7 +10,7 @@ import java.util.Map;
 @Builder
 public class ErrorContext {
     private final String path;     // Request path
-    private final String domain;   // Module domain (security, transaction, etc.)
+    private final ErrorDomain domain;   // Module domain (security, transaction, etc.)
     
     @Builder.Default
     private final Map<String, Object> attributes = new HashMap<>();  // Additional context
