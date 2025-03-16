@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
+import info.mackiewicz.bankapp.shared.dto.interfaces.PasswordConfirmation;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import info.mackiewicz.bankapp.user.validation.Adult;
 import jakarta.validation.constraints.Email;
@@ -16,7 +17,7 @@ import lombok.Data;
 
 @Data
 @PasswordMatches
-public class UserRegistrationDto {
+public class UserRegistrationDto implements PasswordConfirmation {
 
     @NotBlank(message = "Firstname is required")
     @Pattern(regexp = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$", message = "Firstname can only contain letters")
