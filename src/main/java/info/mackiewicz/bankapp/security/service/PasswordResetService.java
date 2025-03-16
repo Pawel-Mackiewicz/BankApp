@@ -30,8 +30,10 @@ public class PasswordResetService {
      * Initiates password reset process for user with given email
      * 
      * @param email Email of user requesting password reset
-     * @throws InvalidEmailFormatException if email is not valid
-     * @throws TooManyPasswordResetAttemptsException if too many password reset attempts have been made
+     * @throws InvalidEmailFormatException           if email is not valid
+     * @throws EmailSendingException                 if email sending fails
+     * @throws TooManyPasswordResetAttemptsException if too many password reset
+     *                                               attempts have been made
      */
     public void requestReset(String email) {
 
@@ -42,56 +44,61 @@ public class PasswordResetService {
             String token = passwordResetTokenService.createToken(email, user.getFullName());
             emailService.sendPasswordResetEmail(email, token, user.getFullName());
         } catch (UserNotFoundException e) {
-            // We don't want to expose the fact that the user doesn't exist for security reasons
+            // We don't want to expose the fact that the user doesn't exist for security
+            // reasons
             log.info("User with email {} not found", email);
             return;
         } catch (TooManyPasswordResetAttemptsException e) {
             log.warn("Too many password reset attempts for email: {}", email);
             throw e;
         } catch (Exception e) {
-            log.error("An unexpected error occurred while processing the password reset request for email: {}", email, e);
+            log.error("An unexpected error occurred while processing the password reset request for email: {}", email,
+                    e);
             throw e;
         }
-
     }
 
     /**
-     * Complete the password reset process by consuming the token and updating the password
+     * Complete the password reset process by consuming the token and updating the
+     * password
      *
-     * @param token Token to consume
-     * @param email Email of the user
+     * @param token       Token to consume
+     * @param email       Email of the user
      * @param newPassword New password to set
-     * @throws IllegalStateException if token is invalid or already used
-     * @throws UserNotFoundException if user with given email doesn't exist
+     * @throws IllegalStateException              if token is invalid or already
+     *                                            used
+     * @throws UserNotFoundException              if user with given email doesn't
+     *                                            exist
      * @throws ExpiredPasswordResetTokenException if token is expired
-     * @throws UsedPasswordResetTokenException if token has already been used
-     * @throws InvalidEmailFormatException if email is not valid
+     * @throws UsedPasswordResetTokenException    if token has already been used
+     * @throws InvalidEmailFormatException        if email is not valid
      */
     @Transactional
     public void completeReset(PasswordResetDTO request) {
-        
+
         PasswordResetToken token = validateAndRetrieveToken(request.getToken());
         Email email = new Email(token.getUserEmail());
         String newPassword = request.getPassword();
         String fullNameOfUser = token.getFullName();
 
         passwordResetTokenService.consumeToken(token);
-        
+
         log.debug("Token successfully consumed, updating password for email: {}", email);
         userService.changeUsersPassword(email, newPassword);
-        
-        log.debug("Password updated successfully, sending confirmation email to: {}", email);
-        emailService.sendPasswordResetConfirmation(email.toString(), fullNameOfUser);
-        
+
+        sendConfirmationEmail(email, fullNameOfUser);
+
         log.info("Password reset completed successfully for email: {}", email);
     }
 
     /**
      * Validates a password reset token
      * exception is thrown if token is not found, expired or already used
+     * 
      * @param token Token to validate
-     * @return PasswordResetToken containing the user's email and other details if token is valid
-     * @throws TokenNotFoundException            if token is not found
+     * @return PasswordResetToken containing the user's email and other details if
+     *         token is valid
+     * @throws TokenNotFoundException             if token is not found
      * @throws ExpiredPasswordResetTokenException if token is expired
      * @throws UsedPasswordResetTokenException    if token has already been used
      */
@@ -101,4 +108,16 @@ public class PasswordResetService {
         return validatedToken;
     }
 
+    /**
+     * Sends a confirmation email to the user after password reset
+     * 
+     * @param email          Email of the user
+     * @param fullNameOfUser Full name of the user
+     * @throws InvalidEmailFormatException if email is not valid
+     * @throws EmailSendingException       if email sending fails
+     */
+    private void sendConfirmationEmail(Email email, String fullNameOfUser) {
+        log.debug("Password updated successfully, sending confirmation email to: {}", email);
+        emailService.sendPasswordResetConfirmation(email.toString(), fullNameOfUser);
+    }
 }

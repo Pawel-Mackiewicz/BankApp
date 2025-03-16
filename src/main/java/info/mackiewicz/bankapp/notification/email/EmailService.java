@@ -3,12 +3,15 @@ package info.mackiewicz.bankapp.notification.email;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import info.mackiewicz.bankapp.notification.email.exception.EmailSendingException;
 import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service for sending various types of emails.
  * Uses EmailSender for delivery and EmailTemplateProvider for content generation.
  */
+@Slf4j
 @Service
 public class EmailService {
 
@@ -32,8 +35,13 @@ public class EmailService {
      * @param username username of the user for personalization
      */
     public void sendWelcomeEmail(String email, String fullNameOfUser, String username) {
-        EmailContent content = templateProvider.getWelcomeEmail(fullNameOfUser, username);
-        emailSender.send(email, content.subject(), content.htmlContent());
+        try {
+            EmailContent content = templateProvider.getWelcomeEmail(fullNameOfUser, username);
+            emailSender.send(email, content.subject(), content.htmlContent());
+        } catch (RuntimeException e) {
+            log.error("Error sending welcome email to {}", email, e);
+            throw new EmailSendingException("Error sending welcome email", e);
+        }
     }
 
     /**
@@ -43,9 +51,14 @@ public class EmailService {
      * @param fullNameOfUser full name of user for personalization
      */
     public void sendPasswordResetEmail(String email, String token, String fullNameOfUser) {
-        String resetLink = baseUrl + "/password-reset/token/" + token;
-        EmailContent content = templateProvider.getPasswordResetEmail(fullNameOfUser, resetLink);
-        emailSender.send(email, content.subject(), content.htmlContent());
+        try {
+            String resetLink = baseUrl + "/password-reset/token/" + token;
+            EmailContent content = templateProvider.getPasswordResetEmail(fullNameOfUser, resetLink);
+            emailSender.send(email, content.subject(), content.htmlContent());
+        } catch (RuntimeException e) {
+            log.error("Error sending password reset email to {}", email, e);
+            throw new EmailSendingException("Error sending password reset email", e);
+        }
     }
 
     /**
@@ -53,8 +66,13 @@ public class EmailService {
      * @param email recipient's email address
      */
     public void sendPasswordResetConfirmation(String email, String fullNameOfUser) {
-        String loginLink = baseUrl + "/login";
-        EmailContent content = templateProvider.getPasswordResetConfirmationEmail(fullNameOfUser, loginLink);
-        emailSender.send(email, content.subject(), content.htmlContent());
+        try {
+            String loginLink = baseUrl + "/login";
+            EmailContent content = templateProvider.getPasswordResetConfirmationEmail(fullNameOfUser, loginLink);
+            emailSender.send(email, content.subject(), content.htmlContent());
+        } catch (RuntimeException e) {
+            log.error("Error sending password reset confirmation email to {}", email, e);
+            throw new EmailSendingException("Error sending password reset confirmation email", e);
+        }
     }
 }
