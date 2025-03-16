@@ -2,31 +2,81 @@
 
 ## Phase 1: Core Error System
 
-### 1. Create Common Error Code System
+### 1. Create Error Domain and Code Systems
+
+a) Create Error Domain Enum:
+```java
+package info.mackiewicz.bankapp.shared.error;
+
+public enum ErrorDomain {
+    COMMON("common"),
+    SECURITY("security"),
+    TRANSACTION("transaction");
+    
+    private final String value;
+    
+    ErrorDomain(String value) {
+        this.value = value;
+    }
+    
+    public String getValue() {
+        return value;
+    }
+    
+    public static ErrorDomain fromString(String value) {
+        if (value == null) return null;
+        
+        for (ErrorDomain domain : ErrorDomain.values()) {
+            if (domain.value.equals(value)) {
+                return domain;
+            }
+        }
+        return null;
+    }
+}
+```
+
+b) Create Error Code Enum:
 ```java
 package info.mackiewicz.bankapp.shared.error;
 
 public enum ErrorCode {
     // Common validation
-    VALIDATION_ERROR(HttpStatus.BAD_REQUEST),
-    RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND),
-    TOO_MANY_ATTEMPTS(HttpStatus.TOO_MANY_REQUESTS),
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, ErrorDomain.COMMON),
+    RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, ErrorDomain.COMMON),
+    TOO_MANY_ATTEMPTS(HttpStatus.TOO_MANY_REQUESTS, ErrorDomain.COMMON),
     
     // Security domain
-    TOKEN_EXPIRED(HttpStatus.BAD_REQUEST),
-    TOKEN_USED(HttpStatus.BAD_REQUEST),
-    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND),
+    TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, ErrorDomain.SECURITY),
+    TOKEN_USED(HttpStatus.BAD_REQUEST, ErrorDomain.SECURITY),
+    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, ErrorDomain.SECURITY),
     
     // Transaction domain
-    INSUFFICIENT_FUNDS(HttpStatus.UNPROCESSABLE_ENTITY),
-    ACCOUNT_LOCKED(HttpStatus.FORBIDDEN);
+    INSUFFICIENT_FUNDS(HttpStatus.UNPROCESSABLE_ENTITY, ErrorDomain.TRANSACTION),
+    ACCOUNT_LOCKED(HttpStatus.FORBIDDEN, ErrorDomain.TRANSACTION);
 
     private final HttpStatus status;
-    private final String domain;  // For grouping related errors
+    private final ErrorDomain domain;
     
-    ErrorCode(HttpStatus status) {
+    ErrorCode(HttpStatus status, ErrorDomain domain) {
         this.status = status;
-        this.domain = this.name().split("_")[0].toLowerCase();
+        this.domain = domain;
+    }
+    
+    public HttpStatus getStatus() {
+        return status;
+    }
+    
+    public ErrorDomain getDomain() {
+        return domain;
+    }
+    
+    /**
+     * Get string representation of the domain.
+     * @return domain value as string
+     */
+    public String getDomainValue() {
+        return domain.getValue();
     }
 }
 ```
@@ -37,41 +87,75 @@ a) Create Error Context:
 ```java
 package info.mackiewicz.bankapp.shared.error;
 
+@Builder
 public class ErrorContext {
     private final String path;     // Request path
-    private final String domain;   // Module domain (security, transaction, etc.)
+    private final ErrorDomain domain;   // Module domain (security, transaction, etc.)
     private final Map<String, Object> attributes;  // Additional context
-    
-    // Builder pattern implementation
 }
 ```
 
-b) Create Translator Interface:
+b) Create Base Error Translator:
+```java
+public abstract class BaseErrorTranslator implements ErrorMessageTranslator {
+    protected static final String DEFAULT_MESSAGE =
+        "An unexpected error occurred. Please try again or contact support if the problem persists.";
+
+    @Override
+    public final String translate(ErrorCode code, ErrorContext context) {
+        if (code == null) {
+            return DEFAULT_MESSAGE;
+        }
+
+        String message = null;
+
+        // First try domain-specific translation if supported
+        if (context != null && supports(context.getDomain())) {
+            message = translateDomainSpecific(code, context);
+        }
+
+        return message == null ? translateCommonError(code, context) : message;
+    }
+
+    protected abstract String translateDomainSpecific(ErrorCode code, ErrorContext context);
+
+    protected String translateCommonError(ErrorCode code, ErrorContext context) {
+        return switch (code) {
+            case VALIDATION_ERROR -> "The provided data is invalid. Please check your input and try again.";
+            case RESOURCE_NOT_FOUND -> "The requested resource could not be found.";
+            case TOO_MANY_ATTEMPTS -> "Too many attempts. Please try again later.";
+            default -> DEFAULT_MESSAGE;
+        };
+    }
+}
+```
+
+c) Create Translator Interface:
 ```java
 package info.mackiewicz.bankapp.shared.error;
 
 public interface ErrorMessageTranslator {
-    boolean supports(String domain);
+    boolean supports(ErrorDomain domain);
     String translate(ErrorCode code, ErrorContext context);
 }
 ```
 
-c) Implement Security Translator:
+d) Implement Security Translator:
 ```java
 @Component
-public class SecurityErrorTranslator implements ErrorMessageTranslator {
+public class SecurityErrorTranslator extends BaseErrorTranslator {
     @Override
-    public boolean supports(String domain) {
-        return "security".equals(domain);
+    public boolean supports(ErrorDomain domain) {
+        return ErrorDomain.SECURITY.equals(domain);
     }
     
     @Override
-    public String translate(ErrorCode code, ErrorContext context) {
+    protected String translateDomainSpecific(ErrorCode code, ErrorContext context) {
         return switch (code) {
-            case TOKEN_EXPIRED -> "Password reset link has expired...";
-            case TOKEN_USED -> "This reset link has already been used...";
-            case TOO_MANY_ATTEMPTS -> "Too many attempts...";
-            default -> "An error occurred...";
+            case TOKEN_EXPIRED -> "The password reset link has expired. Please request a new one.";
+            case TOKEN_USED -> "This password reset link has already been used. Please request a new one if needed.";
+            case TOKEN_NOT_FOUND -> "Invalid password reset link. Please make sure you're using the correct link or request a new one.";
+            default -> null; // Let base class handle common errors or return default message
         };
     }
 }
@@ -236,8 +320,12 @@ class SecurityErrorTranslatorTest {
     @Test
     void shouldTranslateTokenExpired() {
         var translator = new SecurityErrorTranslator();
-        var message = translator.translate(ErrorCode.TOKEN_EXPIRED, new ErrorContext());
-        assertEquals("Password reset link has expired...", message);
+        var context = ErrorContext.builder()
+            .path("/reset-password")
+            .domain(ErrorDomain.SECURITY)
+            .build();
+        var message = translator.translate(ErrorCode.TOKEN_EXPIRED, context);
+        assertEquals("The password reset link has expired. Please request a new one.", message);
     }
 }
 ```
