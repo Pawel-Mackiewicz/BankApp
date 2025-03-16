@@ -39,6 +39,7 @@ public abstract class BaseErrorTranslator implements ErrorMessageTranslator {
      */
     protected String translateCommonError(ErrorCode code, ErrorContext context) {
         return switch (code) {
+            case INTERNAL_ERROR -> "An unexpected error occurred. Please try again or contact support if the problem persists.";
             case VALIDATION_ERROR -> "The provided data is invalid. Please check your input and try again.";
             case RESOURCE_NOT_FOUND -> "The requested resource could not be found.";
             case TOO_MANY_ATTEMPTS -> "Too many attempts. Please try again later.";

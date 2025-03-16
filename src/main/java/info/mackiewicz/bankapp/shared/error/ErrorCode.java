@@ -7,6 +7,7 @@ public enum ErrorCode {
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, ErrorDomain.COMMON),
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, ErrorDomain.COMMON),
     TOO_MANY_ATTEMPTS(HttpStatus.TOO_MANY_REQUESTS, ErrorDomain.COMMON),
+    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, ErrorDomain.COMMON),
     
     // Security domain
     TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, ErrorDomain.SECURITY),
