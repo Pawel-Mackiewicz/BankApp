@@ -8,7 +8,6 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 import info.mackiewicz.bankapp.security.exception.InvalidPasswordResetTokenException;
-import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
 
 /**
  * Entity representing password reset token.
