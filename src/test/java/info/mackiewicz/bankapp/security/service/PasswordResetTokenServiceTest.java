@@ -150,7 +150,8 @@ verify(tokenHashingService, never()).generateToken();
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        tokenService.consumeToken(TEST_TOKEN);
+        PasswordResetToken validatedToken = tokenService.getValidatedToken(TEST_TOKEN);
+        tokenService.consumeToken(validatedToken);
 
         // then
         verify(tokenRepository).save(argThat(token ->
@@ -167,7 +168,7 @@ verify(tokenHashingService, never()).generateToken();
 
         // when/then
         assertThrows(TokenNotFoundException.class, () ->
-            tokenService.consumeToken(TEST_TOKEN)
+            tokenService.getValidatedToken(TEST_TOKEN)
         );
     }
 

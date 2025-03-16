@@ -59,7 +59,7 @@ class PasswordResetTokenIntegrationTest {
         assertEquals(TEST_EMAIL, validatedToken.getUserEmail());
 
         // Act - Consume token
-        tokenService.consumeToken(token);
+        tokenService.consumeToken(validatedToken);
         
         // Verify token is marked as used
         Optional<PasswordResetToken> usedToken = tokenRepository.findAll().stream()
@@ -128,7 +128,8 @@ class PasswordResetTokenIntegrationTest {
         assertNotNull(validToken3);
         
         // Consume token
-        tokenService.consumeToken(token);
+        PasswordResetToken tokenToConsume = tokenService.getValidatedToken(token);
+        tokenService.consumeToken(tokenToConsume);
         
         // Further validations should fail
         assertThrows(InvalidPasswordResetTokenException.class, () -> {
