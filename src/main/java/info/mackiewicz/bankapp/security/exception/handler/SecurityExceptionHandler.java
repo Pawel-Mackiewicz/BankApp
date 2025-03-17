@@ -16,7 +16,7 @@ import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TokenValidationException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.exception.UsedTokenException;
-import info.mackiewicz.bankapp.shared.dto.ApiError;
+import info.mackiewicz.bankapp.shared.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -26,11 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice(basePackages = "info.mackiewicz.bankapp.security.controller")
 public class SecurityExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
+    public ResponseEntity<BaseApiError> handleException(Exception ex, WebRequest request) {
         String path = ((ServletWebRequest) request).getRequest().getRequestURI();
 
         ErrorCode errorCode = mapExceptionToError(ex);
-        ApiError error = new ApiError(errorCode, path);
+        BaseApiError error = new BaseApiError(errorCode, path);
         logError(errorCode, ex, path);
 
         return new ResponseEntity<>(error, error.getStatus());
@@ -60,7 +60,6 @@ public class SecurityExceptionHandler {
             default -> ErrorCode.INTERNAL_ERROR;
         };
     }
-
     private void logError(ErrorCode error, Exception ex, String path) {
         String message = String.format(
                 "Error occurred: %s, Path: %s, Message: %s",
