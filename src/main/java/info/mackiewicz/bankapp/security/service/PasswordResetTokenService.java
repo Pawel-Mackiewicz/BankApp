@@ -5,11 +5,11 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
-import info.mackiewicz.bankapp.security.exception.InvalidPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
+import info.mackiewicz.bankapp.security.exception.InvalidTokenException;
 import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.UsedTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -68,8 +68,8 @@ public class PasswordResetTokenService {
      * @param token Token to validate
      * @return PasswordResetToken object if token is valid, empty otherwise
      * @throws TokenNotFoundException             if token is not found
-     * @throws ExpiredPasswordResetTokenException if token is expired
-     * @throws UsedPasswordResetTokenException    if token has already been used
+     * @throws ExpiredTokenException if token is expired
+     * @throws UsedTokenException    if token has already been used
      */
     public PasswordResetToken getValidatedToken(String token) {
         log.debug("Starting token validation process");
@@ -101,16 +101,16 @@ public class PasswordResetTokenService {
      * Validates the state of the found token
      *
      * @param foundToken
-     * @throws ExpiredPasswordResetTokenException if token is expired
-     * @throws UsedPasswordResetTokenException    if token has already been used
+     * @throws ExpiredTokenException if token is expired
+     * @throws UsedTokenException    if token has already been used
      */
     private void validateToken(PasswordResetToken foundToken) {
         String userEmail = foundToken.getUserEmail();
         if (foundToken.isExpired()) {
-            throw new ExpiredPasswordResetTokenException("Token has expired for user: " + userEmail);
+            throw new ExpiredTokenException("Token has expired for user: " + userEmail);
         }
         if (foundToken.isUsed()) {
-            throw new UsedPasswordResetTokenException("Token has already been used for user: " + userEmail);
+            throw new UsedTokenException("Token has already been used for user: " + userEmail);
         }
     }
 
@@ -118,7 +118,7 @@ public class PasswordResetTokenService {
      * Marks a token as used and saves it to the database
      * 
      * @param token Token to consume
-     * @throws InvalidPasswordResetTokenException if token is not valid (expired or
+     * @throws InvalidTokenException if token is not valid (expired or
      *                                            already used)
      */
     @Transactional

@@ -18,10 +18,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
 import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.UsedTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
 
@@ -116,7 +116,7 @@ class PasswordResetTokenServiceTest {
                 .thenReturn(Optional.of(expiredToken));
 
         // when/then
-        ExpiredPasswordResetTokenException exception = assertThrows(ExpiredPasswordResetTokenException.class, 
+        ExpiredTokenException exception = assertThrows(ExpiredTokenException.class, 
             () -> tokenService.getValidatedToken(TEST_TOKEN)
         );
         assertEquals("Token has expired for user: " + TEST_EMAIL, exception.getMessage());
@@ -134,7 +134,7 @@ class PasswordResetTokenServiceTest {
                 .thenReturn(Optional.of(usedToken));
 
         // when/then
-        UsedPasswordResetTokenException exception = assertThrows(UsedPasswordResetTokenException.class,
+        UsedTokenException exception = assertThrows(UsedTokenException.class,
             () -> tokenService.getValidatedToken(TEST_TOKEN)
         );
         assertEquals("Token has already been used for user: " + TEST_EMAIL, exception.getMessage());

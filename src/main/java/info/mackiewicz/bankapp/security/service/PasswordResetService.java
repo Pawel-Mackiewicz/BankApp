@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.notification.email.exception.EmailSendingException;
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
 import info.mackiewicz.bankapp.security.exception.PasswordChangeException;
 import info.mackiewicz.bankapp.security.exception.TokenCreationException;
 import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TokenValidationException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.UsedTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
@@ -87,8 +87,8 @@ public class PasswordResetService {
      *
      * @param request Password reset request containing token and new password
      * 
-     * @throws ExpiredPasswordResetTokenException if token is expired
-     * @throws UsedPasswordResetTokenException    if token is already used
+     * @throws ExpiredTokenException if token is expired
+     * @throws UsedTokenException    if token is already used
      * @throws TokenValidationException           if token validation fails
      * @throws PasswordChangeException            if password update fails
      * @throws InvalidEmailFormatException        if email is not valid
@@ -143,7 +143,7 @@ public class PasswordResetService {
             validatedToken = passwordResetTokenService.getValidatedToken(token);
             log.debug("Token successfully validated for user: {}", validatedToken.getUserEmail());
             return validatedToken;
-        } catch (ExpiredPasswordResetTokenException | UsedPasswordResetTokenException | TokenNotFoundException e) {
+        } catch (ExpiredTokenException | UsedTokenException | TokenNotFoundException e) {
             throw e;
         } catch (Exception e) {
             throw new TokenValidationException("Failed to validate password reset token for email: " +
