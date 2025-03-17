@@ -1,8 +1,10 @@
 package info.mackiewicz.bankapp.shared.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Value
+@AllArgsConstructor
+@Getter
 public class ValidationError {
     private String field;         
     private String message;       
