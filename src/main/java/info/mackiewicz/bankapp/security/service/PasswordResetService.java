@@ -36,8 +36,10 @@ public class PasswordResetService {
      * 
      * @param email Email of user requesting password reset
      * @throws TokenCreationException                if token creation fails
-     * @throws TooManyPasswordResetAttemptsException if user has exceeded token limit
-     * @throws UserNotFoundException                   if user with given email is not found
+     * @throws TooManyPasswordResetAttemptsException if user has exceeded token
+     *                                               limit
+     * @throws UserNotFoundException                 if user with given email is not
+     *                                               found
      * @throws InvalidEmailFormatException           if email is not valid
      * @throws EmailSendingException                 if email sending fails
      */
@@ -45,12 +47,12 @@ public class PasswordResetService {
         log.info("Initiating password reset process for email: {}", email);
         log.debug("Validating email format and checking user existence");
 
-            var user = userService.getUserByEmail(email);
-            log.debug("User found, generating reset token for user ID: {}", user.getId());
+        var user = userService.getUserByEmail(email);
+        log.debug("User found, generating reset token for user ID: {}", user.getId());
 
-            String token = generatePasswordResetToken(email, user);
+        String token = generatePasswordResetToken(email, user);
 
-            sendPasswordResetEmailNotification(email, user, token);
+        sendPasswordResetEmailNotification(email, user, token);
     }
 
     private void sendPasswordResetEmailNotification(String email, User user, String token) {
@@ -60,7 +62,8 @@ public class PasswordResetService {
         } catch (EmailSendingException e) {
             throw e;
         } catch (Exception e) {
-            throw new EmailSendingException("Failed to send password reset email to: " + email + "\n" + e.getMessage(), e);
+            throw new EmailSendingException("Failed to send password reset email to: " + email + "\n" + e.getMessage(),
+                    e);
         }
     }
 
@@ -72,7 +75,8 @@ public class PasswordResetService {
         } catch (TooManyPasswordResetAttemptsException e) {
             throw e;
         } catch (Exception e) {
-            throw new TokenCreationException("Failed to create password reset token for email: " + email + "\n" + e.getMessage(), e);
+            throw new TokenCreationException(
+                    "Failed to create password reset token for email: " + email + "\n" + e.getMessage(), e);
         }
         return token;
     }
@@ -119,7 +123,8 @@ public class PasswordResetService {
         try {
             userService.changeUsersPassword(email, newPassword);
         } catch (Exception e) {
-            throw new PasswordChangeException("Failed to update password for email: " + email + "\n" + e.getMessage(), e);
+            throw new PasswordChangeException("Failed to update password for email: " + email + "\n" + e.getMessage(),
+                    e);
         }
     }
 
@@ -141,8 +146,8 @@ public class PasswordResetService {
         } catch (ExpiredPasswordResetTokenException | UsedPasswordResetTokenException | TokenNotFoundException e) {
             throw e;
         } catch (Exception e) {
-            throw new TokenValidationException("Failed to validate password reset token for email: " + 
-            (validatedToken != null ? validatedToken.getUserEmail() : "unknown") + "\n" + e.getMessage(), e);
+            throw new TokenValidationException("Failed to validate password reset token for email: " +
+                    (validatedToken != null ? validatedToken.getUserEmail() : "unknown") + "\n" + e.getMessage(), e);
         }
     }
 }
