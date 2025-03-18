@@ -1,12 +1,26 @@
 package info.mackiewicz.bankapp.shared.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
-@AllArgsConstructor
-@Getter
+/**
+ * Encapsulates details about a single field validation error.
+ * Used as part of ValidationApiError to provide specific information 
+ * about which fields failed validation and why.
+ */
+@Value
 public class ValidationError {
-    private String field;         
-    private String message;       
-    private String rejectedValue; 
+    /**
+     * Name of the field that failed validation
+     */
+    String field;         
+
+    /**
+     * Description of why the validation failed
+     */
+    String message;       
+
+    /**
+     * The value that was rejected by validation
+     */
+    String rejectedValue; 
 }
