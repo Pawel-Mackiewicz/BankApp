@@ -15,7 +15,7 @@ public enum ErrorCode {
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "Reset link could not be found. Please request a new reset link."),
     TOKEN_EXPIRED(HttpStatus.GONE, "This password reset link has expired. Please request a new one."),
     TOKEN_INVALID(HttpStatus.BAD_REQUEST, "Invalid password reset link"),
-    TOKEN_USED(HttpStatus.CONFLICT, "This password reset link has already been used. Please request a new one."),
+    TOKEN_USED(HttpStatus.GONE, "This password reset link has already been used. Please request a new one."),
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Your login credentials are invalid. Please try again."),
     TOO_MANY_PASSWORD_RESET_ATTEMPTS(HttpStatus.TOO_MANY_REQUESTS, "You've reached the limit of password reset attempts. Please try again later."),
     
