@@ -40,6 +40,21 @@ public class BaseApiError implements ApiErrorResponse {
         this.timestamp = LocalDateTime.now();
     }
 
+        /**
+     * Creates a new error response with manual status, title and message.
+     *
+     * @param status the HTTP status code for the error
+     * @param title the error title/category
+     * @param message the detailed error message
+     * @param path the request path where the error occurred
+     */
+    public BaseApiError(HttpStatus status, String title, String message) {
+        this.status = status;
+        this.title = title;
+        this.message = message;
+        this.timestamp = LocalDateTime.now();
+    }
+
     /**
      * Creates a new error response from an ErrorCode enum.
      *
