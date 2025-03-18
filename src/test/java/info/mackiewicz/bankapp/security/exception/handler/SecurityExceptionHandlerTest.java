@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @ExtendWith(MockitoExtension.class)
 class SecurityExceptionHandlerTest {
 
-    private SecurityExceptionHandler exceptionHandler;
+    private PasswordResetExceptionHandler exceptionHandler;
 
     @Mock
     private WebRequest webRequest;
@@ -40,7 +40,7 @@ class SecurityExceptionHandlerTest {
 
     @BeforeEach
     void setUp() {
-        exceptionHandler = new SecurityExceptionHandler();
+        exceptionHandler = new PasswordResetExceptionHandler();
         when(servletWebRequest.getRequest()).thenReturn(httpRequest);
         when(httpRequest.getRequestURI()).thenReturn(TEST_PATH);
     }
