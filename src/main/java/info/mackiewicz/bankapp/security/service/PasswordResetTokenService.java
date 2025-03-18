@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
-import info.mackiewicz.bankapp.security.exception.InvalidTokenException;
+import info.mackiewicz.bankapp.security.exception.TokenException;
 import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.exception.UsedTokenException;
@@ -118,7 +118,7 @@ public class PasswordResetTokenService {
      * Marks a token as used and saves it to the database
      * 
      * @param token Token to consume
-     * @throws InvalidTokenException if token is not valid (expired or
+     * @throws TokenException if token is not valid (expired or
      *                                            already used)
      */
     @Transactional

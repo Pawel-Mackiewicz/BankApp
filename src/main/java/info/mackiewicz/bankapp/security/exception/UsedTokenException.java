@@ -1,13 +1,17 @@
 package info.mackiewicz.bankapp.security.exception;
 
-public class UsedTokenException extends InvalidTokenException {
+import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
+
+public class UsedTokenException extends TokenException {
+    
+    private static final ErrorCode ERROR_CODE = ErrorCode.TOKEN_USED;
     
     public UsedTokenException(String message) {
-        super(message);
+        super(message, ERROR_CODE);
     }
 
     public UsedTokenException(String message, Throwable cause) {
-        super(message, cause);
+        super(message, ERROR_CODE, cause);
     }
 
 }

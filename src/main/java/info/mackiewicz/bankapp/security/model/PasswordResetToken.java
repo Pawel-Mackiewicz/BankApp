@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.security.model;
 
 import java.time.LocalDateTime;
 
-import info.mackiewicz.bankapp.security.exception.InvalidTokenException;
+import info.mackiewicz.bankapp.security.exception.TokenException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -102,11 +102,11 @@ public class PasswordResetToken {
 
 /**
  * Marks the token as used with the current timestamp
- * @throws InvalidTokenException if the token is already used or expired
+ * @throws TokenException if the token is already used or expired
  */
 public void markAsUsed() {
     if (!isValid()) {
-        throw new InvalidTokenException("Token is already used or expired");
+        throw new TokenException("Token is already used or expired");
     }
     this.used = true;
     this.usedAt = LocalDateTime.now();

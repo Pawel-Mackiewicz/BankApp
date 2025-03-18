@@ -12,12 +12,12 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
-import info.mackiewicz.bankapp.security.exception.InvalidTokenException;
 import info.mackiewicz.bankapp.security.exception.PasswordChangeException;
 import info.mackiewicz.bankapp.security.exception.TokenCreationException;
+import info.mackiewicz.bankapp.security.exception.TokenException;
 import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
-import info.mackiewicz.bankapp.security.exception.TokenValidationException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
+import info.mackiewicz.bankapp.security.exception.UnexpectedTokenValidationException;
 import info.mackiewicz.bankapp.security.exception.UsedTokenException;
 import info.mackiewicz.bankapp.shared.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.dto.ValidationApiError;
@@ -95,10 +95,10 @@ public class SecurityExceptionHandler {
             case ExpiredTokenException e -> ErrorCode.TOKEN_EXPIRED;
             case UsedTokenException e -> ErrorCode.TOKEN_USED;
             case TokenCreationException e -> ErrorCode.INTERNAL_ERROR;
-            case TokenValidationException e -> ErrorCode.INTERNAL_ERROR;
+            case UnexpectedTokenValidationException e -> ErrorCode.INTERNAL_ERROR;
             case TooManyPasswordResetAttemptsException e -> ErrorCode.TOO_MANY_PASSWORD_RESET_ATTEMPTS;
             case BadCredentialsException e -> ErrorCode.INVALID_CREDENTIALS;
-            case InvalidTokenException e -> ErrorCode.TOKEN_INVALID;
+            case TokenException e -> ErrorCode.TOKEN_INVALID;
 
             // User Exceptions
             case UserNotFoundException e -> ErrorCode.USER_NOT_FOUND;

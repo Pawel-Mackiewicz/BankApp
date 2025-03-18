@@ -2,7 +2,13 @@ package info.mackiewicz.bankapp.security.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.notification.email.exception.EmailSendingException;
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.security.exception.*;
+import info.mackiewicz.bankapp.security.exception.PasswordChangeException;
+import info.mackiewicz.bankapp.security.exception.TokenCreationException;
+import info.mackiewicz.bankapp.security.exception.UnexpectedTokenValidationException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
@@ -106,7 +114,7 @@ class PasswordResetServiceTest {
         // when/then
         assertThatThrownBy(() ->
             passwordResetService.completeReset(createResetDTO(TEST_TOKEN, NEW_PASSWORD, NEW_PASSWORD)))
-            .isInstanceOf(TokenValidationException.class)
+            .isInstanceOf(UnexpectedTokenValidationException.class)
             .hasMessageContaining("Failed to validate password reset token");
     }
 

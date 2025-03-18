@@ -1,14 +1,15 @@
 package info.mackiewicz.bankapp.security.exception;
 
-public class TokenCreationException extends RuntimeException {
+import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
 
+public class TokenCreationException extends TokenException {
+
+    private static final ErrorCode ERROR_CODE = ErrorCode.INTERNAL_ERROR;
     
-    public TokenCreationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public TokenCreationException(String message) {
-        super(message);
+        super(message, ERROR_CODE);
     }
-
+    public TokenCreationException(String message, Throwable cause) {
+        super(message, ERROR_CODE, cause);
+    }
 }

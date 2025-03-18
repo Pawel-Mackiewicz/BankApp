@@ -1,13 +1,22 @@
 package info.mackiewicz.bankapp.security.exception;
 
-public class PasswordResetException extends RuntimeException {
+import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
 
-    public PasswordResetException(String message) {
+public abstract class PasswordResetException extends RuntimeException {
+
+    private final ErrorCode errorCode;
+
+    protected PasswordResetException(String message, ErrorCode errorCode) {
         super(message);
+        this.errorCode = errorCode;
     }
 
-    public PasswordResetException(String message, Throwable cause) {
+    protected PasswordResetException(String message, ErrorCode errorCode, Throwable cause) {
         super(message, cause);
+        this.errorCode = errorCode;
     }
 
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
 }
