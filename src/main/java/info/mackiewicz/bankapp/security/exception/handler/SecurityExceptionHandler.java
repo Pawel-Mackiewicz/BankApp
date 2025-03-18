@@ -1,7 +1,10 @@
 package info.mackiewicz.bankapp.security.exception.handler;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,23 +20,72 @@ import info.mackiewicz.bankapp.security.exception.TokenValidationException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.exception.UsedTokenException;
 import info.mackiewicz.bankapp.shared.dto.BaseApiError;
+import info.mackiewicz.bankapp.shared.dto.ValidationApiError;
+import info.mackiewicz.bankapp.shared.dto.ValidationError;
 import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice(basePackages = "info.mackiewicz.bankapp.security.controller")
 public class SecurityExceptionHandler {
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseApiError> handleException(Exception ex, WebRequest request) {
-        String path = ((ServletWebRequest) request).getRequest().getRequestURI();
+        String path = getRequestURI(request);
 
         ErrorCode errorCode = mapExceptionToError(ex);
         BaseApiError error = new BaseApiError(errorCode, path);
         logError(errorCode, ex, path);
 
         return new ResponseEntity<>(error, error.getStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationApiError> handleValidationException(MethodArgumentNotValidException ex,
+            WebRequest request) {
+        String path = getRequestURI(request);
+
+        List<ValidationError> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(this::convertFieldError)
+                .toList();
+
+        ValidationApiError apiError = new ValidationApiError(path, errors);
+        return new ResponseEntity<>(apiError, apiError.getStatus());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ValidationApiError> handleValidationException(ConstraintViolationException ex,
+            WebRequest request) {
+        String path = getRequestURI(request);
+
+        List<ValidationError> errors = ex.getConstraintViolations()
+                .stream()
+                .map(this::convertConstraintViolation)
+                .toList();
+
+        ValidationApiError apiError = new ValidationApiError(path, errors);
+        return new ResponseEntity<>(apiError, apiError.getStatus());
+    }
+
+    private ValidationError convertConstraintViolation(ConstraintViolation<?> violation) {
+        return new ValidationError(
+            violation.getPropertyPath().toString(),
+            violation.getMessage(),
+            violation.getInvalidValue() != null ? 
+                violation.getInvalidValue().toString() : null
+        );
+    }
+
+    private ValidationError convertFieldError(FieldError fieldError) {
+        return new ValidationError(
+                fieldError.getField(),
+                fieldError.getDefaultMessage(),
+                String.valueOf(fieldError.getRejectedValue()));
     }
 
     private ErrorCode mapExceptionToError(Exception ex) {
@@ -60,6 +112,7 @@ public class SecurityExceptionHandler {
             default -> ErrorCode.INTERNAL_ERROR;
         };
     }
+
     private void logError(ErrorCode error, Exception ex, String path) {
         String message = String.format(
                 "Error occurred: %s, Path: %s, Message: %s",
@@ -72,5 +125,9 @@ public class SecurityExceptionHandler {
         } else {
             log.warn(message);
         }
+    }
+
+    private String getRequestURI(WebRequest request) {
+        return ((ServletWebRequest) request).getRequest().getRequestURI();
     }
 }
