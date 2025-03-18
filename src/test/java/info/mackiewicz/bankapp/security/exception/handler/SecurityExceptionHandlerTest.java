@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.security.exception.handler;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,21 +29,33 @@ class SecurityExceptionHandlerTest {
     private PasswordResetExceptionHandler exceptionHandler;
 
     @Mock
-    private WebRequest webRequest;
+    private RequestUriHandler uriHandler;
+
+    @Mock
+    private ApiErrorLogger errorLogger;
+
+    @Mock
+    private PasswordResetExceptionToErrorMapper exceptionMapper;
 
     @Mock
     private ServletWebRequest servletWebRequest;
-
-    @Mock
-    private HttpServletRequest httpRequest;
 
     private static final String TEST_PATH = "/api/security/test";
 
     @BeforeEach
     void setUp() {
-        exceptionHandler = new PasswordResetExceptionHandler();
-        when(servletWebRequest.getRequest()).thenReturn(httpRequest);
-        when(httpRequest.getRequestURI()).thenReturn(TEST_PATH);
+        exceptionHandler = new PasswordResetExceptionHandler(uriHandler, errorLogger, exceptionMapper);
+        
+        when(uriHandler.getRequestURI(any(WebRequest.class))).thenReturn(TEST_PATH);
+        
+        // Configure exception mapper to return appropriate error codes
+        when(exceptionMapper.map(any(TokenNotFoundException.class))).thenReturn(ErrorCode.TOKEN_NOT_FOUND);
+        when(exceptionMapper.map(any(ExpiredTokenException.class))).thenReturn(ErrorCode.TOKEN_EXPIRED);
+        when(exceptionMapper.map(any(BadCredentialsException.class))).thenReturn(ErrorCode.INVALID_CREDENTIALS);
+        when(exceptionMapper.map(any(TooManyPasswordResetAttemptsException.class))).thenReturn(ErrorCode.TOO_MANY_PASSWORD_RESET_ATTEMPTS);
+        when(exceptionMapper.map(any(UserNotFoundException.class))).thenReturn(ErrorCode.USER_NOT_FOUND);
+        when(exceptionMapper.map(any(PasswordChangeException.class))).thenReturn(ErrorCode.INTERNAL_ERROR);
+        when(exceptionMapper.map(any(RuntimeException.class))).thenReturn(ErrorCode.INTERNAL_ERROR);
     }
 
     @Nested
