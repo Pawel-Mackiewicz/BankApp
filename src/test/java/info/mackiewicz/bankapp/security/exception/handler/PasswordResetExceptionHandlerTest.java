@@ -17,14 +17,16 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
-import info.mackiewicz.bankapp.security.exception.*;
+import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
+import info.mackiewicz.bankapp.security.exception.PasswordChangeException;
+import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
+import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.shared.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)
-class SecurityExceptionHandlerTest {
+class PasswordResetExceptionHandlerTest {
 
     private PasswordResetExceptionHandler exceptionHandler;
 
@@ -38,13 +40,16 @@ class SecurityExceptionHandlerTest {
     private PasswordResetExceptionToErrorMapper exceptionMapper;
 
     @Mock
+    private ValidationErrorProcessor validationErrorProcessor;
+
+    @Mock
     private ServletWebRequest servletWebRequest;
 
     private static final String TEST_PATH = "/api/security/test";
 
     @BeforeEach
     void setUp() {
-        exceptionHandler = new PasswordResetExceptionHandler(uriHandler, errorLogger, exceptionMapper);
+        exceptionHandler = new PasswordResetExceptionHandler(uriHandler, errorLogger, exceptionMapper, validationErrorProcessor);
         
         when(uriHandler.getRequestURI(any(WebRequest.class))).thenReturn(TEST_PATH);
         

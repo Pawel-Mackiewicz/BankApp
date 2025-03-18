@@ -24,32 +24,26 @@ public class PasswordResetExceptionHandler {
     private final PasswordResetExceptionToErrorMapper exceptionMapper;
     private final ValidationErrorProcessor validationErrorProcessor;
 
-           @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationApiError> handleValidationException(MethodArgumentNotValidException ex,
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
             WebRequest request) {
-        String path = uriHandler.getRequestURI(request);
-
-        List<ValidationError> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(validationErrorProcessor::convertFieldError)
-                .toList();
-
-        ValidationApiError apiError = new ValidationApiError(path, errors);
-        return new ResponseEntity<>(apiError, apiError.getStatus());
+        List<ValidationError> errors = validationErrorProcessor.extractValidationErrors(ex);
+        return createValidationErrorResponse(errors, ex, request);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ValidationApiError> handleValidationException(ConstraintViolationException ex,
+    public ResponseEntity<ValidationApiError> handleConstraintViolationException(ConstraintViolationException ex,
+            WebRequest request) {
+        List<ValidationError> errors = validationErrorProcessor.extractValidationErrors(ex);
+        return createValidationErrorResponse(errors, ex, request);
+    }
+
+    private ResponseEntity<ValidationApiError> createValidationErrorResponse(List<ValidationError> errors, Exception ex,
             WebRequest request) {
         String path = uriHandler.getRequestURI(request);
-
-        List<ValidationError> errors = ex.getConstraintViolations()
-                .stream()
-                .map(validationErrorProcessor::convertConstraintViolation)
-                .toList();
-
         ValidationApiError apiError = new ValidationApiError(path, errors);
+        logger.logError(ErrorCode.VALIDATION_ERROR, ex, path);
+
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 

@@ -1,28 +1,45 @@
 package info.mackiewicz.bankapp.security.exception.handler;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import info.mackiewicz.bankapp.shared.dto.ValidationError;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 @Component
 public class ValidationErrorProcessor {
 
-      public ValidationError convertConstraintViolation(ConstraintViolation<?> violation) {
-        return new ValidationError(
-            violation.getPropertyPath().toString(),
-            violation.getMessage(),
-            violation.getInvalidValue() != null ? 
-                violation.getInvalidValue().toString() : null
-        );
+    public List<ValidationError> extractValidationErrors(MethodArgumentNotValidException ex) {
+        return ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(this::convert)
+                .toList();
     }
 
-    public ValidationError convertFieldError(FieldError fieldError) {
+    public List<ValidationError> extractValidationErrors(ConstraintViolationException ex) {
+        return ex.getConstraintViolations()
+                .stream()
+                .map(this::convert)
+                .toList();
+    }
+
+    public ValidationError convert(ConstraintViolation<?> violation) {
+        return new ValidationError(
+                violation.getPropertyPath().toString(),
+                violation.getMessage(),
+                violation.getInvalidValue() != null ? violation.getInvalidValue().toString() : "");
+    }
+
+    @SuppressWarnings("null")
+    public ValidationError convert(FieldError fieldError) {
         return new ValidationError(
                 fieldError.getField(),
                 fieldError.getDefaultMessage(),
-                String.valueOf(fieldError.getRejectedValue()));
+                fieldError.getRejectedValue() != null ? fieldError.getRejectedValue().toString() : "");
     }
-
 }
