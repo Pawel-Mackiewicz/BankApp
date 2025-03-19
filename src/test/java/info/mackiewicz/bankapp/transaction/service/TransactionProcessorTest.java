@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.transaction.service;
 
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
@@ -45,10 +46,10 @@ class TransactionProcessorTest {
 
     @Mock
     private TransactionErrorHandler errorHandler;
-    
+
     @Mock
     private TransactionExecutor executionCommand;
-    
+
     @Mock
     private AccountService accountService;
 
@@ -65,19 +66,19 @@ class TransactionProcessorTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        
+
         sourceAccount = mock(Account.class);
         destinationAccount = mock(Account.class);
         when(sourceAccount.getId()).thenReturn(1);
         when(destinationAccount.getId()).thenReturn(2);
-        
+
         transaction = new Transaction();
         transaction.setType(TransactionType.TRANSFER_INTERNAL);
         transaction.setSourceAccount(sourceAccount);
         transaction.setDestinationAccount(destinationAccount);
-        
+
         when(commandRegistry.getCommand(any(TransactionType.class)))
-            .thenReturn(executionCommand);
+                .thenReturn(executionCommand);
     }
 
     @Test
@@ -128,7 +129,7 @@ class TransactionProcessorTest {
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
         verify(commandRegistry).getCommand(transaction.getType());
         verify(executionCommand).execute(transaction, accountService);
-        verify(errorHandler).handleUnexpectedError(transaction, exception); 
+        verify(errorHandler).handleUnexpectedError(transaction, exception);
         verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
     }
@@ -155,13 +156,13 @@ class TransactionProcessorTest {
     void processTransaction_WhenLockAcquisitionFails_ShouldHandleError() {
         // given
         AccountLockException exception = new AccountLockException(
-            "Thread was interrupted while trying to acquire lock",
-            sourceAccount.getId(),
-            1,    // attempts made before interruption
-            200,  // totalWaitTime in ms
-            true  // wasInterrupted
+                "Thread was interrupted while trying to acquire lock",
+                sourceAccount.getId(),
+                1, // attempts made before interruption
+                200, // totalWaitTime in ms
+                true // wasInterrupted
         );
-        
+
         doThrow(exception).when(accountLockManager).lockAccounts(any(), any());
 
         // when
@@ -177,38 +178,39 @@ class TransactionProcessorTest {
     }
 
     @Test
-    void processTransaction_WhenUnlockFails_ShouldHandleUnlockError() {
+    void processTransaction_WhenUnlockFails_ShouldHandleUnlockErrorAndRethrow() {
         // given
         AccountUnlockException exception = new AccountUnlockException(
-            "Failed to unlock account", 
-            sourceAccount.getId()
-        );
+                "Failed to unlock account",
+                sourceAccount.getId());
         doThrow(exception).when(accountLockManager).unlockAccounts(any(), any());
 
-        // when
-        processor.processTransaction(transaction);
-
-        // then
-        verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(commandRegistry).getCommand(transaction.getType());
-        verify(executionCommand).execute(transaction, accountService);
-        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
-        verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-        verify(errorHandler).handleUnlockError(transaction, exception);
+        // when/then
+        try {
+            processor.processTransaction(transaction);
+            fail("Expected AccountUnlockException to be thrown");
+        } catch (AccountUnlockException e) {
+            // Wyjątek został ponownie rzucony, co jest oczekiwane
+            verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
+            verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
+            verify(commandRegistry).getCommand(transaction.getType());
+            verify(executionCommand).execute(transaction, accountService);
+            verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
+            verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+            verify(errorHandler).handleUnlockError(transaction, exception);
+        }
     }
 
     @Test
     void processTransaction_ShouldPreserveExecutionOrder() {
         // Create ordered verifier for strict order checking
         InOrder orderVerifier = inOrder(
-            accountLockManager, 
-            statusManager, 
-            commandRegistry,
-            executionCommand,
-            statusManager,
-            accountLockManager
-        );
+                accountLockManager,
+                statusManager,
+                commandRegistry,
+                executionCommand,
+                statusManager,
+                accountLockManager);
 
         // when
         processor.processTransaction(transaction);

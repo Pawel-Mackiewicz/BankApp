@@ -41,7 +41,6 @@ public class TransactionErrorHandler {
         log.warn("Transaction {} validation failed: {}", transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.VALIDATION_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw new TransactionValidationException("Validation error for transaction " + transaction.getId(), e);
     }
 
     /**
@@ -52,7 +51,6 @@ public class TransactionErrorHandler {
         log.error("Transaction {} failed with unexpected error: {}", transaction.getId(), e.getMessage(), e);
         statusManager.setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw new TransactionExecutionException("Unexpected error during transaction processing", e);
     }
 
     /**
@@ -87,7 +85,6 @@ public class TransactionErrorHandler {
                 e.getAccountId(), transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw e;
     }
 
     /**
@@ -99,7 +96,6 @@ public class TransactionErrorHandler {
                 transaction.getId(), e.getMessage(), e);
         statusManager.setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw new TransactionExecutionException("Unexpected unlock error for transaction " + transaction.getId(), e);
     }
 
     /**

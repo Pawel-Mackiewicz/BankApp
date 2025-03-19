@@ -75,7 +75,7 @@ public class PasswordResetTokenIntegrationTest {
         doNothing().when(emailService).sendPasswordResetConfirmation(anyString(), anyString());
         
         // Create test user with dynamic ID instead of fixed ID=1
-        testUser = TestUserBuilder.createRandomTestUser();
+        testUser = TestUserBuilder.createRandomTestUserForIntegrationTests();
         testUser.setPassword(passwordEncoder.encode(TEST_PASSWORD));
         testUser = userRepository.save(testUser);
         entityManager.flush();
