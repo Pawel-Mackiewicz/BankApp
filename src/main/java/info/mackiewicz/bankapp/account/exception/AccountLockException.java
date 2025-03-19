@@ -1,13 +1,15 @@
 package info.mackiewicz.bankapp.account.exception;
 
-public class AccountLockException extends RuntimeException {
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+
+public class AccountLockException extends AccountBaseException {
     private final Integer accountId;
     private final int attempts;
     private final long totalWaitTime;
     private final boolean wasInterrupted;
 
     public AccountLockException(String message, Integer accountId, int attempts, long totalWaitTime, boolean wasInterrupted) {
-        super(message);
+        super(message, ErrorCode.INTERNAL_ERROR);
         this.accountId = accountId;
         this.attempts = attempts;
         this.totalWaitTime = totalWaitTime;

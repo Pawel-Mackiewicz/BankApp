@@ -1,17 +1,16 @@
 package info.mackiewicz.bankapp.account.exception;
 
-public class AccountNotFoundByIbanException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "Account not found for the provided IBAN";
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
 
-    public AccountNotFoundByIbanException() {
-        super(DEFAULT_MESSAGE);
-    }
+public class AccountNotFoundByIbanException extends AccountBaseException {
+
+
     public AccountNotFoundByIbanException(String message) {
-        super(message);
+        super(message, ErrorCode.ACCOUNT_NOT_FOUND);
     }
     
     public AccountNotFoundByIbanException(String iban, Throwable cause) {
-        super("Account not found for IBAN: " + iban, cause);
+        super("Account not found for IBAN: " + iban, cause, ErrorCode.ACCOUNT_NOT_FOUND);
     }
 
 }

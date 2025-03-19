@@ -1,13 +1,10 @@
 package info.mackiewicz.bankapp.account.exception;
 
-public class AccountNotFoundByIdException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "Account not found for the provided ID";
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
 
-    public AccountNotFoundByIdException() {
-        super(DEFAULT_MESSAGE);
-    }
+public class AccountNotFoundByIdException extends AccountBaseException {
 
     public AccountNotFoundByIdException(String message) {
-        super(message);
+        super(message, ErrorCode.ACCOUNT_NOT_FOUND);
     }
 }
