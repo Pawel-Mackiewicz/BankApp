@@ -88,13 +88,10 @@ class TransactionProcessor {
             command.execute(transaction, accountService);
         } catch (AccountValidationException e) {
             errorHandler.handleValidationError(transaction, e);
-            throw new TransactionExecutionException();
         } catch (InsufficientFundsException e) {
             errorHandler.handleInsufficientFundsError(transaction, e);
-            throw new TransactionExecutionException();
         } catch (Exception e) {
             errorHandler.handleUnexpectedError(transaction, e);
-            throw new TransactionExecutionException();
         }
     }
 

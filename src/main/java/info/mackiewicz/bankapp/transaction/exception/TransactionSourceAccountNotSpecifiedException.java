@@ -1,13 +1,15 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
-public class TransactionSourceAccountNotSpecifiedException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "Transaction source account must be specified";
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+
+public class TransactionSourceAccountNotSpecifiedException extends TransactionBaseException {
+    private static final String DEFAULT_MESSAGE = "Source account is required for this transaction.";
 
     public TransactionSourceAccountNotSpecifiedException() {
-        super(DEFAULT_MESSAGE);
+        super(DEFAULT_MESSAGE, ErrorCode.TRANSACTION_SOURCE_ACCOUNT_MISSING);
     }
 
     public TransactionSourceAccountNotSpecifiedException(String message) {
-        super(message);
+        super(message, ErrorCode.TRANSACTION_SOURCE_ACCOUNT_MISSING);
     }
 }

@@ -32,7 +32,21 @@ public enum ErrorCode {
     ACCOUNT_OWNER_LOCKED(HttpStatus.FORBIDDEN, "Account owner is locked."),
     ACCOUNT_OWNER_NULL(HttpStatus.BAD_REQUEST, "Account owner is null."),
     ACCOUNT_OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "Account owner not found."), 
-    ACCOUNT_LIMIT_EXCEEDED(HttpStatus.FORBIDDEN, "Account limit exceeded. If you need more accounts, please contact support.");
+    ACCOUNT_LIMIT_EXCEEDED(HttpStatus.FORBIDDEN, "Account limit exceeded. If you need more accounts, please contact support."),
+    
+    // Transaction Errors
+    TRANSACTION_NOT_FOUND(HttpStatus.NOT_FOUND, "Transaction not found."),
+    TRANSACTION_VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "Transaction validation failed. Please check your transaction details."),
+    TRANSACTION_EXECUTION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to process transaction. Please try again later."),
+    TRANSACTION_ALREADY_PROCESSED(HttpStatus.CONFLICT, "This transaction has already been processed."),
+    TRANSACTION_CANNOT_BE_PROCESSED(HttpStatus.BAD_REQUEST, "Transaction cannot be processed in its current state."),
+    TRANSACTION_SOURCE_ACCOUNT_MISSING(HttpStatus.BAD_REQUEST, "Source account is required for this transaction."),
+    TRANSACTION_DESTINATION_ACCOUNT_MISSING(HttpStatus.BAD_REQUEST, "Destination account is required for this transaction."),
+    TRANSACTION_AMOUNT_MISSING(HttpStatus.BAD_REQUEST, "Transaction amount is required."),
+    TRANSACTION_TYPE_MISSING(HttpStatus.BAD_REQUEST, "Transaction type is required."),
+    INVALID_TRANSACTION_TYPE(HttpStatus.BAD_REQUEST, "Invalid transaction type."),
+    INVALID_TRANSACTION_OPERATION(HttpStatus.BAD_REQUEST, "Invalid operation for this transaction."),
+    NO_TRANSACTIONS_FOR_ACCOUNT(HttpStatus.NOT_FOUND, "No transactions found for this account.");
 
     private final HttpStatus status;
     private final String message;

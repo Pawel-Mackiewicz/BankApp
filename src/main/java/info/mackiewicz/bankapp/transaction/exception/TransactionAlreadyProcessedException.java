@@ -1,13 +1,15 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
-public class TransactionAlreadyProcessedException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "Transaction has already been processed";
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+
+public class TransactionAlreadyProcessedException extends TransactionBaseException {
+    private static final String DEFAULT_MESSAGE = "This transaction has already been processed.";
 
     public TransactionAlreadyProcessedException() {
-        super(DEFAULT_MESSAGE);
+        super(DEFAULT_MESSAGE, ErrorCode.TRANSACTION_ALREADY_PROCESSED);
     }
 
     public TransactionAlreadyProcessedException(String message) {
-        super(message);
+        super(message, ErrorCode.TRANSACTION_ALREADY_PROCESSED);
     }
 }

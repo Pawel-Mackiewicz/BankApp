@@ -1,15 +1,22 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+
 /**
- * Exception thrown when there are insufficient funds in the account to complete the transaction
+ * Exception thrown when an account does not have sufficient funds to complete a transaction.
  */
-public class InsufficientFundsException extends RuntimeException {
-    
+public class InsufficientFundsException extends TransactionBaseException {
+    private static final String DEFAULT_MESSAGE = "Insufficient funds for this transaction. Please check your balance and try again.";
+
+    public InsufficientFundsException() {
+        super(DEFAULT_MESSAGE, ErrorCode.INSUFFICIENT_FUNDS);
+    }
+
     public InsufficientFundsException(String message) {
-        super(message);
+        super(message, ErrorCode.INSUFFICIENT_FUNDS);
     }
 
     public InsufficientFundsException(String message, Throwable cause) {
-        super(message, cause);
+        super(message, cause, ErrorCode.INSUFFICIENT_FUNDS);
     }
 }

@@ -1,13 +1,15 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
-public class TransactionTypeNotSpecifiedException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "Transaction type must be specified";
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+
+public class TransactionTypeNotSpecifiedException extends TransactionBaseException {
+    private static final String DEFAULT_MESSAGE = "Transaction type is required.";
 
     public TransactionTypeNotSpecifiedException() {
-        super(DEFAULT_MESSAGE);
+        super(DEFAULT_MESSAGE, ErrorCode.TRANSACTION_TYPE_MISSING);
     }
 
     public TransactionTypeNotSpecifiedException(String message) {
-        super(message);
+        super(message, ErrorCode.TRANSACTION_TYPE_MISSING);
     }
 }
