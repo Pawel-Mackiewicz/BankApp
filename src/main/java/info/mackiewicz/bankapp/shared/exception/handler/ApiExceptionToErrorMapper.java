@@ -7,7 +7,7 @@ import info.mackiewicz.bankapp.security.exception.PasswordResetBaseException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 
 @Component
-public class PasswordResetExceptionToErrorMapper implements ExceptionToErrorMapper {    
+public class ApiExceptionToErrorMapper implements ExceptionToErrorMapper {    
 
     @Override
     public ErrorCode map(Exception ex) {    

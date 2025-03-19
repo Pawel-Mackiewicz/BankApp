@@ -20,8 +20,19 @@ public class ApiExceptionHandler {
 
     private final RequestUriHandler uriHandler;
     private final ApiErrorLogger logger;
-    private final PasswordResetExceptionToErrorMapper exceptionMapper;
+    private final ApiExceptionToErrorMapper exceptionMapper;
     private final ValidationErrorProcessor validationErrorProcessor;
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<BaseApiError> handleException(Exception ex, WebRequest request) {
+        String path = uriHandler.getRequestURI(request);
+
+        ErrorCode errorCode = exceptionMapper.map(ex);
+        BaseApiError error = new BaseApiError(errorCode, path);
+        logger.logError(errorCode, ex, path);
+
+        return new ResponseEntity<>(error, error.getStatus());
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
@@ -46,14 +57,4 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<BaseApiError> handleException(Exception ex, WebRequest request) {
-        String path = uriHandler.getRequestURI(request);
-
-        ErrorCode errorCode = exceptionMapper.map(ex);
-        BaseApiError error = new BaseApiError(errorCode, path);
-        logger.logError(errorCode, ex, path);
-
-        return new ResponseEntity<>(error, error.getStatus());
-    }
 }

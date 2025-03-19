@@ -27,7 +27,7 @@ import info.mackiewicz.bankapp.shared.dto.ValidationError;
 import info.mackiewicz.bankapp.shared.exception.handler.ApiErrorLogger;
 import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
 import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionHandler;
-import info.mackiewicz.bankapp.shared.exception.handler.PasswordResetExceptionToErrorMapper;
+import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionToErrorMapper;
 import info.mackiewicz.bankapp.shared.exception.handler.RequestUriHandler;
 import info.mackiewicz.bankapp.shared.exception.handler.ValidationErrorProcessor;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
@@ -45,7 +45,7 @@ class PasswordResetExceptionHandlerTest {
     private ApiErrorLogger errorLogger;
 
     @Mock
-    private PasswordResetExceptionToErrorMapper exceptionMapper;
+    private ApiExceptionToErrorMapper exceptionMapper;
 
     @Mock
     private ValidationErrorProcessor validationErrorProcessor;

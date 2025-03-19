@@ -15,7 +15,7 @@ import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider
 import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
 import info.mackiewicz.bankapp.shared.exception.handler.ApiErrorLogger;
 import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionHandler;
-import info.mackiewicz.bankapp.shared.exception.handler.PasswordResetExceptionToErrorMapper;
+import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionToErrorMapper;
 import info.mackiewicz.bankapp.shared.exception.handler.RequestUriHandler;
 import info.mackiewicz.bankapp.shared.exception.handler.ValidationErrorProcessor;
 import info.mackiewicz.bankapp.shared.interceptor.LoggingInterceptor;
@@ -45,7 +45,7 @@ public class TestConfig {
     public ApiExceptionHandler apiExceptionHandler(
             RequestUriHandler uriHandler,
             ApiErrorLogger errorLogger,
-            PasswordResetExceptionToErrorMapper exceptionMapper,
+            ApiExceptionToErrorMapper exceptionMapper,
             ValidationErrorProcessor validationErrorProcessor) {
         return new ApiExceptionHandler(uriHandler, errorLogger, exceptionMapper, validationErrorProcessor);
     }
