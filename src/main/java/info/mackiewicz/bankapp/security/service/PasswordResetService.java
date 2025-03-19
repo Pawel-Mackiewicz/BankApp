@@ -47,12 +47,21 @@ public class PasswordResetService {
         log.info("Initiating password reset process for email: {}", email);
         log.debug("Validating email format and checking user existence");
 
+        try {
         var user = userService.getUserByEmail(email);
         log.debug("User found, generating reset token for user ID: {}", user.getId());
-
         String token = generatePasswordResetToken(email, user);
-
         sendPasswordResetEmailNotification(email, user, token);
+        } catch (UserNotFoundException e) {
+            // User not found, log the error and swallow it for security reasons
+            // to prevent information leakage
+            log.warn("User not found for email: {}", email);
+        } catch (TooManyPasswordResetAttemptsException e) {
+            // Too many password reset attemps, log the error and swallow it for security reasons,
+            // to prevent information leakage
+            log.warn("Too many password reset attemps detected for email: {}", email);
+        }
+
     }
 
     private void sendPasswordResetEmailNotification(String email, User user, String token) {
