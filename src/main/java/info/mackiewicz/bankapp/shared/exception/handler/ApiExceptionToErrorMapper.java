@@ -10,8 +10,8 @@ public class ApiExceptionToErrorMapper implements ExceptionToErrorMapper {
     @Override
     public ErrorCode map(Exception ex) {    
         return switch (ex) {
-            case BankAppBaseException e -> ((BankAppBaseException) ex).getErrorCode();
-            
+            case BankAppBaseException e -> e.getErrorCode();
+
             default -> ErrorCode.INTERNAL_ERROR;
         };
     }
