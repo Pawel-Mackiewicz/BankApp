@@ -35,7 +35,7 @@ class AccountValidationService {
         log.debug("Validating account owner: {}", owner.getId());
         if (owner.getAccounts().size() >= MAX_ACCOUNTS) {
             log.warn("Validation fail. Account limit exceeded for owner: {}", owner.getId());
-            throw new AccountLimitException("Account limit exceeded. You can have up to " + MAX_ACCOUNTS + " accounts");
+            throw new AccountLimitException("Account limit exceeded. User can't have more than " + MAX_ACCOUNTS + " accounts");
         }
         if (owner.isLocked()) {
             log.warn("Validation fail. User {} is locked", owner.getId());
