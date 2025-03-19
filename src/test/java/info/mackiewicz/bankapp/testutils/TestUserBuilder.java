@@ -26,6 +26,7 @@ public class TestUserBuilder {
      */
     public static User createRandomTestUser() {
         User user = new User();
+        user.setId(generateNextId()); // Dodajemy ustawienie id użytkownika
         user.setFirstname("Test");
         user.setLastname("User");
         user.setEmail(new Email(generateRandomEmail()));

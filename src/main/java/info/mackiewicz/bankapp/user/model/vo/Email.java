@@ -20,7 +20,7 @@ import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // For JPA
 public class Email {
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
-        "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+        "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
     );
 
     private String value;

@@ -64,10 +64,10 @@ class TransactionProcessor {
     }
 
     private void executeWithStatusUpdates(Transaction transaction) {
-        updateTransactionStatus(transaction, TransactionStatus.PENDING);
-        executeTransaction(transaction);
-        updateTransactionStatus(transaction, TransactionStatus.DONE);
-        loggingService.logSuccessfulTransaction(transaction);
+            updateTransactionStatus(transaction, TransactionStatus.PENDING);
+            executeTransaction(transaction);
+            updateTransactionStatus(transaction, TransactionStatus.DONE);
+            loggingService.logSuccessfulTransaction(transaction);
     }
 
     private void updateTransactionStatus(Transaction transaction, TransactionStatus status) {
@@ -90,6 +90,7 @@ class TransactionProcessor {
             errorHandler.handleValidationError(transaction, e);
         } catch (InsufficientFundsException e) {
             errorHandler.handleInsufficientFundsError(transaction, e);
+            throw e;
         } catch (Exception e) {
             errorHandler.handleUnexpectedError(transaction, e);
         }
@@ -106,6 +107,7 @@ class TransactionProcessor {
             loggingService.logUnlockingAccounts(transaction);
         } catch (AccountUnlockException e) {
             errorHandler.handleUnlockError(transaction, e);
+            throw e;
         } catch (Exception e) {
             errorHandler.handleUnexpectedUnlockError(transaction, e);
         }

@@ -31,7 +31,6 @@ public class TransactionErrorHandler {
         log.warn("Transaction {} failed: Insufficient funds - {}", transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.INSUFFICIENT_FUNDS);
         errorNotifier.notifyError(transaction, e);
-        throw e;
     }
 
     /**
@@ -65,7 +64,6 @@ public class TransactionErrorHandler {
                 e.getAccountId(), transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw e;
     }
 
     /**
