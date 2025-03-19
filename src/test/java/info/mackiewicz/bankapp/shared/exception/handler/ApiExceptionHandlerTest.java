@@ -1,8 +1,10 @@
-package info.mackiewicz.bankapp.security.exception.handler;
+package info.mackiewicz.bankapp.shared.exception.handler;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -20,21 +22,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
-import info.mackiewicz.bankapp.security.exception.*;
+import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
+import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
+import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
+import info.mackiewicz.bankapp.security.exception.UsedTokenException;
 import info.mackiewicz.bankapp.shared.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.dto.ValidationApiError;
 import info.mackiewicz.bankapp.shared.dto.ValidationError;
-import info.mackiewicz.bankapp.shared.exception.handler.ApiErrorLogger;
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
-import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionHandler;
-import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionToErrorMapper;
-import info.mackiewicz.bankapp.shared.exception.handler.RequestUriHandler;
-import info.mackiewicz.bankapp.shared.exception.handler.ValidationErrorProcessor;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 
 @ExtendWith(MockitoExtension.class)
-class PasswordResetExceptionHandlerTest {
+class ApiExceptionHandlerTest {
 
     private ApiExceptionHandler exceptionHandler;
 
