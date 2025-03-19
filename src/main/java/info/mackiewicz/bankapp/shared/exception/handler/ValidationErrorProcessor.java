@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.security.exception.handler;
+package info.mackiewicz.bankapp.shared.exception.handler;
 
 import java.util.List;
 

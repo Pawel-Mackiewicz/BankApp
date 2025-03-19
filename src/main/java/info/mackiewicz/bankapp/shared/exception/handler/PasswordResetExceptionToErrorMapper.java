@@ -1,9 +1,9 @@
-package info.mackiewicz.bankapp.security.exception.handler;
+package info.mackiewicz.bankapp.shared.exception.handler;
 
 import org.springframework.stereotype.Component;
 
-import info.mackiewicz.bankapp.security.exception.PasswordResetException;
-import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
+import info.mackiewicz.bankapp.account.exception.AccountValidationException;
+import info.mackiewicz.bankapp.security.exception.PasswordResetBaseException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 
 @Component
@@ -12,7 +12,8 @@ public class PasswordResetExceptionToErrorMapper implements ExceptionToErrorMapp
     @Override
     public ErrorCode map(Exception ex) {    
         return switch (ex) {
-            case PasswordResetException e -> ((PasswordResetException) ex).getErrorCode();
+            case PasswordResetBaseException e -> ((PasswordResetBaseException) ex).getErrorCode();
+            case AccountValidationException e -> ErrorCode.VALIDATION_ERROR;
             case UserNotFoundException e -> ErrorCode.USER_NOT_FOUND;
             default -> ErrorCode.INTERNAL_ERROR;
         };

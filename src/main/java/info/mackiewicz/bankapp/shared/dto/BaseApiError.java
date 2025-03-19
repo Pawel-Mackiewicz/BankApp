@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import info.mackiewicz.bankapp.shared.dto.interfaces.ApiErrorResponse;
-import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
 import lombok.Getter;
 
 /**

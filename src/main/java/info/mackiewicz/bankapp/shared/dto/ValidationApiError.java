@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.shared.dto;
 
 import java.util.List;
 import info.mackiewicz.bankapp.shared.dto.interfaces.ValidationErrorResponse;
-import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
 import lombok.Getter;
 
 /**

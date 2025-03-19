@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception.handlers;
+package info.mackiewicz.bankapp.shared.exception.handler;
 
 import org.springframework.http.HttpStatus;
 
@@ -20,8 +20,19 @@ public enum ErrorCode {
     TOO_MANY_PASSWORD_RESET_ATTEMPTS(HttpStatus.TOO_MANY_REQUESTS, "You've reached the limit of password reset attempts. Please try again later."),
     
     // User Errors
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "We couldn't find an account with the provided information.");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "We couldn't find user with the provided information."),
     
+    // Account Errors
+    ACCOUNT_VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "We can't validate your account. Please check your input and try again."),
+    ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "Account not found."),
+    PAYMENT_FAILED(HttpStatus.FORBIDDEN, "Payment processing failed. Please try again."),
+    INSUFFICIENT_FUNDS(HttpStatus.FORBIDDEN, "Insufficient funds for this transaction. Please check your balance and try again."), 
+    ACCOUNT_OWNER_EXPIRED(HttpStatus.FORBIDDEN, "Account owner is expired."),
+    ACCOUNT_OWNER_LOCKED(HttpStatus.FORBIDDEN, "Account owner is locked."),
+    ACCOUNT_OWNER_NULL(HttpStatus.BAD_REQUEST, "Account owner is null."),
+    ACCOUNT_OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "Account owner not found."), 
+    ACCOUNT_LIMIT_EXCEEDED(HttpStatus.FORBIDDEN, "Account limit exceeded. If you need more accounts, please contact support.");
+
     private final HttpStatus status;
     private final String message;
 

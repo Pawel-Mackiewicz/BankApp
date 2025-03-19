@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.security.exception.handler;
+package info.mackiewicz.bankapp.shared.exception.handler;
 
 import java.util.List;
 
@@ -11,13 +11,12 @@ import org.springframework.web.context.request.WebRequest;
 import info.mackiewicz.bankapp.shared.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.dto.ValidationApiError;
 import info.mackiewicz.bankapp.shared.dto.ValidationError;
-import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RestControllerAdvice(basePackages = "info.mackiewicz.bankapp.security.controller")
-public class PasswordResetExceptionHandler {
+@RestControllerAdvice
+public class ApiExceptionHandler {
 
     private final RequestUriHandler uriHandler;
     private final ApiErrorLogger logger;

@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.security.exception;
 
-import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
 
 public class UsedTokenException extends TokenException {
     

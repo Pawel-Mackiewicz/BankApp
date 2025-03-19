@@ -24,14 +24,19 @@ import info.mackiewicz.bankapp.security.exception.*;
 import info.mackiewicz.bankapp.shared.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.dto.ValidationApiError;
 import info.mackiewicz.bankapp.shared.dto.ValidationError;
-import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
+import info.mackiewicz.bankapp.shared.exception.handler.ApiErrorLogger;
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionHandler;
+import info.mackiewicz.bankapp.shared.exception.handler.PasswordResetExceptionToErrorMapper;
+import info.mackiewicz.bankapp.shared.exception.handler.RequestUriHandler;
+import info.mackiewicz.bankapp.shared.exception.handler.ValidationErrorProcessor;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 
 @ExtendWith(MockitoExtension.class)
 class PasswordResetExceptionHandlerTest {
 
-    private PasswordResetExceptionHandler exceptionHandler;
+    private ApiExceptionHandler exceptionHandler;
 
     @Mock
     private RequestUriHandler uriHandler;
@@ -62,7 +67,7 @@ class PasswordResetExceptionHandlerTest {
 
     @BeforeEach
     void setUp() {
-        exceptionHandler = new PasswordResetExceptionHandler(
+        exceptionHandler = new ApiExceptionHandler(
                 uriHandler,
                 errorLogger,
                 exceptionMapper,

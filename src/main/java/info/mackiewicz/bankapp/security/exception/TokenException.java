@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.security.exception;
 
-import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
 
-public class TokenException extends PasswordResetException {
+public class TokenException extends PasswordResetBaseException {
     
     private static final ErrorCode ERROR_CODE = ErrorCode.TOKEN_INVALID;
     

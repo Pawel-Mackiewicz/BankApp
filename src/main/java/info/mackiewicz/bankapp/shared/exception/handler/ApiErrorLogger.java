@@ -1,8 +1,7 @@
-package info.mackiewicz.bankapp.security.exception.handler;
+package info.mackiewicz.bankapp.shared.exception.handler;
 
 import org.springframework.stereotype.Component;
 
-import info.mackiewicz.bankapp.shared.exception.handlers.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
