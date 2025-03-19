@@ -14,7 +14,6 @@ import info.mackiewicz.bankapp.notification.email.EmailSender;
 import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
 import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
 import info.mackiewicz.bankapp.shared.exception.handler.ApiErrorLogger;
-import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionHandler;
 import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionToErrorMapper;
 import info.mackiewicz.bankapp.shared.exception.handler.RequestUriHandler;
 import info.mackiewicz.bankapp.shared.exception.handler.ValidationErrorProcessor;
@@ -40,14 +39,25 @@ public class TestConfig {
     public ApiResponseBuilder apiResponseBuilder() {
         return new ApiResponseBuilder();
     }
-    
+
     @Bean
-    public ApiExceptionHandler apiExceptionHandler(
-            RequestUriHandler uriHandler,
-            ApiErrorLogger errorLogger,
-            ApiExceptionToErrorMapper exceptionMapper,
-            ValidationErrorProcessor validationErrorProcessor) {
-        return new ApiExceptionHandler(uriHandler, errorLogger, exceptionMapper, validationErrorProcessor);
+    public RequestUriHandler requestUriHandler() {
+        return new RequestUriHandler();
+    }
+
+    @Bean
+    public ApiErrorLogger apiErrorLogger() {
+        return new ApiErrorLogger();
+    }
+
+    @Bean
+    public ApiExceptionToErrorMapper apiExceptionToErrorMapper() {
+        return new ApiExceptionToErrorMapper();
+    }
+
+    @Bean
+    public ValidationErrorProcessor validationErrorProcessor() {
+        return new ValidationErrorProcessor();
     }
 
     @Bean
