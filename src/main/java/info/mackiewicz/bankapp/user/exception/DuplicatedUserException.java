@@ -1,13 +1,18 @@
 package info.mackiewicz.bankapp.user.exception;
 
-public class DuplicatedUserException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "User with the same PESEL already exists";
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
 
-    public DuplicatedUserException() {
-        super(DEFAULT_MESSAGE);
-    }
+/**
+ * Exception thrown when attempting to create a user that already exists.
+ * Uses INTERNAL_ERROR to avoid exposing sensitive information about which field caused the duplication.
+ */
+public class DuplicatedUserException extends UserBaseException {
 
     public DuplicatedUserException(String message) {
-        super(message);
+        super(message, ErrorCode.USER_ALREADY_EXISTS);
+    }
+
+    public DuplicatedUserException(String message, Throwable cause) {
+        super(message, cause, ErrorCode.USER_ALREADY_EXISTS);
     }
 }

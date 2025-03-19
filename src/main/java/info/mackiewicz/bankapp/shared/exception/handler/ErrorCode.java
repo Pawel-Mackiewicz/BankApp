@@ -21,6 +21,7 @@ public enum ErrorCode {
     
     // User Errors
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "We couldn't find user with the provided information."),
+    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "User with this credentials already exists."),
     
     // Account Errors
     ACCOUNT_VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "We can't validate your account. Please check your input and try again."),

@@ -1,13 +1,18 @@
 package info.mackiewicz.bankapp.user.exception;
 
-public class UserNotFoundException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "User not found";
+import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+
+/**
+ * Exception thrown when a requested user cannot be found.
+ */
+public class UserNotFoundException extends UserBaseException {
+    private static final String DEFAULT_MESSAGE = "We couldn't find user with the provided information.";
 
     public UserNotFoundException() {
-        super(DEFAULT_MESSAGE);
+        super(DEFAULT_MESSAGE, ErrorCode.USER_NOT_FOUND);
     }
 
     public UserNotFoundException(String message) {
-        super(message);
+        super(message, ErrorCode.USER_NOT_FOUND);
     }
 }
