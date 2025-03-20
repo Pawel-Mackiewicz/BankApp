@@ -87,4 +87,14 @@ class AccountQueryService {
         return accountRepository.findByIban(iban)
         .orElseThrow(() -> new AccountNotFoundByIbanException("Account with IBAN " + iban.toFormattedString() + " not found."));
     }
+
+    boolean existsByEmail(Email email) {
+        log.debug("Checking if account exists by email: {}", email);
+        return accountRepository.existsByOwner_email(email);
+    }
+
+    boolean existsByEmail(String email) {
+        return existsByEmail(new Email(email));
+    }
+
 }

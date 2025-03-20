@@ -1,11 +1,12 @@
 package info.mackiewicz.bankapp.shared.config;
 
-import info.mackiewicz.bankapp.shared.interceptor.LoggingInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingInterceptor;
 
 /**
  * Web MVC configuration for registering interceptors and other web-related components.

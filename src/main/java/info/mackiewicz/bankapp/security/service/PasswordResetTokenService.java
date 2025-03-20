@@ -5,11 +5,11 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
-import info.mackiewicz.bankapp.security.exception.InvalidPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
+import info.mackiewicz.bankapp.security.exception.TokenException;
 import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.UsedTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +34,17 @@ public class PasswordResetTokenService {
      * 
      * @param userEmail User email
      * @return Plain token to be sent to user
+     * @throws TooManyPasswordResetAttemptsException if user has exceeded active
+     *                                               token limit
      */
     @Transactional
     public String createToken(String userEmail, String fullName) {
         log.info("Starting password reset token creation process for user: {}", userEmail);
         log.debug("Validating token creation eligibility for user: {}", userEmail);
-        
-        validateTokenCreation(userEmail);
+
+        if (!canRequestNewToken(userEmail)) {
+            throw new TooManyPasswordResetAttemptsException("User exceeded token limit: " + userEmail);
+        }
 
         log.debug("Generating new token and hash for user: {}", userEmail);
         String plainToken = tokenHashingService.generateToken();
@@ -50,14 +54,6 @@ public class PasswordResetTokenService {
         log.info("Successfully created password reset token for user: {}", userEmail);
 
         return plainToken;
-    }
-
-    private void validateTokenCreation(String userEmail) {
-        // Check if user hasn't exceeded token limit
-        if (!canRequestToken(userEmail)) {
-            log.warn("User {} has exceeded the limit of active tokens", userEmail);
-            throw new TooManyPasswordResetAttemptsException();
-        }
     }
 
     private void saveNewToken(String userEmail, String fullName, String tokenHash) {
@@ -72,53 +68,57 @@ public class PasswordResetTokenService {
      * @param token Token to validate
      * @return PasswordResetToken object if token is valid, empty otherwise
      * @throws TokenNotFoundException             if token is not found
-     * @throws ExpiredPasswordResetTokenException if token is expired
-     * @throws UsedPasswordResetTokenException    if token has already been used
+     * @throws ExpiredTokenException if token is expired
+     * @throws UsedTokenException    if token has already been used
      */
     public PasswordResetToken getValidatedToken(String token) {
         log.debug("Starting token validation process");
         String tokenHash = tokenHashingService.hashToken(token);
-        
-        log.debug("Looking up token by hash");
+
         PasswordResetToken foundToken = findTokenByHash(tokenHash);
-        
+
         log.debug("Validating token state for user: {}", foundToken.getUserEmail());
         validateToken(foundToken);
-        
+
         log.info("Successfully validated token for user: {}", foundToken.getUserEmail());
         return foundToken;
     }
 
+    /**
+     * 
+     * @param tokenHash
+     * @return PasswordResetToken object if token is found
+     * @throws TokenNotFoundException if token is not found
+     */
     private PasswordResetToken findTokenByHash(String tokenHash) {
-        try {
-            PasswordResetToken foundToken = tokenRepository.findByTokenHash(tokenHash)
-                    .orElseThrow(() -> new TokenNotFoundException("Token not found"));
-            log.debug("Found token in database");
-            return foundToken;
-        } catch (TokenNotFoundException e) {
-            log.warn("Token lookup failed: token hash not found in database");
-            throw e;
-        }
+        PasswordResetToken foundToken = tokenRepository.findByTokenHash(tokenHash)
+                .orElseThrow(() -> new TokenNotFoundException("Token not found"));
+        log.debug("Found token in database");
+        return foundToken;
     }
 
+    /**
+     * Validates the state of the found token
+     *
+     * @param foundToken
+     * @throws ExpiredTokenException if token is expired
+     * @throws UsedTokenException    if token has already been used
+     */
     private void validateToken(PasswordResetToken foundToken) {
         String userEmail = foundToken.getUserEmail();
         if (foundToken.isExpired()) {
-            log.warn("Token validation failed: expired token for user: {}", userEmail);
-            throw new ExpiredPasswordResetTokenException("Token has expired");
+            throw new ExpiredTokenException("Token has expired for user: " + userEmail);
         }
         if (foundToken.isUsed()) {
-            log.warn("Token validation failed: already used token for user: {}", userEmail);
-            throw new UsedPasswordResetTokenException("Token has already been used");
+            throw new UsedTokenException("Token has already been used for user: " + userEmail);
         }
-        log.debug("Token validation successful for user: {}", userEmail);
     }
 
     /**
      * Marks a token as used and saves it to the database
      * 
      * @param token Token to consume
-     * @throws InvalidPasswordResetTokenException if token is not valid (expired or
+     * @throws TokenException if token is not valid (expired or
      *                                            already used)
      */
     @Transactional
@@ -142,19 +142,13 @@ public class PasswordResetTokenService {
      *
      * @param userEmail User to check
      * @return true if user can request new token, false otherwise
+     * @throws TooManyPasswordResetAttemptsException if user has exceeded token
+     *                                               limit
      */
-    public boolean canRequestToken(String userEmail) {
+    public boolean canRequestNewToken(String userEmail) {
         log.debug("Checking if user can request new token: {}", userEmail);
-        long activeTokens = tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now());
-        boolean canRequest = activeTokens < MAX_ACTIVE_TOKENS_PER_USER;
-        
-        if (!canRequest) {
-            log.warn("User {} has reached maximum number of active tokens: {}", userEmail, activeTokens);
-        } else {
-            log.debug("User {} has {} active tokens, can request new token", userEmail, activeTokens);
-        }
-        
-        return canRequest;
+        int activeTokens = tokenRepository.countValidTokensByUserEmail(userEmail, LocalDateTime.now());
+        return activeTokens < MAX_ACTIVE_TOKENS_PER_USER;
     }
 
     /**

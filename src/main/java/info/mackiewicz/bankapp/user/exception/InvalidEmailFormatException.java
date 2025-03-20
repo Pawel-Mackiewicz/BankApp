@@ -1,8 +1,16 @@
 package info.mackiewicz.bankapp.user.exception;
 
-public class InvalidEmailFormatException extends RuntimeException {
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+
+public class InvalidEmailFormatException extends UserBaseException {
+    private static final String DEFAULT_MESSAGE = "Invalid email format";
+
+    public InvalidEmailFormatException() {
+        super(DEFAULT_MESSAGE, ErrorCode.VALIDATION_ERROR);
+    }
+
     public InvalidEmailFormatException(String message) {
-        super(message);
+        super(message, ErrorCode.VALIDATION_ERROR);
     }
 
 }
