@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception.handler;
+package info.mackiewicz.bankapp.shared.core.error;
 
 import org.springframework.http.HttpStatus;
 

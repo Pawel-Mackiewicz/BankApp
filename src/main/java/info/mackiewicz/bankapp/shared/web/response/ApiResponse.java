@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.dto;
+package info.mackiewicz.bankapp.shared.web.response;
 
 import lombok.Builder;
 import org.springframework.http.HttpStatus;

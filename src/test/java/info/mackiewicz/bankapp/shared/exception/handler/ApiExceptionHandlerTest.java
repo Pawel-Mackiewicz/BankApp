@@ -26,9 +26,15 @@ import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
 import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.exception.UsedTokenException;
-import info.mackiewicz.bankapp.shared.dto.BaseApiError;
-import info.mackiewicz.bankapp.shared.dto.ValidationApiError;
-import info.mackiewicz.bankapp.shared.dto.ValidationError;
+import info.mackiewicz.bankapp.shared.core.ApiExceptionHandler;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
+import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
+import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
+import info.mackiewicz.bankapp.shared.web.dto.ValidationError;
+import info.mackiewicz.bankapp.shared.web.error.mapping.ApiExceptionToErrorMapper;
+import info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor;
+import info.mackiewicz.bankapp.shared.web.util.RequestUriHandler;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 

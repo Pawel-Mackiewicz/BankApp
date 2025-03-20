@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.account.exception;
 
-import info.mackiewicz.bankapp.shared.exception.BankAppBaseException;
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+import info.mackiewicz.bankapp.shared.core.BankAppBaseException;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
 public abstract class AccountBaseException extends BankAppBaseException {
 

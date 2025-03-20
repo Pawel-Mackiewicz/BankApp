@@ -1,8 +1,9 @@
-package info.mackiewicz.bankapp.shared.exception.handler;
+package info.mackiewicz.bankapp.shared.web.error.mapping;
 
 import org.springframework.stereotype.Component;
 
-import info.mackiewicz.bankapp.shared.exception.BankAppBaseException;
+import info.mackiewicz.bankapp.shared.core.BankAppBaseException;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
 @Component
 public class ApiExceptionToErrorMapper implements ExceptionToErrorMapper {    

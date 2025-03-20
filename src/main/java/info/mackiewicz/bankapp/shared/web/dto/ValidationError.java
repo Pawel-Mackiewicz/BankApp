@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.dto;
+package info.mackiewicz.bankapp.shared.web.dto;
 
 import lombok.Value;
 

@@ -22,7 +22,7 @@ import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
-import info.mackiewicz.bankapp.shared.util.LoggingService;
+import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingService;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;

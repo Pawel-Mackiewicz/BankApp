@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
 public class TransactionCannotBeProcessedException extends TransactionBaseException {
     private static final String DEFAULT_MESSAGE = "Transaction cannot be processed in its current state.";

@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
-import info.mackiewicz.bankapp.shared.exception.BankAppBaseException;
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+import info.mackiewicz.bankapp.shared.core.BankAppBaseException;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
 /**
  * Base exception class for transaction-related exceptions in the BankApp application.

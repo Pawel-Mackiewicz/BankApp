@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.interceptor;
+package info.mackiewicz.bankapp.shared.infrastructure.logging;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

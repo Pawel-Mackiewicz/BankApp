@@ -1,10 +1,11 @@
-package info.mackiewicz.bankapp.shared.dto;
+package info.mackiewicz.bankapp.shared.web.dto;
 
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import info.mackiewicz.bankapp.shared.dto.interfaces.ApiErrorResponse;
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.shared.web.dto.interfaces.ApiErrorResponse;
 import lombok.Getter;
 
 /**

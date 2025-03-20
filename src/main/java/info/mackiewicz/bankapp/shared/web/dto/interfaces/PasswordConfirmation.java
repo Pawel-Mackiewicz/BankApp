@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.dto.interfaces;
+package info.mackiewicz.bankapp.shared.web.dto.interfaces;
 
 public interface PasswordConfirmation {
 

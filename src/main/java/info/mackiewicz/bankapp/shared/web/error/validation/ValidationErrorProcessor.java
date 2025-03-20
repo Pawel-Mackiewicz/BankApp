@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception.handler;
+package info.mackiewicz.bankapp.shared.web.error.validation;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import info.mackiewicz.bankapp.shared.dto.ValidationError;
+import info.mackiewicz.bankapp.shared.web.dto.ValidationError;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 

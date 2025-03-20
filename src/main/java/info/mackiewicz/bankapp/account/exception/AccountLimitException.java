@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.account.exception;
 
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
 public class AccountLimitException extends AccountBaseException {
 

@@ -1,10 +1,11 @@
-package info.mackiewicz.bankapp.shared.exception.handler;
+package info.mackiewicz.bankapp.shared.infrastructure.logging;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.springframework.stereotype.Component;
 
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

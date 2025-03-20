@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.user.exception;
 
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
 public class InvalidPeselFormatException extends UserBaseException {
     private static final String DEFAULT_MESSAGE = "Invalid PESEL format";

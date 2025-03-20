@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.security.exception;
 
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
 public class TokenCreationException extends TokenException {
 

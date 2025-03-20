@@ -13,12 +13,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import info.mackiewicz.bankapp.notification.email.EmailSender;
 import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
 import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
-import info.mackiewicz.bankapp.shared.exception.handler.ApiErrorLogger;
-import info.mackiewicz.bankapp.shared.exception.handler.ApiExceptionToErrorMapper;
-import info.mackiewicz.bankapp.shared.exception.handler.RequestUriHandler;
-import info.mackiewicz.bankapp.shared.exception.handler.ValidationErrorProcessor;
-import info.mackiewicz.bankapp.shared.interceptor.LoggingInterceptor;
-import info.mackiewicz.bankapp.shared.util.ApiResponseBuilder;
+import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
+import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingInterceptor;
+import info.mackiewicz.bankapp.shared.web.error.mapping.ApiExceptionToErrorMapper;
+import info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor;
+import info.mackiewicz.bankapp.shared.web.response.ApiResponseBuilder;
+import info.mackiewicz.bankapp.shared.web.util.RequestUriHandler;
 
 @TestConfiguration
 @EnableWebMvc

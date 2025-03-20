@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
 public class TransactionAlreadyProcessedException extends TransactionBaseException {
     private static final String DEFAULT_MESSAGE = "This transaction has already been processed.";

@@ -1,8 +1,9 @@
-package info.mackiewicz.bankapp.shared.dto;
+package info.mackiewicz.bankapp.shared.web.dto;
 
 import java.util.List;
-import info.mackiewicz.bankapp.shared.dto.interfaces.ValidationErrorResponse;
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.shared.web.dto.interfaces.ValidationErrorResponse;
 import lombok.Getter;
 
 /**

@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
-import info.mackiewicz.bankapp.shared.exception.handler.ErrorCode;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
 public class TransactionAmountNotSpecifiedException extends TransactionBaseException {
     private static final String DEFAULT_MESSAGE = "Transaction amount is required.";

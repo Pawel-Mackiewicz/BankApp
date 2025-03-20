@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception.handler;
+package info.mackiewicz.bankapp.shared.core;
 
 import java.util.List;
 
@@ -8,9 +8,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import info.mackiewicz.bankapp.shared.dto.BaseApiError;
-import info.mackiewicz.bankapp.shared.dto.ValidationApiError;
-import info.mackiewicz.bankapp.shared.dto.ValidationError;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
+import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
+import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
+import info.mackiewicz.bankapp.shared.web.dto.ValidationError;
+import info.mackiewicz.bankapp.shared.web.error.mapping.ApiExceptionToErrorMapper;
+import info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor;
+import info.mackiewicz.bankapp.shared.web.util.RequestUriHandler;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 
