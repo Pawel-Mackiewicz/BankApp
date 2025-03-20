@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.exception.handler;
+package info.mackiewicz.bankapp.shared.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,7 +26,6 @@ import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
 import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.security.exception.UsedTokenException;
-import info.mackiewicz.bankapp.shared.core.ApiExceptionHandler;
 import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
