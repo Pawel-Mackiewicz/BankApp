@@ -15,6 +15,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.core.MethodParameter;
 
 import info.mackiewicz.bankapp.shared.web.dto.ValidationError;
 import jakarta.validation.ConstraintViolation;
@@ -46,7 +47,8 @@ class ValidationErrorProcessorTest {
             bindingResult.addError(new FieldError("target", "email", "invalid-email",
                     false, null, null, "Must be a valid email"));
 
-            MethodArgumentNotValidException ex = new MethodArgumentNotValidException(null, bindingResult);
+            MethodParameter methodParameter = mock(MethodParameter.class);
+            MethodArgumentNotValidException ex = new MethodArgumentNotValidException(methodParameter, bindingResult);
 
             // Act
             List<ValidationError> errors = processor.extractValidationErrors(ex);
@@ -74,7 +76,8 @@ class ValidationErrorProcessorTest {
             bindingResult.addError(new FieldError("target", "username", null,
                     false, null, null, "Username is required"));
 
-            MethodArgumentNotValidException ex = new MethodArgumentNotValidException(null, bindingResult);
+            MethodParameter methodParameter = mock(MethodParameter.class);
+            MethodArgumentNotValidException ex = new MethodArgumentNotValidException(methodParameter, bindingResult);
 
             // Act
             List<ValidationError> errors = processor.extractValidationErrors(ex);
