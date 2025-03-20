@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +20,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "admins")
 public class AdminUser implements UserDetails {
@@ -29,30 +33,39 @@ public class AdminUser implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String username;
-    
+
     @Column(nullable = false)
     private String password;
-    
+
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "admin_roles", joinColumns = @JoinColumn(name = "admin_id"))
     @Column(name = "role")
     private Set<String> roles;
-    
-    // ...existing or additional fields if necessary...
+
+    @Column(nullable = false)
+    private boolean expired;
+
+    @Column(nullable = false)
+    private boolean credentialsExpired;
+
+    @Column(nullable = false)
+    private boolean locked;
+
+    @Column(nullable = false)
+    private boolean enabled;
+
+    public AdminUser() {
+        expired = false;
+        credentialsExpired = false;
+        locked = false;
+        enabled = true;
+        roles = Set.of("ROLE_ADMIN");
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
     }
 
     @Override
@@ -73,30 +86,5 @@ public class AdminUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-    
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-  
-    public void setPassword(String password) {
-        this.password = password;
-    }
-  
-    public Set<String> getRoles() {
-        return roles;
-    }
-  
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
     }
 }
