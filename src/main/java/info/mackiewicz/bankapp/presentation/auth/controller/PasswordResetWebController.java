@@ -73,8 +73,6 @@ public class PasswordResetWebController {
     @GetMapping("/password-reset/token/{token}")
     public String showNewPasswordForm(@PathVariable String token, Model model) {
         
-
-        //delete it and implement similar logic with restTemplate
         if (!passwordResetTokenService.isTokenPresent(token)) {
             log.debug("Invalid token: {}", token);
             return "redirect:/login";
