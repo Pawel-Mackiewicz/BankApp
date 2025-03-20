@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TokenHashingService {
 
+    private static final String HASH_ALGORITHM = "SHA-256";
     private static final int TOKEN_LENGTH = 32;
     private final SecureRandom secureRandom;
 
@@ -28,32 +29,35 @@ public class TokenHashingService {
      * @return Base64URL encoded token string
      */
     public String generateToken() {
+        log.debug("Generating new secure token with length: {}", TOKEN_LENGTH);
         byte[] tokenBytes = new byte[TOKEN_LENGTH];
         secureRandom.nextBytes(tokenBytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
+        String token = Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
+        log.info("Successfully generated new secure token");
+        return token;
     }
 
     /**
-     * Hashes a token using SHA-256 (deterministyczne hashowanie)
+     * Hashes a token using SHA-256 (deterministic hash)
      * @param token Token to hash
      * @return Hashed token string
      */
     public String hashToken(String token) {
         if (token == null) {
+            log.error("Attempt to hash null token");
             throw new IllegalArgumentException("Token cannot be null");
         }
         
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            log.debug("Hashing token using {} algorithm", HASH_ALGORITHM);
+            MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
             byte[] hashBytes = digest.digest(token.getBytes(StandardCharsets.UTF_8));
             String hashedToken = Base64.getEncoder().encodeToString(hashBytes);
             
-            if (log.isTraceEnabled()) {
-                log.trace("Hashed token for verification");
-            }
-            
+            log.debug("Successfully hashed token");
             return hashedToken;
         } catch (NoSuchAlgorithmException e) {
+            log.error("Failed to hash token: {} algorithm not available", HASH_ALGORITHM, e);
             throw new RuntimeException("SHA-256 algorithm not available", e);
         }
     }
@@ -65,11 +69,26 @@ public class TokenHashingService {
      * @return true if token matches hash
      */
     public boolean verifyToken(String token, String storedHash) {
+        log.debug("Starting token verification process");
+        
         if (token == null || storedHash == null) {
+            log.error("Token verification failed: token or stored hash is null");
             throw new IllegalArgumentException("Token and hash cannot be null");
         }
         
         String computedHash = hashToken(token);
-        return computedHash.equals(storedHash);
+        // Use MessageDigest.isEqual to prevent timing attacks
+        boolean isValid = MessageDigest.isEqual(
+            computedHash.getBytes(StandardCharsets.UTF_8),
+            storedHash.getBytes(StandardCharsets.UTF_8)
+        );
+        
+        if (isValid) {
+            log.info("Token verification successful");
+        } else {
+            log.warn("Token verification failed: invalid token");
+        }
+        
+        return isValid;
     }
 }
