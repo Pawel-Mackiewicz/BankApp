@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+import info.mackiewicz.bankapp.security.exception.InvalidPasswordResetTokenException;
+
 /**
  * Entity representing password reset token.
  *
@@ -94,16 +96,17 @@ public class PasswordResetToken {
         return !isExpired() && !used;
     }
 
-    /**
-     * Marks the token as used with the current timestamp
-     */
-    public void markAsUsed() {
-        if (!isValid()) {
-            throw new IllegalStateException("Token is not valid");
-        }
-        this.used = true;
-        this.usedAt = LocalDateTime.now();
+/**
+ * Marks the token as used with the current timestamp
+ * @throws InvalidPasswordResetTokenException if the token is already used or expired
+ */
+public void markAsUsed() {
+    if (!isValid()) {
+        throw new InvalidPasswordResetTokenException("Token is already used or expired");
     }
+    this.used = true;
+    this.usedAt = LocalDateTime.now();
+}
 
     /**
      * Gets time until token expiration

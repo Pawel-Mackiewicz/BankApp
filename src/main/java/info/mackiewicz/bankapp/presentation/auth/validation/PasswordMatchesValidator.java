@@ -5,14 +5,14 @@ package info.mackiewicz.bankapp.presentation.auth.validation;
  * Null values are considered valid to allow @NotBlank validation to handle them.
  * When passwords don't match, adds a constraint violation to the confirmPassword field.
  */
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.shared.dto.interfaces.PasswordConfirmation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, UserRegistrationDto> {
+public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, PasswordConfirmation> {
 
     @Override
-    public boolean isValid(UserRegistrationDto dto, ConstraintValidatorContext context) {
+    public boolean isValid(PasswordConfirmation dto, ConstraintValidatorContext context) {
         if (dto.getPassword() == null || dto.getConfirmPassword() == null) {
             return true; // Let @NotBlank handle null validation
         }
