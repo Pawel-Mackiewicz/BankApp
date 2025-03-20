@@ -80,6 +80,10 @@ public class AccountService implements AccountServiceInterface {
         return accountQueryService.findAccountByIban(iban);
     }
 
+    public boolean existsByEmail(@Email(message = "Invalid email format") String email) {
+        return accountQueryService.existsByEmail(email);
+    }
+
     @Override
     @Transactional
     public void deleteAccountById(int id) {
