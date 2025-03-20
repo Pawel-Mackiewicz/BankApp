@@ -172,7 +172,7 @@ const TransactionUI = {
                 <td>${transaction.type.displayName}</td>
                 <td>${sourceOwner} → ${destinationOwner}</td>
                 <td>${transaction.title || ''}</td>
-                <td>${transaction.status}</td>
+                <td>${transaction.status.displayName}</td>
             </tr>
         `;
     },
