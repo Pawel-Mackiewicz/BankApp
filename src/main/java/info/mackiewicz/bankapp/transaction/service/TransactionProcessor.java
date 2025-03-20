@@ -8,10 +8,11 @@ import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.exception.AccountValidationException;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
-import info.mackiewicz.bankapp.shared.util.LoggingService;
+import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingService;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
@@ -50,7 +51,7 @@ class TransactionProcessor {
             try {
                 executeWithStatusUpdates(transaction);
             } catch (TransactionExecutionException e) {
-                return;
+                throw e;
             } catch (Exception e) {
                 errorHandler.handleUnexpectedError(transaction, e);
             }
@@ -83,18 +84,18 @@ class TransactionProcessor {
         try {
             // Get command based on transaction type
             TransactionExecutor command = commandRegistry.getCommand(transaction.getType());
-            
+
             // Execute the transaction using the appropriate command
             command.execute(transaction, accountService);
         } catch (AccountValidationException e) {
             errorHandler.handleValidationError(transaction, e);
-            throw new TransactionExecutionException();
+            throw new TransactionValidationException("Validation error for transaction " + transaction.getId(), e);
         } catch (InsufficientFundsException e) {
             errorHandler.handleInsufficientFundsError(transaction, e);
-            throw new TransactionExecutionException();
+            throw e;
         } catch (Exception e) {
             errorHandler.handleUnexpectedError(transaction, e);
-            throw new TransactionExecutionException();
+            throw new TransactionExecutionException("Unexpected error during transaction processing", e);
         }
     }
 
@@ -109,8 +110,12 @@ class TransactionProcessor {
             loggingService.logUnlockingAccounts(transaction);
         } catch (AccountUnlockException e) {
             errorHandler.handleUnlockError(transaction, e);
+            throw e;
         } catch (Exception e) {
             errorHandler.handleUnexpectedUnlockError(transaction, e);
+            throw new TransactionExecutionException("Unexpected unlock error for transaction " + transaction.getId(),
+                    e);
+
         }
     }
 }

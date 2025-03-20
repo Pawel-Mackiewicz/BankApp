@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
 import info.mackiewicz.bankapp.shared.dto.interfaces.PasswordConfirmation;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
+import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
 import info.mackiewicz.bankapp.user.validation.Adult;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
-import info.mackiewicz.bankapp.shared.dto.ApiResponse;
-import info.mackiewicz.bankapp.shared.util.ApiResponseBuilder;
+import info.mackiewicz.bankapp.shared.web.response.ApiResponse;
+import info.mackiewicz.bankapp.shared.web.response.ApiResponseBuilder;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;

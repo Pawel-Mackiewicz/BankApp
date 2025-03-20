@@ -1,5 +1,9 @@
 package info.mackiewicz.bankapp.account.service;
 
+import info.mackiewicz.bankapp.account.exception.AccountLimitException;
+import info.mackiewicz.bankapp.account.exception.AccountOwnerExpiredException;
+import info.mackiewicz.bankapp.account.exception.AccountOwnerLockedException;
+import info.mackiewicz.bankapp.account.exception.AccountOwnerNullException;
 import info.mackiewicz.bankapp.account.exception.AccountValidationException;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.user.model.User;
@@ -15,6 +19,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 class AccountValidationService {
+
+    private static final int MAX_ACCOUNTS = 3;
     /**
      * Validates if user can own a new account
      * 
@@ -24,20 +30,20 @@ class AccountValidationService {
     void validateNewAccountOwner(User owner) {
         if (owner == null) {
             log.warn("Validation fail. User is null");
-            throw new AccountValidationException("Owner cannot be null");
+            throw new AccountOwnerNullException("Owner cannot be null");
         }
         log.debug("Validating account owner: {}", owner.getId());
-        if (owner.getAccounts().size() >= 3) {
+        if (owner.getAccounts().size() >= MAX_ACCOUNTS) {
             log.warn("Validation fail. Account limit exceeded for owner: {}", owner.getId());
-            throw new AccountValidationException("User account limit: Please contact us if You need more accounts");
+            throw new AccountLimitException("Account limit exceeded. User can't have more than " + MAX_ACCOUNTS + " accounts");
         }
         if (owner.isLocked()) {
             log.warn("Validation fail. User {} is locked", owner.getId());
-            throw new AccountValidationException("User is locked");
+            throw new AccountOwnerLockedException("Owner of this account is locked");
         }
         if (owner.isExpired()) {
             log.warn("Validation fail. User {} is expired", owner.getId());
-            throw new AccountValidationException("User is expired");
+            throw new AccountOwnerExpiredException("Owner of this account is expired");
         }
 
         log.debug("Account owner validated: {}", owner.getId());

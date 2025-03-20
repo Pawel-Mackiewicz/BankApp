@@ -4,17 +4,22 @@ import lombok.experimental.UtilityClass;
 import org.iban4j.IbanUtil;
 
 /**
- * Klasa narzędziowa zawierająca wspólną logikę walidacji numerów IBAN.
- * Używana przez różne walidatory w aplikacji.
+ * Utility class providing common IBAN validation logic.
+ * Used by various validators throughout the application.
+ *
+ * @see org.iban4j.IbanUtil
+ * @see lombok.experimental.UtilityClass
  */
 @UtilityClass
 public class IbanValidationUtil {
     
     /**
-     * Sprawdza, czy podany numer IBAN jest poprawny.
+     * Validates whether the provided IBAN number is correct.
      * 
-     * @param iban Numer IBAN do sprawdzenia
-     * @return true jeśli IBAN jest poprawny, false w przeciwnym przypadku
+     * @param iban The IBAN number to validate
+     * @return true if the IBAN is valid, false otherwise
+     * @throws IllegalArgumentException if the IBAN format is invalid
+     * @see org.iban4j.IbanUtil#isValid(String)
      */
     public boolean isValid(String iban) {
         if (iban == null || iban.trim().isEmpty()) {
@@ -28,16 +33,20 @@ public class IbanValidationUtil {
     }
     
     /**
-     * Sprawdza, czy podany numer IBAN jest poprawny w kontekście walidacji Bean Validation.
-     * Różni się od zwykłej walidacji tym, że puste wartości są traktowane jako poprawne
-     * (walidacja pustych wartości powinna być obsługiwana przez adnotacje @NotNull/@NotEmpty).
+     * Validates whether the provided IBAN number is correct in the context of Bean Validation.
+     * Differs from regular validation by treating empty values as valid
+     * (empty value validation should be handled by @NotNull/@NotEmpty annotations).
      * 
-     * @param iban Numer IBAN do sprawdzenia
-     * @return true jeśli IBAN jest poprawny lub pusty, false jeśli jest niepoprawny
+     * @param iban The IBAN number to validate
+     * @return true if the IBAN is valid or empty, false if it's invalid
+     * @throws IllegalArgumentException if the IBAN format is invalid
+     * @see javax.validation.constraints.NotNull
+     * @see javax.validation.constraints.NotEmpty
+     * @see org.iban4j.IbanUtil#isValid(String)
      */
     public boolean isValidForBeanValidation(String iban) {
         if (iban == null || iban.trim().isEmpty()) {
-            return true; // Puste wartości są akceptowane w kontekście Bean Validation
+            return true; // Empty values are accepted in Bean Validation context
         }
         try {
             return IbanUtil.isValid(iban);

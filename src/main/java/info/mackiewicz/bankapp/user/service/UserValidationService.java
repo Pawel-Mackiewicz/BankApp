@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.user.service;
 
 import org.springframework.stereotype.Service;
 
+import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
@@ -88,7 +89,7 @@ public class UserValidationService {
         log.debug("Validating phone number uniqueness: {}", phoneNumber);
         if (userQueryService.userExistsByPhoneNumber(phoneNumber)) {
             log.warn("Attempt to use existing phone number: {}", phoneNumber);
-            throw new UserValidationException("Phone number already in use: " + phoneNumber);
+            throw new DuplicatedUserException("Phone number already in use: " + phoneNumber);
         }
         log.debug("Phone number {} is unique", phoneNumber);
     }
@@ -103,7 +104,7 @@ public class UserValidationService {
         log.debug("Validating username uniqueness: {}", username);
         if (userQueryService.userExistsByUsername(username)) {
             log.warn("Attempt to use existing username: {}", username);
-            throw new UserValidationException("Username already in use: " + username);
+            throw new DuplicatedUserException("Username already in use: " + username);
         }
         log.debug("Username {} is unique", username);
     }
@@ -119,7 +120,7 @@ public class UserValidationService {
         log.debug("Validating email uniqueness: {}", email);
         if (userQueryService.userExistsByEmail(email)) {
             log.warn("Attempt to use existing email: {}", email);
-            throw new UserValidationException("Email already in use");
+            throw new DuplicatedUserException("Email already in use");
         }
         log.debug("Email {} is unique", email);
     }
@@ -135,7 +136,7 @@ public class UserValidationService {
         log.debug("Validating PESEL uniqueness: {}", pesel);
         if (userQueryService.userExistsByPesel(pesel)) {
             log.warn("Attempt to use existing PESEL: {}", pesel);
-            throw new UserValidationException("PESEL already in use: " + pesel);
+            throw new DuplicatedUserException("PESEL already in use: " + pesel);
         }
         log.debug("PESEL {} is unique", pesel);
     }

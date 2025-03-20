@@ -13,6 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import info.mackiewicz.bankapp.account.exception.AccountLimitException;
+import info.mackiewicz.bankapp.account.exception.AccountOwnerExpiredException;
+import info.mackiewicz.bankapp.account.exception.AccountOwnerLockedException;
+import info.mackiewicz.bankapp.account.exception.AccountOwnerNullException;
 import info.mackiewicz.bankapp.account.exception.AccountValidationException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
@@ -43,7 +47,7 @@ class AccountValidationServiceTest {
     @Test
     void validateNewAccountOwner_WithNullUser_ShouldThrowException() {
         // when & then
-        Exception exception = assertThrows(AccountValidationException.class, 
+        Exception exception = assertThrows(AccountOwnerNullException.class, 
             () -> validationService.validateNewAccountOwner(null));
         assertEquals("Owner cannot be null", exception.getMessage());
     }
@@ -54,9 +58,9 @@ class AccountValidationServiceTest {
         user.setLocked(true);
 
         // when & then
-        Exception exception = assertThrows(AccountValidationException.class, 
+        Exception exception = assertThrows(AccountOwnerLockedException.class, 
             () -> validationService.validateNewAccountOwner(user));
-        assertEquals("User is locked", exception.getMessage());
+        assertEquals("Owner of this account is locked", exception.getMessage());
     }
 
     @Test
@@ -65,9 +69,9 @@ class AccountValidationServiceTest {
         user.setExpired(true);
 
         // when & then
-        Exception exception = assertThrows(AccountValidationException.class, 
+        Exception exception = assertThrows(AccountOwnerExpiredException.class, 
             () -> validationService.validateNewAccountOwner(user));
-        assertEquals("User is expired", exception.getMessage());
+        assertEquals("Owner of this account is expired", exception.getMessage());
     }
 
     @Test
@@ -81,9 +85,9 @@ class AccountValidationServiceTest {
         user.setAccounts(accounts);
         
         // when & then
-        Exception exception = assertThrows(AccountValidationException.class, 
+        Exception exception = assertThrows(AccountLimitException.class, 
             () -> validationService.validateNewAccountOwner(user));
-        assertEquals("User account limit: Please contact us if You need more accounts", exception.getMessage());
+        assertEquals("Account limit exceeded. User can't have more than 3 accounts", exception.getMessage());
     }
 
     @Test

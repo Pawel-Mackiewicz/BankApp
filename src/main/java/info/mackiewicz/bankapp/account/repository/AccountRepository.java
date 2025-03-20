@@ -19,4 +19,6 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Optional<Account> findFirstByOwner_email(Email email);
     
     Optional<Account> findByIban(Iban iban);
+
+    boolean existsByOwner_email(Email email);
 }

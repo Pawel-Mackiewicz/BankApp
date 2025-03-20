@@ -1,11 +1,13 @@
 package info.mackiewicz.bankapp.user.exception;
 
-public class UserValidationException extends RuntimeException {
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+
+public class UserValidationException extends UserBaseException {
     public UserValidationException(String message) {
-        super(message);
+        super(message, ErrorCode.VALIDATION_ERROR);
     }
 
     public UserValidationException(String message, Throwable cause) {
-        super(message, cause);
+        super(message, cause, ErrorCode.VALIDATION_ERROR);
     }
 }

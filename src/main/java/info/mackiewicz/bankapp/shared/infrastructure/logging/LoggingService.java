@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.util;
+package info.mackiewicz.bankapp.shared.infrastructure.logging;
 
 import org.springframework.stereotype.Service;
 
@@ -6,10 +6,30 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Service responsible for logging transaction-related operations in a consistent format.
+ *
+ * <p>This service provides specialized logging for:
+ * <ul>
+ *   <li>Account locking and unlocking during transactions</li>
+ *   <li>Transaction attempts with detailed information</li>
+ *   <li>Successful transaction completion with category-specific details</li>
+ * </ul></p>
+ *
+ * <p>All logs use structured formats to ensure consistency and easy parsing.
+ * Thread information is included where relevant for concurrent operation tracking.</p>
+ *
+ * <p>Thread-safe: This class is thread-safe as it uses SLF4J's thread-safe logging
+ * and has no shared mutable state.</p>
+ *
+ * @see Account
+ * @see Transaction
+ * @see info.mackiewicz.bankapp.transaction.model.TransactionType
+ */
 @Slf4j
 @Service
 public class LoggingService {
-
+    
     private String formatAccountInfo(Account account) {
         return account != null ? "ID:" + account.getId() : "N/A";
     }

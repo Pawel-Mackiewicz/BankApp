@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import info.mackiewicz.bankapp.account.exception.AccountLockException;
 import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.service.TransactionStatusManager;
@@ -29,7 +30,6 @@ public class TransactionErrorHandler {
         log.warn("Transaction {} failed: Insufficient funds - {}", transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.INSUFFICIENT_FUNDS);
         errorNotifier.notifyError(transaction, e);
-        throw e;
     }
 
     /**
@@ -40,7 +40,6 @@ public class TransactionErrorHandler {
         log.warn("Transaction {} validation failed: {}", transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.VALIDATION_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw new RuntimeException("Validation error for transaction " + transaction.getId(), e);
     }
 
     /**
@@ -51,7 +50,6 @@ public class TransactionErrorHandler {
         log.error("Transaction {} failed with unexpected error: {}", transaction.getId(), e.getMessage(), e);
         statusManager.setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw new RuntimeException("Unexpected error during transaction processing", e);
     }
 
     /**
@@ -63,7 +61,6 @@ public class TransactionErrorHandler {
                 e.getAccountId(), transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw e;
     }
 
     /**
@@ -75,7 +72,7 @@ public class TransactionErrorHandler {
                 transaction.getId(), e.getMessage(), e);
         statusManager.setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw new RuntimeException("Unexpected lock error for transaction " + transaction.getId(), e);
+        throw new TransactionExecutionException("Unexpected lock error for transaction " + transaction.getId(), e);
     }
 
     /**
@@ -87,7 +84,6 @@ public class TransactionErrorHandler {
                 e.getAccountId(), transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw e;
     }
 
     /**
@@ -109,7 +105,7 @@ public class TransactionErrorHandler {
         log.warn("Failed to update status for transaction {}: {}", transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw new RuntimeException("Error while changing transaction status", e);
+        throw new TransactionExecutionException("Error while changing transaction status", e);
     }
 
 }

@@ -117,7 +117,6 @@ public class WebExceptionHandler {
     @ExceptionHandler({
         InsufficientFundsException.class,
         InvalidOperationException.class,
-        TransactionIsNotInternalException.class
     })
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ModelAndView handleTransactionBusinessExceptions(Exception ex) {

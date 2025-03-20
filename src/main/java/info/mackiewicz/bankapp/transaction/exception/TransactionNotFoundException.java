@@ -1,13 +1,15 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
-public class TransactionNotFoundException extends RuntimeException {
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+
+public class TransactionNotFoundException extends TransactionBaseException {
     private static final String DEFAULT_MESSAGE = "Transaction not found";
 
     public TransactionNotFoundException() {
-        super(DEFAULT_MESSAGE);
+        super(DEFAULT_MESSAGE, ErrorCode.TRANSACTION_NOT_FOUND);
     }
 
     public TransactionNotFoundException(String message) {
-        super(message);
+        super(message, ErrorCode.TRANSACTION_NOT_FOUND);
     }
 }

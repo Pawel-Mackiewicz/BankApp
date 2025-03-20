@@ -1,10 +1,9 @@
-package info.mackiewicz.bankapp.shared.util;
+package info.mackiewicz.bankapp.shared.web.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import info.mackiewicz.bankapp.shared.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 
 /**
