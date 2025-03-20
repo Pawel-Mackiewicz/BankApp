@@ -25,9 +25,23 @@ public class PasswordService {
         String password = user.getPassword();
         if (!isPasswordEncoded(password)) {
             user.setPassword(encodePassword(password));
-            log.info("Password encoded for user with ID: {}", user.getId());
+            log.debug("Password encoded for user with ID: {}", user.getId());
         }
         return user;
+    }
+
+    /**
+     * Ensures the password is encoded using the configured PasswordEncoder.
+     * If the password is already encoded, returns the password unchanged.
+     *
+     * @param password the password to check/encode
+     * @return encoded password
+     */
+    public String ensurePasswordEncoded(String password) {
+        if (!isPasswordEncoded(password)) {
+            return encodePassword(password);
+        }
+        return password;
     }
 
     public String encodePassword(String password) {
