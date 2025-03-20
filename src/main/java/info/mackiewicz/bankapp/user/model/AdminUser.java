@@ -66,7 +66,7 @@ public class AdminUser extends BaseUser {
     }
     public AdminUser(String username, String password) {
         super();
-        this.username = username;
+    this.username = username;
         this.password = password;
         addDefaultRole();
     }
