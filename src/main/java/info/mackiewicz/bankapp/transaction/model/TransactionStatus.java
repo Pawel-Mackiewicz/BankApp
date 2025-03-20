@@ -85,4 +85,8 @@ public enum TransactionStatus {
     public boolean isProcessing() {
         return category == TransactionStatusCategory.PROCESSING;
     }
+
+    public String toString() {
+        return displayName;
+    }
 }
