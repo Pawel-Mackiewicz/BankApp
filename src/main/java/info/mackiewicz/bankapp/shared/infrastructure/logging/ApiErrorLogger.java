@@ -36,7 +36,7 @@ public class ApiErrorLogger {
      * Flag to determine whether to log the stack trace or not.
      * Set to true for development and false for production.
      */
-    private static final boolean LOG_STACKTRACE = true;
+    private static final boolean LOG_STACKTRACE = false;
 
 
 
