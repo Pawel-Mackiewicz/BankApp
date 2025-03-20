@@ -33,7 +33,9 @@ public class TokenHashingService {
         byte[] tokenBytes = new byte[TOKEN_LENGTH];
         secureRandom.nextBytes(tokenBytes);
         String token = Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
+
         log.info("Successfully generated new secure token");
+
         return token;
     }
 

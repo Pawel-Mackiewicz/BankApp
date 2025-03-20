@@ -1,13 +1,10 @@
 package info.mackiewicz.bankapp.account.exception;
 
-public class OwnerAccountsNotFoundException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "No accounts found for the given owner";
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
-    public OwnerAccountsNotFoundException() {
-        super(DEFAULT_MESSAGE);
-    }
+public class OwnerAccountsNotFoundException extends AccountBaseException {
 
     public OwnerAccountsNotFoundException(String message) {
-        super(message);
+        super(message, ErrorCode.ACCOUNT_OWNER_NOT_FOUND);
     }
 }

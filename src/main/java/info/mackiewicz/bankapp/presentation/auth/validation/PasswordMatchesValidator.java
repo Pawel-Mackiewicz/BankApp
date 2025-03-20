@@ -1,14 +1,15 @@
 package info.mackiewicz.bankapp.presentation.auth.validation;
 
+import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 /**
  * Validates that the password and confirmation password match.
  * Null values are considered valid to allow @NotBlank validation to handle them.
  * When passwords don't match, adds a constraint violation to the confirmPassword field.
  */
-import info.mackiewicz.bankapp.shared.dto.interfaces.PasswordConfirmation;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, PasswordConfirmation> {
 
     @Override

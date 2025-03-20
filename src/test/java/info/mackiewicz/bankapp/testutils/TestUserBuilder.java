@@ -26,6 +26,24 @@ public class TestUserBuilder {
      */
     public static User createRandomTestUser() {
         User user = new User();
+        user.setId(generateNextId());
+        user.setFirstname("Test");
+        user.setLastname("User");
+        user.setEmail(new Email(generateRandomEmail()));
+        user.setPesel(new Pesel(generateRandomPesel()));
+        user.setPhoneNumber(new PhoneNumber(generateRandomPhoneNumber()));
+        user.setPassword(PASSWORD);
+        user.setUsername(generateRandomUsername(user.getFirstname()));
+        user.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        return user;
+    }
+
+        /** 
+     * Creates a test user with random values
+     * @return User
+     */
+    public static User createRandomTestUserForIntegrationTests() {
+        User user = new User();
         user.setFirstname("Test");
         user.setLastname("User");
         user.setEmail(new Email(generateRandomEmail()));

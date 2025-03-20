@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.security.exception.ExpiredPasswordResetTokenException;
-import info.mackiewicz.bankapp.security.exception.UsedPasswordResetTokenException;
+import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
+import info.mackiewicz.bankapp.security.exception.UsedTokenException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
 import info.mackiewicz.bankapp.security.service.PasswordResetService;
@@ -75,7 +75,7 @@ public class PasswordResetTokenIntegrationTest {
         doNothing().when(emailService).sendPasswordResetConfirmation(anyString(), anyString());
         
         // Create test user with dynamic ID instead of fixed ID=1
-        testUser = TestUserBuilder.createRandomTestUser();
+        testUser = TestUserBuilder.createRandomTestUserForIntegrationTests();
         testUser.setPassword(passwordEncoder.encode(TEST_PASSWORD));
         testUser = userRepository.save(testUser);
         entityManager.flush();
@@ -156,7 +156,7 @@ public class PasswordResetTokenIntegrationTest {
 
         // Then
         assertThatThrownBy(() -> passwordResetService.completeReset(resetDTO))
-                .isInstanceOf(ExpiredPasswordResetTokenException.class);
+                .isInstanceOf(ExpiredTokenException.class);
 
         User unchangedUser = userRepository.findByEmail(testUser.getEmail()).orElseThrow();
         entityManager.refresh(unchangedUser);
@@ -191,7 +191,7 @@ public class PasswordResetTokenIntegrationTest {
 
         // Then
         assertThatThrownBy(() -> passwordResetService.completeReset(secondResetDTO))
-                .isInstanceOf(UsedPasswordResetTokenException.class);
+                .isInstanceOf(UsedTokenException.class);
 
         User user = userRepository.findByEmail(testUser.getEmail()).orElseThrow();
         entityManager.refresh(user);
