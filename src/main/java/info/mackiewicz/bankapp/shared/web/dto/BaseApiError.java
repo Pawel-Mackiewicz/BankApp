@@ -9,19 +9,44 @@ import info.mackiewicz.bankapp.shared.web.dto.interfaces.ApiErrorResponse;
 import lombok.Getter;
 
 /**
- * Standard implementation of the ApiErrorResponse interface.
- * Provides common error response functionality including HTTP status, message, and timestamp.
+ * Standard implementation of the ApiErrorResponse interface for error handling in REST API responses.
+ *
+ * <p>This class provides a structured format for error responses, including:
+ * <ul>
+ *   <li>HTTP status code</li>
+ *   <li>Error title/category</li>
+ *   <li>Detailed error message</li>
+ *   <li>Request path where the error occurred</li>
+ *   <li>Timestamp of the error</li>
+ * </ul></p>
+ *
+ * <p>The class can be instantiated either with individual error components or with a predefined
+ * {@link ErrorCode}. It ensures consistent error response format across the application.</p>
+ *
+ * <p>This class is thread-safe as it's immutable after construction.</p>
  *
  * @see ApiErrorResponse
  * @see ErrorCode
+ * @see info.mackiewicz.bankapp.shared.core.ApiExceptionHandler
  */
 @Getter
 public class BaseApiError implements ApiErrorResponse {
+    /** The HTTP status code representing the type of error */
     private HttpStatus status;
+    
+    /** Category or type of the error */
     private String title;
+    
+    /** Detailed description of the error */
     private String message;
+    
+    /** The URI path where the error occurred */
     private String path;
     
+    /**
+     * Timestamp when the error occurred
+     * Formatted as dd-MM-yyyy HH:mm:ss in JSON responses
+     */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime timestamp;
 
@@ -41,13 +66,13 @@ public class BaseApiError implements ApiErrorResponse {
         this.timestamp = LocalDateTime.now();
     }
 
-        /**
-     * Creates a new error response with manual status, title and message.
+    /**
+     * Creates a new error response with manual status, title and message without a path.
+     * Useful for non-request specific errors.
      *
      * @param status the HTTP status code for the error
      * @param title the error title/category
      * @param message the detailed error message
-     * @param path the request path where the error occurred
      */
     public BaseApiError(HttpStatus status, String title, String message) {
         this.status = status;

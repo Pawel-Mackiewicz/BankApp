@@ -4,6 +4,21 @@ import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
 
+/**
+ * Defines all possible error codes in the BankApp application along with their corresponding
+ * HTTP status codes and user-friendly messages.
+ *
+ * <p>This enum categorizes errors into different domains (Common, Security, User, Account, Transaction)
+ * and provides a standardized way to handle error responses across the application. Each error code
+ * is associated with an appropriate HTTP status code and a descriptive message.</p>
+ *
+ * <p>The error codes are used in conjunction with exception handling to provide consistent
+ * error responses throughout the API.</p>
+ *
+ * @see HttpStatus
+ * @see info.mackiewicz.bankapp.shared.core.BankAppBaseException
+ * @see info.mackiewicz.bankapp.shared.core.ApiExceptionHandler
+ */
 @Getter
 public enum ErrorCode {
     // Common Errors

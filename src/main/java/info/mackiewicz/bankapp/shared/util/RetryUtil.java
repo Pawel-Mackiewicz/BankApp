@@ -5,30 +5,41 @@ import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Utility class for handling retry operations.
- * <p>
+ * Utility class for handling retry operations with exponential backoff.
+ * &lt;p&gt;
  * This class provides functionality to retry operations that might fail temporarily,
- * with configurable retry attempts and delay between retries.
- * </p>
+ * with configurable retry attempts and delay between retries. It implements an
+ * exponential backoff strategy with a small random factor to prevent thundering herd problems.
+ * &lt;p&gt;
+ * Thread safety: This utility is thread-safe as it maintains no state between invocations.
+ *
+ * @see java.util.function.Supplier
+ * @see lombok.extern.slf4j.Slf4j
  */
 @Slf4j
 public class RetryUtil {
 
     /**
-     * Executes the provided operation with retry logic.
-     * <p>
+     * Executes the provided operation with retry logic and exponential backoff.
+     * &lt;p&gt;
      * If the operation fails, it will be retried up to the specified number of times
-     * with an increasing delay between retries.
-     * </p>
+     * with an increasing delay between retries. The delay increases exponentially with
+     * each attempt and includes a small random factor (10% variance) to prevent
+     * synchronized retries in distributed systems.
+     * &lt;p&gt;
+     * The method logs retry attempts and outcomes for monitoring and debugging purposes.
      *
      * @param <T>           The return type of the operation
-     * @param operation     The operation to execute
-     * @param maxRetries    Maximum number of retry attempts
-     * @param retryDelayMs  Base delay in milliseconds between retries
+     * @param operation     The operation to execute, wrapped in a Supplier
+     * @param maxRetries    Maximum number of retry attempts (must be at least 1)
+     * @param retryDelayMs  Base delay in milliseconds between retries (must be non-negative)
      * @param operationName Name of the operation for logging purposes
      * @param context       Additional context information for logging
      * @return The result of the successful operation
-     * @throws RuntimeException if all retry attempts fail
+     * @throws IllegalArgumentException if maxRetries is less than 1 or retryDelayMs is negative
+     * @throws RuntimeException if all retry attempts fail or if the thread is interrupted while waiting
+     * @throws NullPointerException if operation, operationName, or context is null
+     * @see java.util.function.Supplier#get()
      */
     public static <T> T executeWithRetry(
             Supplier<T> operation,
