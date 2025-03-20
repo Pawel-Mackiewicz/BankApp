@@ -169,10 +169,9 @@ class PasswordResetServiceTest {
         when(passwordResetTokenService.getValidatedToken(TEST_TOKEN)).thenReturn(mockToken);
         
         var inOrder = inOrder(passwordResetTokenService, userService, emailService);
-
+    
         // when
         passwordResetService.completeReset(createResetDTO(TEST_TOKEN, NEW_PASSWORD, NEW_PASSWORD));
-
         // then
         inOrder.verify(passwordResetTokenService).getValidatedToken(TEST_TOKEN);
         inOrder.verify(passwordResetTokenService).consumeToken(mockToken);

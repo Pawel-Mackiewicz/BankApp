@@ -57,7 +57,7 @@ public class EmailService {
             emailSender.send(email, content.subject(), content.htmlContent());
         } catch (RuntimeException e) {
             log.error("Error sending password reset email to {}", email, e);
-            throw new EmailSendingException("Error sending password reset email to: " + email, e);
+            throw new EmailSendingException("Error sending password reset email", e);
         }
     }
 
@@ -71,7 +71,8 @@ public class EmailService {
             EmailContent content = templateProvider.getPasswordResetConfirmationEmail(fullNameOfUser, loginLink);
             emailSender.send(email, content.subject(), content.htmlContent());
         } catch (RuntimeException e) {
-            throw new EmailSendingException("Error sending password reset confirmation email to: " + email, e);
+            log.error("Error sending password reset confirmation email to {}", email, e);
+            throw new EmailSendingException("Error sending password reset confirmation email", e);
         }
     }
 }
