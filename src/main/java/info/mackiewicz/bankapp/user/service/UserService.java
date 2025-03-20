@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.Email;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -146,6 +147,17 @@ public class UserService {
      * @throws IllegalArgumentException if the email format is invalid
      */
     public void changeUsersPassword(String email, String newPassword) {
+        userOperationsService.changeUsersPassword(email, newPassword);
+    }
+
+        /**
+     * Changes the password for a user identified by their email.
+     *
+     * @param email The email of the user whose password should be changed
+     * @param newPassword The new password (in plain text)
+     * @throws IllegalArgumentException if the email format is invalid
+     */
+    public void changeUsersPassword(Email email, String newPassword) {
         userOperationsService.changeUsersPassword(email, newPassword);
     }
 }
