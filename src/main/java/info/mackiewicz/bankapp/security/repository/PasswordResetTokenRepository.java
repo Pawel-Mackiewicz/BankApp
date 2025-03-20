@@ -35,7 +35,7 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
      * Used for rate limiting - preventing users from requesting too many tokens.
      */
     @Query("SELECT COUNT(t) FROM PasswordResetToken t WHERE t.userEmail = :userEmail AND t.used = false AND t.expiresAt > :now")
-    long countValidTokensByUserEmail(@Param("userEmail") String userEmail, @Param("now") LocalDateTime now);
+    int countValidTokensByUserEmail(@Param("userEmail") String userEmail, @Param("now") LocalDateTime now);
 
     /**
      * Find all active tokens.

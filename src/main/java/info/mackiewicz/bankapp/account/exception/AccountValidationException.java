@@ -1,17 +1,14 @@
 package info.mackiewicz.bankapp.account.exception;
 
-public class AccountValidationException extends RuntimeException {
-    final static String MESSAGE = "Account validation failed";
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+
+public class AccountValidationException extends AccountBaseException {
+
     public AccountValidationException(String message, Throwable cause) {
-        super(message, cause);
+        super(message, cause, ErrorCode.VALIDATION_ERROR);
     }
 
     public AccountValidationException(String message) {
-        super(message);
+        super(message, ErrorCode.VALIDATION_ERROR);
     }
-
-    public AccountValidationException() {
-        super(MESSAGE);
-    }
-
 }

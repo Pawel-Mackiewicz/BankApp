@@ -45,7 +45,6 @@ public class UserQueryService {
         log.debug("Querying user by ID: {}", id);
         return userRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Failed to find user with ID: {}", id);
                     return new UserNotFoundException("User not found with id: " + id);
                 });
     }
@@ -65,7 +64,6 @@ public class UserQueryService {
         try {
             return userRepository.findByIdWithPessimisticLock(id)
                     .orElseThrow(() -> {
-                        log.warn("Failed to find user with ID (pessimistic lock): {}", id);
                         return new UserNotFoundException("User not found with id: " + id);
                     });
         } catch (Exception e) {
@@ -86,7 +84,6 @@ public class UserQueryService {
         log.debug("Querying user by username: {}", username);
         return userRepository.findByUsername(username)
             .orElseThrow(() -> {
-                log.warn("Failed to find user with username: {}", username);
                 return new UserNotFoundException("User not found with username: " + username);
             });
     }
@@ -117,7 +114,6 @@ public class UserQueryService {
         log.debug("Querying user by email object: {}", email);
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> {
-                    log.warn("Failed to find user with email: {}", email);
                     return new UserNotFoundException("User not found with email: " + email);
                 });
     }

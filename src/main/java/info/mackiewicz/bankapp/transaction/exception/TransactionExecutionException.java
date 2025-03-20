@@ -1,18 +1,22 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+
 /**
  * Exception thrown when transaction execution fails
  */
-public class TransactionExecutionException extends RuntimeException {
-    
+public class TransactionExecutionException extends TransactionBaseException {
+    private static final String DEFAULT_MESSAGE = "Unable to process transaction. Please try again later.";
+
     public TransactionExecutionException() {
-        super();
+        super(DEFAULT_MESSAGE, ErrorCode.TRANSACTION_EXECUTION_ERROR);
     }
+
     public TransactionExecutionException(String message) {
-        super(message);
+        super(message, ErrorCode.TRANSACTION_EXECUTION_ERROR);
     }
 
     public TransactionExecutionException(String message, Throwable cause) {
-        super(message, cause);
+        super(message, cause, ErrorCode.TRANSACTION_EXECUTION_ERROR);
     }
 }

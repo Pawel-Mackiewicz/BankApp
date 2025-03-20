@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import info.mackiewicz.bankapp.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
-import info.mackiewicz.bankapp.user.model.vo.Email;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -22,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ValidationController {
 
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     /**
      * Validates the format of an IBAN (International Bank Account Number).
@@ -57,13 +56,8 @@ public class ValidationController {
     public ResponseEntity<Map<String, Object>> validateEmail(@RequestParam String email) {
         try {
             // Check if an account exists with the provided email
-            boolean hasAccount = accountRepository.findFirstByOwner_email(new Email(email)).isPresent();
-            if (!hasAccount) {
-                // Try to find by username as email
-                hasAccount = accountRepository.findAccountsByOwner_username(email)
-                    .map(accounts -> !accounts.isEmpty())
-                    .orElse(false);
-            }
+            boolean hasAccount = accountService.existsByEmail(email);
+
             return ResponseEntity.ok(Map.of(
                 "valid", hasAccount,
                 "message", hasAccount ? "Account found" : "No account found for this email"

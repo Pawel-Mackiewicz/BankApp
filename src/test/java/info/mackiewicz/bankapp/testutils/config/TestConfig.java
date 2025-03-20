@@ -10,13 +10,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import info.mackiewicz.bankapp.account.exception.handler.AccountExceptionHandler;
 import info.mackiewicz.bankapp.notification.email.EmailSender;
 import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
 import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
-import info.mackiewicz.bankapp.shared.exception.handlers.ApiExceptionHandler;
-import info.mackiewicz.bankapp.shared.interceptor.LoggingInterceptor;
-import info.mackiewicz.bankapp.shared.util.ApiResponseBuilder;
+import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
+import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingInterceptor;
+import info.mackiewicz.bankapp.shared.web.error.mapping.ApiExceptionToErrorMapper;
+import info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor;
+import info.mackiewicz.bankapp.shared.web.response.ApiResponseBuilder;
+import info.mackiewicz.bankapp.shared.web.util.RequestUriHandler;
 
 @TestConfiguration
 @EnableWebMvc
@@ -37,15 +39,25 @@ public class TestConfig {
     public ApiResponseBuilder apiResponseBuilder() {
         return new ApiResponseBuilder();
     }
-    
+
     @Bean
-    public ApiExceptionHandler apiExceptionHandler() {
-        return new ApiExceptionHandler();
+    public RequestUriHandler requestUriHandler() {
+        return new RequestUriHandler();
     }
 
     @Bean
-    public AccountExceptionHandler accountExceptionHandler() {
-        return new AccountExceptionHandler();
+    public ApiErrorLogger apiErrorLogger() {
+        return new ApiErrorLogger();
+    }
+
+    @Bean
+    public ApiExceptionToErrorMapper apiExceptionToErrorMapper() {
+        return new ApiExceptionToErrorMapper();
+    }
+
+    @Bean
+    public ValidationErrorProcessor validationErrorProcessor() {
+        return new ValidationErrorProcessor();
     }
 
     @Bean
