@@ -39,7 +39,7 @@ public class PasswordResetTokenService {
      */
     @Transactional
     public String createToken(String userEmail, String fullName) {
-        log.info("Starting password reset token creation process for user: {}", userEmail);
+        log.debug("Starting password reset token creation process for user: {}", userEmail);
         log.debug("Validating token creation eligibility for user: {}", userEmail);
 
         if (!canRequestNewToken(userEmail)) {
@@ -51,7 +51,7 @@ public class PasswordResetTokenService {
         String tokenHash = tokenHashingService.hashToken(plainToken);
 
         saveNewToken(userEmail, fullName, tokenHash);
-        log.info("Successfully created password reset token for user: {}", userEmail);
+        log.debug("Successfully created password reset token for user: {}", userEmail);
 
         return plainToken;
     }
@@ -80,7 +80,7 @@ public class PasswordResetTokenService {
         log.debug("Validating token state for user: {}", foundToken.getUserEmail());
         validateToken(foundToken);
 
-        log.info("Successfully validated token for user: {}", foundToken.getUserEmail());
+        log.debug("Successfully validated token for user: {}", foundToken.getUserEmail());
         return foundToken;
     }
 
@@ -123,7 +123,7 @@ public class PasswordResetTokenService {
      */
     @Transactional
     public void consumeToken(PasswordResetToken token) {
-        log.info("Consuming password reset token for user: {}", token.getUserEmail());
+        log.debug("Consuming password reset token for user: {}", token.getUserEmail());
         token.markAsUsed();
         tokenRepository.save(token);
         log.debug("Token marked as used and saved for user: {}", token.getUserEmail());
@@ -158,7 +158,7 @@ public class PasswordResetTokenService {
      */
     @Transactional
     public int cleanupOldTokens() {
-        log.info("Starting default token cleanup ({}  days old)", DEFAULT_CLEANUP_DAYS);
+        log.debug("Starting default token cleanup ({}  days old)", DEFAULT_CLEANUP_DAYS);
         return cleanupOldTokens(DEFAULT_CLEANUP_DAYS);
     }
 
@@ -170,10 +170,10 @@ public class PasswordResetTokenService {
      */
     @Transactional
     public int cleanupOldTokens(int days) {
-        log.info("Starting token cleanup for tokens older than {} days", days);
+        log.debug("Starting token cleanup for tokens older than {} days", days);
         LocalDateTime cutoffDate = LocalDateTime.now().minusDays(days);
         int deletedCount = tokenRepository.deleteTokensOlderThan(cutoffDate);
-        log.info("Cleanup completed: removed {} expired tokens", deletedCount);
+        log.debug("Cleanup completed: removed {} expired tokens", deletedCount);
         return deletedCount;
     }
 }
