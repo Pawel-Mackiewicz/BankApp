@@ -34,7 +34,7 @@ public class TokenHashingService {
         secureRandom.nextBytes(tokenBytes);
         String token = Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
 
-        log.info("Successfully generated new secure token");
+        log.debug("Successfully generated new secure token");
 
         return token;
     }
@@ -86,7 +86,7 @@ public class TokenHashingService {
         );
         
         if (isValid) {
-            log.info("Token verification successful");
+            log.debug("Token verification successful");
         } else {
             log.warn("Token verification failed: invalid token");
         }

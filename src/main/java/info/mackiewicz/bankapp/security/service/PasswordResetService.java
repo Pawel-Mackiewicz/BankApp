@@ -52,6 +52,7 @@ public class PasswordResetService {
         log.debug("User found, generating reset token for user ID: {}", user.getId());
         String token = generatePasswordResetToken(email, user);
         sendPasswordResetEmailNotification(email, user, token);
+        log.info("Password reset ended successfully for email: {}", email);
         } catch (UserNotFoundException e) {
             // User not found, log the error and swallow it for security reasons
             // to prevent information leakage
@@ -61,7 +62,6 @@ public class PasswordResetService {
             // to prevent information leakage
             log.warn("Too many password reset attemps detected for email: {}", email);
         }
-
     }
 
     private void sendPasswordResetEmailNotification(String email, User user, String token) {
