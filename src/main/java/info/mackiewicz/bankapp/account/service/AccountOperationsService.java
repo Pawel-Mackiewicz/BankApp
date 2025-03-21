@@ -38,7 +38,7 @@ class AccountOperationsService {
 
     Account withdraw(Account account,
             @NotNull @DecimalMin(value = "0.01", message = "Amount must be greater than zero") BigDecimal amount) {
-        log.debug(null, "Withdrawing {} from account {}", amount, account.getId());
+        log.debug("Withdrawing {} from account {}", amount, account.getId());
         validationService.validateWithdrawal(account.getBalance(), amount);
         account.setBalance(account.getBalance().subtract(amount));
         log.debug("Withdrawal successful. New balance: {}", account.getBalance());
