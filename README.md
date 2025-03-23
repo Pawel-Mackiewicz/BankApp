@@ -144,3 +144,22 @@ BankApp/
 ├── Dockerfile                                  # Docker configuration
 ├── pom.xml                                     # Maven configuration and dependencies
 └── README.md                                   # Project documentation
+```
+
+## Continuous Integration
+
+This project uses GitHub Actions for continuous integration. The pipeline runs on every push to `main` and `develop` branches, as well as on pull requests to these branches.
+
+### Pipeline Features
+
+- Builds and tests the application using Maven on Java 21
+- Runs unit tests and verifies code coverage with JaCoCo
+- Stores test results and code coverage reports as artifacts
+
+### Artifacts
+
+After each workflow run, the following artifacts are available:
+- Test results: Detailed reports from unit test execution
+- Coverage report: JaCoCo analysis showing test coverage metrics
+
+You can view workflow runs in the [Actions tab](https://github.com/pawel-mackiewicz/BankApp/actions) of the repository.
