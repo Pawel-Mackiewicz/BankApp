@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.shared.web.response.ApiResponse;
-import info.mackiewicz.bankapp.shared.web.response.ApiResponseBuilder;
+import info.mackiewicz.bankapp.shared.web.response.ApiResponseFactory;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
@@ -37,7 +37,7 @@ public class UserController {
     private final UserService userService;
     private final UserRegistrationService registrationService;
     private final UserMapper userMapper;
-    private final ApiResponseBuilder apiResponseBuilder;
+    private final ApiResponseFactory apiResponseBuilder;
 
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponseDto>> createUser(

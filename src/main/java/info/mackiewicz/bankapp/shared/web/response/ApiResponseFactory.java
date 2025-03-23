@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Component
 @RequiredArgsConstructor
-public class ApiResponseBuilder {
+public class ApiResponseFactory {
 
     /**
      * Creates a response entity with CREATED status
