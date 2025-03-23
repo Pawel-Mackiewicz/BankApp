@@ -9,6 +9,7 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 
 /**
  * Manages transaction error observers and notifies them about errors.
+ * Not implemented yet.
  */
 @Component
 public class TransactionErrorNotifier {

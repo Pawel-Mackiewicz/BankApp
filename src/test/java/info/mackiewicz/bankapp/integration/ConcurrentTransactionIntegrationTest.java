@@ -359,7 +359,7 @@ class ConcurrentTransactionIntegrationTest {
         
         // Generate unique PESEL (needs to be 11 digits)
         // Use testRunId's hashCode to ensure uniqueness across test runs
-        int hashCode = Math.abs(testRunId.hashCode());
+        int hashCode = Math.abs(testRunId.hashCode() % 1000000);
         String uniqueSequence = String.format("%05d", (hashCode + index) % 100000);
         String yearMonth = "9901"; // Fixed birth year and month
         String day = String.format("%02d", (index % 28) + 1); // Day between 1-28
@@ -370,9 +370,14 @@ class ConcurrentTransactionIntegrationTest {
         user.setLastname("User");
         user.setEmail(new Email("test.user" + uniqueSuffix + "@test.com"));
         user.setPassword("Password123!");
-        user.setPhoneNumber(new PhoneNumber("+48" + String.format("%09d", hashCode + index)));
+        user.setPhoneNumber(new PhoneNumber(paddedNumber(hashCode, index)));
         user.setDateOfBirth(LocalDate.of(1999, 1, (index % 28) + 1)); // Match PESEL date
         return userService.createUser(user);
+    }
+
+    private String paddedNumber(int hashCode, int index) {
+        String number = String.valueOf(hashCode + index);
+        return "9".repeat(9 - number.length()) + number;
     }
 
     private Account createTestAccount(User user) {
