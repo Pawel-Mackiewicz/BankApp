@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.shared.validation;
 
-import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -15,10 +14,30 @@ import lombok.experimental.UtilityClass;
  *
  * <p>Thread-safe: This class is immutable and only contains static final fields.</p>
  *
- * @see PasswordResetToken
+ * @see <a href="https://github.com/Pawel-Mackiewicz/BankApp/wiki/Password-Reset-System">Password Reset System</a>
+ * @see <a href="https://github.com/Pawel-Mackiewicz/BankApp/wiki/Registration-System">Registration System</a>
  */
+//TODO: Think about introducing VO for password
 @UtilityClass
 public final class ValidationConstants {
+
+
+    /**
+     * Regular expression pattern for name validation.
+     * Ensures name contains only letters (including Polish characters).
+     */
+    public static final String NAME_PATTERN = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
+
+    /**
+     * Regular expression pattern for phone number validation.
+     * Ensures phone number is in one of the following formats:
+     * <ul>
+     *   <li>+48XXXXXXXXX</li>
+     *   <li>0XXXXXXXXX</li>
+     *   <li>XXXXXXXXX</li>
+     * </ul>
+     */
+    public static final String PHONE_NUMBER_PATTERN = "^(\\+48\\d{9}|0\\d{9}|[1-9]\\d{8})$";
 
     /**
      * Regular expression pattern for password validation.
@@ -27,7 +46,7 @@ public final class ValidationConstants {
      *   <li>One digit (0-9)</li>
      *   <li>One lowercase letter (a-z)</li>
      *   <li>One uppercase letter (A-Z)</li>
-     *   <li>One special character from the set: @$!%*?&</li>
+     *   <li>One special character from the set: "@$!%*?&"</li>
      * </ul>
      */
     public static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).*$";

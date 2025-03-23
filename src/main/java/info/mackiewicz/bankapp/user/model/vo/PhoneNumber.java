@@ -27,12 +27,11 @@ public class PhoneNumber {
             throw new IllegalArgumentException("Phone number cannot be empty");
         }
 
-        // Polish phone number validation is not required for the portfolio project
-        // String normalized = normalizePhoneNumber(phoneNumber);
+        String normalized = normalizePhoneNumber(phoneNumber);
 
-        // if (!isValidPolishPhoneNumber(normalized)) {
-        //     throw new IllegalArgumentException("Invalid Polish phone number format");
-        // } 
+        if (!isValidPolishPhoneNumber(normalized)) {
+            throw new IllegalArgumentException("Invalid Polish phone number format");
+        } 
     }
 
     private String normalizePhoneNumber(String phoneNumber) {
@@ -47,25 +46,26 @@ public class PhoneNumber {
         return normalized;
     }
 
-    @SuppressWarnings("unused")
     private boolean isValidPolishPhoneNumber(String number) {
         // Polish phone numbers are 9 digits
         if (number.length() != 9) {
             return false;
         }
 
-        // Check if starts with valid Polish prefix
-        String prefix = number.substring(0, 2);
-        return switch (prefix) {
-            case "45", "50", "51", "53", "57", "60", "66", "69", // mobile
-                  "22", "23", "24", "25", "29", "32", "33", "34", // landline
-                  "41", "42", "43", "44", "46", "48", "52", "54",
-                  "55", "56", "58", "59", "61", "62", "63", "65",
-                  "67", "68", "71", "74", "75", "76", "77", "81",
-                  "82", "83", "84", "85", "86", "87", "89", "91",
-                  "94", "95" -> true;
-            default -> false;
-        };
+        // This validation is not required for the portfolio project
+        // // Check if starts with valid Polish prefix
+        // String prefix = number.substring(0, 2);
+        // return switch (prefix) {
+        //     case "45", "50", "51", "53", "57", "60", "66", "69", // mobile
+        //           "22", "23", "24", "25", "29", "32", "33", "34", // landline
+        //           "41", "42", "43", "44", "46", "48", "52", "54",
+        //           "55", "56", "58", "59", "61", "62", "63", "65",
+        //           "67", "68", "71", "74", "75", "76", "77", "81",
+        //           "82", "83", "84", "85", "86", "87", "89", "91",
+        //           "94", "95" -> true;
+        //     default -> false;
+        // };
+        return true;
     }
 
     @Override
