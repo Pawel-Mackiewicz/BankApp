@@ -27,7 +27,7 @@ public class PasswordResetTokenService {
     private static final int DEFAULT_CLEANUP_DAYS = 30;
 
     private final PasswordResetTokenRepository tokenRepository;
-    private final TokenHashingService tokenHashingService;
+    private final TokenOperationsService tokenOperationsService;
 
     /**
      * Creates a new password reset token for the given user
@@ -47,8 +47,8 @@ public class PasswordResetTokenService {
         }
 
         log.debug("Generating new token and hash for user: {}", userEmail);
-        String plainToken = tokenHashingService.generateToken();
-        String tokenHash = tokenHashingService.hashToken(plainToken);
+        String plainToken = tokenOperationsService.generateToken();
+        String tokenHash = tokenOperationsService.hashToken(plainToken);
 
         saveNewToken(userEmail, fullName, tokenHash);
         log.debug("Successfully created password reset token for user: {}", userEmail);
@@ -73,7 +73,7 @@ public class PasswordResetTokenService {
      */
     public PasswordResetToken getValidatedToken(String token) {
         log.debug("Starting token validation process");
-        String tokenHash = tokenHashingService.hashToken(token);
+        String tokenHash = tokenOperationsService.hashToken(token);
 
         PasswordResetToken foundToken = findTokenByHash(tokenHash);
 
@@ -131,7 +131,7 @@ public class PasswordResetTokenService {
 
     public boolean isTokenPresent(String token) {
         log.debug("Checking if token exists in database");
-        String tokenHash = tokenHashingService.hashToken(token);
+        String tokenHash = tokenOperationsService.hashToken(token);
         boolean exists = tokenRepository.findByTokenHash(tokenHash).isPresent();
         log.debug("Token existence check result: {}", exists);
         return exists;

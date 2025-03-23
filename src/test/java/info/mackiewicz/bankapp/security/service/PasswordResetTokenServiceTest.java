@@ -1,6 +1,10 @@
 package info.mackiewicz.bankapp.security.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -32,7 +36,7 @@ class PasswordResetTokenServiceTest {
     private PasswordResetTokenRepository tokenRepository;
     
     @Mock
-    private TokenHashingService tokenHashingService;
+    private TokenOperationsService tokenHashingService;
 
     private PasswordResetTokenService tokenService;
 

@@ -26,7 +26,7 @@ import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
 import info.mackiewicz.bankapp.security.service.PasswordResetService;
 import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
-import info.mackiewicz.bankapp.security.service.TokenHashingService;
+import info.mackiewicz.bankapp.security.service.TokenOperationsService;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
@@ -50,7 +50,7 @@ public class PasswordResetTokenIntegrationTest {
     private PasswordEncoder passwordEncoder;
     
     @Autowired
-    private TokenHashingService tokenHashingService;
+    private TokenOperationsService tokenHashingService;
     
     @MockitoSpyBean
     private PasswordResetTokenService passwordResetTokenService;

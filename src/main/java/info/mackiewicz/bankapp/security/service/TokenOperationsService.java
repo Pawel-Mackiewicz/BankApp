@@ -1,26 +1,27 @@
 package info.mackiewicz.bankapp.security.service;
 
-import java.security.SecureRandom;
-import java.util.Base64;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 import org.springframework.stereotype.Service;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Service for secure token generation and hashing using SHA-256
+ * Service for secure token generation, validation and hashing using SHA-256
  */
 @Service
 @Slf4j
-public class TokenHashingService {
+public class TokenOperationsService {
 
     private static final String HASH_ALGORITHM = "SHA-256";
     private static final int TOKEN_LENGTH = 32;
     private final SecureRandom secureRandom;
 
-    public TokenHashingService() {
+    public TokenOperationsService() {
         this.secureRandom = new SecureRandom();
     }
 
