@@ -1,22 +1,25 @@
 package info.mackiewicz.bankapp.security.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Base64;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+class TokenOperationsServiceTest {
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Base64;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-class TokenHashingServiceTest {
-
-    private TokenHashingService tokenHashingService;
+    private TokenOperationsService tokenHashingService;
 
     @BeforeEach
     void setUp() {
-        tokenHashingService = new TokenHashingService();
+        tokenHashingService = new TokenOperationsService();
     }
 
     @Test
