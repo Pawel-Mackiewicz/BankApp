@@ -25,6 +25,8 @@ import lombok.Setter;
 @Table(name = "password_reset_tokens")
 public class PasswordResetToken {
 
+    private static final int EXPIRATION_TIME = 60; // in minutes
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -80,7 +82,7 @@ public class PasswordResetToken {
         this.tokenHash = tokenHash;
         this.userEmail = userEmail;
         this.fullName = fullName;
-        this.expiresAt = LocalDateTime.now().plusMinutes(60);
+        this.expiresAt = LocalDateTime.now().plusMinutes(EXPIRATION_TIME);
         this.used = false;
     }
 

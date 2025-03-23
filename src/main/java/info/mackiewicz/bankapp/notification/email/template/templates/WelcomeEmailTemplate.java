@@ -26,9 +26,8 @@ public class WelcomeEmailTemplate extends EmailTemplate {
             <h2 class="header" style="font-size: 1.5em;">What's next?</h2>
             <ul>
                 <li>Log in to your account</li>
-                <li>Add your first bank account</li>
+                <li>Check your ballance - we got something nice for you</li>
                 <li>Set up your profile</li>
-                <li>Explore our security features</li>
             </ul>
 
             <p>Our customer support is available 24/7 if you need any assistance.</p>
