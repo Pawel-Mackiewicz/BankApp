@@ -16,51 +16,122 @@ I'm working on BankApp – a Java-based banking application for my portfolio. Th
 - **Online**: [bankapp.mackiewicz.info](http://bankapp.mackiewicz.info)
 - **Repo**: https://github.com/Pawel-Mackiewicz/BankApp.git
 
-## What Needs to Be Done on the Frontend?
+### Project Structure
 
-- **Web App for Managing Bank Accounts**: The current version needs UI/UX improvements and optimization.
-- **Mobile App for Managing Bank Accounts**: The same as the web app but optimized for mobile devices.
-- **Web/Mobile (Android/iOS) App Simulating an ATM/Cash Deposit Machine**: Enabling deposits and withdrawals in a simulated environment.
-- **???**: If you have a great idea, I’d love to hear it!
+```bash
+BankApp/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── info/
+│   │   │       └── mackiewicz/
+│   │   │           └── bankapp/                  # Main application package
+│   │   │               ├── account/              # Account management module
+│   │   │               │   ├── controller/       # REST controllers for accounts
+│   │   │               │   ├── exception/        # Account-related exceptions
+│   │   │               │   ├── model/            # Account data models
+│   │   │               │   ├── repository/       # Account repositories 
+│   │   │               │   ├── service/          # Account business services
+│   │   │               │   ├── util/             # Helper utilities
+│   │   │               │   └── validation/       # Account data validation
+│   │   │               │
+│   │   │               ├── notification/         # Notification module
+│   │   │               │   └── email/            # Email message handling
+│   │   │               │
+│   │   │               ├── presentation/         # Presentation layer
+│   │   │               │   ├── auth/             # Authentication
+│   │   │               │   │   ├── controller/   # Auth controllers
+│   │   │               │   │   ├── dto/          # Data transfer objects
+│   │   │               │   │   ├── service/      # Auth services
+│   │   │               │   │   └── validation/   # Auth data validation
+│   │   │               │   │
+│   │   │               │   ├── dashboard/        # Dashboard interface
+│   │   │               │   │   ├── controller/   # Dashboard controllers
+│   │   │               │   │   ├── dto/          # Data transfer objects
+│   │   │               │   │   └── service/      # Dashboard services
+│   │   │               │   │
+│   │   │               │   └── exception/        # Presentation exception handling
+│   │   │               │
+│   │   │               ├── security/             # Security module
+│   │   │               │   ├── controller/       # Security controllers
+│   │   │               │   ├── exception/        # Security exceptions
+│   │   │               │   ├── model/            # Security models
+│   │   │               │   ├── repository/       # Security repositories
+│   │   │               │   └── service/          # Security services
+│   │   │               │
+│   │   │               ├── shared/               # Shared components
+│   │   │               │   ├── config/           # Application configuration
+│   │   │               │   ├── core/             # Core functionalities
+│   │   │               │   ├── dto/              # Common DTOs
+│   │   │               │   ├── infrastructure/   # Infrastructure components
+│   │   │               │   ├── util/             # Helper utilities
+│   │   │               │   ├── validation/       # General validation mechanisms
+│   │   │               │   └── web/              # Web components
+│   │   │               │
+│   │   │               ├── transaction/          # Transaction module
+│   │   │               │   ├── config/           # Transaction configuration
+│   │   │               │   ├── controller/       # Transaction controllers
+│   │   │               │   ├── exception/        # Transaction exceptions
+│   │   │               │   ├── model/            # Transaction models
+│   │   │               │   ├── repository/       # Transaction repositories
+│   │   │               │   ├── service/          # Transaction services
+│   │   │               │   └── validation/       # Transaction validation
+│   │   │               │
+│   │   │               └── user/                 # User module
+│   │   │                   ├── controller/       # User controllers
+│   │   │                   ├── exception/        # User exceptions
+│   │   │                   ├── model/            # User models
+│   │   │                   │   └── vo/           # Value Objects
+│   │   │                   ├── repository/       # User repositories
+│   │   │                   ├── service/          # User services
+│   │   │                   └── validation/       # User validation
+│   │   │
+│   │   └── resources/                            # Application resources
+│   │       ├── static/                           # Static resources (CSS, JS, images)
+│   │       │   ├── css/                          # CSS styles
+│   │       │   ├── js/                           # JavaScript scripts
+│   │       │   │   └── modules/                  # JS modules
+│   │       │   └── favicon.ico                   # Page icon
+│   │       │
+│   │       ├── templates/                        # Thymeleaf templates
+│   │       │   ├── dashboard.html                # Main dashboard 
+│   │       │   ├── login.html                    # Login page
+│   │       │   ├── registration.html             # Registration page
+│   │       │   ├── settings.html                 # User settings
+│   │       │   ├── transactions-history.html     # Transaction history
+│   │       │   └── password-reset.html           # Password reset
+│   │       │
+│   │       ├── application.properties            # Main application configuration
+│   │       └── logback.xml                       # Logging configuration
+│   │
+│   └── test/                                     # Application tests
+│       ├── java/                                 # Test code
+│       │   └── info/
+│       │       └── mackiewicz/
+│       │           └── bankapp/                  # Unit and integration tests
+│       │
+│       └── resources/                            # Test resources
+│           ├── application-test.properties       # Test configuration
+│           └── test-plans/                       # Test plans
+│
+├── logs/                                         # Application logs directory
+│
+├── .env                                          # Environment variables
+├── Dockerfile                                    # Docker configuration
+├── fly.toml                                      # Fly.io deployment configuration
+├── pom.xml                                       # Maven configuration
+└── README.md                                     # Project documentation
+```
 
-The scope of work depends on how many people get involved and how fast we progress.
+### How to run locally
 
-## What Needs to Be Done on the Backend?
-
-The backend is mostly complete but still requires improvements and optimizations. I also have a few ideas for additional features, so if you have solid backend skills, there’s definitely work to be done!
-
-## Who Am I Looking For?
-
-- **Frontend Developers**: I need someone who is already comfortable with frontend development or really wants to master it! Basic HTML, CSS, and JS knowledge won’t be enough – experience with frameworks (React, Angular, or others) would be very useful. Also, the frontend will communicate with the backend via API, so if you’ve worked with APIs before or want to learn, this is a great opportunity!
-- **Backend Developers**: Strong Java skills are required. Spring is a plus, but not necessary. If you have experience with Hibernate and MySQL, that’s even better!
-
-- People who can help wrap up the project within 1-2 weeks (or longer if the project expands).
-
-## What Do I Offer?
-
-- Hands-on experience in a real project.
-- Collaboration in a friendly and supportive environment.
-- A great project you can add to your portfolio.
-
-## Additional Information
-
-The frontend and backend will communicate via API, so the frontend will be in a separate repository.
-
-If you're interested, reach out to me on GitHub or email me at pawel@mackiewicz.info
-
-Looking forward to working with you!
-
-Pawel
-
-## How to run locally
-
-### Requiriments
+#### Requiriments
 - Java 21 or newer (never tested it on older version)
 - Maven
 - MySQL
 - Git
 
-### Steps
+#### Steps
 
 1. **Clone repo**
    ```bash
@@ -72,7 +143,7 @@ Pawel
    - Create MySQL db and name it bankapp
    - Create a copy of the `.env.example` file and name it `.env`
 
-   - Fill in the `.env` file with your credentials:
+   - Fill in the `.env` file with your credentials, use `.env.example`:
    ```bash
    # Database configuration
    DB_URL=jdbc:mysql://localhost:3306/bankapp
@@ -99,67 +170,112 @@ The application is configured to check for an admin user on startup. If you've s
 
    The application will be available at: `http://localhost:8080`
 
-## Project Structure
+### Key Features
 
-```bash
-BankApp/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── info/
-│   │   │       └── mackiewicz/
-│   │   │           └── bankapp/
-│   │   │               ├── account/            # Account functionality
-│   │   │               │   ├── controller/     # Account controllers
-│   │   │               │   ├── model/          # Account data models
-│   │   │               │   ├── repository/     # Account repositories
-│   │   │               │   └── service/        # Account services
-│   │   │               ├── config/             # Spring configuration
-│   │   │               ├── security/           # Security configuration
-│   │   │               ├── transaction/        # Transaction functionality
-│   │   │               │   ├── controller/     # Transaction controllers
-│   │   │               │   ├── model/          # Transaction data models
-│   │   │               │   ├── repository/     # Transaction repositories
-│   │   │               │   └── service/        # Transaction services
-│   │   │               │       └── strategy/   # Transaction strategies
-│   │   │               ├── user/               # User functionality
-│   │   │               │   ├── controller/     # User controllers
-│   │   │               │   ├── model/          # User data models
-│   │   │               │   ├── repository/     # User repositories
-│   │   │               │   ├── service/        # User services
-│   │   │               │   └── validation/     # User data validation
-│   │   │               ├── exception/          # Exception handling
-│   │   │               └── util/               # Utility classes
-│   │   └── resources/
-│   │       ├── static/                         # Static resources (CSS, JS, images)
-│   │       ├── templates/                      # Thymeleaf templates
-│   │       └── application.properties          # Application configuration
-│   └── test/                                   # Unit and integration tests
-│       ├── java/
-│       │   └── info/
-│       │       └── mackiewicz/
-│       │           └── bankapp/                # Application module tests
-│       └── resources/                          # Test resources
-├── .env                                        # Local environment variables
-├── Dockerfile                                  # Docker configuration
-├── pom.xml                                     # Maven configuration and dependencies
-└── README.md                                   # Project documentation
-```
+#### Transaction System
 
-## Continuous Integration
+BankApp's Transaction System provides a robust foundation for secure financial operations between bank accounts. The system handles deposits, withdrawals, and various types of transfers with strong focus on data consistency and error handling.
 
-This project uses GitHub Actions for continuous integration. The pipeline runs on every push to `main` and `develop` branches, as well as on pull requests to these branches.
+- **Multi-layered Architecture**: Clean separation of controller, service, and execution layers
+- **Security-First Design**: Robust account locking mechanism to prevent race conditions
+- **Asynchronous Processing**: Non-blocking transaction execution for improved throughput
+- **Comprehensive Error Handling**: Centralized error management with appropriate recovery strategies
+- **Automatic Batch Processing**: Scheduled tasks for processing new transactions every 10 minutes
 
-### Pipeline Features
+For detailed technical documentation, see the [Transaction System](../../wiki/Transaction-System) page in the wiki.
 
-- Builds and tests the application using Maven on Java 21
-- Runs unit tests and verifies code coverage with JaCoCo
-- Stores test results and code coverage reports as artifacts
+#### Registration System
 
-### Artifacts
+BankApp implements a comprehensive user registration system that ensures secure account creation with automatic bank account setup and welcome bonus processing.
 
-After each workflow run, the following artifacts are available:
-- Test results: Detailed reports from unit test execution
-- Coverage report: JaCoCo analysis showing test coverage metrics
+- **Multi-layered Architecture**: Clean separation of web, service, and validation layers
+- **Comprehensive Validation**: Extensive validation of personal data, contact info, and security requirements
+- **Automatic Account Setup**: Automated bank account creation and welcome bonus processing
+- **Security-First Design**: Built-in protection against common vulnerabilities and data breaches
+- **User-Friendly Experience**: Immediate feedback and clear error messaging
+- 
+For detailed technical documentation, see the [Registration System](../../wiki/Registration-System) page in the wiki.
 
-You can view workflow runs in the [Actions tab](https://github.com/pawel-mackiewicz/BankApp/actions) of the repository.
+#### Password Reset System
+
+The BankApp implements a secure password reset system with the following features:
+
+- **Three-tier architecture**: Web controller, REST API, and service layer
+- **Token-based security**: Time-limited tokens for password reset operations
+- **Security measures**: Rate limiting, information hiding, and secure error handling
+- **Email notifications**: Automatic notifications at each stage of the process
+- **Transactional processing**: Ensures data consistency during password changes
+
+For detailed technical documentation, see the [Password Reset System](../../wiki/Password-Reset-System) page in the wiki.
+
+#### Email Notification System
+
+BankApp includes a flexible email notification system that handles various types of user communication. The system utilizes a multi-layered architecture and ensures reliable message delivery.
+
+- **Multi-layered Architecture**: Separation of service layers, templates, and delivery
+- **Template System**: Consistent formatting and responsive design for all emails
+- **Flexible Integration**: Full integration with registration and password reset processes
+- **Error Handling**: Comprehensive error handling with appropriate logging
+- **Resend API**: Reliable email delivery through Resend API
+
+For detailed technical documentation, see the [Email Notification System](../../wiki/Email-Notification-System) page in the wiki.
+
+#### Token System
+
+BankApp implements a secure and robust token system primarily used for password reset functionality, ensuring secure handling of sensitive operations through time-limited, single-use tokens.
+
+- **Multi-layered Architecture**: Service layer for token generation, validation, and lifecycle management
+- **Security Features**: SHA-256 hashing, rate limiting, and automatic token expiration
+- **Token Management**: Single-use tokens with built-in expiration and cleanup mechanisms
+- **Error Handling**: Comprehensive exception handling with proper security measures
+- **Database Integration**: Efficient token storage with automated cleanup of expired tokens
+
+For detailed technical documentation, see the [Token System](../../wiki/Token-System) page in the wiki.
+
+#### Exception Handling System
+
+BankApp implements a comprehensive exception handling system that ensures consistent error management, logging, and standardized API responses across the entire application.
+
+- **Multi-layered Architecture**: Global exception handler, logging system, and validation processors
+- **Standardized Responses**: Unified error response format with consistent HTTP status mapping
+- **Validation Framework**: Specialized handling for DTO and parameter validation errors
+- **Centralized Logging**: Differentiated logging levels with configurable stack trace handling
+- **Error Classification**: Structured error codes system with proper categorization
+
+For detailed technical documentation, see the [Exception Handling System](../../wiki/Exception-Handling-System) page in the wiki.
+
+## What Needs to Be Done on the Frontend?
+
+- **Web App for Managing Bank Accounts**: The current version needs UI/UX improvements and optimization.
+- **Mobile App for Managing Bank Accounts**: The same as the web app but optimized for mobile devices.
+- **Web/Mobile (Android/iOS) App Simulating an ATM/Cash Deposit Machine**: Enabling deposits and withdrawals in a simulated environment.
+- **???**: If you have a great idea, I’d love to hear it!
+
+The scope of work depends on how many people get involved and how fast we progress.
+
+## What Needs to Be Done on the Backend?
+
+The backend is mostly complete but still requires improvements, refactoring of few modules and optimizations. I also have a few ideas for additional features, so if you have solid backend skills, there’s definitely work to be done!
+
+## Who Am I Looking For?
+
+- **Frontend Developers**: I need someone who is already comfortable with frontend development or really wants to master it! Basic HTML, CSS, and JS knowledge won’t be enough – experience with frameworks (React, Angular, or others) would be very useful. Also, the frontend will communicate with the backend via API, so if you’ve worked with APIs before or want to learn, this is a great opportunity!
+- **Backend Developers**: Strong Java skills are required. Spring is a plus, but not necessary. If you have experience with Hibernate and MySQL, that’s even better!
+
+- People who can help wrap up the project within 1-2 weeks (or longer if the project expands).
+
+## What Do I Offer?
+
+- Hands-on experience in a real project.
+- Collaboration in a friendly and supportive environment.
+- A great project you can add to your portfolio.
+
+## Additional Information
+
+The frontend and backend will communicate via API, so the frontend will be in a separate repository.
+
+If you're interested, reach out to me on GitHub or email me at pawel@mackiewicz.info
+
+Looking forward to working with you!
+
+Pawel
