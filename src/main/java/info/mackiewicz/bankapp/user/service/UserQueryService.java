@@ -132,6 +132,17 @@ public class UserQueryService {
     }
 
     /**
+     * Checks if a user exists with the given ID.
+     *
+     * @param id The unique identifier of the user
+     * @return true if the user exists, false otherwise
+     */
+    boolean userExistsById(Integer id) {
+        log.debug("Checking if user exists by ID: {}", id);
+        return userRepository.existsById(id);
+    }
+
+    /**
      * Checks if a username already exists in the system.
      *
      * @param username The username to check

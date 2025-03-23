@@ -17,7 +17,7 @@ import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
 import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingInterceptor;
 import info.mackiewicz.bankapp.shared.web.error.mapping.ApiExceptionToErrorMapper;
 import info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor;
-import info.mackiewicz.bankapp.shared.web.response.ApiResponseFactory;
+import info.mackiewicz.bankapp.shared.web.response.ApiResponseBuilder;
 import info.mackiewicz.bankapp.shared.web.util.RequestUriHandler;
 
 @TestConfiguration
@@ -36,8 +36,8 @@ public class TestConfig {
 
     @Bean
     @Primary
-    public ApiResponseFactory apiResponseBuilder() {
-        return new ApiResponseFactory();
+    public ApiResponseBuilder apiResponseBuilder() {
+        return new ApiResponseBuilder();
     }
 
     @Bean
