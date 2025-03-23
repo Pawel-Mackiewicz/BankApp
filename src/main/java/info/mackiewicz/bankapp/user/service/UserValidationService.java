@@ -151,12 +151,12 @@ public class UserValidationService {
      */
     public void validateUserExists(Integer id) {
         log.debug("Validating user existence for ID: {}", id);
-        try {
-            userQueryService.getUserById(id);
+
+        if (userQueryService.userExistsById(id)) {
             log.debug("User with ID {} exists", id);
-        } catch (UserNotFoundException e) {
+        } else {
             log.warn("Validation failed - user with ID {} does not exist", id);
-            throw e;
+            throw new UserNotFoundException("User with ID " + id + " does not exist");
         }
     }
 }

@@ -137,8 +137,10 @@ public class TransferController {
     private void validateAccountOwnership(User user, Integer accountId) {
         log.debug("Validating account ownership by ID for user: {} and account: {}", user.getId(), accountId);
         
-        boolean hasAccess = accountService.getAccountsByOwnersId(user.getId()).stream()
-                .anyMatch(account -> account.getId().equals(accountId));
+        boolean hasAccess = accountService.getAccountById(accountId)
+        .getOwner()
+        .getId()
+        .equals(user.getId());
                 
         if (!hasAccess) {
             log.warn("Access denied - user: {} does not own account: {}", user.getId(), accountId);

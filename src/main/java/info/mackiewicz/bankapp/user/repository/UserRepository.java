@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.LockModeType;
@@ -15,6 +16,7 @@ import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
+    boolean existsById(@NonNull Integer id);
     boolean existsByPesel(Pesel pesel);
     boolean existsByEmail(Email email);
     boolean existsByUsername(String username);
