@@ -24,12 +24,13 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
 import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingService;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
-import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutorRegistry;
 import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutor;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutorRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -87,69 +88,94 @@ class TransactionProcessorTest {
         processor.processTransaction(transaction);
 
         // then
+        verify(loggingService).logTransactionAttempt(transaction);
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
+        verify(loggingService).logLockingAccounts(transaction);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
         verify(commandRegistry).getCommand(transaction.getType());
         verify(executionCommand).execute(transaction, accountService);
         verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
+        verify(loggingService).logSuccessfulTransaction(transaction);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
-        verifyNoInteractions(errorHandler);
+        verify(loggingService).logUnlockingAccounts(transaction);
     }
-
+    
     @Test
     void processTransaction_WhenInsufficientFunds_ShouldHandleError() {
         // given
         InsufficientFundsException exception = new InsufficientFundsException("Insufficient funds");
         doThrow(exception).when(executionCommand).execute(transaction, accountService);
 
-        // when
-        processor.processTransaction(transaction);
-
-        // then
-        verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(commandRegistry).getCommand(transaction.getType());
-        verify(executionCommand).execute(transaction, accountService);
-        verify(errorHandler).handleInsufficientFundsError(transaction, exception);
-        verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
-        verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+        // when/then
+        try {
+            processor.processTransaction(transaction);
+            fail("Expected InsufficientFundsException to be thrown");
+        } catch (InsufficientFundsException e) {
+            // Expected exception
+            verify(loggingService).logTransactionAttempt(transaction);
+            verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
+            verify(loggingService).logLockingAccounts(transaction);
+            verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
+            verify(commandRegistry).getCommand(transaction.getType());
+            verify(executionCommand).execute(transaction, accountService);
+            verify(errorHandler).handleInsufficientFundsError(transaction, exception);
+            verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
+            verify(loggingService, never()).logSuccessfulTransaction(transaction);
+            verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+            verify(loggingService).logUnlockingAccounts(transaction);
+        }
     }
-
+    
     @Test
     void processTransaction_WhenUnexpectedError_ShouldHandleError() {
         // given
         RuntimeException exception = new RuntimeException("Unexpected error");
         doThrow(exception).when(executionCommand).execute(transaction, accountService);
 
-        // when
-        processor.processTransaction(transaction);
-
-        // then
-        verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(commandRegistry).getCommand(transaction.getType());
-        verify(executionCommand).execute(transaction, accountService);
-        verify(errorHandler).handleUnexpectedError(transaction, exception);
-        verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
-        verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+        // when/then
+        try {
+            processor.processTransaction(transaction);
+            fail("Expected TransactionExecutionException to be thrown");
+        } catch (TransactionExecutionException e) {
+            // Oczekiwane rzucenie TransactionExecutionException
+            verify(loggingService).logTransactionAttempt(transaction);
+            verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
+            verify(loggingService).logLockingAccounts(transaction);
+            verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
+            verify(commandRegistry).getCommand(transaction.getType());
+            verify(executionCommand).execute(transaction, accountService);
+            verify(errorHandler).handleUnexpectedError(transaction, exception);
+            verify(statusManager, never()).setTransactionStatus(transaction, TransactionStatus.DONE);
+            verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+            verify(loggingService).logUnlockingAccounts(transaction);
+            verify(loggingService, never()).logSuccessfulTransaction(transaction);
+        }
     }
 
     @Test
-    void processTransaction_ShouldReleaseLocks_EvenIfStatusUpdateFails() {
+    void processTransaction_WhenStatusUpdateToDoneThrowsException_ShouldHandleErrorCorrectly() {
         // given
         RuntimeException exception = new RuntimeException("Status update failed");
         doThrow(exception).when(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
 
-        // when
-        processor.processTransaction(transaction);
-
-        // then
-        verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
-        verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
-        verify(commandRegistry).getCommand(transaction.getType());
-        verify(executionCommand).execute(transaction, accountService);
-        verify(errorHandler).handleUnexpectedError(transaction, exception);
-        verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+        // when/then
+        try {
+            processor.processTransaction(transaction);
+            fail("Expected TransactionExecutionException to be thrown");
+        } catch (TransactionExecutionException e) {
+            // verify correct behavior
+            verify(loggingService).logTransactionAttempt(transaction);
+            verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
+            verify(loggingService).logLockingAccounts(transaction);
+            verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
+            verify(commandRegistry).getCommand(transaction.getType());
+            verify(executionCommand).execute(transaction, accountService);
+            verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE); // verify called but throws exception
+            verify(errorHandler).handleTransactionStatusChangeError(transaction, exception);
+            verify(loggingService, never()).logSuccessfulTransaction(transaction);
+            verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+            verify(loggingService).logUnlockingAccounts(transaction);
+        }
     }
 
     @Test
@@ -169,12 +195,16 @@ class TransactionProcessorTest {
         processor.processTransaction(transaction);
 
         // then
+        verify(loggingService).logTransactionAttempt(transaction);
         verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
         verify(errorHandler).handleLockError(transaction, exception);
         verify(statusManager, never()).setTransactionStatus(any(), any());
         verify(commandRegistry, never()).getCommand(any());
         verify(executionCommand, never()).execute(transaction, accountService);
+        verify(loggingService, never()).logLockingAccounts(transaction);
+        verify(loggingService, never()).logSuccessfulTransaction(transaction);
         verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+        verify(loggingService).logUnlockingAccounts(transaction);
     }
 
     @Test
@@ -191,11 +221,14 @@ class TransactionProcessorTest {
             fail("Expected AccountUnlockException to be thrown");
         } catch (AccountUnlockException e) {
             // Wyjątek został ponownie rzucony, co jest oczekiwane
+            verify(loggingService).logTransactionAttempt(transaction);
             verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
+            verify(loggingService).logLockingAccounts(transaction);
             verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
             verify(commandRegistry).getCommand(transaction.getType());
             verify(executionCommand).execute(transaction, accountService);
             verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
+            verify(loggingService).logSuccessfulTransaction(transaction);
             verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
             verify(errorHandler).handleUnlockError(transaction, exception);
         }
@@ -205,23 +238,31 @@ class TransactionProcessorTest {
     void processTransaction_ShouldPreserveExecutionOrder() {
         // Create ordered verifier for strict order checking
         InOrder orderVerifier = inOrder(
+                loggingService,
                 accountLockManager,
+                loggingService,
                 statusManager,
                 commandRegistry,
                 executionCommand,
                 statusManager,
-                accountLockManager);
+                loggingService,
+                accountLockManager,
+                loggingService);
 
         // when
         processor.processTransaction(transaction);
 
         // then
+        orderVerifier.verify(loggingService).logTransactionAttempt(transaction);
         orderVerifier.verify(accountLockManager).lockAccounts(sourceAccount, destinationAccount);
+        orderVerifier.verify(loggingService).logLockingAccounts(transaction);
         orderVerifier.verify(statusManager).setTransactionStatus(transaction, TransactionStatus.PENDING);
         orderVerifier.verify(commandRegistry).getCommand(transaction.getType());
         orderVerifier.verify(executionCommand).execute(transaction, accountService);
         orderVerifier.verify(statusManager).setTransactionStatus(transaction, TransactionStatus.DONE);
+        orderVerifier.verify(loggingService).logSuccessfulTransaction(transaction);
         orderVerifier.verify(accountLockManager).unlockAccounts(sourceAccount, destinationAccount);
+        orderVerifier.verify(loggingService).logUnlockingAccounts(transaction);
         verifyNoInteractions(errorHandler);
     }
 }

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import info.mackiewicz.bankapp.account.exception.AccountLockException;
 import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.service.TransactionStatusManager;
@@ -72,7 +71,6 @@ public class TransactionErrorHandler {
                 transaction.getId(), e.getMessage(), e);
         statusManager.setTransactionStatus(transaction, TransactionStatus.SYSTEM_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw new TransactionExecutionException("Unexpected lock error for transaction " + transaction.getId(), e);
     }
 
     /**
@@ -105,7 +103,6 @@ public class TransactionErrorHandler {
         log.warn("Failed to update status for transaction {}: {}", transaction.getId(), e.getMessage());
         statusManager.setTransactionStatus(transaction, TransactionStatus.EXECUTION_ERROR);
         errorNotifier.notifyError(transaction, e);
-        throw new TransactionExecutionException("Error while changing transaction status", e);
     }
 
 }

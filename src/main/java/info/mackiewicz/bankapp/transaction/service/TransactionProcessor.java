@@ -10,14 +10,14 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.util.AccountLockManager;
 import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingService;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionBaseException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler;
-import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutorRegistry;
 import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutor;
+import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutorRegistry;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -50,15 +50,21 @@ class TransactionProcessor {
             acquireAccountLocks(transaction);
             try {
                 executeWithStatusUpdates(transaction);
-            } catch (TransactionExecutionException e) {
+            } catch (TransactionBaseException e) {
                 throw e;
             } catch (Exception e) {
                 errorHandler.handleUnexpectedError(transaction, e);
+                throw new TransactionExecutionException(
+                    String.format("Unexpected error during transaction %d processing", transaction.getId()), e);
             }
         } catch (AccountLockException e) {
             errorHandler.handleLockError(transaction, e);
         } catch (Exception e) {
+            if (e instanceof TransactionBaseException) {
+                throw e;
+            }
             errorHandler.handleUnexpectedLockError(transaction, e);
+            throw new TransactionExecutionException("Unexpected lock error for transaction %d" + transaction.getId(), e);
         } finally {
             releaseAccountLocks(transaction);
         }
@@ -74,9 +80,9 @@ class TransactionProcessor {
     private void updateTransactionStatus(Transaction transaction, TransactionStatus status) {
         try {
             statusManager.setTransactionStatus(transaction, status);
-        } catch (TransactionNotFoundException | IllegalStateException | IllegalArgumentException e) {
+        } catch (Exception e) {
             errorHandler.handleTransactionStatusChangeError(transaction, e);
-            throw new TransactionExecutionException();
+            throw new TransactionExecutionException("Error while changing transaction status", e);
         }
     }
 
