@@ -2,8 +2,6 @@ package info.mackiewicz.bankapp.user.model;
 
 import java.time.LocalDate;
 
-import org.hibernate.validator.constraints.pl.PESEL;
-
 import info.mackiewicz.bankapp.user.exception.InvalidUserDataException;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
@@ -19,6 +17,11 @@ public class UserBuilder {
      * Initializes the step builder process.
      * 
      * @return FirstnameStep interface to begin building a User object
+     * @throws InvalidUserDataException if any validation fails
+     * @throws InvalidPeselFormatException if PESEL format is invalid
+     * @throws InvalidEmailFormatException if email format is invalid
+     * @throws InvalidPhoneNumberFormatException if phone number format is invalid
+     * @throws InvalidPasswordFormatException if password format is invalid
      */
     public static FirstnameStep builder() {
         return new Steps();
@@ -136,7 +139,6 @@ public class UserBuilder {
         
         private String firstname;
         private String lastname;
-        @PESEL
         private Pesel pesel;
         private Email email;
         private PhoneNumber phoneNumber;

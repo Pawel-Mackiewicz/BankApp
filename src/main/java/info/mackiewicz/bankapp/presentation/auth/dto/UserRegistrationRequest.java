@@ -2,10 +2,13 @@ package info.mackiewicz.bankapp.presentation.auth.dto;
 
 import java.time.LocalDate;
 
+import info.mackiewicz.bankapp.presentation.auth.validation.Password;
+ import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -29,15 +32,15 @@ public record UserRegistrationRequest(
     @Email
     String email,
 
-    @NotBlank
-    @Size(min = 9, max = 9)
+    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = ValidationConstants.PHONE_NUMBER_PATTERN, 
+            message = "Invalid phone number format. Use +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX format")
     String phoneNumber,
 
     @NotNull
     @Past
     LocalDate dateOfBirth,
 
-    @NotBlank
-    @Size(min = 8)
+    @Password
     String password
 ) {}
