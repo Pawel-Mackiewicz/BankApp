@@ -1,27 +1,15 @@
 package info.mackiewicz.bankapp.user.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
@@ -98,18 +86,6 @@ public abstract class BaseUser implements UserDetails {
     protected boolean enabled;
 
     /**
-     * Collection of security roles assigned to the user.
-     * These roles are used for authorization and access control.
-     * The roles are eagerly fetched to ensure they are always available
-     * for security checks.
-     */
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    protected Set<String> roles;
-
-    /**
      * Protected constructor for creating a new base user.
      * Initializes the user with default security settings:
      * - Not expired
@@ -123,21 +99,6 @@ public abstract class BaseUser implements UserDetails {
         this.credentialsExpired = false;
         this.locked = false;
         this.enabled = true;
-        this.roles = new HashSet<>();
-    }
-
-    /**
-     * Returns the collection of granted authorities based on the user's roles.
-     * Each role string is converted to a SimpleGrantedAuthority object.
-     *
-     * @return Collection of GrantedAuthority objects representing the user's roles
-     * @see org.springframework.security.core.authority.SimpleGrantedAuthority
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toSet());
     }
 
     /**
