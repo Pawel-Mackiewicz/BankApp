@@ -140,16 +140,19 @@ BankApp/
    ```
 
 2. **DB Config**
-   - Create MySQL db and name it bankapp
+   - Create MySQL db and make `bankapp` schema
    - Create a copy of the `.env.example` file and name it `.env`
 
    - Fill in the `.env` file with your credentials, use `.env.example`:
    ```bash
+   # Application configuration
+   PORT=8080   # port at which the application will run (default is 8080)
+   SPRING_PROFILES_ACTIVE=dev  # active profile for the application (dev/prod)
+
    # Database configuration
-   DB_URL=jdbc:mysql://localhost:3306/bankapp
-   DB_USERNAME=your_username
-   DB_PASSWORD=your_password
-   PORT=8080
+   DB_URL=your_database_url_here
+   DB_USERNAME=your_username_here
+   DB_PASSWORD=your_password_here
 
    # Spring Security credentials
    SPRING_SECURITY_USER_NAME=your_admin_username
@@ -157,7 +160,7 @@ BankApp/
 
    # Resend email configuration
    RESEND_API_KEY=your_resend_api_key
-   APP_BASE_URL=http://localhost:8080
+   APP_BASE_URL=base_url_for_your_app # http://localhost:8080 for local development
    ```
 
 3. **Build and Run**
@@ -166,7 +169,7 @@ BankApp/
    mvn spring-boot:run
    ```
    
-The application is configured to check for an admin user on startup. If you've set the `SPRING_SECURITY_USER_NAME` and `SPRING_SECURITY_USER_PASSWORD` in your `.env` file, an admin account will be automatically created on first run.
+The application is configured to check for an admin api user on startup. If you've set the `SPRING_SECURITY_USER_NAME` and `SPRING_SECURITY_USER_PASSWORD` in your `.env` file, an admin account will be automatically created on first run.
 
    The application will be available at: `http://localhost:8080`
 
