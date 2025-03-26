@@ -9,6 +9,7 @@ import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
 import info.mackiewicz.bankapp.user.validation.Adult;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,9 +45,17 @@ public class UserRegistrationDto implements PasswordConfirmation {
             message = "Invalid phone number format. Use +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX format")
     private String phoneNumber;
 
+    @Schema(
+    description = "Password must be at least 8 characters long, contain at least one digit, " +
+                  "one lowercase letter, one uppercase letter, and one special character from the set: @$!%*?&",
+    minLength = 8,
+    pattern = ValidationConstants.PASSWORD_PATTERN,
+    example = "StrongP@ss123"
+                  )
     @Password
     private String password;
 
     @NotBlank(message = "Password confirmation is required")
+    @Schema(description = "Password confirmation must match the password")
     private String confirmPassword;
 }
