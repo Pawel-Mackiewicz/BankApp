@@ -8,7 +8,7 @@ import info.mackiewicz.bankapp.presentation.auth.validation.Password;
 import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
-import info.mackiewicz.bankapp.user.validation.Adult;
+import info.mackiewicz.bankapp.user.validation.AgeRange;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,7 +29,7 @@ public class UserRegistrationDto implements PasswordConfirmation {
 
     @NotNull(message = "Date of Birth is required")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Adult(message = "You must be at least 18 years old")
+    @AgeRange
     @Schema(description = "Date of birth in the format yyyy-MM-dd." +
             " User must be at least 18 years old." +
             " User cannot be older than 120 years old")
