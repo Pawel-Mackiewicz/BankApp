@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Component
 @RequiredArgsConstructor
-public class ApiResponseFactory {
+public class RestResponseFactory {
 
     /**
      * Creates a response entity with CREATED status
@@ -21,9 +21,9 @@ public class ApiResponseFactory {
      * @return ResponseEntity with ApiResponse wrapper and CREATED status
      * @param <T> Type of the response data
      */
-    public <T> ResponseEntity<ApiResponse<T>> created(T data) {
+    public <T> ResponseEntity<RestResponse<T>> created(T data) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.created(data));
+                .body(RestResponse.created(data));
     }
 
     /**
@@ -33,8 +33,8 @@ public class ApiResponseFactory {
      * @return ResponseEntity with ApiResponse wrapper and OK status
      * @param <T> Type of the response data
      */
-    public <T> ResponseEntity<ApiResponse<T>> ok(T data) {
-        return ResponseEntity.ok(ApiResponse.success(data));
+    public <T> ResponseEntity<RestResponse<T>> ok(T data) {
+        return ResponseEntity.ok(RestResponse.success(data));
     }
 
     /**
@@ -42,7 +42,7 @@ public class ApiResponseFactory {
      *
      * @return ResponseEntity with ApiResponse wrapper and OK status
      */
-    public ResponseEntity<ApiResponse<Void>> deleted() {
-        return ResponseEntity.ok(ApiResponse.success(null));
+    public ResponseEntity<RestResponse<Void>> deleted() {
+        return ResponseEntity.ok(RestResponse.success(null));
     }
 }

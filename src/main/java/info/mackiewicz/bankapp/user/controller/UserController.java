@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
-import info.mackiewicz.bankapp.shared.web.response.ApiResponse;
-import info.mackiewicz.bankapp.shared.web.response.ApiResponseFactory;
+import info.mackiewicz.bankapp.shared.web.response.RestResponse;
+import info.mackiewicz.bankapp.shared.web.response.RestResponseFactory;
 import info.mackiewicz.bankapp.user.UserMapper;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
 import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;
 import info.mackiewicz.bankapp.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -37,42 +38,46 @@ public class UserController {
     private final UserService userService;
     private final UserRegistrationService registrationService;
     private final UserMapper userMapper;
-    private final ApiResponseFactory apiResponseBuilder;
+    private final RestResponseFactory restResponseBuilder;
 
+    @Operation(summary = "Create a new user",
+            description = "Creates a new user in the system. The user will be registered with the provided details.")
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
+    public ResponseEntity<RestResponse<UserResponseDto>> createUser(
             @Valid @RequestBody UserRegistrationDto registrationDto) {
         User created = registrationService.registerUser(registrationDto);
-        return apiResponseBuilder.created(userMapper.toResponseDto(created));
+        return restResponseBuilder.created(userMapper.toResponseDto(created));
     }
 
+    @Operation(summary = "Get user by ID",
+            description = "Retrieves a user by their unique ID. Returns user details if found, otherwise returns 404.")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<RestResponse<UserResponseDto>> getUserById(@PathVariable Integer id) {
         User user = userService.getUserById(id);
-        return apiResponseBuilder.ok(userMapper.toResponseDto(user));
+        return restResponseBuilder.ok(userMapper.toResponseDto(user));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers() {
+    public ResponseEntity<RestResponse<List<UserResponseDto>>> getAllUsers() {
         List<UserResponseDto> users = userService.getAllUsers().stream()
                 .map(userMapper::toResponseDto)
                 .collect(Collectors.toList());
-        return apiResponseBuilder.ok(users);
+        return restResponseBuilder.ok(users);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(
+    public ResponseEntity<RestResponse<UserResponseDto>> updateUser(
             @PathVariable Integer id,
             @Valid @RequestBody UpdateUserRequest updateRequest) {
         User existingUser = userService.getUserById(id);
         existingUser = userMapper.updateUserFromRequest(existingUser, updateRequest);
         User updatedUser = userService.updateUser(existingUser);
-        return apiResponseBuilder.ok(userMapper.toResponseDto(updatedUser));
+        return restResponseBuilder.ok(userMapper.toResponseDto(updatedUser));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<RestResponse<Void>> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
-        return apiResponseBuilder.deleted();
+        return restResponseBuilder.deleted();
     }
 }
