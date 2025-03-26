@@ -27,6 +27,7 @@ import info.mackiewicz.bankapp.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -49,11 +50,29 @@ public class UserController {
 
     @Operation(summary = "Create a new user",
         description = "Creates a new user in the system. The user will be registered with the provided details.")
-    @Parameter(
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
         required = true,
         description = "User registration details",
-        name = "registrationDto",
-        schema = @Schema(implementation = UserRegistrationDto.class)    
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = UserRegistrationDto.class),
+            examples = {
+                @ExampleObject(
+                    name = "Standard registration",
+                    value = "{\n" +
+                            "  \"email\": \"user@example.com\",\n" +
+                            "  \"password\": \"secureP@ssword123\",\n" +
+                            "  \"confirmPassword\": \"secureP@ssword123\",\n" +
+                            "  \"firstName\": \"John\",\n" +
+                            "  \"lastName\": \"Smith\",\n" +
+                            "  \"pesel\": \"12345678901\",\n" +
+                            "  \"phoneNumber\": \"+48123456789\",\n" +
+                            "  \"dateOfBirth\": \"1990-01-01\"\n" +
+                            
+                            "}"
+                )
+            }
+        )
     )
     @ApiResponses(value = {
         @ApiResponse(
@@ -107,7 +126,19 @@ public class UserController {
                 responseCode = "404", 
                 description = "User not found",
                 content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = BaseApiError.class)
+                    schema = @Schema(implementation = BaseApiError.class),
+                    examples = {
+                        @ExampleObject(
+                            name = "User not found response",
+                            value = "{\n" +
+                                    "  \"status\": \"NOT_FOUND\",\n" +
+                                    "  \"title\": \"USER_NOT_FOUND\",\n" +
+                                    "  \"message\": \"User with ID 123 not found\",\n" +
+                                    "  \"path\": \"/api/users/123\",\n" +
+                                    "  \"timestamp\": \"26-03-2025 14:30:45\"\n" +
+                                    "}"
+                        )
+                    }
                     )
                 )
     })
@@ -131,7 +162,19 @@ public class UserController {
                 responseCode = "404",
                 description = "No users found",
                 content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = BaseApiError.class)
+                    schema = @Schema(implementation = BaseApiError.class),
+                    examples = {
+                        @ExampleObject(
+                            name = "No users found response",
+                            value = "{\n" +
+                                    "  \"status\": \"NOT_FOUND\",\n" +
+                                    "  \"title\": \"USERS_NOT_FOUND\",\n" +
+                                    "  \"message\": \"No users found in the system\",\n" +
+                                    "  \"path\": \"/api/users\",\n" +
+                                    "  \"timestamp\": \"26-03-2025 15:20:10\"\n" +
+                                    "}"
+                        )
+                    }
                     )
             )
     })
@@ -144,13 +187,32 @@ public class UserController {
     }
 
     @Operation(summary = "Update user by ID",
-            description = "Updates the details of an existing user. You can update one or more information. Returns the updated user details.")
+            description = "Updates the details of an existing user. You can update one or more information." + 
+            " You can only update: username, email, password and phone number. Returns the updated user details.")
     @Parameter(
             required = true,
-            description = "User ID to update",
-            name = "id",
-            schema = @Schema(implementation = UpdateUserRequest.class)
+            description = "User's unique identifier",
+            name = "id"
     )
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        required = true,
+        description = "Updated user information",
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = UpdateUserRequest.class),
+                examples = {
+                        @ExampleObject(
+                                name = "User update example",
+                                value = "{\n" +
+                                        "  \"username\": \"updatedUsername\",\n" +
+                                        "  \"email\": \"updated.email@example.com\",\n" +
+                                        "  \"password\": \"newSecurePassword123!\",\n" +
+                                        "  \"phoneNumber\": \"+48123456789\"\n" +
+                                        "}"
+                        )
+                }
+        )
+)
     @ApiResponses(value = {
             @ApiResponse(
                 responseCode = "200",
@@ -170,7 +232,19 @@ public class UserController {
                 responseCode = "404",
                 description = "User not found",
                 content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = BaseApiError.class)
+                    schema = @Schema(implementation = BaseApiError.class),
+                    examples = {
+                        @ExampleObject(
+                            name = "User not found response",
+                            value = "{\n" +
+                                    "  \"status\": \"NOT_FOUND\",\n" +
+                                    "  \"title\": \"USER_NOT_FOUND\",\n" +
+                                    "  \"message\": \"User with ID 9999 not found\",\n" +
+                                    "  \"path\": \"/api/users/9999\",\n" +
+                                    "  \"timestamp\": \"26-03-2025 14:30:45\"\n" +
+                                    "}"
+                        )
+                    }
                     )
             )
     })
@@ -196,7 +270,19 @@ public class UserController {
                 responseCode = "404",
                 description = "User not found",
                 content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = BaseApiError.class)
+                    schema = @Schema(implementation = BaseApiError.class),
+                    examples = {
+                        @ExampleObject(
+                            name = "User not found response",
+                            value = "{\n" +
+                                    "  \"status\": \"NOT_FOUND\",\n" +
+                                    "  \"title\": \"USER_NOT_FOUND\",\n" +
+                                    "  \"message\": \"User with ID 5678 not found\",\n" +
+                                    "  \"path\": \"/api/users/5678\",\n" +
+                                    "  \"timestamp\": \"26-03-2025 16:45:22\"\n" +
+                                    "}"
+                        )
+                    }
                     )
             )
     })
