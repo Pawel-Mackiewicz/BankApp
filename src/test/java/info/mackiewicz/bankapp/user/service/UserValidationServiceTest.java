@@ -1,25 +1,31 @@
 package info.mackiewicz.bankapp.user.service;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
+import info.mackiewicz.bankapp.user.exception.InvalidAgeException;
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@DisplayName("UserValidationService Tests")
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 class UserValidationServiceTest {
 
     @Mock
@@ -28,197 +34,242 @@ class UserValidationServiceTest {
     @InjectMocks
     private UserValidationService userValidationService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Nested
-    @DisplayName("validateUsernameUnique tests")
-    class ValidateUsernameUniqueTests {
+    @DisplayName("Name Validation Tests")
+    class NameValidationTests {
 
         @Test
-        @DisplayName("Should throw exception when username exists")
-        void validateUsernameUnique_whenUsernameExists_shouldThrowException() {
-            // given
-            String username = "existingUsername";
-            when(userQueryService.userExistsByUsername(username)).thenReturn(true);
+        @DisplayName("Should pass for valid name with Polish letters")
+        void shouldPassForValidNameWithPolishLetters() {
+            User user = User.builder()
+                    .withFirstname("Żółć")
+                    .withLastname("Ćma")
+                    .withPesel("12345678901")
+                    .withDateOfBirth(LocalDate.now().minusYears(30))
+                    .withEmail("test@example.com")
+                    .withPhoneNumber("123456789")
+                    .withPassword("password")
+                    .build();
 
-            // when & then
-            assertThrows(DuplicatedUserException.class,
-                    () -> userValidationService.validateUsernameUnique(username));
-
-            verify(userQueryService).userExistsByUsername(username);
+            assertThatCode(() -> userValidationService.validateNewUser(user))
+                    .doesNotThrowAnyException();
         }
 
         @Test
-        @DisplayName("Should not throw exception when username does not exist")
-        void validateUsernameUnique_whenUsernameDoesNotExist_shouldNotThrowException() {
-            // given
-            String username = "newUsername";
-            when(userQueryService.userExistsByUsername(username)).thenReturn(false);
+        @DisplayName("Should throw exception for invalid name with numbers")
+        void shouldThrowExceptionForInvalidName() {
+            User user = User.builder()
+                    .withFirstname("John123")
+                    .withLastname("Doe")
+                    .withPesel("12345678901")
+                    .withDateOfBirth(LocalDate.now().minusYears(30))
+                    .withEmail("test@example.com")
+                    .withPhoneNumber("123456789")
+                    .withPassword("password")
+                    .build();
 
-            // when
-            userValidationService.validateUsernameUnique(username);
-
-            // then
-            verify(userQueryService).userExistsByUsername(username);
+            assertThatThrownBy(() -> userValidationService.validateNewUser(user))
+                    .isInstanceOf(UserValidationException.class)
+                    .hasMessageContaining("Invalid name");
         }
     }
 
     @Nested
-    @DisplayName("validateEmailUnique tests")
-    class ValidateEmailUniqueTests {
+    @DisplayName("Username Validation Tests")
+    class UsernameValidationTests {
 
         @Test
-        @DisplayName("Should throw exception when email exists")
-        void validateEmailUnique_whenEmailExists_shouldThrowException() {
-            // given
+        @DisplayName("Should pass for unique username")
+        void shouldPassForUniqueUsername() {
+            when(userQueryService.userExistsByUsername(any())).thenReturn(false);
+            
+            assertThatCode(() -> userValidationService.validateUsernameUnique("newuser"))
+                    .doesNotThrowAnyException();
+        }
+
+        @Test
+        @DisplayName("Should throw exception for duplicate username")
+        void shouldThrowExceptionForDuplicateUsername() {
+            when(userQueryService.userExistsByUsername("existinguser")).thenReturn(true);
+
+            assertThatThrownBy(() -> userValidationService.validateUsernameUnique("existinguser"))
+                    .isInstanceOf(DuplicatedUserException.class)
+                    .hasMessageContaining("Username already in use");
+        }
+    }
+
+    @Nested
+    @DisplayName("Email Validation Tests")
+    class EmailValidationTests {
+
+        @Test
+        @DisplayName("Should pass for unique email")
+        void shouldPassForUniqueEmail() {
+            Email email = new Email("unique@example.com");
+            when(userQueryService.userExistsByEmail(email)).thenReturn(false);
+
+            assertThatCode(() -> userValidationService.validateEmailUnique(email))
+                    .doesNotThrowAnyException();
+        }
+
+        @Test
+        @DisplayName("Should throw exception for duplicate email")
+        void shouldThrowExceptionForDuplicateEmail() {
             Email email = new Email("existing@example.com");
             when(userQueryService.userExistsByEmail(email)).thenReturn(true);
 
-            // when & then
-            assertThrows(DuplicatedUserException.class,
-                    () -> userValidationService.validateEmailUnique(email));
-
-            verify(userQueryService).userExistsByEmail(email);
-        }
-
-        @Test
-        @DisplayName("Should not throw exception when email does not exist")
-        void validateEmailUnique_whenEmailDoesNotExist_shouldNotThrowException() {
-            // given
-            Email email = new Email("new@example.com");
-            when(userQueryService.userExistsByEmail(email)).thenReturn(false);
-
-            // when
-            userValidationService.validateEmailUnique(email);
-
-            // then
-            verify(userQueryService).userExistsByEmail(email);
+            assertThatThrownBy(() -> userValidationService.validateEmailUnique(email))
+                    .isInstanceOf(DuplicatedUserException.class)
+                    .hasMessageContaining("Email already in use");
         }
     }
 
     @Nested
-    @DisplayName("validatePeselUnique tests")
-    class ValidatePeselUniqueTests {
+    @DisplayName("PESEL Validation Tests")
+    class PeselValidationTests {
 
         @Test
-        @DisplayName("Should throw exception when PESEL exists")
-        void validatePeselUnique_whenPeselExists_shouldThrowException() {
-            // given
-            Pesel pesel = new Pesel("12345678901");
-            when(userQueryService.userExistsByPesel(pesel)).thenReturn(true);
-
-            // when & then
-            assertThrows(DuplicatedUserException.class,
-                    () -> userValidationService.validatePeselUnique(pesel));
-
-            verify(userQueryService).userExistsByPesel(pesel);
-        }
-
-        @Test
-        @DisplayName("Should not throw exception when PESEL does not exist")
-        void validatePeselUnique_whenPeselDoesNotExist_shouldNotThrowException() {
-            // given
+        @DisplayName("Should pass for unique PESEL")
+        void shouldPassForUniquePesel() {
             Pesel pesel = new Pesel("12345678901");
             when(userQueryService.userExistsByPesel(pesel)).thenReturn(false);
 
-            // when
-            userValidationService.validatePeselUnique(pesel);
+            assertThatCode(() -> userValidationService.validatePeselUnique(pesel))
+                    .doesNotThrowAnyException();
+        }
 
-            // then
-            verify(userQueryService).userExistsByPesel(pesel);
+        @Test
+        @DisplayName("Should throw exception for duplicate PESEL")
+        void shouldThrowExceptionForDuplicatePesel() {
+            Pesel pesel = new Pesel("12345678901");
+            when(userQueryService.userExistsByPesel(pesel)).thenReturn(true);
+
+            assertThatThrownBy(() -> userValidationService.validatePeselUnique(pesel))
+                    .isInstanceOf(DuplicatedUserException.class)
+                    .hasMessageContaining("PESEL already in use");
         }
     }
 
     @Nested
-    @DisplayName("validateNewUser tests")
-    class ValidateNewUserTests {
+    @DisplayName("Phone Number Validation Tests")
+    class PhoneNumberValidationTests {
 
         @Test
-        @DisplayName("Should not throw exception when all fields are unique")
-        void validateNewUser_whenAllFieldsAreUnique_shouldNotThrowException() {
-            // given
-            User user = new User();
-            user.setUsername("newUsername");
-            user.setEmail(new Email("new@example.com"));
-            user.setPesel(new Pesel("12345678901"));
+        @DisplayName("Should pass for unique phone number")
+        void shouldPassForUniquePhoneNumber() {
+            PhoneNumber phoneNumber = new PhoneNumber("123456789");
+            when(userQueryService.userExistsByPhoneNumber(phoneNumber)).thenReturn(false);
 
-            when(userQueryService.userExistsByUsername(user.getUsername())).thenReturn(false);
-            when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(false);
-            when(userQueryService.userExistsByPesel(user.getPesel())).thenReturn(false);
+            User user = User.builder()
+                    .withFirstname("John")
+                    .withLastname("Doe")
+                    .withPesel("12345678901")
+                    .withDateOfBirth(LocalDate.now().minusYears(30))
+                    .withEmail("test@example.com")
+                    .withPhoneNumber(phoneNumber)
+                    .withPassword("password")
+                    .build();
 
-            // when
-            userValidationService.validateNewUser(user);
-
-            // then
-            verify(userQueryService).userExistsByUsername(user.getUsername());
-            verify(userQueryService).userExistsByEmail(user.getEmail());
-            verify(userQueryService).userExistsByPesel(user.getPesel());
+            assertThatCode(() -> userValidationService.validateNewUser(user))
+                    .doesNotThrowAnyException();
         }
 
         @Test
-        @DisplayName("Should throw exception when username exists")
-        void validateNewUser_whenUsernameExists_shouldThrowException() {
-            // given
-            User user = new User();
-            user.setUsername("existingUsername");
-            user.setEmail(new Email("new@example.com"));
-            user.setPesel(new Pesel("12345678901"));
+        @DisplayName("Should throw exception for duplicate phone number")
+        void shouldThrowExceptionForDuplicatePhoneNumber() {
+            PhoneNumber phoneNumber = new PhoneNumber("123456789");
+            when(userQueryService.userExistsByPhoneNumber(phoneNumber)).thenReturn(true);
 
-            when(userQueryService.userExistsByUsername(user.getUsername())).thenReturn(true);
+            User user = User.builder()
+                    .withFirstname("John")
+                    .withLastname("Doe")
+                    .withPesel("12345678901")
+                    .withDateOfBirth(LocalDate.now().minusYears(30))
+                    .withEmail("test@example.com")
+                    .withPhoneNumber(phoneNumber)
+                    .withPassword("password")
+                    .build();
 
-            // when & then
-            assertThrows(DuplicatedUserException.class,
-                    () -> userValidationService.validateNewUser(user));
+            assertThatThrownBy(() -> userValidationService.validateNewUser(user))
+                    .isInstanceOf(DuplicatedUserException.class)
+                    .hasMessageContaining("Phone number already in use");
+        }
+    }
 
-            verify(userQueryService).userExistsByUsername(user.getUsername());
-            verify(userQueryService, never()).userExistsByEmail(any(Email.class));
-            verify(userQueryService, never()).userExistsByPesel(any(Pesel.class));
+    @Nested
+    @DisplayName("User Existence Validation Tests")
+    class UserExistenceValidationTests {
+
+        @Test
+        @DisplayName("Should pass for existing user")
+        void shouldPassForExistingUser() {
+            when(userQueryService.userExistsById(1)).thenReturn(true);
+
+            assertThatCode(() -> userValidationService.validateUserExists(1))
+                    .doesNotThrowAnyException();
         }
 
         @Test
-        @DisplayName("Should throw exception when email exists")
-        void validateNewUser_whenEmailExists_shouldThrowException() {
-            // given
-            User user = new User();
-            user.setUsername("newUsername");
-            user.setEmail(new Email("existing@example.com"));
-            user.setPesel(new Pesel("12345678901"));
+        @DisplayName("Should throw exception for non-existing user")
+        void shouldThrowExceptionForNonExistingUser() {
+            when(userQueryService.userExistsById(999)).thenReturn(false);
 
-            when(userQueryService.userExistsByUsername(user.getUsername())).thenReturn(false);
-            when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(true);
+            assertThatThrownBy(() -> userValidationService.validateUserExists(999))
+                    .isInstanceOf(UserNotFoundException.class)
+                    .hasMessageContaining("User with ID 999 does not exist");
+        }
+    }
 
-            // when & then
-            assertThrows(DuplicatedUserException.class,
-                    () -> userValidationService.validateNewUser(user));
+    @Nested
+    @DisplayName("Age Validation Tests")
+    class AgeValidationTests {
 
-            verify(userQueryService).userExistsByUsername(user.getUsername());
-            verify(userQueryService).userExistsByEmail(user.getEmail());
-            verify(userQueryService, never()).userExistsByPesel(any(Pesel.class));
+        @Test
+        @DisplayName("Should pass validation for 18 years old user")
+        void shouldPassValidationFor18YearsOld() {
+            LocalDate eighteenYearsOld = LocalDate.now().minusYears(18);
+
+            assertThatCode(() -> userValidationService.validateAge(eighteenYearsOld))
+                    .doesNotThrowAnyException();
         }
 
         @Test
-        @DisplayName("Should throw exception when PESEL exists")
-        void validateNewUser_whenPeselExists_shouldThrowException() {
-            // given
-            User user = new User();
-            user.setUsername("newUsername");
-            user.setEmail(new Email("new@example.com"));
-            user.setPesel(new Pesel("12345678901"));
+        @DisplayName("Should pass validation for 120 years old user")
+        void shouldPassValidationFor120YearsOld() {
+            LocalDate maxAge = LocalDate.now().minusYears(120);
 
-            when(userQueryService.userExistsByUsername(user.getUsername())).thenReturn(false);
-            when(userQueryService.userExistsByEmail(user.getEmail())).thenReturn(false);
-            when(userQueryService.userExistsByPesel(user.getPesel())).thenReturn(true);
+            assertThatCode(() -> userValidationService.validateAge(maxAge))
+                    .doesNotThrowAnyException();
+        }
 
-            // when & then
-            assertThrows(DuplicatedUserException.class,
-                    () -> userValidationService.validateNewUser(user));
+        @Test
+        @DisplayName("Should throw InvalidAgeException for null birth date")
+        void shouldThrowExceptionForNullBirthDate() {
+            assertThatThrownBy(() -> userValidationService.validateAge(null))
+                    .isInstanceOf(InvalidAgeException.class)
+                    .hasMessage("Birth date is required");
+        }
 
-            verify(userQueryService).userExistsByUsername(user.getUsername());
-            verify(userQueryService).userExistsByEmail(user.getEmail());
-            verify(userQueryService).userExistsByPesel(user.getPesel());
+        @ParameterizedTest(name = "Age {0} should be invalid")
+        @ValueSource(ints = {1, 10, 17})
+        @DisplayName("Should throw InvalidAgeException for users under 18")
+        void shouldThrowExceptionForUsersUnder18(int age) {
+            LocalDate underage = LocalDate.now().minusYears(age);
+
+            assertThatThrownBy(() -> userValidationService.validateAge(underage))
+                    .isInstanceOf(InvalidAgeException.class)
+                    .hasMessage("User must be at least 18 years old");
+        }
+
+        @ParameterizedTest(name = "Age {0} should be invalid")
+        @ValueSource(ints = {121, 150, 200})
+        @DisplayName("Should throw InvalidAgeException for users over 120")
+        void shouldThrowExceptionForUsersOver120(int age) {
+            LocalDate overMaxAge = LocalDate.now().minusYears(age);
+
+            assertThatThrownBy(() -> userValidationService.validateAge(overMaxAge))
+                    .isInstanceOf(InvalidAgeException.class)
+                    .hasMessage("User cannot be older than 120 years old");
         }
     }
 }
