@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import java.lang.annotation.*;
 
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Annotation for validating password fields.
@@ -36,6 +37,10 @@ import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 @Constraint(validatedBy = {})
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
+@Schema(
+    description = "Password must be at least 8 characters long, contain at least one digit, " +
+                  "one lowercase letter, one uppercase letter, and one special character from the set: @$!%*?&"
+)
 public @interface Password {
     String message() default "Invalid password";
     Class<?>[] groups() default {};

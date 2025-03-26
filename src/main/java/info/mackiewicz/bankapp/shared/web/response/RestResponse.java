@@ -1,7 +1,8 @@
 package info.mackiewicz.bankapp.shared.web.response;
 
-import lombok.Builder;
 import org.springframework.http.HttpStatus;
+
+import lombok.Builder;
 
 /**
  * Represents a standardized API response structure for the application.
@@ -13,7 +14,7 @@ import org.springframework.http.HttpStatus;
  * @see HttpStatus
  */
 @Builder(setterPrefix = "with")
-public class ApiResponse<T> {
+public class RestResponse<T> {
     private final T data;
     private final String message;
     private final HttpStatus status;
@@ -52,8 +53,8 @@ public class ApiResponse<T> {
      * @param data the data to include in the response
      * @return a new ApiResponse instance with the provided data and OK status
      */
-    public static <T> ApiResponse<T> success(T data) {
-        return ApiResponse.<T>builder()
+    public static <T> RestResponse<T> success(T data) {
+        return RestResponse.<T>builder()
                 .withData(data)
                 .withStatus(HttpStatus.OK)
                 .build();
@@ -67,8 +68,8 @@ public class ApiResponse<T> {
      * @param data the data to include in the response
      * @return a new ApiResponse instance with the provided data and CREATED status
      */
-    public static <T> ApiResponse<T> created(T data) {
-        return ApiResponse.<T>builder()
+    public static <T> RestResponse<T> created(T data) {
+        return RestResponse.<T>builder()
                 .withData(data)
                 .withStatus(HttpStatus.CREATED)
                 .build();
@@ -82,8 +83,8 @@ public class ApiResponse<T> {
      * @param status the HTTP status code for the error
      * @return a new ApiResponse instance with the provided error message and status
      */
-    public static <T> ApiResponse<T> error(String message, HttpStatus status) {
-        return ApiResponse.<T>builder()
+    public static <T> RestResponse<T> error(String message, HttpStatus status) {
+        return RestResponse.<T>builder()
                 .withMessage(message)
                 .withStatus(status)
                 .build();
