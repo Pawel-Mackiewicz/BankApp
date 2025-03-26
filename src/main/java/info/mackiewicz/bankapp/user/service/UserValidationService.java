@@ -1,8 +1,12 @@
 package info.mackiewicz.bankapp.user.service;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
+import info.mackiewicz.bankapp.user.exception.InvalidAgeException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
@@ -29,19 +33,24 @@ public class UserValidationService {
 
     private final UserQueryService userQueryService;
 
-        // Only allow letters (English and Polish)
-        private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
+    // Only allow letters (English and Polish)
+    private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
+    
+    // Age constraints
+    private static final int MINIMUM_AGE = 18;
+    private static final int MAXIMUM_AGE = 120;
 
     /**
      * Performs all necessary validations for a new user creation.
      * Validates the user's first name, last name, username, email, PESEL and phone number.
      * Validates that the first name and last name contain only letters (English and Polish) if they are provided.
      * Validates uniqueness of username, email and PESEL if they are provided.
-     * 
+     * Validates that the user is at least 18 years old and not older than 120 years.
      *
      * @param user The user object to validate
      * @throws UserValidationException if any of the unique fields (username,
      *                                  email, PESEL) already exist
+     * @throws InvalidAgeException if the user's age is less than 18 or greater than 120
      * @see User
      */
     public void validateNewUser(User user) {
@@ -69,6 +78,10 @@ public class UserValidationService {
         }
         if (user.getPhoneNumber() != null) {
             validatePhoneNumberUnique(user.getPhoneNumber());
+        }
+        
+        if (user.getDateOfBirth() != null) {
+            validateAge(user.getDateOfBirth());
         }
 
         log.info("Successfully completed validation for new user registration");
@@ -158,5 +171,38 @@ public class UserValidationService {
             log.warn("Validation failed - user with ID {} does not exist", id);
             throw new UserNotFoundException("User with ID " + id + " does not exist");
         }
+    }
+
+    /**
+     * Validates that the user's age is at least 18 years old and not older than 120 years.
+     * The age is calculated based on the provided birth date.
+     *
+     * @param birthDate The user's birth date
+     * @throws InvalidAgeException if the user's age is less than 18 or greater than 120
+     */
+    public void validateAge(LocalDate birthDate) {
+        log.debug("Validating user age based on birth date: {}", birthDate);
+        
+        if (birthDate == null) {
+            log.warn("Birth date is null, cannot validate age");
+            throw new InvalidAgeException("Birth date is required");
+        }
+        
+        LocalDate currentDate = LocalDate.now();
+        int age = Period.between(birthDate, currentDate).getYears();
+        
+        log.debug("Calculated user age: {} years", age);
+        
+        if (age < MINIMUM_AGE) {
+            log.warn("User age validation failed: user is under minimum age of {}", MINIMUM_AGE);
+            throw new InvalidAgeException("User must be at least " + MINIMUM_AGE + " years old");
+        }
+        
+        if (age > MAXIMUM_AGE) {
+            log.warn("User age validation failed: user exceeds maximum age of {}", MAXIMUM_AGE);
+            throw new InvalidAgeException("User cannot be older than " + MAXIMUM_AGE + " years old");
+        }
+        
+        log.debug("User age validation successful: {} years", age);
     }
 }
