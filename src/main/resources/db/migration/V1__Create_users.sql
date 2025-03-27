@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `credentials_expired` bit(1) NOT NULL,
+  `enabled` bit(1) NOT NULL,
+  `expired` bit(1) NOT NULL,
+  `locked` bit(1) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `username` varchar(255) NOT NULL,
+  `account_counter` int DEFAULT NULL,
+  `date_of_birth` date NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `firstname` varchar(255) NOT NULL,
+  `lastname` varchar(255) NOT NULL,
+  `pesel` varchar(255) NOT NULL,
+  `phone_number` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKlgkd7iin2rkv9xkrkvdf6do2v` (`username`),
+  UNIQUE KEY `UK6j5t70rd2eub907qysjvvd76n` (`email`),
+  UNIQUE KEY `UKf8c714wvkklt46dtwf2bxpw1s` (`pesel`),
+  UNIQUE KEY `UKadf16uc2muitd0doxrtgdpts` (`phone_number`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

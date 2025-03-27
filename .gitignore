@@ -22,7 +22,6 @@ memory-bank/
 h2db/
 *.mv.db
 *.trace.db
-*.sql
 *.log
 
 # H2 specific
