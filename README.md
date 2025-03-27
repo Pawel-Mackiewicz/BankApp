@@ -247,6 +247,26 @@ BankApp implements a comprehensive exception handling system that ensures consis
 
 For detailed technical documentation, see the [Exception Handling System](../../wiki/Exception-Handling-System) page in the wiki.
 
+#### API Documentation System
+
+BankApp implements a comprehensive API documentation system based on OpenAPI (Swagger) specification. The system provides interactive and up-to-date documentation for all API endpoints, supporting development and integration. 
+
+- **OpenAPI 3.0 Standard**: Implementation of the industry-standard specification for API documentation
+- **Interactive Documentation**: Swagger UI integration for testing and exploring API endpoints
+- **Code-First Approach**: Documentation automatically synchronized with codebase
+- **Detailed Examples**: Request and response examples for all endpoints
+- **Security Integration**: Authentication requirements documented for each endpoint
+
+##### Accessing Documentation
+
+The API documentation is available at the following URLs when the application is running:
+
+- **Swagger UI**: `/swagger-ui.html`
+- **OpenAPI Specification**: `/v3/api-docs`
+- **YAML format**: `/v3/api-docs.yaml`
+
+For detailed technical documentation, see the [API Documentation System](../../wiki/API-Documentation-System) page in the wiki.
+
 ## What Needs to Be Done on the Frontend?
 
 - **Web App for Managing Bank Accounts**: The current version needs UI/UX improvements and optimization.
