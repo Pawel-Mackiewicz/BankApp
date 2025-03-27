@@ -9,7 +9,6 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
-import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
