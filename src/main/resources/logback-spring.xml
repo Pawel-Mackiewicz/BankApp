@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- Wspólne definiowanie appenderów, które będą używane w obu profilach -->
-    <!-- Appender konsolowy dla wszystkich profili -->
-    <appender name="CONSOLE_PROD" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- Appenders for both profiles -->
+    <!-- Console appender for both profiles -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss} %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
         </encoder>
     </appender>
-    
-    <appender name="CONSOLE_DEV" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>WARN</level>
-        </filter>
-        <encoder>
-            <pattern>%d{HH:mm:ss} %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
-        </encoder>
-    </appender>
-    
-    <!-- Appender SQL dla wszystkich profili -->
+
+    <!-- Console SQL Appender  -->
     <appender name="SQL_MARKER" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] SQL %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    
-    <!-- Appendery dla plików używane tylko w profilu nieprodukcyjnym -->
+
+    <!-- Appenders for files. Used only in `dev` profile -->
     <appender name="APP_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/application.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -58,101 +49,109 @@
         </encoder>
     </appender>
 
-    <!-- Konfiguracja dla środowiska produkcyjnego -->
+    <appender name="SQL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/sql.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/sql.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Configuration for production environment -->
     <springProfile name="prod">
-        <!-- Loggery dla profilu produkcyjnego -->
+        <!-- Loggers for production profile -->
         <logger name="info.mackiewicz.bankapp" level="INFO" additivity="false">
-            <appender-ref ref="CONSOLE_PROD" />
+            <appender-ref ref="CONSOLE" />
         </logger>
-        
+
         <logger name="org.springframework" level="INFO" additivity="false">
-            <appender-ref ref="CONSOLE_PROD" />
+            <appender-ref ref="CONSOLE" />
         </logger>
-        
+
         <logger name="org.hibernate" level="INFO" additivity="false">
-            <appender-ref ref="CONSOLE_PROD" />
+            <appender-ref ref="CONSOLE" />
         </logger>
-        
+
         <logger name="ch.qos.logback" level="WARN" additivity="false">
-            <appender-ref ref="CONSOLE_PROD" />
+            <appender-ref ref="CONSOLE" />
         </logger>
-        
+
         <logger name="org.springframework.security" level="INFO" additivity="false">
-            <appender-ref ref="CONSOLE_PROD" />
+            <appender-ref ref="CONSOLE" />
         </logger>
-        
+
         <logger name="org.springframework.web" level="INFO" additivity="false">
-            <appender-ref ref="CONSOLE_PROD" />
+            <appender-ref ref="CONSOLE" />
         </logger>
-        
+
         <logger name="org.hibernate.SQL" level="INFO" additivity="false">
             <appender-ref ref="SQL_MARKER" />
         </logger>
-        
+
         <logger name="org.hibernate.type.descriptor.sql" level="INFO" additivity="false">
             <appender-ref ref="SQL_MARKER" />
         </logger>
-        
-        <!-- Root logger dla produkcji -->
+
+        <!-- Root logger for production -->
         <root level="INFO">
-            <appender-ref ref="CONSOLE_PROD" />
+            <appender-ref ref="CONSOLE" />
         </root>
     </springProfile>
 
-    <!-- Konfiguracja dla środowiska nieprodukcyjnego -->
-    <springProfile name="!prod">
-        <!-- Logger aplikacji -->
-        <logger name="info.mackiewicz.bankapp" level="TRACE" additivity="false">
-            <appender-ref ref="CONSOLE_DEV" />
+    <!-- Configuration for developement -->
+    <springProfile name="dev">
+        <!-- Application logger -->
+        <logger name="info.mackiewicz.bankapp" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE" />
             <appender-ref ref="APP_FILE" />
-            <appender-ref ref="DEBUG_FILE" />
         </logger>
-        
-        <!-- Loggery frameworkowe -->
-        <logger name="org.springframework" level="WARN" additivity="false">
-            <appender-ref ref="CONSOLE_DEV" />
+
+        <!-- Framework loggers -->
+        <logger name="org.springframework" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE" />
             <appender-ref ref="FRAMEWORK_FILE" />
         </logger>
 
-        <logger name="org.hibernate" level="DEBUG" additivity="false">
+        <logger name="org.hibernate" level="INFO" additivity="false">
             <appender-ref ref="FRAMEWORK_FILE" />
+            <appender-ref ref="SQL_FILE" />
         </logger>
 
         <logger name="ch.qos.logback" level="WARN" additivity="false">
-            <appender-ref ref="CONSOLE_DEV" />
+            <appender-ref ref="CONSOLE" />
             <appender-ref ref="FRAMEWORK_FILE" />
         </logger>
 
-        <!-- Logi bezpieczeństwa -->
-        <logger name="org.springframework.security" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE_DEV" />
+        <!-- Security logs -->
+        <logger name="org.springframework.security" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE" />
             <appender-ref ref="APP_FILE" />
-            <appender-ref ref="DEBUG_FILE" />
         </logger>
 
-        <!-- Logi warstwy web -->
+        <!-- Web layer logs -->
         <logger name="org.springframework.web" level="WARN" additivity="false">
-            <appender-ref ref="CONSOLE_DEV" />
+            <appender-ref ref="CONSOLE" />
             <appender-ref ref="APP_FILE" />
-            <appender-ref ref="DEBUG_FILE" />
         </logger>
 
-        <!-- Logi SQL -->
-        <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <!-- SQL logs -->
+        <logger name="org.hibernate.SQL" level="INFO" additivity="false">
             <appender-ref ref="SQL_MARKER" />
             <appender-ref ref="APP_FILE" />
         </logger>
-        
-        <logger name="org.hibernate.type.descriptor.sql" level="TRACE" additivity="false">
+
+        <logger name="org.hibernate.type.descriptor.sql" level="INFO" additivity="false">
             <appender-ref ref="SQL_MARKER" />
             <appender-ref ref="APP_FILE" />
         </logger>
 
         <!-- Root logger -->
-        <root level="DEBUG">
-            <appender-ref ref="CONSOLE_DEV" />
-            <appender-ref ref="APP_FILE" />
-            <appender-ref ref="FRAMEWORK_FILE" />
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="DEBUG_FILE" />
         </root>
     </springProfile>
 </configuration>
