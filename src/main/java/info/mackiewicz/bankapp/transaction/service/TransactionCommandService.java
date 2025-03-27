@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
