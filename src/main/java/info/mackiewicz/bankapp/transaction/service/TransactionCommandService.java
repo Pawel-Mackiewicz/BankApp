@@ -8,6 +8,7 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +31,7 @@ class TransactionCommandService {
      *
      * @param transaction the transaction to create
      * @return the saved transaction with generated ID
-     * @throws IllegalArgumentException if the transaction fails validation
+     * @throws TransactionValidationException if the transaction fails validation
      */
     @Transactional
     public Transaction registerTransaction(Transaction transaction) {

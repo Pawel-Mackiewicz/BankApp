@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +28,11 @@ public class TransactionService {
     private final TransactionProcessingService processingService;
 
     /**
-     * Saves a transaction in the system after validation.
+     * Validate and register a new transaction in the system.
      *
      * @param transaction the transaction to save
      * @return the saved transaction with generated ID
-     * @throws IllegalArgumentException if the transaction fails validation
+     * @throws TransactionValidationException if the transaction fails validation
      */
     @Transactional
     public Transaction registerTransaction(Transaction transaction) {
