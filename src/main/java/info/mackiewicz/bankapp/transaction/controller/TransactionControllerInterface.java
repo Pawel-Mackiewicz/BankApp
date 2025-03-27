@@ -25,7 +25,7 @@ public interface TransactionControllerInterface {
                     "  \"destinationAccountId\": 2,\n" +
                     "  \"amount\": 100.00,\n" +
                     "  \"title\": \"Payment for services\",\n" +
-                    "  \"type\": \"TRANSFER\"\n" +
+                    "  \"type\": \"TRANSFER_INTERNAL\"\n" +
                     "}")
     }))
     @ApiResponses(value = {
