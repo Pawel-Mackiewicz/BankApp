@@ -8,7 +8,6 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
 import info.mackiewicz.bankapp.presentation.dashboard.service.TransactionFilterService;
 import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/transaction-history")
 @RequiredArgsConstructor
-public class TransactionHistoryRestController {
+public class TransactionHistoryRestController implements TransactionHistoryRestControllerInterface {
 
     private static final int MAX_RECENT_TRANSACTIONS = 100;
     private static final String DEFAULT_SORT_FIELD = "date";
@@ -39,10 +38,11 @@ public class TransactionHistoryRestController {
     private final TransactionFilterService filterService;
     private final List<TransactionExporter> exporters;
 
+    @Override
     @GetMapping
     public ResponseEntity<Page<Transaction>> getTransactions(
-            @AuthenticationPrincipal User user,
-            @Valid TransactionFilterDTO filter
+            @AuthenticationPrincipal User user, 
+            TransactionFilterDTO filter
     ) {
         log.debug("Fetching transactions for account {} (user: {})", filter.getAccountId(), user.getUsername());
         
@@ -53,10 +53,11 @@ public class TransactionHistoryRestController {
         return ResponseEntity.ok(createPaginatedResponse(transactions, filter.getPage(), filter.getSize()));
     }
 
+    @Override
     @GetMapping("/export")
     public ResponseEntity<byte[]> exportTransactions(
             @AuthenticationPrincipal User user,
-            @Valid TransactionFilterDTO filter,
+            TransactionFilterDTO filter,
             @RequestParam(defaultValue = DEFAULT_EXPORT_FORMAT) String format
     ) {
         log.debug("Exporting transactions for account {} (user: {}) in {} format",
