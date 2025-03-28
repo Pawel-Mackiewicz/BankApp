@@ -32,9 +32,9 @@ import jakarta.validation.Valid;
 @SecurityRequirement(name = "cookieAuth")
 public interface TransactionHistoryRestControllerInterface {
 
-    private static final String NOT_IMPLEMENTED_YET = "NOT ALL API RESPONSES ARE IMPLEMENTED YET.";
+    static final String NOT_IMPLEMENTED_YET = "NOT ALL API RESPONSES ARE IMPLEMENTED YET.\n";
 
-    @Operation(summary = "Get filtered transactions", description = NOT_IMPLEMENTED_YET + " Retrieves a paginated list of transactions for a specific account with optional filtering criteria. The user information is automatically extracted from the current session. You must be logged in to access this endpoint.")
+    @Operation(summary = "Get filtered transactions", description = "Retrieves a paginated list of transactions for a specific account with optional filtering criteria. The user information is automatically extracted from the current session. You must be logged in to access this endpoint.")
     @RequestBody(required = true, description = "Transaction filtering criteria", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionFilterDTO.class), examples = {
             @ExampleObject(name = "Standard filter", value = "{\n" +
                     "  \"accountId\": 1,\n" +
@@ -62,7 +62,7 @@ public interface TransactionHistoryRestControllerInterface {
 
     @Operation(summary = "Export filtered transactions", description = "Export transactions for a specific account in the requested format (default: CSV). Supports the same filtering criteria as the get transactions endpoint. The user information is automatically extracted from the current session. You must be logged in to access this endpoint.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = NOT_IMPLEMENTED_YET + "Transactions exported successfully", content = @Content(mediaType = "application/octet-stream")),
+            @ApiResponse(responseCode = "200", description = "Transactions exported successfully", content = @Content(mediaType = "application/octet-stream")),
             @ApiResponse(responseCode = "403", description = NOT_IMPLEMENTED_YET + "Access denied - Account doesn't belong to user", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = NOT_IMPLEMENTED_YET + "Account not found", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = NOT_IMPLEMENTED_YET + "Unsupported export format", content = @Content(mediaType = "application/json")),
