@@ -1,13 +1,11 @@
 package info.mackiewicz.bankapp.presentation.exception;
 
-public class InvalidUserException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "User ID must not be null for update.";
+import info.mackiewicz.bankapp.shared.core.BankAppBaseException;
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 
-    public InvalidUserException() {
-        super(DEFAULT_MESSAGE);
-    }
+public class InvalidUserException extends BankAppBaseException {
 
     public InvalidUserException(String message) {
-        super(message);
+        super(message, ErrorCode.INVALID_CREDENTIALS);
     }
 }

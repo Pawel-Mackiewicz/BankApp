@@ -37,11 +37,11 @@ public class SettingsService {
             throw new InvalidUserException("Incorrect current password");
         }
 
-        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new InvalidUserException("New password and confirmation do not match");
         }
 
-        user.setPassword(request.getNewPassword());
+        user.setPassword(request.getPassword());
         userService.updateUser(user);
         log.info("Changed password for user: {}", user.getUsername());
         
