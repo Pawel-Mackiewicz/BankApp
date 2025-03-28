@@ -21,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
-//TODO: REFACTOR. USE TransactionAssembler and dedicated validators
-// TODO: REFACTOR. Use API endpoints for transfer
 @Slf4j
 @RequiredArgsConstructor
 @Controller

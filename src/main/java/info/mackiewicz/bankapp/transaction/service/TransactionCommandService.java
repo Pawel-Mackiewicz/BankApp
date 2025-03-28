@@ -59,7 +59,6 @@ class TransactionCommandService {
      * @param id the ID of the transaction to delete
      * @throws TransactionNotFoundException if no transaction is found with the given ID
      */
-    //TODO: Add transaction status check. You cannot delete a transaction that is already processed.
     public void deleteTransactionById(int id) {
         log.info("Attempting to delete transaction: {}", id);
         Transaction transaction = queryService.getTransactionById(id);

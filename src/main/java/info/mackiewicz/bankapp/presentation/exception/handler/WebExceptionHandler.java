@@ -145,7 +145,7 @@ public class WebExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
             title,
             message,
-            "/", // TODO: Add request path when available
+            "/",
             status.value(),
             status.getReasonPhrase()
         );

@@ -27,7 +27,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/transaction-history")
 @RequiredArgsConstructor
-//TODO: Refactor this class to use a service for transaction history generation
 public class TransactionHistoryRestController {
 
     private static final int MAX_RECENT_TRANSACTIONS = 100;

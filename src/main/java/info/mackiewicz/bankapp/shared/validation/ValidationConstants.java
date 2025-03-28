@@ -17,7 +17,6 @@ import lombok.experimental.UtilityClass;
  * @see <a href="https://github.com/Pawel-Mackiewicz/BankApp/wiki/Password-Reset-System">Password Reset System</a>
  * @see <a href="https://github.com/Pawel-Mackiewicz/BankApp/wiki/Registration-System">Registration System</a>
  */
-//TODO: Think about introducing VO for password
 @UtilityClass
 public final class ValidationConstants {
 
