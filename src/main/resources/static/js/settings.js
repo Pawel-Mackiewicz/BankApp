@@ -62,17 +62,17 @@ document.getElementById('changeUsernameForm').addEventListener('submit', functio
 document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const newPassword = document.getElementById('newPassword').value;
+    const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
-    if (newPassword !== confirmPassword) {
+    if (password !== confirmPassword) {
         alert('New password and confirmation do not match');
         return;
     }
 
     const data = {
         currentPassword: document.getElementById('currentPassword').value,
-        newPassword: newPassword,
+        password: password,
         confirmPassword: confirmPassword
     };
 
