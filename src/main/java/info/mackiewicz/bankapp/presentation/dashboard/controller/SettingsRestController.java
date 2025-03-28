@@ -15,24 +15,27 @@ import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
 import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
 import info.mackiewicz.bankapp.user.model.User;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/settings")
-public class SettingsRestController {
+public class SettingsRestController implements SettingsRestControllerInterface {
 
     private final SettingsService settingsService;
 
+    @Override
     @GetMapping("/user")
     public ResponseEntity<UserSettingsDTO> getUserSettings(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(settingsService.getUserSettings(user.getId()));
     }
 
+    @Override
     @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(
             @AuthenticationPrincipal User user,
-            @RequestBody ChangePasswordRequest request,
+            @Valid @RequestBody ChangePasswordRequest request,
             HttpServletRequest httpRequest) {
         
         boolean changed = settingsService.changePassword(user, request);
@@ -44,8 +47,11 @@ public class SettingsRestController {
         return ResponseEntity.badRequest().body("Failed to change password");
     }
 
+    @Override
     @PostMapping("/change-username")
-    public ResponseEntity<Void> changeUsername(@AuthenticationPrincipal User user, @RequestBody ChangeUsernameRequest request) {
+    public ResponseEntity<Void> changeUsername(
+            @AuthenticationPrincipal User user,
+            @Valid @RequestBody ChangeUsernameRequest request) {
         settingsService.changeUsername(user, request);
         return ResponseEntity.ok().build();
     }
