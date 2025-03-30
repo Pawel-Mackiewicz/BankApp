@@ -67,3 +67,5 @@ release.properties
 pom.xml.releaseBackup
 update-dockerfile-version.sh
 
+.clinerules-test-engineer
+.roo/system-prompt-clean

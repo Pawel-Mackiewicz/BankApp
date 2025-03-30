@@ -1,9 +1,8 @@
 package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
-import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import lombok.Value;
 
-//TODO: THINK ABOUT REMOVING THIS CLASS AND USE PersonalInfo interface instead
 @Value
 public class UserSettingsDTO {
     String firstname;
@@ -12,7 +11,7 @@ public class UserSettingsDTO {
     String email;
     String username;
 
-    public static UserSettingsDTO fromUser(User user) {
+    public static UserSettingsDTO fromUser(PersonalInfo user) {
         return new UserSettingsDTO(
             user.getFirstname(),
             user.getLastname(),

@@ -6,9 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
-import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
-import info.mackiewicz.bankapp.security.service.PasswordService;
+import info.mackiewicz.bankapp.security.service.PasswordValidationService;
+import info.mackiewicz.bankapp.security.service.UsernameValidationService;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,47 +20,63 @@ import lombok.extern.slf4j.Slf4j;
 public class SettingsService {
 
     private final UserService userService;
-    private final PasswordService passwordService;
+    private final PasswordValidationService passwordValidationService;
+    private final UsernameValidationService usernameValidationService;
 
-    public UserSettingsDTO getUserSettings(Integer userId) {
-        User requestedUser = userService.getUserById(userId);
-        if (!requestedUser.getId().equals(userId)) {
-            throw new InvalidUserException("Access denied");
-        }
-        UserSettingsDTO dto = UserSettingsDTO.fromUser(requestedUser);
-        return dto;
+    /**
+     * Retrieves the user settings for the authenticated user.
+     *
+     * @param user The authenticated user
+     * @return UserSettingsDTO containing user settings information
+     */
+    public UserSettingsDTO getUserSettings(PersonalInfo user) {
+        return UserSettingsDTO.fromUser(user);
     }
 
+    /**
+     * Updates the user settings for the authenticated user.
+     *
+     * @param user        The authenticated user
+     * @param settingsDTO The new settings to be applied
+     * @throws UserNotFoundException if the user does not exist
+     * @throws InvalidPasswordException   if the current password is incorrect
+     * @throws PasswordsMismatchException if the new password and confirmation do
+     *                                    not match
+     * @throws PasswordSameException      if the new password is the same as the old
+     *                                    one
+     */
     @Transactional
-    public boolean changePassword(User user, ChangePasswordRequest request) {
+    public void changePassword(User user, ChangePasswordRequest request) {
+        // Delegate all password validation to the PasswordValidationService
+        passwordValidationService.validatePasswordChange(
+                request.getCurrentPassword(),
+                request.getPassword(),
+                request.getConfirmPassword(),
+                user.getPassword());
 
-        if (!passwordService.verifyPassword(request.getCurrentPassword(), user.getPassword())) {
-            throw new InvalidUserException("Incorrect current password");
-        }
-
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new InvalidUserException("New password and confirmation do not match");
-        }
-
+        // Set and encode the new password
         user.setPassword(request.getPassword());
         userService.updateUser(user);
         log.info("Changed password for user: {}", user.getUsername());
-        
-        return true;
     }
 
+    /**
+     * Changes the username for the authenticated user.
+     *
+     * @param user    The authenticated user
+     * @param request The request containing the new username
+     * @throws UserNotFoundException if the user does not exist
+     * @throws UsernameAlreadyTakenException if the new username is already taken
+     * @throws UsernameSameException if the new username is the same as the old one
+     * @throws ForbiddenUsernameException if the new username is forbidden
+     */
     @Transactional
     public void changeUsername(User user, ChangeUsernameRequest request) {
         String oldUsername = user.getUsername();
         String newUsername = request.getNewUsername();
 
-        if (newUsername.equals(user.getUsername())) {
-            throw new InvalidUserException("New username is the same as the current one");
-        }
-
-        if (userService.userExistsByUsername(newUsername)) {
-            throw new InvalidUserException("Username " + newUsername + " is already taken");
-        }
+        // Validates username change
+        usernameValidationService.validateUsername(newUsername, oldUsername);
 
         user.setUsername(newUsername);
         userService.updateUser(user);
