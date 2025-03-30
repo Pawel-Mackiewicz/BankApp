@@ -41,10 +41,13 @@ public enum ErrorCode {
 
     // User Errors
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "We couldn't find user with the provided information."),
-    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "User with this credentials already exists."),
+    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "User with these credentials already exists."),
     USERNAME_TAKEN(HttpStatus.CONFLICT, "Username is already taken. Please choose a different one."),
     EMAIL_TAKEN(HttpStatus.CONFLICT, "Email is already taken. Please choose a different one."),
     USERNAME_NOT_FOUND(HttpStatus.NOT_FOUND, "Username not found."),
+    USERNAME_LENGTH(HttpStatus.BAD_REQUEST, "Username must be between 3 and 20 characters long."),
+    USERNAME_SAME(HttpStatus.BAD_REQUEST, "New username cannot be the same as the current one."),
+    USERNAME_INVALID(HttpStatus.BAD_REQUEST, "Username contains invalid characters. Only alphanumeric characters are allowed."),
 
     
     // Account Errors
