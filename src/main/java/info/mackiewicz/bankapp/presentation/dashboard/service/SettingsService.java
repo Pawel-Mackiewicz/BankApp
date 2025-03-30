@@ -68,6 +68,7 @@ public class SettingsService {
      * @throws UserNotFoundException if the user does not exist
      * @throws UsernameAlreadyTakenException if the new username is already taken
      * @throws UsernameSameException if the new username is the same as the old one
+     * @throws ForbiddenUsernameException if the new username is forbidden
      */
     @Transactional
     public void changeUsername(User user, ChangeUsernameRequest request) {

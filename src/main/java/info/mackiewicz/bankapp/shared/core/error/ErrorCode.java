@@ -48,7 +48,7 @@ public enum ErrorCode {
     USERNAME_LENGTH(HttpStatus.BAD_REQUEST, "Username must be between 3 and 20 characters long."),
     USERNAME_SAME(HttpStatus.BAD_REQUEST, "New username cannot be the same as the current one."),
     USERNAME_INVALID(HttpStatus.BAD_REQUEST, "Username contains invalid characters. Only alphanumeric characters are allowed."),
-
+    USERNAME_FORBIDDEN(HttpStatus.BAD_REQUEST, "Username is forbidden. Please choose a different one."),
     
     // Account Errors
     ACCOUNT_VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "We can't validate your account. Please check your input and try again."),
