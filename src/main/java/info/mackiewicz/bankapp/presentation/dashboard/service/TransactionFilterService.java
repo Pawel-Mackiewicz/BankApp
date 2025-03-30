@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.presentation.dashboard.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.presentation.exception.TransactionFilterException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,21 +16,38 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransactionFilterService {
 
+    /**
+     * Filters a list of transactions based on various criteria.
+     *
+     * @param transactions the list of transactions to filter
+     * @param dateFrom     the start date for filtering (inclusive)
+     * @param dateTo       the end date for filtering (inclusive)
+     * @param type         the type of transaction to filter by (e.g., "TRANSFER_OWN", "TRANSFER_INTERNAL", "DEPOSIT", "WITHDRAWAL", "FEE")
+     * @param amountFrom   the minimum amount for filtering (inclusive)
+     * @param amountTo     the maximum amount for filtering (inclusive)
+     * @param searchQuery  a search query to match against transaction titles and account details
+     * @return a filtered list of transactions
+     * @throws TransactionFilterException if an unexpected error occurs during filtering
+     */
     public List<Transaction> filterTransactions(List<Transaction> transactions,
-                                               LocalDateTime dateFrom,
-                                               LocalDateTime dateTo,
-                                               String type,
-                                               BigDecimal amountFrom,
-                                               BigDecimal amountTo,
-                                               String searchQuery) {
-        return transactions.stream()
-                .filter(t -> dateFrom == null || !t.getDate().isBefore(dateFrom))
-                .filter(t -> dateTo == null || !t.getDate().isAfter(dateTo))
-                .filter(t -> type == null || filterByType(t, type))
-                .filter(t -> amountFrom == null || t.getAmount().compareTo(amountFrom) >= 0)
-                .filter(t -> amountTo == null || t.getAmount().compareTo(amountTo) <= 0)
-                .filter(t -> matches(t, searchQuery))
-                .collect(Collectors.toList());
+            LocalDateTime dateFrom,
+            LocalDateTime dateTo,
+            String type,
+            BigDecimal amountFrom,
+            BigDecimal amountTo,
+            String searchQuery) {
+        try {
+            return transactions.stream()
+                    .filter(t -> dateFrom == null || !t.getDate().isBefore(dateFrom))
+                    .filter(t -> dateTo == null || !t.getDate().isAfter(dateTo))
+                    .filter(t -> type == null || filterByType(t, type))
+                    .filter(t -> amountFrom == null || t.getAmount().compareTo(amountFrom) >= 0)
+                    .filter(t -> amountTo == null || t.getAmount().compareTo(amountTo) <= 0)
+                    .filter(t -> matches(t, searchQuery))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new TransactionFilterException("Unexpected error while filtering transactions", e);
+        }
     }
 
     private boolean filterByType(Transaction transaction, String type) {
@@ -60,22 +78,34 @@ public class TransactionFilterService {
                 .map(id -> id.contains(query))
                 .orElse(false) ||
                 Optional.ofNullable(account.getOwner().getFullName())
-                .map(owner -> {
-                    String fullName = owner.toLowerCase();
-                    return fullName.contains(query);
-                })
-                .orElse(false);
+                        .map(owner -> {
+                            String fullName = owner.toLowerCase();
+                            return fullName.contains(query);
+                        })
+                        .orElse(false);
     }
 
+    /**
+     * Sorts a list of transactions based on the specified criteria.
+     *
+     * @param transactions  the list of transactions to sort
+     * @param sortBy       the field to sort by (e.g., "date", "amount", "type")
+     * @param sortDirection the direction to sort (e.g., "asc" or "desc")
+     * @throws TransactionFilterException if an unexpected error occurs during sorting
+     */
     public void sortTransactions(List<Transaction> transactions, String sortBy, String sortDirection) {
-        transactions.sort((t1, t2) -> {
-            int multiplier = sortDirection.equalsIgnoreCase("asc") ? 1 : -1;
-            return switch (sortBy.toLowerCase()) {
-                case "date" -> multiplier * t1.getDate().compareTo(t2.getDate());
-                case "amount" -> multiplier * t1.getAmount().compareTo(t2.getAmount());
-                case "type" -> multiplier * t1.getType().toString().compareTo(t2.getType().toString());
-                default -> multiplier * t1.getDate().compareTo(t2.getDate());
-            };
-        });
+        try {
+            transactions.sort((t1, t2) -> {
+                int multiplier = sortDirection.equalsIgnoreCase("asc") ? 1 : -1;
+                return switch (sortBy.toLowerCase()) {
+                    case "date" -> multiplier * t1.getDate().compareTo(t2.getDate());
+                    case "amount" -> multiplier * t1.getAmount().compareTo(t2.getAmount());
+                    case "type" -> multiplier * t1.getType().toString().compareTo(t2.getType().toString());
+                    default -> multiplier * t1.getDate().compareTo(t2.getDate());
+                };
+            });
+        } catch (Exception e) {
+            throw new TransactionFilterException("Unexpected error while sorting transactions", e);
+        }
     }
 }

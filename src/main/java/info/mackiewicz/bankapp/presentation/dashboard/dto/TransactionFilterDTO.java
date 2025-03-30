@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionFilterDTO {
+        
     @NotNull
     private Integer accountId;
     
@@ -45,9 +46,9 @@ public class TransactionFilterDTO {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dateTo;
     
-    @Schema(description = "Type of transaction", 
-            example = "DEPOSIT")
-    private String type;
+@Schema(description = "Type of transaction", 
+                examples = {"TRANSFER_OWN", "TRANSFER_INTERNAL", "DEPOSIT", "WITHDRAWAL", "FEE"})
+private String type;
 
     @Schema(description = "Minimum amount for filtering transactions", 
             example = "100.00")
