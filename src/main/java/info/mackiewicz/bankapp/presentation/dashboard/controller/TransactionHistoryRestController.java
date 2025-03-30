@@ -30,7 +30,7 @@ public class TransactionHistoryRestController implements TransactionHistoryRestC
             TransactionFilterDTO filter
     ) {
         log.debug("Fetching transactions for account {} (user: {})", filter.getAccountId(), user.getUsername());
-        return ResponseEntity.ok(transactionHistoryService.getTransactionHistory(user, filter));
+        return ResponseEntity.ok(transactionHistoryService.getTransactionHistory(user.getId(), filter));
     }
 
     @Override
@@ -42,6 +42,6 @@ public class TransactionHistoryRestController implements TransactionHistoryRestC
     ) {
         log.debug("Exporting transactions for account {} (user: {}) in {} format",
                 filter.getAccountId(), user.getUsername(), format);
-        return transactionHistoryService.exportTransactions(user, filter, format);
+        return transactionHistoryService.exportTransactions(user.getId(), filter, format);
     }
 }

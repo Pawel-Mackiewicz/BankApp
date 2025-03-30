@@ -48,6 +48,8 @@ class TransactionHistoryServiceTest {
     private TransactionHistoryService transactionHistoryService;
 
     private User testUser;
+    private Integer testUserId;
+    private Integer otherUserId;
     private Account testAccount;
     private Account destinationAccount;
     private TransactionFilterDTO filter;
@@ -57,6 +59,9 @@ class TransactionHistoryServiceTest {
     void setUp() {
         // Create test user and accounts
         testUser = TestUserBuilder.createTestUser();
+        testUserId = testUser.getId();
+        otherUserId = TestUserBuilder.createRandomTestUser().getId();
+        
         testAccount = TestAccountBuilder.createTestAccount(1, BigDecimal.valueOf(1000), testUser);
         destinationAccount = TestAccountBuilder.createTestAccount(2, BigDecimal.valueOf(2000), TestUserBuilder.createRandomTestUser());
 
@@ -98,7 +103,7 @@ class TransactionHistoryServiceTest {
                 .thenReturn(transactions);
 
         // When
-        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUser, filter);
+        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUserId, filter);
 
         // Then
         assertNotNull(result);
@@ -109,12 +114,11 @@ class TransactionHistoryServiceTest {
     @Test
     void getTransactionHistory_WhenUserDoesNotOwnAccount_ThrowsAccessDeniedException() {
         // Given
-        User otherUser = TestUserBuilder.createRandomTestUser();
         when(accountService.getAccountById(testAccount.getId())).thenReturn(testAccount);
 
         // When/Then
         assertThrows(AccessDeniedException.class, 
-            () -> transactionHistoryService.getTransactionHistory(otherUser, filter));
+            () -> transactionHistoryService.getTransactionHistory(otherUserId, filter));
     }
 
     @Test
@@ -127,7 +131,7 @@ class TransactionHistoryServiceTest {
                 .thenReturn(Collections.emptyList());
 
         // When
-        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUser, filter);
+        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUserId, filter);
 
         // Then
         assertNotNull(result);
@@ -147,7 +151,7 @@ class TransactionHistoryServiceTest {
                 .thenReturn(ResponseEntity.ok("test".getBytes()));
 
         // When
-        ResponseEntity<byte[]> result = transactionHistoryService.exportTransactions(testUser, filter, "csv");
+        ResponseEntity<byte[]> result = transactionHistoryService.exportTransactions(testUserId, filter, "csv");
 
         // Then
         assertNotNull(result);
@@ -166,6 +170,6 @@ class TransactionHistoryServiceTest {
 
         // When/Then
         assertThrows(UnsupportedOperationException.class,
-            () -> transactionHistoryService.exportTransactions(testUser, filter, "invalid"));
+            () -> transactionHistoryService.exportTransactions(testUserId, filter, "invalid"));
     }
 }

@@ -33,12 +33,14 @@ class TransactionHistoryRestControllerTest {
     private TransactionHistoryRestController controller;
 
     private User testUser;
+    private Integer testUserId;
     private TransactionFilterDTO filter;
     private Page<Transaction> transactionPage;
 
     @BeforeEach
     void setUp() {
         testUser = TestUserBuilder.createTestUser();
+        testUserId = testUser.getId();
         filter = TransactionFilterDTO.builder()
                 .accountId(1)
                 .page(0)
@@ -50,7 +52,7 @@ class TransactionHistoryRestControllerTest {
     @Test
     void getTransactions_ShouldReturnTransactionsFromService() {
         // Given
-        when(transactionHistoryService.getTransactionHistory(eq(testUser), any(TransactionFilterDTO.class)))
+        when(transactionHistoryService.getTransactionHistory(eq(testUserId), any(TransactionFilterDTO.class)))
                 .thenReturn(transactionPage);
 
         // When
@@ -66,7 +68,7 @@ class TransactionHistoryRestControllerTest {
     void exportTransactions_ShouldReturnExportedDataFromService() {
         // Given
         byte[] exportedData = "test data".getBytes();
-        when(transactionHistoryService.exportTransactions(eq(testUser), any(TransactionFilterDTO.class), eq("csv")))
+        when(transactionHistoryService.exportTransactions(eq(testUserId), any(TransactionFilterDTO.class), eq("csv")))
                 .thenReturn(ResponseEntity.ok(exportedData));
 
         // When

@@ -6,9 +6,10 @@ import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
 import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.user.model.User;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -31,23 +32,31 @@ public class TransactionHistoryService {
     private final TransactionFilterService filterService;
     private final List<TransactionExporter> exporters;
 
-    public Page<Transaction> getTransactionHistory(User user, TransactionFilterDTO filter) {
-        verifyAccountOwnership(user, filter.getAccountId());
+    /**
+     * Retrieves a paginated list of transactions for a given user and account.
+     *
+     * @param user   the user requesting the transaction history
+     * @param filter the filter criteria for transactions
+     * @return a paginated list of transactions
+     * @throws AccessDeniedException if the user does not own the account
+     */
+    public Page<Transaction> getTransactionHistory(Integer userId, TransactionFilterDTO filter) {
+        verifyAccountOwnership(userId, filter.getAccountId());
         List<Transaction> transactions = getFilteredAndSortedTransactions(filter);
         return createPaginatedResponse(transactions, filter.getPage(), filter.getSize());
     }
 
-    public ResponseEntity<byte[]> exportTransactions(User user, TransactionFilterDTO filter, String format) {
-        verifyAccountOwnership(user, filter.getAccountId());
+    public ResponseEntity<byte[]> exportTransactions(Integer userId, TransactionFilterDTO filter, String format) {
+        verifyAccountOwnership(userId, filter.getAccountId());
         filter.setSortBy(DEFAULT_SORT_FIELD);
         filter.setSortDirection(DEFAULT_SORT_DIRECTION);
         List<Transaction> transactions = getFilteredAndSortedTransactions(filter);
         return findExporter(format).exportTransactions(transactions);
     }
 
-    private void verifyAccountOwnership(User user, Integer accountId) {
+    private void verifyAccountOwnership(Integer userId, Integer accountId) {
         Account account = accountService.getAccountById(accountId);
-        if (!account.getOwner().getId().equals(user.getId())) {
+        if (!account.getOwner().getId().equals(userId)) {
             throw new AccessDeniedException("Account doesn't belong to user");
         }
     }
