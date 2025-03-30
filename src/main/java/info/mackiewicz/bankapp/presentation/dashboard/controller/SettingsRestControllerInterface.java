@@ -7,6 +7,7 @@ import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,7 +46,7 @@ public interface SettingsRestControllerInterface {
     })
     ResponseEntity<UserSettingsDTO> getUserSettings(
             @Parameter(hidden = true, description = "Current authenticated user (automatically injected by Spring Security)") 
-            User user);
+            PersonalInfo user);
 
     @Operation(
         summary = "Change user password", 

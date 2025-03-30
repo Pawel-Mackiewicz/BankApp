@@ -14,6 +14,7 @@ import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
 import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class SettingsRestController implements SettingsRestControllerInterface {
 
     @Override
     @GetMapping("/user")
-    public ResponseEntity<UserSettingsDTO> getUserSettings(@AuthenticationPrincipal User user) {
+    public ResponseEntity<UserSettingsDTO> getUserSettings(@AuthenticationPrincipal PersonalInfo user) {
         return ResponseEntity.ok(settingsService.getUserSettings(user));
     }
 

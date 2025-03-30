@@ -9,6 +9,7 @@ import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
 import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
 import info.mackiewicz.bankapp.security.service.PasswordService;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class SettingsService {
      * @param user The authenticated user
      * @return UserSettingsDTO containing user settings information
      */
-    public UserSettingsDTO getUserSettings(User user) {
+    public UserSettingsDTO getUserSettings(PersonalInfo user) {
         return UserSettingsDTO.fromUser(user);
     }
 
