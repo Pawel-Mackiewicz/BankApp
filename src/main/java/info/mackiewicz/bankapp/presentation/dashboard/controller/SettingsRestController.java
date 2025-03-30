@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.presentation.dashboard.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,24 +27,30 @@ public class SettingsRestController implements SettingsRestControllerInterface {
 
     private final SettingsService settingsService;
 
+    @Value("${app.thymeleaf.enabled:true}")
+    private boolean isThymeleafEnabled; // Feature flag. Controlled via environment variable
+ 
     @Override
     @GetMapping("/user")
     public ResponseEntity<UserSettingsDTO> getUserSettings(@AuthenticationPrincipal PersonalInfo user) {
         return ResponseEntity.ok(settingsService.getUserSettings(user));
     }
-
     @Override
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(
+    public ResponseEntity<?> changePassword(
             @AuthenticationPrincipal User user,
             @Valid @RequestBody ChangePasswordRequest request,
             HttpServletRequest httpRequest) {
 
         settingsService.changePassword(user, request);
-        String logoutUrl = UriComponentsBuilder.fromUriString("/logout").build().toUriString();
+        if (isThymeleafEnabled) {
+            String logoutUrl = UriComponentsBuilder.fromUriString("/logout").build().toUriString();
 
-        return ResponseEntity.ok().header("Location", logoutUrl)
-                .body("Password changed successfully. Redirecting to logout...");
+            return ResponseEntity.ok().header("Location", logoutUrl)
+                    .body("Password changed successfully. Redirecting to logout...");
+        } else {
+            return ResponseEntity.ok().build();
+        }
     }
 
     @Override

@@ -50,7 +50,7 @@ public interface SettingsRestControllerInterface {
 
     @Operation(
         summary = "Change user password", 
-        description = "DO NOT IMPLEMENT YET!" + " Changes the password for the currently logged in user. After successful change, user will be logged out. " +
+        description = "Changes the password for the currently logged in user. After successful change, user will be logged out. " +
                      "The user is automatically identified from the current session."
     )
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, 
@@ -85,7 +85,7 @@ public interface SettingsRestControllerInterface {
                 })),
             @ApiResponse(responseCode = "401", description = "Unauthorized access - user is not logged in")
     })
-    ResponseEntity<String> changePassword(
+    ResponseEntity<?> changePassword(
             @Parameter(hidden = true, description = "Current authenticated user (automatically injected by Spring Security)") 
             User user, 
             ChangePasswordRequest request, 
@@ -93,7 +93,7 @@ public interface SettingsRestControllerInterface {
 
     @Operation(
         summary = "Change username", 
-        description = "DO NOT IMPLEMENT YET!" + " Changes the username for the currently logged in user. The user is automatically identified from the current session."
+        description = "Changes the username for the currently logged in user. The user is automatically identified from the current session."
     )
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
         description = "Username change details",

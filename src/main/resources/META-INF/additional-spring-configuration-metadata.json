@@ -28,5 +28,10 @@
     "name": "test.retry.delay",
     "type": "java.lang.String",
     "description": "A description for 'test.retry.delay'"
+  },
+  {
+    "name": "app.thymeleaf.enabled",
+    "type": "java.lang.String",
+    "description": "Enable Thymeleaf template engine"
   }
 ]}
