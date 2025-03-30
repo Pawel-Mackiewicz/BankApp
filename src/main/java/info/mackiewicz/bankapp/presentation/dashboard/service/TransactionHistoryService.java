@@ -16,6 +16,7 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
 import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
 import info.mackiewicz.bankapp.presentation.exception.TransactionFilterException;
+import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
 import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
@@ -38,7 +39,7 @@ public class TransactionHistoryService {
     /**
      * Retrieves a paginated list of transactions for a given user and account.
      *
-     * @param user   the user requesting the transaction history
+     * @param userId the ID of the user who owns the account
      * @param filter the filter criteria for transactions
      * @return a paginated list of transactions
      * @throws AccessDeniedException if the user does not own the account
@@ -62,6 +63,7 @@ public class TransactionHistoryService {
      * @throws AccessDeniedException if the user does not own the account
      * @throws TransactionFilterException if the filter criteria are invalid
      * @throws NoTransactionsForAccountException if no transactions are found for the account
+     * @throws UnsupportedOperationException if the export format is not supported
      */
     public ResponseEntity<byte[]> exportTransactions(Integer userId, TransactionFilterDTO filter, String format) {
         verifyAccountOwnership(userId, filter.getAccountId());
@@ -124,6 +126,6 @@ public class TransactionHistoryService {
         return exporters.stream()
                 .filter(e -> e.getFormat().equalsIgnoreCase(format))
                 .findFirst()
-                .orElseThrow(() -> new UnsupportedOperationException("Unsupported export format: " + format));
+                .orElseThrow(() -> new UnsupportedExporterException("Unsupported export format: " + format));
     }
 }
