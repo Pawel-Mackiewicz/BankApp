@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import org.hibernate.query.SortDirection;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
@@ -41,9 +44,8 @@ public class TransactionFilterDTO {
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private LocalDateTime dateTo;
 
-        @Schema(description = "Type of transaction", examples = { "TRANSFER_OWN", "TRANSFER_INTERNAL", "DEPOSIT",
-                        "WITHDRAWAL", "FEE" }, required = false)
-        private String type;
+        @Schema(description = "Type of transaction", required = false)
+        private TransactionType type;
 
         @Schema(description = "Minimum amount for filtering transactions", example = "100.00", required = false)
         private BigDecimal amountFrom;
@@ -58,7 +60,7 @@ public class TransactionFilterDTO {
         @Builder.Default
         private String sortBy = "date";
 
-        @Schema(description = "Sort direction (asc or desc)", example = "asc", defaultValue = "desc", required = false)
+        @Schema(description = "Sort direction (asc or desc)", example = "asc", defaultValue = "DESCENDING", required = false)
         @Builder.Default
-        private String sortDirection = "desc";
+        private SortDirection sortDirection = SortDirection.DESCENDING;
 }

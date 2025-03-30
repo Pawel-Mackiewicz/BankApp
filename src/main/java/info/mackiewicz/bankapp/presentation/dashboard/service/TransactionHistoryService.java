@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.presentation.dashboard.service;
 
 import java.util.List;
 
+import org.hibernate.query.SortDirection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TransactionHistoryService {
     private static final int MAX_RECENT_TRANSACTIONS = 100;
     private static final String DEFAULT_SORT_FIELD = "date";
-    private static final String DEFAULT_SORT_DIRECTION = "desc";
+    private static final SortDirection DEFAULT_SORT_DIRECTION = SortDirection.DESCENDING;
 
     private final TransactionService transactionService;
     private final AccountService accountService;

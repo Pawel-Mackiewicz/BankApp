@@ -3,7 +3,10 @@ package info.mackiewicz.bankapp.presentation.dashboard.service;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.presentation.exception.TransactionFilterException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.RequiredArgsConstructor;
+
+import org.hibernate.query.SortDirection;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -32,7 +35,7 @@ public class TransactionFilterService {
     public List<Transaction> filterTransactions(List<Transaction> transactions,
             LocalDateTime dateFrom,
             LocalDateTime dateTo,
-            String type,
+            TransactionType type,
             BigDecimal amountFrom,
             BigDecimal amountTo,
             String searchQuery) {
@@ -40,7 +43,7 @@ public class TransactionFilterService {
             return transactions.stream()
                     .filter(t -> dateFrom == null || !t.getDate().isBefore(dateFrom))
                     .filter(t -> dateTo == null || !t.getDate().isAfter(dateTo))
-                    .filter(t -> type == null || filterByType(t, type))
+                    .filter(t -> type == null || t.getType().equals(type))
                     .filter(t -> amountFrom == null || t.getAmount().compareTo(amountFrom) >= 0)
                     .filter(t -> amountTo == null || t.getAmount().compareTo(amountTo) <= 0)
                     .filter(t -> matches(t, searchQuery))
@@ -48,13 +51,6 @@ public class TransactionFilterService {
         } catch (Exception e) {
             throw new TransactionFilterException("Unexpected error while filtering transactions", e);
         }
-    }
-
-    private boolean filterByType(Transaction transaction, String type) {
-        if (type.equals("TRANSFER")) {
-            return transaction.getType().getCategory().toString().equals("TRANSFER");
-        }
-        return transaction.getType().toString().equals(type);
     }
 
     private boolean matches(Transaction transaction, String searchQuery) {
@@ -93,10 +89,10 @@ public class TransactionFilterService {
      * @param sortDirection the direction to sort (e.g., "asc" or "desc")
      * @throws TransactionFilterException if an unexpected error occurs during sorting
      */
-    public void sortTransactions(List<Transaction> transactions, String sortBy, String sortDirection) {
+    public void sortTransactions(List<Transaction> transactions, String sortBy, SortDirection sortDirection) {
         try {
             transactions.sort((t1, t2) -> {
-                int multiplier = sortDirection.equalsIgnoreCase("asc") ? 1 : -1;
+                int multiplier = sortDirection.equals(SortDirection.ASCENDING) ? 1 : -1;    
                 return switch (sortBy.toLowerCase()) {
                     case "date" -> multiplier * t1.getDate().compareTo(t2.getDate());
                     case "amount" -> multiplier * t1.getAmount().compareTo(t2.getAmount());
