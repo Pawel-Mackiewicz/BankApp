@@ -2,7 +2,6 @@ package info.mackiewicz.bankapp.presentation.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,9 +49,7 @@ class SettingsServiceTest {
         user.setEmail(new Email("test@example.com"));
         user.setPhoneNumber(new PhoneNumber("123456789"));
 
-        when(userService.getUserById(userId)).thenReturn(user);
-
-        UserSettingsDTO settings = settingsService.getUserSettings(userId);
+        UserSettingsDTO settings = settingsService.getUserSettings(user);
 
         assertNotNull(settings);
         assertEquals("testuser", settings.getUsername());

@@ -21,13 +21,14 @@ public class SettingsService {
     private final UserService userService;
     private final PasswordService passwordService;
 
-    public UserSettingsDTO getUserSettings(Integer userId) {
-        User requestedUser = userService.getUserById(userId);
-        if (!requestedUser.getId().equals(userId)) {
-            throw new InvalidUserException("Access denied");
-        }
-        UserSettingsDTO dto = UserSettingsDTO.fromUser(requestedUser);
-        return dto;
+    /**
+     * Retrieves the user settings for the authenticated user.
+     *
+     * @param user The authenticated user
+     * @return UserSettingsDTO containing user settings information
+     */
+    public UserSettingsDTO getUserSettings(User user) {
+        return UserSettingsDTO.fromUser(user);
     }
 
     @Transactional

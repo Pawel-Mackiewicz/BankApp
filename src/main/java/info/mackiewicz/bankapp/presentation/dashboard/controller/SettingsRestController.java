@@ -28,7 +28,7 @@ public class SettingsRestController implements SettingsRestControllerInterface {
     @Override
     @GetMapping("/user")
     public ResponseEntity<UserSettingsDTO> getUserSettings(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(settingsService.getUserSettings(user.getId()));
+        return ResponseEntity.ok(settingsService.getUserSettings(user));
     }
 
     @Override
