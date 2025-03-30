@@ -22,13 +22,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
 import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
+import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -123,7 +124,7 @@ class TransactionHistoryServiceTest {
         when(accountService.getAccountById(testAccount.getId())).thenReturn(testAccount);
 
         // When/Then
-        assertThrows(AccessDeniedException.class, 
+        assertThrows(AccountOwnershipException.class, 
             () -> transactionHistoryService.getTransactionHistory(otherUserId, filter));
     }
 
@@ -175,7 +176,7 @@ class TransactionHistoryServiceTest {
                 .thenReturn(transactions);
 
         // When/Then
-        assertThrows(UnsupportedOperationException.class,
+        assertThrows(UnsupportedExporterException.class,
             () -> transactionHistoryService.exportTransactions(testUserId, filter, "invalid"));
     }
 }
