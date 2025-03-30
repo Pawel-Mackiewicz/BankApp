@@ -7,7 +7,7 @@ import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
 import info.mackiewicz.bankapp.presentation.exception.InvalidUserException;
-import info.mackiewicz.bankapp.security.service.PasswordService;
+import info.mackiewicz.bankapp.security.service.PasswordValidationService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SettingsService {
 
     private final UserService userService;
-    private final PasswordService passwordService;
+    private final PasswordValidationService passwordValidationService;
 
     /**
      * Retrieves the user settings for the authenticated user.
@@ -32,22 +32,30 @@ public class SettingsService {
         return UserSettingsDTO.fromUser(user);
     }
 
+    /**
+     * Updates the user settings for the authenticated user.
+     *
+     * @param user        The authenticated user
+     * @param settingsDTO The new settings to be applied
+     * @throws InvalidPasswordException   if the current password is incorrect
+     * @throws PasswordsMismatchException if the new password and confirmation do
+     *                                    not match
+     * @throws PasswordSameException      if the new password is the same as the old
+     *                                    one
+     */
     @Transactional
-    public boolean changePassword(User user, ChangePasswordRequest request) {
+    public void changePassword(User user, ChangePasswordRequest request) {
+        // Delegate all password validation to the PasswordValidationService
+        passwordValidationService.validatePasswordChange(
+                request.getCurrentPassword(),
+                request.getPassword(),
+                request.getConfirmPassword(),
+                user.getPassword());
 
-        if (!passwordService.verifyPassword(request.getCurrentPassword(), user.getPassword())) {
-            throw new InvalidUserException("Incorrect current password");
-        }
-
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new InvalidUserException("New password and confirmation do not match");
-        }
-
+        // Set and encode the new password
         user.setPassword(request.getPassword());
         userService.updateUser(user);
         log.info("Changed password for user: {}", user.getUsername());
-        
-        return true;
     }
 
     @Transactional

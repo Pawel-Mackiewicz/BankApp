@@ -38,14 +38,12 @@ public class SettingsRestController implements SettingsRestControllerInterface {
             @AuthenticationPrincipal User user,
             @Valid @RequestBody ChangePasswordRequest request,
             HttpServletRequest httpRequest) {
-        
-        boolean changed = settingsService.changePassword(user, request);
-        if (changed) {
-            String logoutUrl = UriComponentsBuilder.fromUriString("/logout").build().toUriString();
-            return ResponseEntity.ok().header("Location", logoutUrl)
-                    .body("Password changed successfully. Redirecting to logout...");
-        }
-        return ResponseEntity.badRequest().body("Failed to change password");
+
+        settingsService.changePassword(user, request);
+        String logoutUrl = UriComponentsBuilder.fromUriString("/logout").build().toUriString();
+
+        return ResponseEntity.ok().header("Location", logoutUrl)
+                .body("Password changed successfully. Redirecting to logout...");
     }
 
     @Override
