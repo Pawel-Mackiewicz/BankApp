@@ -86,7 +86,9 @@ class UserRegistrationServiceTest {
         TestAccountBuilder.setField(bankAccount, "id", -1);
 
         Transaction transaction = new Transaction();
+        transaction.setId(1); // Set ID for the transaction
 
+        logger.debug("Setting up mocks for user registration test");
         when(userMapper.toUser(registrationDto)).thenReturn(user);
         when(userService.createUser(user)).thenReturn(user);
         when(accountService.createAccount(anyInt())).thenReturn(userAccount);
@@ -99,6 +101,7 @@ class UserRegistrationServiceTest {
         when(transferBuilder.withAmount(any(BigDecimal.class))).thenReturn(transferBuilder);
         when(transferBuilder.withTitle(anyString())).thenReturn(transferBuilder);
         when(transferBuilder.build()).thenReturn(transaction);
+        when(transactionService.registerTransaction(any(Transaction.class))).thenReturn(transaction);
 
         // when
         registrationService.registerUser(registrationDto);
