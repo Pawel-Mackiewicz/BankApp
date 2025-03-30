@@ -60,6 +60,7 @@ public enum ErrorCode {
     ACCOUNT_OWNER_NULL(HttpStatus.BAD_REQUEST, "Account owner is null."),
     ACCOUNT_OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "Account owner not found."), 
     ACCOUNT_LIMIT_EXCEEDED(HttpStatus.FORBIDDEN, "Account limit exceeded. If you need more accounts, please contact support."),
+    ACCOUNT_OWNERSHIP_ERROR(HttpStatus.FORBIDDEN, "You do not have permission to access this account."),
     
     // Transaction Errors
     TRANSACTION_NOT_FOUND(HttpStatus.NOT_FOUND, "Transaction not found."),

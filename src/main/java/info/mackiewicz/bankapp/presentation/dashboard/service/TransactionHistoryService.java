@@ -10,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
@@ -81,7 +82,7 @@ public class TransactionHistoryService {
     private void verifyAccountOwnership(Integer userId, Integer accountId) {
         Account account = accountService.getAccountById(accountId);
         if (!account.getOwner().getId().equals(userId)) {
-            throw new AccessDeniedException("Account doesn't belong to user");
+            throw new AccountOwnershipException("Account " + accountId + " doesn't belong to user with ID: " + userId);
         }
     }
 
