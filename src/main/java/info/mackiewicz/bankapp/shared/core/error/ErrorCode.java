@@ -33,10 +33,18 @@ public enum ErrorCode {
     TOKEN_USED(HttpStatus.GONE, "This password reset link has already been used. Please request a new one."),
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Your login credentials are invalid. Please try again."),
     TOO_MANY_PASSWORD_RESET_ATTEMPTS(HttpStatus.TOO_MANY_REQUESTS, "You've reached the limit of password reset attempts. Please try again later."),
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "The provided password is invalid. Please check your input and try again."),
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "The provided passwords do not match. Please check your input and try again."),
+    PASSWORD_TOO_WEAK(HttpStatus.BAD_REQUEST, "The provided password is too weak. Please choose a stronger password."),
+    AUTHENTICATION_ERROR(HttpStatus.UNAUTHORIZED, "Authentication failed. Please check your credentials and try again."),
     
     // User Errors
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "We couldn't find user with the provided information."),
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "User with this credentials already exists."),
+    USERNAME_TAKEN(HttpStatus.CONFLICT, "Username is already taken. Please choose a different one."),
+    EMAIL_TAKEN(HttpStatus.CONFLICT, "Email is already taken. Please choose a different one."),
+    USERNAME_NOT_FOUND(HttpStatus.NOT_FOUND, "Username not found."),
+
     
     // Account Errors
     ACCOUNT_VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "We can't validate your account. Please check your input and try again."),
