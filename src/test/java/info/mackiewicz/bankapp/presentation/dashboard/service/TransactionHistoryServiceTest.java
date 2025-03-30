@@ -1,14 +1,19 @@
 package info.mackiewicz.bankapp.presentation.dashboard.service;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
-import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
-import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
-import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.user.model.User;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,14 +25,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
+import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
+import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.user.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionHistoryServiceTest {
