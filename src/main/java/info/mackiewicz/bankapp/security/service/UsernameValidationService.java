@@ -21,9 +21,13 @@ public class UsernameValidationService {
     );
 
     /**
-     * Validates if the provided username is already taken.
+     * Validates the username for a user.
+     * Checks if the username is different from the old one,
+     * if it is available (not already taken),
+     * and if it is not on the forbidden list.
      * 
      * @param newUsername The username to check
+     * @param oldUsername The old username to compare with
      * @throws UsernameAlreadyTakenException if the username is already taken
      * @throws UsernameSameException if the new username is the same as the old one
      * @throws ForbiddenUsernameException if the username is on the forbidden list
