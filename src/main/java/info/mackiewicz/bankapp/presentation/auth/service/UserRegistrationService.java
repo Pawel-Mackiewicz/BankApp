@@ -52,8 +52,12 @@ public class UserRegistrationService {
             .build();
         log.debug("Prepared welcome bonus transaction");
 
-        transactionService.registerTransaction(transaction);
+        Transaction registeredTransaction = transactionService.registerTransaction(transaction);
         log.debug("Registered welcome bonus transaction");
+
+        // Process the transaction to update account balances immediately
+        transactionService.processTransactionById(registeredTransaction.getId());
+        log.debug("Processed welcome bonus transaction for user with ID: {}", createdUser.getId());
 
         emailService.sendWelcomeEmail(createdUser.getEmail().toString(), createdUser.getFullName(), createdUser.getUsername());
         log.info("Completed user registration process for user: {}", createdUser.getUsername());

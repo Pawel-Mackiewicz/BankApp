@@ -36,6 +36,7 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.testutils.TestUserRegistrationDtoBuilder;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 
@@ -80,6 +81,13 @@ public class UserRegistrationIntegrationTest {
             User owner = TestUserBuilder.createRandomTestUser();
             return TestAccountBuilder.createTestAccount(1, BigDecimal.ZERO, owner);
         });
+
+        // Setup mock for transaction registration
+        when(transactionService.registerTransaction(any())).thenAnswer(invocation -> {
+            Transaction transaction = invocation.getArgument(0);
+            transaction.setId(100); // Set a known ID for verification
+            return transaction;
+        });
     }
 
     @Test
@@ -105,12 +113,16 @@ public class UserRegistrationIntegrationTest {
             anyString()
         );
         
+        // Verify welcome bonus transaction registration
         verify(transactionService).registerTransaction(argThat(transaction ->
             transaction.getAmount().equals(new BigDecimal("1000")) &&
             transaction.getTitle().equals("Welcome bonus") &&
             transaction.getType() == TransactionType.TRANSFER_INTERNAL &&
             transaction.getSourceAccount().getId() == -1
         ));
+
+        // Verify transaction processing was called with the correct ID
+        verify(transactionService).processTransactionById(100);
     }
 
     @Test
