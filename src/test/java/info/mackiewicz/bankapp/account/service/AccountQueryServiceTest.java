@@ -159,13 +159,13 @@ class AccountQueryServiceTest {
     }
 
     @Test
-    void findAccountByIban_WhenAccountExists_ShouldReturnAccount() {
+    void getAccountByIban_WhenAccountExists_ShouldReturnAccount() {
         // given
         Iban testIban = TestIbanProvider.getIbanObject(0);
         when(accountRepository.findByIban(testIban)).thenReturn(Optional.of(testAccount));
 
         // when
-        Account result = accountQueryService.findAccountByIban(testIban.toString());
+        Account result = accountQueryService.getAccountByIban(testIban.toString());
 
         // then
         assertNotNull(result);
@@ -174,14 +174,14 @@ class AccountQueryServiceTest {
     }
 
     @Test
-    void findAccountByIban_WhenAccountDoesNotExist_ShouldThrowException() {
+    void getAccountByIban_WhenAccountDoesNotExist_ShouldThrowException() {
         // given
         Iban testIban = TestIbanProvider.getIbanObject(1);
         when(accountRepository.findByIban(testIban)).thenReturn(Optional.empty());
 
         // when & then
         assertThrows(AccountNotFoundByIbanException.class,
-            () -> accountQueryService.findAccountByIban(testIban.toString()));
+            () -> accountQueryService.getAccountByIban(testIban.toString()));
         verify(accountRepository).findByIban(testIban);
     }
 

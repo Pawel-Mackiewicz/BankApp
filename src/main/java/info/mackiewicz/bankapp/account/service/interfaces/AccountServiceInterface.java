@@ -3,6 +3,8 @@ package info.mackiewicz.bankapp.account.service.interfaces;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.iban4j.Iban;
+
 import info.mackiewicz.bankapp.account.model.Account;
 import jakarta.validation.constraints.Email;
 
@@ -67,12 +69,23 @@ public interface AccountServiceInterface {
 
     /**
      * Finds an account by its IBAN (International Bank Account Number).
+     * 
+     * @deprecated Use {@link #getAccountByIban(Iban)} instead.
      *
      * @param iban The IBAN to search for
      * @return An {@link Account} with the specified IBAN
      * @throws IllegalArgumentException if iban is null or empty
      */
-    Account findAccountByIban(String iban);
+    Account getAccountByIban(String iban);
+
+    /**
+     * Finds an account by its IBAN (International Bank Account Number).
+     *
+     * @param iban The IBAN to search for
+     * @return An {@link Account} with the specified IBAN
+     * @throws AccountNotFoundByIbanException if no account is found with the given IBAN
+     */
+    Account getAccountByIban(Iban iban);
 
     /**
      * Finds an account by the owner's email address.
@@ -81,7 +94,7 @@ public interface AccountServiceInterface {
      * @return An {@link Account} belonging to the owner with the specified email address
      * @throws IllegalArgumentException if recipientEmail is null or has invalid format
      */
-    Account findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail);
+    Account getAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail);
 
     /**
      * Deletes an account with the specified ID.

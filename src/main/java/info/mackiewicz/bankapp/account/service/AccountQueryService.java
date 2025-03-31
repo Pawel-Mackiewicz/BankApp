@@ -78,11 +78,11 @@ class AccountQueryService {
         return findAccountByOwnersEmail(new Email(email));
     }
 
-    Account findAccountByIban(String iban) {
-        return findAccountByIban(Iban.valueOf(iban));
+    Account getAccountByIban(String iban) {
+        return getAccountByIban(Iban.valueOf(iban));
     }
 
-    Account findAccountByIban(Iban iban) {
+    Account getAccountByIban(Iban iban) {
         log.debug("Finding account by IBAN: {}", iban.toFormattedString());
         return accountRepository.findByIban(iban)
         .orElseThrow(() -> new AccountNotFoundByIbanException("Account with IBAN " + iban.toFormattedString() + " not found."));

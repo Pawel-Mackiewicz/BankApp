@@ -139,7 +139,7 @@ class AccountServiceTest {
         when(accountQueryService.findAccountByOwnersEmail(TEST_EMAIL.getValue())).thenReturn(testAccount);
 
         // Act
-        Account result = accountService.findAccountByOwnersEmail(TEST_EMAIL.getValue());
+        Account result = accountService.getAccountByOwnersEmail(TEST_EMAIL.getValue());
 
         // Assert
         assertThat(result).isEqualTo(testAccount);
@@ -150,14 +150,14 @@ class AccountServiceTest {
     void findAccountByIban_ShouldDelegateToQueryService() {
         // Arrange
         String iban = testAccount.getIban().toString();
-        when(accountQueryService.findAccountByIban(iban)).thenReturn(testAccount);
+        when(accountQueryService.getAccountByIban(iban)).thenReturn(testAccount);
 
         // Act
-        Account result = accountService.findAccountByIban(iban);
+        Account result = accountService.getAccountByIban(iban);
 
         // Assert
         assertThat(result).isEqualTo(testAccount);
-        verify(accountQueryService).findAccountByIban(iban);
+        verify(accountQueryService).getAccountByIban(iban);
     }
 
     @Test
