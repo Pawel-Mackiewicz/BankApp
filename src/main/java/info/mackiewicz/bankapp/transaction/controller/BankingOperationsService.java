@@ -11,6 +11,7 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
+import info.mackiewicz.bankapp.transaction.service.TransactionBuilderService;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +23,12 @@ public class BankingOperationsService {
 
     private final AccountService accountService;
     private final IbanAnalysisService ibanAnalysisService;
+    private final TransactionBuilderService transactionBuilderService;
 
     public TransferResponse handleIbanTransfer(IbanTransferRequest transferRequest, UserDetailsWithId user) {
         Iban sourceIban = transferRequest.getSourceIban();
         Iban destinationIban = transferRequest.getRecipientIban();
 
-        // Validate the account ownership
         Account sourceAccount = retrieveAccount(sourceIban);
         validateAccountOwnership(user.getId(), sourceAccount);
 
@@ -44,23 +45,6 @@ public class BankingOperationsService {
         // Retrieve the account using the source Iban from the transfer request
         return accountService.getAccountByIban(accountIban);
     }
-
-    private TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
-        return ibanAnalysisService.resolveTransferType(sourceIban, destinationIban);
-    }
-
-    private Transaction buildTransferTransaction(IbanTransferRequest transferRequest, Account sourceAccount,
-            Account destinationAccount, TransactionType type) {
-        Transaction transfer = Transaction.buildTransfer()
-                .from(sourceAccount)
-                .to(destinationAccount)
-                .withTransactionType(type)
-                .withAmount(transferRequest.getAmount())
-                .withTitle(transferRequest.getTitle())
-                .build();
-        return transfer;
-    }
-
     private void validateAccountOwnership(Integer userId, Account account) {
         Integer ownerId = account.getOwner().getId();
 
@@ -70,5 +54,16 @@ public class BankingOperationsService {
             throw new AccountOwnershipException("Unauthorized access to account");
         }
     }
+
+    private TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
+        return ibanAnalysisService.resolveTransferType(sourceIban, destinationIban);
+    }
+
+    private Transaction buildTransferTransaction(IbanTransferRequest transferRequest, Account sourceAccount,
+            Account destinationAccount, TransactionType type) {
+        return transactionBuilderService.buildTransferTransaction(transferRequest, sourceAccount,
+                destinationAccount, type);
+    }
+
 
 }

@@ -4,7 +4,6 @@ import info.mackiewicz.bankapp.account.model.interfaces.AccountInfo;
 import info.mackiewicz.bankapp.transaction.model.interfaces.TransactionInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -17,7 +16,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class TransferResponse {
     /**
      * The account from which the money was transferred.
