@@ -43,7 +43,7 @@ public class ExternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
     @Override
     protected <T extends TransferRequest> Account getSourceAccount(T request) {
         log.debug("Finding source account by IBAN: {}", request.getSourceIban());
-        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban());
+        Account sourceAccount = accountService.getAccountByIban(request.getSourceIban());
         log.debug("Source account found with ID: {}", sourceAccount.getId());
         return sourceAccount;
     }
@@ -51,7 +51,7 @@ public class ExternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
     @Override
     protected <T extends TransferRequest> Account getDestinationAccount(T request) {
         log.debug("Finding destination account by IBAN: {}", request.getRecipientIban());
-        Account destinationAccount = accountService.findAccountByIban(request.getRecipientIban());
+        Account destinationAccount = accountService.getAccountByIban(request.getRecipientIban());
         log.debug("Destination account found with ID: {}", destinationAccount.getId());
         return destinationAccount;
     }

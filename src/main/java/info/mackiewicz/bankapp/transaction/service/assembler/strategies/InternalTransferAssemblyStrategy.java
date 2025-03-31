@@ -49,7 +49,7 @@ public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
     @Override
     protected <T extends TransferRequest> Account getSourceAccount(T request) {
         log.debug("Finding source account by IBAN: {}", request.getSourceIban());
-        Account sourceAccount = accountService.findAccountByIban(request.getSourceIban());
+        Account sourceAccount = accountService.getAccountByIban(request.getSourceIban());
         log.debug("Source account found with ID: {}", sourceAccount.getId());
         return sourceAccount;
     }
@@ -67,14 +67,14 @@ public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
     
     private Account findAccountByIban(InternalTransferRequest request) {
         log.debug("Resolving destination account by IBAN: {}", request.getRecipientIban());
-        Account account = accountService.findAccountByIban(request.getRecipientIban());
+        Account account = accountService.getAccountByIban(request.getRecipientIban());
         log.debug("Destination account found by IBAN with ID: {}", account.getId());
         return account;
     }
 
     private Account findAccountByEmail(InternalTransferRequest request) {
         log.debug("Resolving destination account by email: {}", request.getRecipientEmail());
-        Account account = accountService.findAccountByOwnersEmail(request.getRecipientEmail());
+        Account account = accountService.getAccountByOwnersEmail(request.getRecipientEmail());
         log.debug("Destination account found by email with ID: {}", account.getId());
         return account;
     }

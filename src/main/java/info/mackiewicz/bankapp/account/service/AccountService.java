@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.account.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.iban4j.Iban;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,14 +78,20 @@ public class AccountService implements AccountServiceInterface {
     }
 
     @Override
-    public Account findAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
+    public Account getAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
         return accountQueryService.findAccountByOwnersEmail(recipientEmail);
     }
 
+
+    @Deprecated
     @Override
-    public Account findAccountByIban(String iban) {
-        log.debug("inside AccountService findAccountByIban");
-        return accountQueryService.findAccountByIban(iban);
+    public Account getAccountByIban(String iban) {
+        return accountQueryService.getAccountByIban(iban);
+    }
+
+    @Override
+    public Account getAccountByIban(Iban iban) {
+        return accountQueryService.getAccountByIban(iban);
     }
 
     public boolean existsByEmail(@Email(message = "Invalid email format") String email) {

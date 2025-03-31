@@ -15,7 +15,6 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Optional<List<Account>> findAccountsByOwner_pesel(Pesel ownerPESEL);
     Optional<List<Account>> findAccountsByOwner_username(String ownerUsername);
     Optional<List<Account>> findAccountsByOwner_id(Integer ownerId);
-    List<Account> findByIbanIsNull();
     Optional<Account> findFirstByOwner_email(Email email);
     
     Optional<Account> findByIban(Iban iban);
