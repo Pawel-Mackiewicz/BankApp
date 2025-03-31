@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import org.iban4j.Iban;
 
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -21,9 +20,9 @@ import lombok.Getter;
 @Getter
 public class BankingOperationRequest {
 
-    @Schema(description = "IBAN of the active account", required = true)
+    @Schema(description = "IBAN of the source account", required = true)
     @NotNull
-    private Iban activeAccountIban;
+    private Iban sourceIban;
     
     @Schema(description = "Amount to be transferred", required = true)
     @NotNull
