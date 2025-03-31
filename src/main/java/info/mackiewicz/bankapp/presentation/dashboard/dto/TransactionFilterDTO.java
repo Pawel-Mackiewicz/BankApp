@@ -26,12 +26,12 @@ public class TransactionFilterDTO {
         @NotNull
         private Integer accountId;
 
-        @Schema(description = "Page number for pagination, starting from 0", example = "0", defaultValue = "0", required = false)
+        @Schema(description = "Page number for pagination, starting from 0", defaultValue = "0", required = false)
         @Min(0)
         @Builder.Default
         private int page = 0;
 
-        @Schema(description = "Number of items per page", example = "20", defaultValue = "20", required = false)
+        @Schema(description = "Number of items per page", defaultValue = "20", required = false)
         @Min(1)
         @Builder.Default
         private int size = 20;
