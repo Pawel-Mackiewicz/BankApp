@@ -60,6 +60,7 @@ public enum ErrorCode {
     ACCOUNT_OWNER_NULL(HttpStatus.BAD_REQUEST, "Account owner is null."),
     ACCOUNT_OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "Account owner not found."), 
     ACCOUNT_LIMIT_EXCEEDED(HttpStatus.FORBIDDEN, "Account limit exceeded. If you need more accounts, please contact support."),
+    ACCOUNT_OWNERSHIP_ERROR(HttpStatus.FORBIDDEN, "You do not have permission to access this account."),
     
     // Transaction Errors
     TRANSACTION_NOT_FOUND(HttpStatus.NOT_FOUND, "Transaction not found."),
@@ -73,7 +74,10 @@ public enum ErrorCode {
     TRANSACTION_TYPE_MISSING(HttpStatus.BAD_REQUEST, "Transaction type is required."),
     INVALID_TRANSACTION_TYPE(HttpStatus.BAD_REQUEST, "Invalid transaction type."),
     INVALID_TRANSACTION_OPERATION(HttpStatus.BAD_REQUEST, "Invalid operation for this transaction."),
-    NO_TRANSACTIONS_FOR_ACCOUNT(HttpStatus.NOT_FOUND, "No transactions found for this account.");
+    NO_TRANSACTIONS_FOR_ACCOUNT(HttpStatus.NOT_FOUND, "No transactions found for this account."),
+
+    // Other errors
+    UNSUPPORTED_EXPORTER(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Unsupported export format. Please choose a different one.");
 
     private final HttpStatus status;
     private final String message;

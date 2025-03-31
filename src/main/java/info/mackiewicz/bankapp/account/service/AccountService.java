@@ -44,6 +44,13 @@ public class AccountService implements AccountServiceInterface {
         return accountCreationService.createAccount(userId);
     }
 
+    /**
+     * Retrieves an account by its ID.
+     *
+     * @param id The ID of the account to retrieve
+     * @return The account with the specified ID
+     * @throws info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException if no account is found with the given ID
+     */
     @Override
     public Account getAccountById(int id) {
         return accountQueryService.getAccountById(id);

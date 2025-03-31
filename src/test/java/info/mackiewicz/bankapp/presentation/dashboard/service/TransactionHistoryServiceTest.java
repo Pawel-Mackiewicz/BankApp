@@ -1,14 +1,19 @@
 package info.mackiewicz.bankapp.presentation.dashboard.service;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
-import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
-import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
-import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.user.model.User;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,17 +22,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
+import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
+import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
+import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.user.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionHistoryServiceTest {
@@ -48,6 +55,8 @@ class TransactionHistoryServiceTest {
     private TransactionHistoryService transactionHistoryService;
 
     private User testUser;
+    private Integer testUserId;
+    private Integer otherUserId;
     private Account testAccount;
     private Account destinationAccount;
     private TransactionFilterDTO filter;
@@ -57,6 +66,9 @@ class TransactionHistoryServiceTest {
     void setUp() {
         // Create test user and accounts
         testUser = TestUserBuilder.createTestUser();
+        testUserId = testUser.getId();
+        otherUserId = TestUserBuilder.createRandomTestUser().getId();
+        
         testAccount = TestAccountBuilder.createTestAccount(1, BigDecimal.valueOf(1000), testUser);
         destinationAccount = TestAccountBuilder.createTestAccount(2, BigDecimal.valueOf(2000), TestUserBuilder.createRandomTestUser());
 
@@ -98,7 +110,7 @@ class TransactionHistoryServiceTest {
                 .thenReturn(transactions);
 
         // When
-        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUser, filter);
+        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUserId, filter);
 
         // Then
         assertNotNull(result);
@@ -109,12 +121,11 @@ class TransactionHistoryServiceTest {
     @Test
     void getTransactionHistory_WhenUserDoesNotOwnAccount_ThrowsAccessDeniedException() {
         // Given
-        User otherUser = TestUserBuilder.createRandomTestUser();
         when(accountService.getAccountById(testAccount.getId())).thenReturn(testAccount);
 
         // When/Then
-        assertThrows(AccessDeniedException.class, 
-            () -> transactionHistoryService.getTransactionHistory(otherUser, filter));
+        assertThrows(AccountOwnershipException.class, 
+            () -> transactionHistoryService.getTransactionHistory(otherUserId, filter));
     }
 
     @Test
@@ -127,7 +138,7 @@ class TransactionHistoryServiceTest {
                 .thenReturn(Collections.emptyList());
 
         // When
-        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUser, filter);
+        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUserId, filter);
 
         // Then
         assertNotNull(result);
@@ -147,7 +158,7 @@ class TransactionHistoryServiceTest {
                 .thenReturn(ResponseEntity.ok("test".getBytes()));
 
         // When
-        ResponseEntity<byte[]> result = transactionHistoryService.exportTransactions(testUser, filter, "csv");
+        ResponseEntity<byte[]> result = transactionHistoryService.exportTransactions(testUserId, filter, "csv");
 
         // Then
         assertNotNull(result);
@@ -165,7 +176,7 @@ class TransactionHistoryServiceTest {
                 .thenReturn(transactions);
 
         // When/Then
-        assertThrows(UnsupportedOperationException.class,
-            () -> transactionHistoryService.exportTransactions(testUser, filter, "invalid"));
+        assertThrows(UnsupportedExporterException.class,
+            () -> transactionHistoryService.exportTransactions(testUserId, filter, "invalid"));
     }
 }

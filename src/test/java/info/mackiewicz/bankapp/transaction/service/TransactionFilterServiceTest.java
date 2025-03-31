@@ -7,6 +7,7 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.user.model.User;
 
+import org.hibernate.query.SortDirection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -85,28 +86,28 @@ class TransactionFilterServiceTest {
     void filterTransactions_FilterByTypeTransfer_ReturnsTransferTransactions() {
         // Arrange
         List<Transaction> transactions = createTransactions();
-        String type = "TRANSFER";
+        TransactionType type = TransactionType.TRANSFER_INTERNAL;
 
         // Act
         List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, type, null, null, null);
 
         // Assert
         assertEquals(1, filteredTransactions.size());
-        assertTrue(filteredTransactions.stream().allMatch(t -> t.getType().getCategory().toString().equals(type)));
+        assertTrue(filteredTransactions.stream().allMatch(t -> t.getType().equals(type)));
     }
 
     @Test
     void filterTransactions_FilterByTypeDeposit_ReturnsDepositTransactions() {
         // Arrange
         List<Transaction> transactions = createTransactions();
-        String type = "DEPOSIT";
+        TransactionType type = TransactionType.DEPOSIT;
 
         // Act
         List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, type, null, null, null);
 
         // Assert
         assertEquals(1, filteredTransactions.size());
-        assertTrue(filteredTransactions.stream().allMatch(t -> t.getType().getCategory().toString().equals(type) || t.getType().toString().equals(type)));
+        assertTrue(filteredTransactions.stream().allMatch(t -> t.getType().equals(type)));
     }
     
     @Test
@@ -276,7 +277,7 @@ class TransactionFilterServiceTest {
         List<Transaction> transactions = createTransactions();
 
         // Act
-        transactionFilterService.sortTransactions(transactions, "date", "asc");
+        transactionFilterService.sortTransactions(transactions, "date", SortDirection.ASCENDING);
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
@@ -290,7 +291,7 @@ class TransactionFilterServiceTest {
         List<Transaction> transactions = createTransactions();
 
         // Act
-        transactionFilterService.sortTransactions(transactions, "date", "desc");
+        transactionFilterService.sortTransactions(transactions, "date", SortDirection.DESCENDING);
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
@@ -304,7 +305,7 @@ class TransactionFilterServiceTest {
         List<Transaction> transactions = createTransactions();
 
         // Act
-        transactionFilterService.sortTransactions(transactions, "amount", "asc");
+        transactionFilterService.sortTransactions(transactions, "amount", SortDirection.ASCENDING);
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
@@ -318,7 +319,7 @@ class TransactionFilterServiceTest {
         List<Transaction> transactions = createTransactions();
 
         // Act
-        transactionFilterService.sortTransactions(transactions, "amount", "desc");
+        transactionFilterService.sortTransactions(transactions, "amount", SortDirection.DESCENDING);
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
@@ -332,7 +333,7 @@ class TransactionFilterServiceTest {
         List<Transaction> transactions = createTransactions();
 
         // Act
-        transactionFilterService.sortTransactions(transactions, "type", "asc");
+        transactionFilterService.sortTransactions(transactions, "type", SortDirection.ASCENDING);
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
@@ -346,7 +347,7 @@ class TransactionFilterServiceTest {
         List<Transaction> transactions = createTransactions();
 
         // Act
-        transactionFilterService.sortTransactions(transactions, "type", "desc");
+        transactionFilterService.sortTransactions(transactions, "type", SortDirection.DESCENDING);
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
@@ -360,7 +361,7 @@ class TransactionFilterServiceTest {
         List<Transaction> transactions = createTransactions();
 
         // Act
-        transactionFilterService.sortTransactions(transactions, "invalid", "asc");
+        transactionFilterService.sortTransactions(transactions, "invalid", SortDirection.ASCENDING);
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
