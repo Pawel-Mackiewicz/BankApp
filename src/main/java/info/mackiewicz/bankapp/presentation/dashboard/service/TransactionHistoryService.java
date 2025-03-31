@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
@@ -43,7 +42,7 @@ public class TransactionHistoryService {
      * @param userId the ID of the user who owns the account
      * @param filter the filter criteria for transactions
      * @return a paginated list of transactions
-     * @throws AccessDeniedException if the user does not own the account
+     * @throws AccountOwnershipException if the user does not own the account
      * @throws TransactionFilterException if the filter criteria are invalid
      * @throws NoTransactionsForAccountException if no transactions are found for the account
      */
@@ -61,10 +60,10 @@ public class TransactionHistoryService {
      * @param format  the export format (e.g., CSV, PDF)
      * @return a ResponseEntity containing the exported transactions as a byte array
      * @throws AccountNotFoundByIdException if the account does not exist
-     * @throws AccessDeniedException if the user does not own the account
+     * @throws AccountOwnershipException if the user does not own the account
      * @throws TransactionFilterException if the filter criteria are invalid
      * @throws NoTransactionsForAccountException if no transactions are found for the account
-     * @throws UnsupportedOperationException if the export format is not supported
+     * @throws UnsupportedExporterException if the export format is not supported
      */
     public ResponseEntity<byte[]> exportTransactions(Integer userId, TransactionFilterDTO filter, String format) {
         verifyAccountOwnership(userId, filter.getAccountId());
@@ -80,7 +79,7 @@ public class TransactionHistoryService {
      * @param userId    the ID of the user
      * @param accountId the ID of the account
      * @throws AccountNotFoundByIdException if the account does not exist
-     * @throws AccessDeniedException if the account does not belong to the user
+     * @throws AccountOwnershipException if the account does not belong to the user
      */
     private void verifyAccountOwnership(Integer userId, Integer accountId) {
         Account account = accountService.getAccountById(accountId);
