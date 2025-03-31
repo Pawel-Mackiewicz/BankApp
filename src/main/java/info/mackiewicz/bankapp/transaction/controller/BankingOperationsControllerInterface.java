@@ -1,11 +1,11 @@
 package info.mackiewicz.bankapp.transaction.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 
 /**
  * Interface defining basic banking operations API endpoints.
@@ -20,7 +20,7 @@ public interface BankingOperationsControllerInterface {
      * @param authUser authenticated user details, who has access to the source account
      * @return response with transaction result
      */
-    ResponseEntity<?> ibanTransfer(IbanTransferRequest request, UserDetails authUser);
+    ResponseEntity<?> ibanTransfer(IbanTransferRequest request, UserDetailsWithId authUser);
 
     /**
      * Transfers funds to an email address
@@ -29,7 +29,7 @@ public interface BankingOperationsControllerInterface {
      * @param authUser authenticated user details, who has access to the source account
      * @return response with transaction result
      */
-    ResponseEntity<?> emailTransfer(EmailTransferRequest request, UserDetails authUser);
+    ResponseEntity<?> emailTransfer(EmailTransferRequest request, UserDetailsWithId authUser);
     
     /**
      * Withdraws funds from an account
@@ -38,7 +38,7 @@ public interface BankingOperationsControllerInterface {
      * @param authUser authenticated user details, who has access to the account
      * @return response with transaction result
      */
-    ResponseEntity<?> withdraw(BankingOperationRequest request, UserDetails authUser);
+    ResponseEntity<?> withdraw(BankingOperationRequest request, UserDetailsWithId authUser);
     
     /**
      * Deposits funds to an account
@@ -47,5 +47,5 @@ public interface BankingOperationsControllerInterface {
      * @param authUser authenticated user details, who has access to the account
      * @return response with transaction result
      */
-    ResponseEntity<?> deposit(BankingOperationRequest request, UserDetails authUser);
+    ResponseEntity<?> deposit(BankingOperationRequest request, UserDetailsWithId authUser);
 }
