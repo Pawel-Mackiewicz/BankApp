@@ -12,7 +12,7 @@ I'm working on BankApp – a Java-based banking application for my portfolio. Th
 - **Tech Stack**:
   - **Backend**: Java, Spring, Hibernate, MySQL, Maven, JUnit, Mockito
   - **Frontend**: HTML, CSS, JavaScript, Thymeleaf (which I want to replace with a modern frontend)
-  - **Additional Tools**: Git, Docker
+  - **Additional Tools**: Git, Docker, AWS
 - **Online**: [bankapp.mackiewicz.info](http://bankapp.mackiewicz.info)
 - **Repo**: https://github.com/Pawel-Mackiewicz/BankApp.git
 
@@ -186,6 +186,18 @@ BankApp's Transaction System provides a robust foundation for secure financial o
 - **Automatic Batch Processing**: Scheduled tasks for processing new transactions every 10 minutes
 
 For detailed technical documentation, see the [Transaction System](../../wiki/Transaction-System) page in the wiki.
+
+#### Transaction History System
+
+BankApp implements a comprehensive transaction history system that allows users to view, filter, sort, and export history of financial operations on their bank accounts in a secure and efficient manner.
+
+- **Multi-layered Architecture**: Clean separation between controller, service, and data presentation layers
+- **Advanced Filtering**: Robust filtering by date, amount, transaction type, and text search
+- **Dynamic Sorting**: Flexible sorting options with toggling direction capabilities
+- **Data Export**: Support for exporting transaction history in multiple formats (CSV, PDF)
+- **Security-First Design**: Strict account ownership verification and authenticated access
+
+For detailed technical documentation, see the [Transaction History System](../../wiki/Transaction-History-System) page in the wiki.
 
 #### Registration System
 
