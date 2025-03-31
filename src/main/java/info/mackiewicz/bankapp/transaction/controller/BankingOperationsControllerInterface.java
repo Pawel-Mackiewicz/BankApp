@@ -11,7 +11,7 @@ import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
  * Interface defining basic banking operations API endpoints.
  * Provides contract for money transfers, withdrawals and deposits.
  */
-public interface BankingOperationControllerInterface {
+public interface BankingOperationsControllerInterface {
 
     /**
      * Transfers funds between accounts

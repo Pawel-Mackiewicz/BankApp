@@ -8,18 +8,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
 import jakarta.validation.Valid;
 
-public class BankingOperationController implements BankingOperationControllerInterface {
+public class BankingOperationsController implements BankingOperationsControllerInterface {
 
     @Override
-    public ResponseEntity<?> ibanTransfer(@Valid @RequestBody IbanTransferRequest request, @AuthenticationPrincipal UserDetails authUser) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'IbanTransfer'");
+    public ResponseEntity<TransferResponse> ibanTransfer(@Valid @RequestBody IbanTransferRequest request, @AuthenticationPrincipal UserDetails authUser) {
+        
+        return ResponseEntity.ok(new TransferResponse());
     }
 
     @Override
-    public ResponseEntity<?> emailTransfer(@Valid @RequestBody EmailTransferRequest request, @AuthenticationPrincipal UserDetails authUser) {
+    public ResponseEntity<TransferResponse> emailTransfer(@Valid @RequestBody EmailTransferRequest request, @AuthenticationPrincipal UserDetails authUser) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'EmailTransfer'");
     }
