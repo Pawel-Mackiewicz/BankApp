@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
@@ -11,8 +12,10 @@ import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
 import jakarta.validation.Valid;
 
+@RestController
 public class BankingOperationsController implements BankingOperationsControllerInterface {
 
+    private final BankingOperationsService bankingOperationsService;
     @Override
     public ResponseEntity<TransferResponse> ibanTransfer(@Valid @RequestBody IbanTransferRequest request, @AuthenticationPrincipal UserDetails authUser) {
         
