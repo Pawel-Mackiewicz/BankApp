@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
-import jakarta.validation.Valid;
 
 /**
  * Interface defining basic banking operations API endpoints.
@@ -21,7 +20,7 @@ public interface BankingOperationControllerInterface {
      * @param authUser authenticated user details, who has access to the source account
      * @return response with transaction result
      */
-    ResponseEntity<?> IbanTransfer(@Valid IbanTransferRequest request, UserDetails authUser);
+    ResponseEntity<?> ibanTransfer(IbanTransferRequest request, UserDetails authUser);
 
     /**
      * Transfers funds to an email address
@@ -30,7 +29,7 @@ public interface BankingOperationControllerInterface {
      * @param authUser authenticated user details, who has access to the source account
      * @return response with transaction result
      */
-    ResponseEntity<?> EmailTransfer(@Valid EmailTransferRequest request, UserDetails authUser);
+    ResponseEntity<?> emailTransfer(EmailTransferRequest request, UserDetails authUser);
     
     /**
      * Withdraws funds from an account
@@ -39,7 +38,7 @@ public interface BankingOperationControllerInterface {
      * @param authUser authenticated user details, who has access to the account
      * @return response with transaction result
      */
-    ResponseEntity<?> withdraw(@Valid BankingOperationRequest request, UserDetails authUser);
+    ResponseEntity<?> withdraw(BankingOperationRequest request, UserDetails authUser);
     
     /**
      * Deposits funds to an account
@@ -48,5 +47,5 @@ public interface BankingOperationControllerInterface {
      * @param authUser authenticated user details, who has access to the account
      * @return response with transaction result
      */
-    ResponseEntity<?> deposit(@Valid BankingOperationRequest request, UserDetails authUser);
+    ResponseEntity<?> deposit(BankingOperationRequest request, UserDetails authUser);
 }
