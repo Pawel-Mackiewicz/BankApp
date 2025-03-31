@@ -47,13 +47,13 @@ public interface TransactionHistoryRestControllerInterface {
                 )
             ) @Valid TransactionFilterDTO filter);
 
-    @Operation(summary = "Export filtered transactions", description = "Export transactions for a specific account in the requested format (default: CSV). Supports the same filtering criteria as the get transactions endpoint. The user information is automatically extracted from the current session. You must be logged in to access this endpoint.")
+    @Operation(summary = "Export filtered transactions", description = "EXCEPTION HANDLING NOT SUPPORTED. IF ERRORED WILL ALWAYS THROW 500. You should errorproof it." "Export transactions for a specific account in the requested format (default: CSV). Supports the same filtering criteria as the get transactions endpoint. The user information is automatically extracted from the current session. You must be logged in to access this endpoint.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Transactions exported successfully", content = @Content(mediaType = "application/octet-stream")),
-            @ApiResponse(responseCode = "403", description = "Access denied - Account doesn't belong to user", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))),
-            @ApiResponse(responseCode = "404", description = "Account not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))),
-            @ApiResponse(responseCode = "413", description = "Unsupported export format", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized access - user is not logged in", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class)))
+            @ApiResponse(responseCode = "500", description = "Access denied - Account doesn't belong to user", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))),
+            @ApiResponse(responseCode = "500", description = "Account not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))),
+            @ApiResponse(responseCode = "500", description = "Unsupported export format", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))),
+            @ApiResponse(responseCode = "500", description = "Unauthorized access - user is not logged in", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class)))
     })
     ResponseEntity<byte[]> exportTransactions(
             @Parameter(hidden = true, description = "Current authenticated user (automatically injected by Spring Security)") User user,
