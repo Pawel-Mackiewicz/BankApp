@@ -17,7 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BankingOperationsController implements BankingOperationsControllerInterface {
 
-    private final BankingOperationsService bankingOperationsService;
+    private final BankingOperationsServiceInterface bankingOperationsService;
+
     @Override
     public ResponseEntity<TransferResponse> ibanTransfer(@Valid @RequestBody IbanTransferRequest request, @AuthenticationPrincipal UserDetailsWithId authUser) {
         TransferResponse response =  bankingOperationsService.handleIbanTransfer(request, authUser);
@@ -26,8 +27,8 @@ public class BankingOperationsController implements BankingOperationsControllerI
 
     @Override
     public ResponseEntity<TransferResponse> emailTransfer(@Valid @RequestBody EmailTransferRequest request, @AuthenticationPrincipal UserDetailsWithId authUser) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'EmailTransfer'");
+        TransferResponse response =  bankingOperationsService.handleEmailTransfer(request, authUser);
+        return ResponseEntity.ok(response);
     }
 
     @Override
