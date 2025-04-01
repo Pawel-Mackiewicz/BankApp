@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 
 /** 
  * Class representing a banking operation request.
@@ -18,6 +19,7 @@ import lombok.Getter;
  @see Transaction
  */
 @Getter
+@Setter
 public class BankingOperationRequest {
 
     @Schema(description = "IBAN of the source account", required = true)
