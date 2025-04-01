@@ -1,5 +1,10 @@
 package info.mackiewicz.bankapp.transaction.controller;
 
+import java.util.function.Supplier;
+
+import org.iban4j.Iban;
+import org.springframework.stereotype.Service;
+
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
@@ -18,10 +23,6 @@ import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.iban4j.Iban;
-import org.springframework.stereotype.Service;
-
-import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +74,12 @@ public class BankingOperationsService implements BankingOperationsServiceInterfa
 
         Transaction transfer = createTransferTransaction(request, validatedSourceAccount, destinationAccount);
         log.info("Transaction with ID: {} created", transfer.getId());
-        return new TransferResponse(validatedSourceAccount, destinationAccount, transfer);
+        
+        return new TransferResponse(
+            validatedSourceAccount,
+            destinationAccount,
+            transfer
+        );
     }
 
     /**
