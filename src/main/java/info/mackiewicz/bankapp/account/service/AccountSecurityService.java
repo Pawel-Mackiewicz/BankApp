@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AccountSecurityService {
 
-    AccountService accountService;
+    private final AccountService accountService;
 
     /**
      * Validates the ownership of an account by a user.
