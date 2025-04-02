@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.controller;
+package info.mackiewicz.bankapp.transaction.service;
 
 import java.util.function.Supplier;
 
@@ -18,7 +18,6 @@ import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import info.mackiewicz.bankapp.user.model.vo.Email;
 import lombok.RequiredArgsConstructor;

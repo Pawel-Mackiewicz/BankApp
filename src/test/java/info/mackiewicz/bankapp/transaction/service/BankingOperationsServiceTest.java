@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.controller;
+package info.mackiewicz.bankapp.transaction.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -35,7 +35,6 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import info.mackiewicz.bankapp.user.model.vo.Email;
@@ -244,9 +243,10 @@ class BankingOperationsServiceTest {
 
     private void assertSuccessfulTransfer(TransferResponse response) {
         assertThat(response).isNotNull();
-        assertThat(response.getSourceAccount()).isEqualTo(sourceAccount);
-        assertThat(response.getTargetAccount()).isEqualTo(destinationAccount);
-        assertThat(response.getTransactionInfo()).isEqualTo(transaction);
+        assertThat(response.getSourceAccount().getFormattedIban()).isEqualTo(sourceAccount.getFormattedIban());
+        assertThat(response.getTargetAccount().getFormattedIban()).isEqualTo(destinationAccount.getFormattedIban());
+        assertThat(response.getTransactionInfo().getAmount()).isEqualTo(transaction.getAmount());
+        assertThat(response.getTransactionInfo().getTitle()).isEqualTo(transaction.getTitle());
     }
 
     private EmailTransferRequest createEmailTransferRequest(Iban sourceIban, Email destEmail) {

@@ -9,6 +9,7 @@ import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
+import info.mackiewicz.bankapp.transaction.service.BankingOperationsServiceInterface;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
