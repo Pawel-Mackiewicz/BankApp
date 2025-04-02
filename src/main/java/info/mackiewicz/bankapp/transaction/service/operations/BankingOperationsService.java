@@ -10,7 +10,6 @@ import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountSecurityService;
 import info.mackiewicz.bankapp.shared.service.TransactionBuilderService;
-import info.mackiewicz.bankapp.transaction.exception.InvalidIbanException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
