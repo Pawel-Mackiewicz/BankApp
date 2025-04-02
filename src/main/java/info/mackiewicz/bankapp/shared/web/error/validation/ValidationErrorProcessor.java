@@ -1,9 +1,11 @@
 package info.mackiewicz.bankapp.shared.web.error.validation;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import info.mackiewicz.bankapp.shared.web.dto.ValidationError;
@@ -33,10 +35,19 @@ public class ValidationErrorProcessor {
      * @see info.mackiewicz.bankapp.shared.web.dto.ValidationError
      */
     public List<ValidationError> extractValidationErrors(MethodArgumentNotValidException ex) {
-        return ex.getBindingResult()
-                .getFieldErrors()
+        var bindingResult = ex.getBindingResult();
+        
+        var fieldErrors = bindingResult.getFieldErrors()
                 .stream()
                 .map(this::convert)
+                .toList();
+                
+        var globalErrors = bindingResult.getGlobalErrors()
+                .stream()
+                .map(this::convertGlobal)
+                .toList();
+                
+        return Stream.concat(fieldErrors.stream(), globalErrors.stream())
                 .toList();
     }
 
@@ -90,5 +101,18 @@ public class ValidationErrorProcessor {
                 fieldError.getField(),
                 fieldError.getDefaultMessage(),
                 fieldError.getRejectedValue() != null ? fieldError.getRejectedValue().toString() : "");
+    }
+
+    /**
+     * Converts a global error (class-level constraint violation) into a ValidationError object.
+     *
+     * @param globalError the global error to convert
+     * @return ValidationError containing the object name as field, error message, and empty rejected value
+     */
+    private ValidationError convertGlobal(ObjectError globalError) {
+        return new ValidationError(
+                globalError.getObjectName(),
+                globalError.getDefaultMessage(),
+                "");
     }
 }
