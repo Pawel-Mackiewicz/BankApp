@@ -8,6 +8,7 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,14 +21,15 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class BankingOperationRequest {
+public abstract class BankingOperationRequest {
 
     @Schema(description = "IBAN of the source account", required = true)
-    @NotNull
+    @NotEmpty
     private Iban sourceIban;
     
     @Schema(description = "Amount to be transferred", required = true)
     @NotNull
+    @Positive
     private BigDecimal amount;
 
     @Schema(description = "Title of the transaction", required = false)
