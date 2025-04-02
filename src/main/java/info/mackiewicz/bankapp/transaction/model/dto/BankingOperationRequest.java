@@ -6,7 +6,7 @@ import org.iban4j.Iban;
 
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -24,16 +24,16 @@ import lombok.Setter;
 public abstract class BankingOperationRequest {
 
     @Schema(description = "IBAN of the source account", required = true)
-    @NotEmpty
+    @NotNull
     private Iban sourceIban;
     
     @Schema(description = "Amount to be transferred", required = true)
     @NotNull
-    @Positive
+    @Positive(message = "Amount must be positive")
     private BigDecimal amount;
 
     @Schema(description = "Title of the transaction", required = false)
-    @NotEmpty
+    @NotBlank(message = "Title cannot be blank")
     private String title;
 
 }
