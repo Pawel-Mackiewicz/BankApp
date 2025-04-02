@@ -11,9 +11,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @DifferentAccounts
-@Schema(description = "Request object for transferring money to an IBAN account")
 @Getter
 @Setter
+@Schema(description = "Request object for transferring money to an IBAN account")
 public class IbanTransferRequest extends BankingOperationRequest {
 
     @Schema(description = "The destination IBAN for the transfer", requiredMode = RequiredMode.REQUIRED) //is requireMode needed?

@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.service;
+package info.mackiewicz.bankapp.transaction.service.operations;
 
 import java.util.function.Supplier;
 
@@ -9,65 +9,46 @@ import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountSecurityService;
-import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.shared.service.TransactionBuilderService;
+import info.mackiewicz.bankapp.transaction.exception.InvalidIbanException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
-import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
-import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
-import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BankingOperationsService implements BankingOperationsServiceInterface {
+class BankingOperationsService {
 
-    private final AccountServiceInterface accountService;
     private final TransactionBuilderService transactionBuilderService;
     private final AccountSecurityService accountSecurityService;
     private final TransactionService transactionService;
 
-    @Override
-    public TransferResponse handleEmailTransfer(EmailTransferRequest transferRequest, UserDetailsWithId user) {
-        log.info("Handling transfer from :{} to {}", transferRequest.getSourceIban(),
-                transferRequest.getDestinationEmail());
-
-        return handleTransfer(transferRequest,
-                user.getId(),
-                transferRequest.getSourceIban(),
-                () -> retrieveAccountFromEmail(transferRequest.getDestinationEmail()));
-    }
-
-    private Account retrieveAccountFromEmail(Email destinationEmail) {
-        return accountService.getAccountByOwnersEmail(destinationEmail);
-    }
-
-    @Override
-    public TransferResponse handleIbanTransfer(IbanTransferRequest transferRequest, UserDetailsWithId user) {
-        log.info("Handling transfer from :{} to {}", transferRequest.getSourceIban(),
-                transferRequest.getRecipientIban());
-
-        return handleTransfer(transferRequest,
-                user.getId(),
-                transferRequest.getSourceIban(),
-                () -> retrieveAccountFromIban(transferRequest.getRecipientIban()));
-    }
-
-    private Account retrieveAccountFromIban(Iban accountIban) {
-        return accountService.getAccountByIban(accountIban);
-    }
-
-    private TransferResponse handleTransfer(
+           /**
+     * Handles the transfer of funds between accounts.
+     *
+     * @param request                The request containing transfer details
+     * @param userId                 The ID of the user
+     * @param sourceIban             The Iban of the source account
+     * @param destinationAccountSupplier A supplier for the destination account
+     * @return A response containing details of the transfer
+     * @throws AccountNotFoundByIbanException if no account is found with the given Iban
+     * @throws AccountOwnershipException      if the user does not own the source account
+     * @throws TransactionBuildingException   if the transaction cannot be built
+     * @throws TransactionValidationException if the transaction fails validation
+     */
+    
+    public TransferResponse handleTransfer(
             BankingOperationRequest request,
             Integer userId,
             Iban sourceIban,
             Supplier<Account> destinationAccountSupplier) {
+
         Account validatedSourceAccount = retrieveValidatedAccount(userId, sourceIban);
         Account destinationAccount = destinationAccountSupplier.get();
 

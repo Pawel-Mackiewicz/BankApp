@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
@@ -27,6 +29,8 @@ import jakarta.validation.Valid;
  */
 @Tag(name = "Banking Operations", description = "API for performing banking operations like transfers, withdrawals and deposits")
 @SecurityRequirement(name = "bearerAuth")
+@RestController
+@RequestMapping("/api/banking")
 public interface BankingOperationsControllerInterface {
 
     /**
@@ -37,7 +41,7 @@ public interface BankingOperationsControllerInterface {
      * @return response with transaction result
      */
     @Operation(summary = "Transfer funds using IBAN", description = "Transfers funds from source account to destination account using IBAN identifiers")
-    @PostMapping("/api/banking/transfer/iban")
+    @PostMapping("/transfer/iban")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Transfer completed successfully", 
                     content = @Content(mediaType = "application/json", 
@@ -106,7 +110,7 @@ public interface BankingOperationsControllerInterface {
      * @return response with transaction result
      */
     @Operation(summary = "Transfer funds using email", description = "Transfers funds from source account to the account associated with the provided email address")
-    @PostMapping("/api/banking/transfer/email")
+    @PostMapping("/transfer/email")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Transfer completed successfully", 
                     content = @Content(mediaType = "application/json", 

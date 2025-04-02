@@ -3,32 +3,32 @@ package info.mackiewicz.bankapp.transaction.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
-import info.mackiewicz.bankapp.transaction.service.BankingOperationsServiceInterface;
+import info.mackiewicz.bankapp.transaction.service.operations.EmailTransferService;
+import info.mackiewicz.bankapp.transaction.service.operations.IbanTransferService;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@RestController
 @RequiredArgsConstructor
 public class BankingOperationsController implements BankingOperationsControllerInterface {
 
-    private final BankingOperationsServiceInterface bankingOperationsService;
+    private final EmailTransferService emailTransferService;
+    private final IbanTransferService ibanTransferService;
 
     @Override
     public ResponseEntity<TransferResponse> ibanTransfer(@Valid @RequestBody IbanTransferRequest request, @AuthenticationPrincipal UserDetailsWithId authUser) {
-        TransferResponse response =  bankingOperationsService.handleIbanTransfer(request, authUser);
+        TransferResponse response =  ibanTransferService.handleIbanTransfer(request, authUser);
         return ResponseEntity.ok(response);
     }
 
     @Override
     public ResponseEntity<TransferResponse> emailTransfer(@Valid @RequestBody EmailTransferRequest request, @AuthenticationPrincipal UserDetailsWithId authUser) {
-        TransferResponse response =  bankingOperationsService.handleEmailTransfer(request, authUser);
+        TransferResponse response =  emailTransferService.handleEmailTransfer(request, authUser);
         return ResponseEntity.ok(response);
     }
 
