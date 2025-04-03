@@ -10,7 +10,7 @@ import lombok.experimental.UtilityClass;
  * This class provides functionality for generating Polish IBANs with specific formatting rules.
  */
 @UtilityClass
-public class IbanGenerator {
+public final class IbanGenerator {
 
     /**
      * Generates a Polish IBAN based on user ID and account number.
@@ -41,21 +41,21 @@ public class IbanGenerator {
 
     /**
      * Generates the account number part of the IBAN.
-     * 
+     * DO NOT CHANGE THIS IMPLEMENTATION, IT'S A BANKING STANDARD.
      * @param userId The user's unique identifier
      * @param accountCounter The sequential number of the account for the user
      * @return A 16-digit account number string
      */
-    private String generateAccountNumber(Integer userId, Integer accountCounter) {
+    private final String generateAccountNumber(Integer userId, Integer accountCounter) {
         // Encoded User ID
-        String encodedId = String.format("%06d", userId * 17);
+        String encodedId = String.format("%08d", userId * 13);
         
         // User Account Number (2 digits)
-        String accountNum = String.format("%02d", accountCounter);
+        String accountNum = String.format("%04d", accountCounter);
         
-        // Middle filled with zeros (8 digits)
-        String middle = "00000000";
+        // Beggining filled with zeros (4 digits)
+        String beginning = "0000";
         
-        return encodedId + middle + accountNum;
+        return beginning + encodedId + accountNum;
     }
 }
