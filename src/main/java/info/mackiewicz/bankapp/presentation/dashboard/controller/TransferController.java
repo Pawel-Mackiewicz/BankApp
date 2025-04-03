@@ -11,7 +11,7 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.transaction.service.assembler.TransactionAssembler;
@@ -108,7 +108,7 @@ public class TransferController {
     @PostMapping("/external")
     public String handleExternalTransfer(
             @AuthenticationPrincipal User user,
-            TransferRequest request,
+            WebTransferRequest request,
             RedirectAttributes redirectAttributes) {
         log.info("Processing external transfer request for user: {}, source IBAN: {}, recipient IBAN: {}, amount: {}",
                 user.getId(), request.getSourceIban(), request.getRecipientIban(), request.getAmount());

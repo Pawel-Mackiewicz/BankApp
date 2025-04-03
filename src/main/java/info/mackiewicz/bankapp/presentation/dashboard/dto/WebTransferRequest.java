@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 
-public interface TransferRequest {
+public interface WebTransferRequest {
 
     String getSourceIban();
 
