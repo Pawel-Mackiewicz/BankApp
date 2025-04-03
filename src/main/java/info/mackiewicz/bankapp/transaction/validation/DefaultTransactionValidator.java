@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Component;
 
+import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionAccountConflictException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.model.TransactionTypeCategory;
@@ -18,11 +21,29 @@ public class DefaultTransactionValidator implements TransactionValidator {
     public void validate(Transaction transaction) {
         log.debug("Validating transaction: {}", transaction);
         validateNotNull(transaction);
+        validateDifferentAccounts(transaction);
         validateAmount(transaction);
         validateType(transaction);
-        validateBothAccountsNotNull(transaction);
+        validateAccountsNotNull(transaction);
         validateAccounts(transaction);
+        validateSufficientFunds(transaction);
         validateSameOwnerForOwnTransfer(transaction);
+    }
+
+    private void validateSufficientFunds(Transaction transaction) {
+        if (transaction.getSourceAccount() == null) {
+            return; // No source account, no validation needed
+        }
+        
+        BigDecimal transactionAmount = transaction.getAmount();
+        BigDecimal accountBalance = transaction.getSourceAccount().getBalance();
+
+        if (transactionAmount.compareTo(accountBalance) > 0) {
+            throw new InsufficientFundsException("Insufficient funds for transaction from account: " +
+                    transaction.getSourceAccount().getFormattedIban() +
+                    ". Required: " + transactionAmount +
+                    ", Available: " + accountBalance);
+        }
     }
 
     @Override
@@ -33,12 +54,26 @@ public class DefaultTransactionValidator implements TransactionValidator {
         } catch (TransactionValidationException e) {
             log.debug("Transaction validation failed: {}", e.getMessage());
             return false;
+        } catch (InsufficientFundsException e) {
+            log.debug("Transaction validation failed due to insufficient funds: {}", e.getMessage());
+            return false;
         }
     }
 
     private void validateNotNull(Transaction transaction) {
         if (transaction == null) {
             throw new TransactionValidationException("Transaction cannot be null");
+        }
+    }
+
+    private void validateDifferentAccounts(Transaction transaction) {
+        if (transaction.getSourceAccount() == null ||
+                transaction.getDestinationAccount() == null) {
+            return;
+        }
+        if (transaction.getSourceAccount().equals(transaction.getDestinationAccount())) {
+            throw new TransactionAccountConflictException(
+                    "Source and destination accounts is the same for transaction from: " + transaction.getSourceAccount().getFormattedIban());
         }
     }
 
@@ -57,7 +92,7 @@ public class DefaultTransactionValidator implements TransactionValidator {
         }
     }
 
-    private void validateBothAccountsNotNull(Transaction transaction) {
+    private void validateAccountsNotNull(Transaction transaction) {
         if (transaction.getSourceAccount() == null && transaction.getDestinationAccount() == null) {
             throw new TransactionValidationException("Both accounts cannot be null");
         }
@@ -80,7 +115,7 @@ public class DefaultTransactionValidator implements TransactionValidator {
     private void validateAccounts(Transaction transaction) {
         TransactionType type = transaction.getType();
         TransactionTypeCategory category = type.getCategory();
-        
+
         switch (category) {
             case DEPOSIT -> validateDepositAccounts(transaction);
             case WITHDRAWAL -> validateWithdrawalAccounts(transaction);
@@ -108,10 +143,6 @@ public class DefaultTransactionValidator implements TransactionValidator {
         }
         if (transaction.getDestinationAccount() == null) {
             throw new TransactionValidationException("Transfer transaction must have a destination account");
-        }
-        if (transaction.getSourceAccount().equals(transaction.getDestinationAccount()) 
-            && transaction.getType() != TransactionType.TRANSFER_OWN) {
-            throw new TransactionValidationException("Only TRANSFER_OWN can have the same source and destination account");
         }
     }
 

@@ -38,6 +38,7 @@ public enum ErrorCode {
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "The provided passwords do not match. Please check your input and try again."),
     PASSWORD_TOO_WEAK(HttpStatus.BAD_REQUEST, "The provided password is too weak. Please choose a stronger password."),
     AUTHENTICATION_ERROR(HttpStatus.UNAUTHORIZED, "Authentication failed. Please check your credentials and try again."),
+    ACCOUNT_OWNERSHIP_ERROR(HttpStatus.FORBIDDEN, "You do not have permission to access this account."),
 
     // User Errors
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "We couldn't find user with the provided information."),
@@ -60,7 +61,6 @@ public enum ErrorCode {
     ACCOUNT_OWNER_NULL(HttpStatus.BAD_REQUEST, "Account owner is null."),
     ACCOUNT_OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "Account owner not found."), 
     ACCOUNT_LIMIT_EXCEEDED(HttpStatus.FORBIDDEN, "Account limit exceeded. If you need more accounts, please contact support."),
-    ACCOUNT_OWNERSHIP_ERROR(HttpStatus.FORBIDDEN, "You do not have permission to access this account."),
     
     // Transaction Errors
     TRANSACTION_NOT_FOUND(HttpStatus.NOT_FOUND, "Transaction not found."),
@@ -75,7 +75,8 @@ public enum ErrorCode {
     INVALID_TRANSACTION_TYPE(HttpStatus.BAD_REQUEST, "Invalid transaction type."),
     INVALID_TRANSACTION_OPERATION(HttpStatus.BAD_REQUEST, "Invalid operation for this transaction."),
     NO_TRANSACTIONS_FOR_ACCOUNT(HttpStatus.NOT_FOUND, "No transactions found for this account."),
-
+    TRANSACTION_ACCOUNT_CONFLICT(HttpStatus.BAD_REQUEST, "Source and destination accounts cannot be the same."),
+    INVALID_IBAN(HttpStatus.BAD_REQUEST, "Invalid IBAN. Please check your input and try again."),
     // Other errors
     UNSUPPORTED_EXPORTER(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Unsupported export format. Please choose a different one.");
 
