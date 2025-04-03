@@ -19,4 +19,8 @@ public class EmailTransferRequest extends BankingOperationRequest {
     public Email getDestinationEmail() {
         return new Email(destinationEmail);
     }
+
+    public void setDestinationEmail(Email email) {
+        this.destinationEmail = email.getValue();
+    }
 }

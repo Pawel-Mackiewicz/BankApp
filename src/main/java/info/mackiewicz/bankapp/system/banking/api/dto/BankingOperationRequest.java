@@ -45,4 +45,8 @@ public abstract class BankingOperationRequest {
         return Iban.valueOf(sourceIban);
     }
 
+    public void setSourceIban(Iban iban) {
+        this.sourceIban = iban.toString();
+    }
+
 }

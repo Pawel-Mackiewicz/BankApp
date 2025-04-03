@@ -25,4 +25,8 @@ public class IbanTransferRequest extends BankingOperationRequest {
     public Iban getRecipientIban() {
         return Iban.valueOf(recipientIban);
     }
+
+    public void setRecipientIban(Iban iban) {
+        this.recipientIban = iban.toString();
+    }
 }
