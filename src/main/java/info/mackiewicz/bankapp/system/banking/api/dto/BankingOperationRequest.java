@@ -22,6 +22,7 @@ import lombok.Setter;
  * 
  * @see Transaction
  */
+@Getter
 @Setter
 public abstract class BankingOperationRequest {
 
@@ -30,13 +31,11 @@ public abstract class BankingOperationRequest {
     @ValidIban(message = "Invalid IBAN format")
     private String sourceIban;
 
-    @Getter
     @Schema(description = "Amount to be transferred", required = true, minimum = "0.01")
     @NotNull(message = "Amount cannot be null")
     @Positive(message = "Amount must be positive")
     private BigDecimal amount;
 
-    @Getter
     @Schema(description = "Title of the transaction", required = false)
     @NotBlank(message = "Title cannot be blank")
     private String title;
@@ -49,4 +48,7 @@ public abstract class BankingOperationRequest {
         this.sourceIban = iban.toString();
     }
 
+    public void setSourceIban(String iban) {
+        this.sourceIban = iban;
+    }
 }
