@@ -40,6 +40,7 @@ public class IbanAnalysisService {
      * @return true if both accounts belong to the same owner, false otherwise
      */
     public boolean isSameOwner(Iban sourceIban, Iban destinationIban) {
+        // first 4 characters are always 0's and should be ignored in the comparison
         return sourceIban.getAccountNumber().regionMatches(4, destinationIban.getAccountNumber(), 4, 10);
     }
 
