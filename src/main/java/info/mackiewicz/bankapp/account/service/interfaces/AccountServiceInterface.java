@@ -1,12 +1,12 @@
 package info.mackiewicz.bankapp.account.service.interfaces;
 
-import java.math.BigDecimal;
-import java.util.List;
-
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.user.model.vo.Email;
 import org.iban4j.Iban;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import jakarta.validation.constraints.Email;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Interface defining bank account operations for managing accounts, balances and owner-related queries.
@@ -14,6 +14,7 @@ import jakarta.validation.constraints.Email;
  * as well as performing financial operations like deposits and withdrawals.
  */
 public interface AccountServiceInterface {
+
     /**
      * Creates a new bank account for a specified user.
      *
@@ -69,12 +70,11 @@ public interface AccountServiceInterface {
 
     /**
      * Finds an account by its IBAN (International Bank Account Number).
-     * 
-     * @deprecated Use {@link #getAccountByIban(Iban)} instead.
      *
      * @param iban The IBAN to search for
      * @return An {@link Account} with the specified IBAN
      * @throws IllegalArgumentException if iban is null or empty
+     * @deprecated Use {@link #getAccountByIban(Iban)} instead.
      */
     Account getAccountByIban(String iban);
 
@@ -94,33 +94,51 @@ public interface AccountServiceInterface {
      * @return An {@link Account} belonging to the owner with the specified email address
      * @throws IllegalArgumentException if recipientEmail is null or has invalid format
      */
-    Account getAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail);
+    Account getAccountByOwnersEmail(@jakarta.validation.constraints.Email(message = "Invalid email format") String recipientEmail);
 
     /**
-     * Deletes an account with the specified ID.
+     * Finds an account by the owner's email address.
      *
-     * @param id The unique identifier of the account to delete
-     * @throws info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException if no account is found with the given id
+     * @param recipientEmail The email address to search for
+     * @return An {@link Account} belonging to the owner with the specified email address
+     * @throws info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException if no account is found with the given email
      */
-    void deleteAccountById(int id);
+    Account getAccountByOwnersEmail(Email recipientEmail);
 
-    /**
-     * Deposits funds into an account.
-     *
-     * @param account The account to deposit funds into
-     * @param amount The amount to deposit
-     * @return The updated {@link Account} after the deposit
-     * @throws IllegalArgumentException if account is null or amount is negative
-     */
-    Account deposit(Account account, BigDecimal amount);
+        /**
+         * Deletes an account with the specified ID.
+         *
+         * @param id The unique identifier of the account to delete
+         * @throws info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException if no account is found with the given id
+         */
+        void deleteAccountById(int id);
 
-    /**
-     * Withdraws funds from an account.
-     *
-     * @param account The account to withdraw funds from
-     * @param amount The amount to withdraw
-     * @return The updated {@link Account} after the withdrawal
-     * @throws IllegalArgumentException if account is null or amount is negative
-     */
-    Account withdraw(Account account, BigDecimal amount);
-}
+        /**
+         * Checks if an account exists by the owner's email address.
+         *
+         * @param email The email address to check
+         * @return true if an account exists with the specified email, false otherwise
+         * @throws IllegalArgumentException if email is null or has invalid format
+         */
+        boolean existsByEmail(@jakarta.validation.constraints.Email(message = "Invalid email format") String email);
+
+        /**
+         * Deposits funds into an account.
+         *
+         * @param account The account to deposit funds into
+         * @param amount The amount to deposit
+         * @return The updated {@link Account} after the deposit
+         * @throws IllegalArgumentException if account is null or amount is negative
+         */
+        Account deposit(Account account, BigDecimal amount);
+
+        /**
+         * Withdraws funds from an account.
+         *
+         * @param account The account to withdraw funds from
+         * @param amount The amount to withdraw
+         * @return The updated {@link Account} after the withdrawal
+         * @throws IllegalArgumentException if account is null or amount is negative
+         */
+        Account withdraw(Account account, BigDecimal amount);
+    }

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
+import info.mackiewicz.bankapp.account.model.interfaces.AccountInfo;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.account.service.AccountServiceAccessManager;
 import info.mackiewicz.bankapp.account.util.IbanConverter;
@@ -35,7 +36,7 @@ import lombok.Getter;
  */
 @Entity
 @Table(name = "accounts")
-public class Account {
+public class Account implements AccountInfo {
 
     @Getter
     @Id
@@ -130,7 +131,11 @@ public class Account {
     public AccountOwnerDTO getOwner() {
         return new AccountOwnerDTO(owner);
     }
-
+    
+    @Override
+    public String getOwnerFullname() {
+        return owner.getFullName();
+    }
     /**
      * Returns the actual User object that owns this account.
      * This method is for internal use only, for JSON serialization use getOwner()
@@ -181,4 +186,5 @@ public class Account {
     public int hashCode() {
         return Objects.hash(iban);
     }
+
 }

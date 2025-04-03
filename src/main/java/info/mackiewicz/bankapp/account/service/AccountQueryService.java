@@ -67,15 +67,16 @@ class AccountQueryService {
                 "ID");
     }
 
-    Account findAccountByOwnersEmail(Email recipientEmail) {
+    Account getAccountByOwnersEmail(Email recipientEmail) {
         log.debug("Finding account by owner's email: {}", recipientEmail);
         return accountRepository.findFirstByOwner_email(recipientEmail)
                 .orElseThrow(() -> new OwnerAccountsNotFoundException(
                         String.format("User with email %s does not have any account.", recipientEmail)));
     }
 
+    @Deprecated
     Account findAccountByOwnersEmail(String email) {
-        return findAccountByOwnersEmail(new Email(email));
+        return getAccountByOwnersEmail(new Email(email));
     }
 
     Account getAccountByIban(String iban) {
