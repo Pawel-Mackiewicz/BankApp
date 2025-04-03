@@ -18,7 +18,7 @@ import jakarta.validation.Payload;
 @Constraint(validatedBy = IbanValidator.class)
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Iban {
+public @interface ValidIban {
     /**
      * Error message to be displayed when validation fails.
      * 
