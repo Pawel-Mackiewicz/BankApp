@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.assembler.TransactionAssemblyStrategy;
-import info.mackiewicz.bankapp.transaction.service.assembler.TransactionTypeResolver;
+import info.mackiewicz.bankapp.transaction.service.assembler.WebTransactionTypeResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStrategy implements TransactionAssemblyStrategy<InternalTransferRequest> {
 
     private final AccountService accountService;
-    private final TransactionTypeResolver transactionTypeResolver;
+    private final WebTransactionTypeResolver transactionTypeResolver;
 
     @Override
     public Transaction assembleTransaction(InternalTransferRequest request) {
@@ -36,7 +36,7 @@ public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
     }
     
     @Override
-    protected <T extends TransferRequest> void logTransferRequest(T request) {
+    protected <T extends WebTransferRequest> void logTransferRequest(T request) {
         InternalTransferRequest internalRequest = (InternalTransferRequest) request;
         log.info("Assembling internal transfer from IBAN: {}, amount: {}, recipient: {}",
                 internalRequest.getSourceIban(), 
@@ -47,7 +47,7 @@ public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
     }
 
     @Override
-    protected <T extends TransferRequest> Account getSourceAccount(T request) {
+    protected <T extends WebTransferRequest> Account getSourceAccount(T request) {
         log.debug("Finding source account by IBAN: {}", request.getSourceIban());
         Account sourceAccount = accountService.getAccountByIban(request.getSourceIban());
         log.debug("Source account found with ID: {}", sourceAccount.getId());
@@ -55,7 +55,7 @@ public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
     }
 
     @Override
-    protected <T extends TransferRequest> Account getDestinationAccount(T request) {
+    protected <T extends WebTransferRequest> Account getDestinationAccount(T request) {
         return resolveDestinationAccount((InternalTransferRequest) request);
     }
     

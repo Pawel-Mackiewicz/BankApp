@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
 import info.mackiewicz.bankapp.account.validation.DifferentAccounts;
-import info.mackiewicz.bankapp.account.validation.Iban;
+import info.mackiewicz.bankapp.account.validation.ValidIban;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,12 +11,12 @@ import lombok.Data;
 
 @Data
 @DifferentAccounts
-public class ExternalTransferRequest implements TransferRequest {
-    @Iban
+public class ExternalTransferRequest implements WebTransferRequest {
+    @ValidIban
     @NotNull(message = "Source IBAN is required")
     private String sourceIban;
 
-    @Iban
+    @ValidIban
     @NotEmpty(message = "Recipient IBAN is required")
     @Size(min = 15, max = 34, message = "IBAN must be between 15 and 34 characters")
     private String recipientIban;

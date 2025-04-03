@@ -2,13 +2,13 @@ package info.mackiewicz.bankapp.transaction.service.assembler;
 
 import org.springframework.stereotype.Component;
 
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class TransactionTypeResolver {
+public class WebTransactionTypeResolver {
 
     /**
      * Resolves the transaction type based on the request data.
@@ -21,7 +21,7 @@ public class TransactionTypeResolver {
      * @param request the transfer request
      * @return resolved transaction type
      */
-    public <T extends TransferRequest> TransactionType resolveTransactionType(T request) {
+    public <T extends WebTransferRequest> TransactionType resolveTransactionType(T request) {
         log.debug("Resolving transaction type for request with source IBAN: {}", request.getSourceIban());
 
         TransactionType resolvedType =
@@ -44,7 +44,7 @@ public class TransactionTypeResolver {
      * @param request
      * @return true if the transfer is through email, false otherwise
      */
-    private <T extends TransferRequest> boolean isThroughEmail(T request) {
+    private <T extends WebTransferRequest> boolean isThroughEmail(T request) {
         log.debug("Checking if the transfer is through email");
         if (request.getRecipientIban() == null) {
             log.debug("Recipient IBAN is null, resolving as TRANSFER_INTERNAL");
@@ -63,7 +63,7 @@ public class TransactionTypeResolver {
      * @return true if the source and recipient IBANs have the same owner, false
      *         otherwise
      */
-    private <T extends TransferRequest> boolean isSameOwner(T request) {
+    private <T extends WebTransferRequest> boolean isSameOwner(T request) {
         log.debug("Checking if the source and recipient IBANs have the same owner");
         boolean isOwnTransfer = request.getSourceIban().regionMatches(5, request.getRecipientIban(), 5, 20);
         log.debug("Checking ownership: source IBAN {} and recipient IBAN {} - has same owner: {}",

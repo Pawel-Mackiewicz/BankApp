@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
 import info.mackiewicz.bankapp.account.validation.DifferentAccounts;
-import info.mackiewicz.bankapp.account.validation.Iban;
+import info.mackiewicz.bankapp.account.validation.ValidIban;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,13 +11,13 @@ import lombok.Data;
 
 @Data
 @DifferentAccounts
-public class InternalTransferRequest implements TransferRequest {
+public class InternalTransferRequest implements WebTransferRequest {
     
-    @Iban
+    @ValidIban
     @NotNull(message = "Source IBAN is required")
     private String sourceIban;
 
-    @Iban
+    @ValidIban
     private String recipientIban;
 
     @Email(message = "Invalid email format")
@@ -33,7 +33,7 @@ public class InternalTransferRequest implements TransferRequest {
     private TransactionType transactionType = TransactionType.TRANSFER_INTERNAL;
 
     public boolean isValid() {
-        // Albo IBAN albo email musi być podany
+        // Check if either recipientIban or recipientEmail is provided
         return (recipientIban != null && !recipientIban.trim().isEmpty())
             || (recipientEmail != null && !recipientEmail.trim().isEmpty());
     }
