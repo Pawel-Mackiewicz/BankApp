@@ -1,16 +1,21 @@
 package info.mackiewicz.bankapp.account.validation;
 
-import info.mackiewicz.bankapp.presentation.dashboard.dto.ExternalTransferRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
-import info.mackiewicz.bankapp.utils.TestIbanProvider;
-import jakarta.validation.ConstraintValidatorContext;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
+import info.mackiewicz.bankapp.account.exception.UnsupportedValidationTypeException;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.ExternalTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
+import info.mackiewicz.bankapp.utils.TestIbanProvider;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * Tests for DifferentAccountsValidator ensuring correct validation
@@ -63,7 +68,7 @@ class DifferentAccountsValidatorTest {
     @Test
     void isValid_ExternalTransfer_DifferentIbans_ReturnsTrue() {
         // Given
-        TransferRequest request = new ExternalTransferRequest();
+        WebTransferRequest request = new ExternalTransferRequest();
         request.setSourceIban(TestIbanProvider.getIban(0));
         request.setRecipientIban(EXTERNAL_TEST_IBAN);
 
@@ -77,7 +82,7 @@ class DifferentAccountsValidatorTest {
     @Test
     void isValid_ExternalTransfer_SameIbans_ReturnsFalse() {
         // Given
-        TransferRequest request = new ExternalTransferRequest();
+        WebTransferRequest request = new ExternalTransferRequest();
         String sameIban = TestIbanProvider.getIban(0);
         request.setSourceIban(sameIban);
         request.setRecipientIban(sameIban);
@@ -116,12 +121,16 @@ class DifferentAccountsValidatorTest {
     }
 
     @Test
-    void isValid_NotATransferRequest_ReturnsTrue() {
-        // When
-        boolean isValid = validator.isValid(new Object(), context);
+    void isValid_NotATransferRequest_ThrowsException() {
+        // Given
+        Object invalidRequest = new Object();
 
-        // Then
-        assertTrue(isValid);
+        // When/Then
+        UnsupportedValidationTypeException exception = assertThrows(
+                UnsupportedValidationTypeException.class,
+                () -> validator.isValid(invalidRequest, context)
+        );
+        assertEquals("Invalid transfer request type: java.lang.Object", exception.getMessage());
     }
 
     @Test

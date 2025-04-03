@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.transaction.service.assembler.strategies;
 import java.math.BigDecimal;
 
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class BaseTransactionAssemblyStrategy {
 
-    protected <T extends TransferRequest> Transaction assembleTransaction(
+    protected <T extends WebTransferRequest> Transaction assembleTransaction(
             T request,
             Account sourceAccount,
             Account destinationAccount,
@@ -22,7 +22,7 @@ public abstract class BaseTransactionAssemblyStrategy {
         return buildTransfer(request, sourceAccount, destinationAccount, resolvedType);
     }
 
-    protected <T extends TransferRequest> Transaction buildTransfer(T request, Account sourceAccount,
+    protected <T extends WebTransferRequest> Transaction buildTransfer(T request, Account sourceAccount,
             Account destinationAccount, TransactionType resolvedType) {
         log.debug("Building transaction with amount: {}", request.getAmount());
 
@@ -38,10 +38,10 @@ public abstract class BaseTransactionAssemblyStrategy {
         return transaction;
     }
 
-    protected abstract <T extends TransferRequest> void logTransferRequest(T request);
+    protected abstract <T extends WebTransferRequest> void logTransferRequest(T request);
 
-    protected abstract <T extends TransferRequest> Account getSourceAccount(T request);
+    protected abstract <T extends WebTransferRequest> Account getSourceAccount(T request);
 
-    protected abstract <T extends TransferRequest> Account getDestinationAccount(T request);
+    protected abstract <T extends WebTransferRequest> Account getDestinationAccount(T request);
 
 }

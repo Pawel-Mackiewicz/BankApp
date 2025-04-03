@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
-import info.mackiewicz.bankapp.account.validation.Iban;
+import info.mackiewicz.bankapp.account.validation.ValidIban;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -8,13 +8,13 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class OwnTransferRequest implements TransferRequest {
+public class OwnTransferRequest implements WebTransferRequest {
 
     // This field is not used in the application yet
-    @Iban
+    @ValidIban
     private String sourceIban;
     // This field is not used in the application yet
-    @Iban
+    @ValidIban
     private String recipientIban;
 
     @NotNull(message = "Source account is required")
