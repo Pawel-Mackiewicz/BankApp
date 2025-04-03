@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.transaction.exception.TransactionAccountConflictException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.user.model.User;
@@ -141,9 +143,9 @@ class DefaultTransactionValidatorTest {
         transaction.setDestinationAccount(sourceAccount);
 
         // When & Then
-        assertThrows(TransactionValidationException.class, 
+        assertThrows(TransactionAccountConflictException.class, 
             () -> validator.validate(transaction),
-            "Only TRANSFER_OWN can have the same source and destination account");
+            "Source and destination accounts cannot be the same");
     }
 
     @Test
