@@ -46,7 +46,7 @@ public class SecurityConfig {
         return new HttpSessionEventPublisher();
     }
 
-    // Security chain for settings API endpoints (najwyższy priorytet)
+    // Security chain for settings API endpoints (highest priority)
     @Bean
     @Order(1)
     public SecurityFilterChain settingsSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -69,7 +69,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Security chain for admin API endpoints (średni priorytet)
+    // Security chain for admin API endpoints (medium priority)
     @Bean
     @Order(2)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -95,12 +95,12 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Security chain for web endpoints (najniższy priorytet)
+    // Security chain for web endpoints (lowest priority)
     @Bean
     @Order(3)
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Tymczasowo wyłączone dla debugowania
+                .csrf(AbstractHttpConfigurer::disable) // Temporarily disabled for debugging
                 .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/public/**", "/login", "/css/**", "/js/**", "/images/**", "/register",
