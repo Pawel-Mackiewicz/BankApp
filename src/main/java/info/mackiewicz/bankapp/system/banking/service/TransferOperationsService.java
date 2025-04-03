@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.service.operations;
+package info.mackiewicz.bankapp.system.banking.service;
 
 import java.util.function.Supplier;
 
@@ -10,11 +10,11 @@ import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountSecurityService;
 import info.mackiewicz.bankapp.shared.service.TransactionBuilderService;
+import info.mackiewicz.bankapp.system.banking.api.dto.BankingOperationRequest;
+import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.dto.BankingOperationRequest;
-import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-class BankingOperationsService {
+public class TransferOperationsService {
 
     private final TransactionBuilderService transactionBuilderService;
     private final AccountSecurityService accountSecurityService;

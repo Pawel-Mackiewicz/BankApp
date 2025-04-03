@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.model.dto;
+package info.mackiewicz.bankapp.system.banking.api.dto;
 
 import java.math.BigDecimal;
 
@@ -6,28 +6,30 @@ import org.iban4j.Iban;
 
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
-/** 
+/**
  * Class representing a banking operation request.
- * This class serves as a base for various banking operations such as transfers.    
+ * This class serves as a base for various banking operations such as transfers.
  * It can also be used for withdrawals and deposits.
  * It will be converted to Transaction.java objects
- @see Transaction
+ * 
+ * @see Transaction
  */
 @Getter
 @Setter
 public abstract class BankingOperationRequest {
 
-    @Schema(description = "IBAN of the source account", required = true)
+    @Schema(description = "IBAN of the source account", requiredMode = RequiredMode.REQUIRED, example = "PL11485112340000123400000077", type = "string")
     @NotNull
     private Iban sourceIban;
-    
-    @Schema(description = "Amount to be transferred", required = true)
+
+    @Schema(description = "Amount to be transferred", required = true, minimum = "0.01")
     @NotNull
     @Positive(message = "Amount must be positive")
     private BigDecimal amount;

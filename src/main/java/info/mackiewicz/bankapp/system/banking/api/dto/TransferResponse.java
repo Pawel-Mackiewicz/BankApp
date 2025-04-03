@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.model.dto;
+package info.mackiewicz.bankapp.system.banking.api.dto;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.adapter.AccountInfoAdapter;

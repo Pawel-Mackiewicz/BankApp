@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.service.operations;
+package info.mackiewicz.bankapp.system.banking.service.transfer;
 
 import org.iban4j.Iban;
 import org.springframework.stereotype.Service;
@@ -8,10 +8,11 @@ import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.shared.exception.IbanAnalysisException;
+import info.mackiewicz.bankapp.system.banking.api.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
+import info.mackiewicz.bankapp.system.banking.service.TransferOperationsService;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
-import info.mackiewicz.bankapp.transaction.model.dto.IbanTransferRequest;
-import info.mackiewicz.bankapp.transaction.model.dto.TransferResponse;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class IbanTransferService {
 
     private final AccountServiceInterface accountService;
-    private final BankingOperationsService operationsService;
+    private final TransferOperationsService operationsService;
 
     /**
      * Handles the transfer of funds between accounts using IBANs.

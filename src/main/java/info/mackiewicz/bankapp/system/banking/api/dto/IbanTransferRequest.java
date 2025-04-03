@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.model.dto;
+package info.mackiewicz.bankapp.system.banking.api.dto;
 
 
 import org.iban4j.Iban;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Schema(description = "Request object for transferring money to an IBAN account")
 public class IbanTransferRequest extends BankingOperationRequest {
 
-    @Schema(description = "The destination IBAN for the transfer", requiredMode = RequiredMode.REQUIRED) //is requireMode needed?
+    @Schema(description = "IBAN of the source account", requiredMode = RequiredMode.REQUIRED, example = "PL99485112340000123400000099", type = "string")
     @NotNull
     private Iban recipientIban;
 }
