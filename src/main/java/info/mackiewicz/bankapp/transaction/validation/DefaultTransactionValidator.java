@@ -144,10 +144,6 @@ public class DefaultTransactionValidator implements TransactionValidator {
         if (transaction.getDestinationAccount() == null) {
             throw new TransactionValidationException("Transfer transaction must have a destination account");
         }
-        if (transaction.getSourceAccount().equals(transaction.getDestinationAccount())
-                && transaction.getType() != TransactionType.TRANSFER_OWN) {
-            throw new TransactionValidationException("Only TRANSFER_OWN can have the same source and destination account");
-        }
     }
 
     private void validateFeeAccounts(Transaction transaction) {
