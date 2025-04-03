@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.transaction.model.builder;
 
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionDestinationAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionSourceAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -64,10 +65,14 @@ public class TransferBuilder extends AbstractTransactionBuilder<TransferBuilder>
     
     @Override
     public Transaction build() {
+        try {
         validate();
         Transaction transaction = createBaseTransaction();
         transaction.setSourceAccount(sourceAccount);
         transaction.setDestinationAccount(destinationAccount);
         return transaction;
+        } catch (Exception e) {
+            throw new TransactionBuildingException("Error building transaction for account ID: " + sourceAccount.getId(), e);
+        }
     }
 }

@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -30,9 +31,9 @@ import org.springframework.test.context.ActiveProfiles;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.util.Util;
+import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.model.TransactionStatusCategory;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.Email;
@@ -335,22 +336,17 @@ class ConcurrentTransactionIntegrationTest {
         Account zeroBalanceAccount = testAccounts.get(0);
         accountService.withdraw(zeroBalanceAccount, zeroBalanceAccount.getBalance()); // Set balance to zero
 
-        // Attempt transfer from zero balance account
-        Transaction zeroBalanceTransfer = createTransfer(
-            zeroBalanceAccount,
-            testAccounts.get(1),
-            BigDecimal.TEN
-        );
-        transactionService.processTransactionById(zeroBalanceTransfer.getId());
-
-        await()
-            .atMost(Duration.ofSeconds(10))
-            .untilAsserted(() -> {
-                Transaction completed = transactionService.getTransactionById(zeroBalanceTransfer.getId());
-                assertThat(completed.getStatus().getCategory())
-                    .as("Zero balance transfer should fail")
-                    .isEqualTo(TransactionStatusCategory.FAULTY);
-            });
+        // Attempt transfer from zero balance account - should fail immediately
+        assertThrows(InsufficientFundsException.class, () -> {
+            Transaction transfer = Transaction.buildTransfer()
+                .asInternalTransfer()
+                .from(zeroBalanceAccount)
+                .to(testAccounts.get(1))
+                .withAmount(BigDecimal.TEN)
+                .withTitle("Test zero balance transfer")
+                .build();
+            transactionService.registerTransaction(transfer);
+        }, "Should throw InsufficientFundsException when trying to create transfer with insufficient funds");
     }
 
     private User createTestUser(int index) {
