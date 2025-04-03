@@ -33,7 +33,7 @@ public class InternalTransferRequest implements WebTransferRequest {
     private TransactionType transactionType = TransactionType.TRANSFER_INTERNAL;
 
     public boolean isValid() {
-        // Albo IBAN albo email musi być podany
+        // Check if either recipientIban or recipientEmail is provided
         return (recipientIban != null && !recipientIban.trim().isEmpty())
             || (recipientEmail != null && !recipientEmail.trim().isEmpty());
     }
