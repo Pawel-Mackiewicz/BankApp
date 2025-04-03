@@ -1,11 +1,10 @@
 package info.mackiewicz.bankapp.user.model;
 
 
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,7 +34,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class BaseUser implements UserDetails {
+public abstract class BaseUser implements UserDetailsWithId {
     /**
      * Unique identifier for the user entity.
      */

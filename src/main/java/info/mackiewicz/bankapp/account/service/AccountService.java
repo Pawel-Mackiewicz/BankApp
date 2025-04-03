@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
+import info.mackiewicz.bankapp.user.model.vo.Email;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,11 +77,16 @@ public class AccountService implements AccountServiceInterface {
         return accountQueryService.getAccountsByOwnersId(id);
     }
 
+    @Deprecated
     @Override
-    public Account getAccountByOwnersEmail(@Email(message = "Invalid email format") String recipientEmail) {
+    public Account getAccountByOwnersEmail(String recipientEmail) {
         return accountQueryService.findAccountByOwnersEmail(recipientEmail);
     }
 
+    @Override
+    public Account getAccountByOwnersEmail(Email recipientEmail) {
+        return accountQueryService.getAccountByOwnersEmail(recipientEmail);
+    }
 
     @Deprecated
     @Override
@@ -94,7 +99,8 @@ public class AccountService implements AccountServiceInterface {
         return accountQueryService.getAccountByIban(iban);
     }
 
-    public boolean existsByEmail(@Email(message = "Invalid email format") String email) {
+    @Override
+    public boolean existsByEmail(String email) {
         return accountQueryService.existsByEmail(email);
     }
 
