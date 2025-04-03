@@ -23,6 +23,7 @@ public class TestAccountBuilder {
             "PL78485112340000510000000001");
     private static int currentIbanIndex = 0;
     private static final int RANDOM_INT = new Random().nextInt(20);
+    private static final BigDecimal BALANCE = BigDecimal.valueOf(1000.00);
 
     public static Account createTestAccount() {
         return createTestAccountWithBalance(BigDecimal.ZERO);
@@ -51,6 +52,7 @@ public class TestAccountBuilder {
         String iban = getNextIban();
         setField(account, "iban", Iban.valueOf(iban));
         setField(account, "owner", owner);
+        setField(account, "balance", BALANCE);
         if (owner.getAccounts() == null) {
             owner.setAccounts(new HashSet<>());
         }
@@ -62,6 +64,7 @@ public class TestAccountBuilder {
         User owner = TestUserBuilder.createRandomTestUser();
         Account account = Account.factory().createAccount(owner);
         setField(account, "id", RANDOM_INT);
+        setField(account, "balance", BALANCE);
         return account;
     }
 
@@ -69,6 +72,7 @@ public class TestAccountBuilder {
         User owner = TestUserBuilder.createTestUser();
         Account account = Account.factory().createAccount(owner);
         setField(account, "id", RANDOM_INT);
+        setField(account, "balance", BALANCE);
         return account;
     }
 
