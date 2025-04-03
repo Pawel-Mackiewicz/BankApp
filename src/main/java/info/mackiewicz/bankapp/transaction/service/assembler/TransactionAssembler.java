@@ -1,15 +1,15 @@
 package info.mackiewicz.bankapp.transaction.service.assembler;
 
-import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransferRequest;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Assembles Transaction objects from different types of transfer requests.
@@ -22,7 +22,7 @@ public class TransactionAssembler {
 
     private final Map<Class<?>, TransactionAssemblyStrategy<?>> assemblyStrategies;
 
-    public Transaction assembleExternalTransfer(TransferRequest request) {
+    public Transaction assembleExternalTransfer(WebTransferRequest request) {
         return assembleTransaction(request);
     }
 
