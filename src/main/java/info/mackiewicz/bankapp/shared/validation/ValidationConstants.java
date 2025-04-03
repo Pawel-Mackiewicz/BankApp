@@ -1,7 +1,5 @@
 package info.mackiewicz.bankapp.shared.validation;
 
-import java.util.regex.Pattern;
-
 import lombok.experimental.UtilityClass;
 
 /**
