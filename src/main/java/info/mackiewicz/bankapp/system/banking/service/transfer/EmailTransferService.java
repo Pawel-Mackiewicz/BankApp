@@ -37,8 +37,6 @@ public class EmailTransferService {
      * 
      */
     public TransferResponse handleEmailTransfer(EmailTransferRequest transferRequest, UserDetailsWithId user) {
-        log.info("Handling transfer from :{} to {}", transferRequest.getSourceIban(), transferRequest.getDestinationEmail());
-
         return operationsService.handleTransfer(
                 transferRequest,
                 user.getId(),
