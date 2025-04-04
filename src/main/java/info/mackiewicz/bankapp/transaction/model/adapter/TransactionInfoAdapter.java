@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 import org.springframework.lang.NonNull;
 
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.model.interfaces.TransactionInfo;
 import lombok.RequiredArgsConstructor;
 
@@ -36,13 +34,13 @@ public class TransactionInfoAdapter implements TransactionInfo {
     }
     
     @Override
-    public TransactionStatus getStatus() {
-        return transaction.getStatus();
+    public String getStatus() {
+        return transaction.getStatus().getName();
     }
     
     @Override
-    public TransactionType getType() {
-        return transaction.getType();
+    public String getType() {
+        return transaction.getType().getName();
     }
     
     @Override
