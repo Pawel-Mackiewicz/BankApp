@@ -5,7 +5,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import info.mackiewicz.bankapp.system.banking.api.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.system.banking.api.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.api.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
@@ -33,15 +32,4 @@ public class BankingOperationsController implements BankingOperationsControllerI
         TransferResponse response =  emailTransferService.handleEmailTransfer(request, authUser);
         return ResponseEntity.ok(response);
     }
-
-    @Override
-    public ResponseEntity<?> withdraw(@Valid @RequestBody BankingOperationRequest request, @AuthenticationPrincipal UserDetailsWithId authUser) {
-        throw new UnsupportedOperationException("Unimplemented method 'withdraw'");
-    }
-
-    @Override
-    public ResponseEntity<?> deposit(@Valid @RequestBody BankingOperationRequest request, @AuthenticationPrincipal UserDetailsWithId authUser) {
-        throw new UnsupportedOperationException("Unimplemented method 'deposit'");
-    }
-
 }

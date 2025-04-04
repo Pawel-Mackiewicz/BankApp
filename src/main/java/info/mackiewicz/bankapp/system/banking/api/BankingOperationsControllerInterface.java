@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
-import info.mackiewicz.bankapp.system.banking.api.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.system.banking.api.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.api.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
@@ -179,6 +178,7 @@ public interface BankingOperationsControllerInterface {
             )
             @AuthenticationPrincipal UserDetailsWithId authUser);
 
+
     /**
      * Transfers funds to an email address
      * 
@@ -333,84 +333,6 @@ public interface BankingOperationsControllerInterface {
                         )
                     })
             @Valid @RequestBody EmailTransferRequest request, 
-            
-            @Parameter(description = "Authenticated user details", hidden = true)
-            @AuthenticationPrincipal UserDetailsWithId authUser);
-    
-    /**
-     * Withdraws funds from an account
-     * Stub method for future implementation.
-     * @param request withdrawal details including account and amount
-     * @param authUser authenticated user details, who has access to the account
-     * @return response with transaction result
-     */
-    @Operation(summary = "Withdraw funds", description = "STUB. NOT IMPLEMENTED." + " Withdraws funds from the specified account")
-    @PostMapping("/withdraw")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Withdrawal completed successfully", 
-                    content = @Content),
-        @ApiResponse(responseCode = "400", description = "Invalid input data or insufficient funds", 
-                    content = @Content),
-        @ApiResponse(responseCode = "404", description = "Account not found", 
-                    content = @Content),
-        @ApiResponse(responseCode = "403", description = "User does not own the account", 
-                    content = @Content),
-        @ApiResponse(responseCode = "501", description = "Operation not implemented yet", 
-                    content = @Content)
-    })
-    ResponseEntity<?> withdraw(
-            @Parameter(description = "Withdrawal details including source IBAN and amount", required = true,
-                    examples = {
-                        @ExampleObject(
-                            name = "Standard withdrawal",
-                            summary = "Example of a withdrawal operation",
-                            value = "{\n" +
-                                    "  \"sourceIban\": \"PL12345678901234567890123456\",\n" +
-                                    "  \"amount\": 200.00,\n" +
-                                    "  \"title\": \"Withdraw\"\n" +
-                                    "}"
-                        )
-                    })
-            @Valid @RequestBody BankingOperationRequest request, 
-            
-            @Parameter(description = "Authenticated user details", hidden = true)
-            @AuthenticationPrincipal UserDetailsWithId authUser);
-    
-    /**
-     * Deposits funds to an account
-     * Stub method for future implementation.
-     * @param request deposit details including account and amount
-     * @param authUser authenticated user details, who has access to the account
-     * @return response with transaction result
-     */
-    @Operation(summary = "Deposit funds", description = "STUB. NOT IMPLEMENTED" + " Deposits funds to the specified account")
-    @PostMapping("/deposit")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Deposit completed successfully", 
-                    content = @Content),
-        @ApiResponse(responseCode = "400", description = "Invalid input data", 
-                    content = @Content),
-        @ApiResponse(responseCode = "404", description = "Account not found", 
-                    content = @Content),
-        @ApiResponse(responseCode = "403", description = "User does not own the account", 
-                    content = @Content),
-        @ApiResponse(responseCode = "501", description = "Operation not implemented yet", 
-                    content = @Content)
-    })
-    ResponseEntity<?> deposit(
-            @Parameter(description = "Deposit details including destination IBAN and amount", required = true,
-                    examples = {
-                        @ExampleObject(
-                            name = "Standard deposit",
-                            summary = "Example of a deposit operation",
-                            value = "{\n" +
-                                    "  \"sourceIban\": \"PL12345678901234567890123456\",\n" +
-                                    "  \"amount\": 500.00,\n" +
-                                    "  \"title\": \"Deposit\"\n" +
-                                    "}"
-                        )
-                    })
-            @Valid @RequestBody BankingOperationRequest request, 
             
             @Parameter(description = "Authenticated user details", hidden = true)
             @AuthenticationPrincipal UserDetailsWithId authUser);
