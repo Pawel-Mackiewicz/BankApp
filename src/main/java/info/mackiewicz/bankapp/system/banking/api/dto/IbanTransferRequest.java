@@ -14,8 +14,8 @@ import lombok.ToString;
 @Setter
 public class IbanTransferRequest extends BankingOperationRequest {
 
-    @Schema(description = "IBAN of the source account", example = "PL99485112340000123400000099")
-    @NotBlank(message = "Source IBAN cannot be blank")
+    @Schema(description = "IBAN of the recipient account", example = "PL99485112340000123400000099")
+    @NotBlank(message = "Recipient IBAN cannot be blank")
     @ValidIban
     private String recipientIban;
 
