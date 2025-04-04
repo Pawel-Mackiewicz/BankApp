@@ -19,7 +19,7 @@ public interface TransactionInfo {
     Integer getId();
     BigDecimal getAmount();
     String getTitle();
-    TransactionStatus getStatus();
-    TransactionType getType();
+    String getStatus();
+    String getType();
     LocalDateTime getDate();
 }

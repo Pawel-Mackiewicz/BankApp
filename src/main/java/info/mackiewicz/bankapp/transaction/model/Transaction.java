@@ -7,7 +7,6 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.transaction.model.builder.DepositBuilder;
 import info.mackiewicz.bankapp.transaction.model.builder.TransferBuilder;
 import info.mackiewicz.bankapp.transaction.model.builder.WithdrawalBuilder;
-import info.mackiewicz.bankapp.transaction.model.interfaces.TransactionInfo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "transactions")
-public class Transaction implements TransactionInfo{
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
