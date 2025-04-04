@@ -4,6 +4,7 @@ import org.iban4j.Iban;
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.shared.exception.IbanAnalysisException;
+import info.mackiewicz.bankapp.shared.util.IbanMasker;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +32,7 @@ public class IbanAnalysisService {
     public TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
         log.debug("Resolving transfer type for \n" +
                   "source IBAN: {}\n" +
-                  "destination IBAN: {}", sourceIban, destinationIban);
+                  "destination IBAN: {}", IbanMasker.maskIban(sourceIban), IbanMasker.maskIban(destinationIban));
 
         try {
             TransactionType type = !isSameBank(sourceIban, destinationIban) ? TransactionType.TRANSFER_EXTERNAL
@@ -39,9 +40,9 @@ public class IbanAnalysisService {
                                  : TransactionType.TRANSFER_OWN;
 
             log.debug("Transfer type for \n" +
-                      "source IBAN: {}\n" +
-                      "destination IBAN: {}\n" +
-                      "is {}", sourceIban, destinationIban, type);
+                     "source IBAN: {}\n" +
+                     "destination IBAN: {}\n" +
+                     "is {}", IbanMasker.maskIban(sourceIban), IbanMasker.maskIban(destinationIban), type);
 
             return type;
         } catch (Exception e) {
@@ -60,8 +61,8 @@ public class IbanAnalysisService {
      */
     public boolean isSameOwner(Iban sourceIban, Iban destinationIban) {
         // first 4 characters are always 0's and should be ignored in the comparison
-        log.trace("Comparing account numbers for ownership: {} and {}", sourceIban.getAccountNumber(),
-                destinationIban.getAccountNumber());
+        log.trace("Comparing account numbers for ownership: {} and {}", IbanMasker.maskIban(sourceIban),
+                IbanMasker.maskIban(destinationIban));
         return sourceIban.getAccountNumber().regionMatches(4, destinationIban.getAccountNumber(), 4, 10);
     }
 
@@ -74,7 +75,7 @@ public class IbanAnalysisService {
      * @return true if both accounts belong to the same bank, false otherwise
      */
     public boolean isSameBank(Iban sourceIban, Iban destinationIban) {
-        log.trace("Comparing bank codes and country codes: {} and {}", sourceIban, destinationIban);
+        log.trace("Comparing bank codes and country codes: {} and {}", IbanMasker.maskIban(sourceIban), IbanMasker.maskIban(destinationIban));
         return sourceIban.getBankCode().equals(destinationIban.getBankCode())
                 && sourceIban.getCountryCode().equals(destinationIban.getCountryCode());
     }
