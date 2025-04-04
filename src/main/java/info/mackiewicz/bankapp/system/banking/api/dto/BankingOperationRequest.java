@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.system.banking.api.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.iban4j.Iban;
 
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Class representing a banking operation request.
@@ -25,21 +27,26 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 public abstract class BankingOperationRequest {
+    /**
+     * Temporary ID for the transaction, used for tracking purposes.
+     * This ID is generated based on the current time in milliseconds.
+     */
+    @Schema(description = "Temporary ID for the transaction", hidden = true, requiredMode = RequiredMode.NOT_REQUIRED)
+    private final Long tempId;
 
-    private final LocalDateTime createdAt = LocalDateTime.now();
-
-    @Schema(description = "IBAN of the source account", requiredMode = RequiredMode.REQUIRED, example = "PL11485112340000123400000077")
+    @Schema(description = "IBAN of the source account", example = "PL11485112340000123400000077")
     @NotBlank(message = "Source IBAN cannot be blank")
-    @ValidIban(message = "Invalid IBAN format")
+    @ValidIban
     private String sourceIban;
 
-    @Schema(description = "Amount to be transferred", required = true, minimum = "0.01")
-    @NotNull(message = "Amount cannot be null")
+    @Schema(description = "Amount to be transferred", minimum = "0.01")
     @Positive(message = "Amount must be positive")
+    @NotNull(message = "Amount cannot be null")
     private BigDecimal amount;
 
-    @Schema(description = "Title of the transaction", required = false)
+    @Schema(description = "Title of the transaction")
     @NotBlank(message = "Title cannot be blank")
     private String title;
 
@@ -53,5 +60,12 @@ public abstract class BankingOperationRequest {
 
     public void setSourceIban(String iban) {
         this.sourceIban = iban;
+    }
+
+    public BankingOperationRequest() {
+        tempId = ChronoUnit.MILLIS.between(
+            LocalDateTime.now().withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),
+            LocalDateTime.now()
+        );
     }
 }

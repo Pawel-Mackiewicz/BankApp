@@ -55,7 +55,7 @@ public enum ErrorCode {
     ACCOUNT_VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "We can't validate your account. Please check your input and try again."),
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "Account not found."),
     PAYMENT_FAILED(HttpStatus.FORBIDDEN, "Payment processing failed. Please try again."),
-    INSUFFICIENT_FUNDS(HttpStatus.FORBIDDEN, "Insufficient funds for this transaction. Please check your balance and try again."), 
+    INSUFFICIENT_FUNDS(HttpStatus.BAD_REQUEST, "Insufficient funds for this transaction. Please check your balance and try again."), 
     ACCOUNT_OWNER_EXPIRED(HttpStatus.FORBIDDEN, "Account owner is expired."),
     ACCOUNT_OWNER_LOCKED(HttpStatus.FORBIDDEN, "Account owner is locked."),
     ACCOUNT_OWNER_NULL(HttpStatus.BAD_REQUEST, "Account owner is null."),

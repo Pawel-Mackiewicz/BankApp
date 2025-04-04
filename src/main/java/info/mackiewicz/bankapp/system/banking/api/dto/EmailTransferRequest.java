@@ -7,13 +7,16 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Setter;
+import lombok.ToString;
 
+@Schema(description = "Request object for transferring money to an email address")
+@ToString(callSuper = true)
 @Setter
 public class EmailTransferRequest extends BankingOperationRequest {
 
     @Schema(description = "The destination email address for the transfer", requiredMode = RequiredMode.REQUIRED, example = "example@user.com")
-    @NotBlank
     @Pattern(regexp = ValidationConstants.EMAIL_PATTERN, message = "Invalid email format")
+    @NotBlank
     private String destinationEmail;
 
     public Email getDestinationEmail() {
