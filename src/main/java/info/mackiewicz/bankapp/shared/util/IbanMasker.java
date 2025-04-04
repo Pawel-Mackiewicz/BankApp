@@ -20,6 +20,8 @@ public class IbanMasker {
         }
         return iban.substring(0, 4) + "****" + iban.substring(iban.length() - 4);
     }
+
     public String maskIban(Iban iban) {
         return maskIban(iban.toString());
+    }
 }
