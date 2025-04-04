@@ -27,7 +27,6 @@ public class AccountSecurityService {
      * @throws AccountNotFoundByIbanException if the account is not found
      */
     public Account retrieveValidatedAccount(Integer userId, Iban accountIban) {
-        log.debug("Validating account ownership for user ID: {} and account Iban: {}", userId, accountIban);
         Account account = accountService.getAccountByIban(accountIban);
         Integer ownerId = account.getOwner().getId();
 
@@ -35,7 +34,6 @@ public class AccountSecurityService {
             log.warn("Unauthorized access attempt by user ID: {}", userId);
             throw new AccountOwnershipException("Unauthorized access to account");
         }
-        log.debug("Account ownership validated for user ID: {} and account Iban: {}", userId, accountIban);
         return account;
     }
 }
