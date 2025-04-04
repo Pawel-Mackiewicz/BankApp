@@ -15,13 +15,13 @@ import info.mackiewicz.bankapp.system.banking.service.IbanAnalysisService;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 
 /**
- * Testy jednostkowe dla klasy IbanAnalysisService.
+ * Unit tests for the IbanAnalysisService class.
  */
 class IbanAnalysisServiceTest {
 
     private IbanAnalysisService ibanAnalysisService;
 
-    // Przykładowe IBAN-y do testów
+    // Sample IBANs for testing
     private Iban sameOwnerIban1;
     private Iban sameOwnerIban2;
     private Iban differentOwnerSameBankIban;
@@ -31,26 +31,26 @@ class IbanAnalysisServiceTest {
     void setUp() {
         ibanAnalysisService = new IbanAnalysisService();
 
-        // Przygotowanie danych testowych przy użyciu IbanGenerator
-        // Ten sam właściciel, ten sam bank - mają ten sam userId (123)
+        // Prepare test data using IbanGenerator
+        // Same owner, same bank - they have the same userId (123)
         sameOwnerIban1 = IbanGenerator.generateIban(123, 1);
         sameOwnerIban2 = IbanGenerator.generateIban(123, 2);
 
-        // Inny właściciel, ten sam bank - ma inny userId (456)
+        // Different owner, same bank - has a different userId (456)
         differentOwnerSameBankIban = IbanGenerator.generateIban(456, 1);
 
-        // Inny bank - używamy bezpośrednio Iban.Builder()
+        // Different bank - use Iban.Builder() directly
         differentBankIban = new Iban.Builder()
                 .countryCode(CountryCode.PL)
-                .bankCode("101") // Inny kod banku niż "485"
+                .bankCode("101") // Different bank code than "485"
                 .branchCode("1123")
                 .nationalCheckDigit("4")
-                .accountNumber("0000123456780000") // Taki sam numer konta jak sameOwnerIban2
+                .accountNumber("0000123456780000") // Same account number as sameOwnerIban2
                 .build();
     }
 
     @Test
-    @DisplayName("resolveTransferType powinien zwrócić TRANSFER_OWN gdy to ten sam właściciel")
+    @DisplayName("resolveTransferType should return TRANSFER_OWN when owner is the same")
     void resolveTransferType_SameOwner_ShouldReturnTransferOwn() {
         // when
         TransactionType result = ibanAnalysisService.resolveTransferType(sameOwnerIban1, sameOwnerIban2);
@@ -60,7 +60,7 @@ class IbanAnalysisServiceTest {
     }
 
     @Test
-    @DisplayName("resolveTransferType powinien zwrócić TRANSFER_INTERNAL gdy inny właściciel w tym samym banku")
+    @DisplayName("resolveTransferType should return TRANSFER_INTERNAL when different owner in same bank")
     void resolveTransferType_DifferentOwnerSameBank_ShouldReturnTransferInternal() {
         // when
         TransactionType result = ibanAnalysisService.resolveTransferType(sameOwnerIban1, differentOwnerSameBankIban);
@@ -70,7 +70,7 @@ class IbanAnalysisServiceTest {
     }
 
     @Test
-    @DisplayName("resolveTransferType powinien zwrócić TRANSFER_EXTERNAL gdy inny bank")
+    @DisplayName("resolveTransferType should return TRANSFER_EXTERNAL when different bank")
     void resolveTransferType_DifferentBank_ShouldReturnTransferExternal() {
         // when
         TransactionType result = ibanAnalysisService.resolveTransferType(sameOwnerIban1, differentBankIban);
@@ -80,7 +80,7 @@ class IbanAnalysisServiceTest {
     }
 
     @Test
-    @DisplayName("isSameOwner powinien zwrócić true gdy to ten sam właściciel")
+    @DisplayName("isSameOwner should return true when owner is the same")
     void isSameOwner_SameOwner_ShouldReturnTrue() {
         // when
         boolean result = ibanAnalysisService.isSameOwner(sameOwnerIban1, sameOwnerIban2);
@@ -90,7 +90,7 @@ class IbanAnalysisServiceTest {
     }
 
     @Test
-    @DisplayName("isSameOwner powinien zwrócić false gdy to inny właściciel")
+    @DisplayName("isSameOwner should return false when owner is different")
     void isSameOwner_DifferentOwner_ShouldReturnFalse() {
         // when
         boolean result = ibanAnalysisService.isSameOwner(sameOwnerIban1, differentOwnerSameBankIban);
@@ -100,7 +100,7 @@ class IbanAnalysisServiceTest {
     }
 
     @Test
-    @DisplayName("isSameBank powinien zwrócić true gdy to ten sam bank")
+    @DisplayName("isSameBank should return true when bank is the same")
     void isSameBank_SameBank_ShouldReturnTrue() {
         // when
         boolean result = ibanAnalysisService.isSameBank(sameOwnerIban1, differentOwnerSameBankIban);
@@ -110,7 +110,7 @@ class IbanAnalysisServiceTest {
     }
 
     @Test
-    @DisplayName("isSameBank powinien zwrócić false gdy to inny bank")
+    @DisplayName("isSameBank should return false when bank is different")
     void isSameBank_DifferentBank_ShouldReturnFalse() {
         // when
         boolean result = ibanAnalysisService.isSameBank(sameOwnerIban1, differentBankIban);
@@ -120,9 +120,9 @@ class IbanAnalysisServiceTest {
     }
 
     @Test
-    @DisplayName("Test diagnostyczny weryfikujący numery kont")
+    @DisplayName("Diagnostic test verifying account numbers")
     void diagnosticTest_CheckAccountNumbers() {
-        // Wypisanie informacji diagnostycznych
+        // Print diagnostic information
         System.out.println("sameOwnerIban1: " + sameOwnerIban1.toString());
         System.out.println("sameOwnerIban2: " + sameOwnerIban2.toString());
         System.out.println("differentOwnerSameBankIban: " + differentOwnerSameBankIban.toString());
@@ -132,20 +132,20 @@ class IbanAnalysisServiceTest {
         System.out.println("sameOwnerIban2 accountNumber: " + sameOwnerIban2.getAccountNumber());
         System.out.println("differentOwnerSameBankIban accountNumber: " + differentOwnerSameBankIban.getAccountNumber());
         
-        // Fragment numeru konta odpowiadający za identyfikację właściciela (pozycje 4-13)
+        // Account number fragment responsible for owner identification (positions 4-13)
         System.out.println("sameOwnerIban1 owner part: " + sameOwnerIban1.getAccountNumber().substring(4, 14));
         System.out.println("sameOwnerIban2 owner part: " + sameOwnerIban2.getAccountNumber().substring(4, 14));
         System.out.println("differentOwnerSameBankIban owner part: " + differentOwnerSameBankIban.getAccountNumber().substring(4, 14));
         
-        // Porównanie części numeru konta identyfikującej właściciela
+        // Compare account number parts identifying the owner
         boolean sameOwnerCompare = sameOwnerIban1.getAccountNumber().regionMatches(4, sameOwnerIban2.getAccountNumber(), 4, 10);
         boolean differentOwnerCompare = sameOwnerIban1.getAccountNumber().regionMatches(4, differentOwnerSameBankIban.getAccountNumber(), 4, 10);
         
-        System.out.println("Czy sameOwnerIban1 i sameOwnerIban2 mają tego samego właściciela: " + sameOwnerCompare);
-        System.out.println("Czy sameOwnerIban1 i differentOwnerSameBankIban mają tego samego właściciela: " + differentOwnerCompare);
+        System.out.println("Do sameOwnerIban1 and sameOwnerIban2 have the same owner: " + sameOwnerCompare);
+        System.out.println("Do sameOwnerIban1 and differentOwnerSameBankIban have the same owner: " + differentOwnerCompare);
         
-        // Weryfikacje
-        assertTrue(sameOwnerCompare, "IBAN-y tego samego właściciela powinny mieć identyczne fragmenty od pozycji 4 o długości 10 znaków");
-        assertFalse(differentOwnerCompare, "IBAN-y różnych właścicieli powinny mieć różne fragmenty od pozycji 4 o długości 10 znaków");
+        // Verifications
+        assertTrue(sameOwnerCompare, "IBANs of the same owner should have identical fragments from position 4 with a length of 10 characters");
+        assertFalse(differentOwnerCompare, "IBANs of different owners should have different fragments from position 4 with a length of 10 characters");
     }
 }
