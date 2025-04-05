@@ -199,6 +199,18 @@ BankApp implements a comprehensive transaction history system that allows users 
 
 For detailed technical documentation, see the [Transaction History System](../../wiki/Transaction-History-System) page in the wiki.
 
+#### Banking Operations System
+
+BankApp implements a comprehensive banking operations system that enables secure money transfers between accounts using different identification methods. The system provides flexible transfer options while maintaining strict security standards.
+
+- **Multi-layered Architecture**: API layer, specialized services, and security components
+- **Multiple Transfer Methods**: Support for IBAN-based and email-based transfers
+- **Transaction Building**: Coordinated transaction creation with proper type assignment
+- **Security Features**: Strict account ownership verification and secure processing
+- **Comprehensive Validation**: Input validation, amount verification, and access control
+
+For detailed technical documentation, see the [Banking Operations System](../../wiki/Banking-Operations-System) page in the wiki.
+
 #### Registration System
 
 BankApp implements a comprehensive user registration system that ensures secure account creation with automatic bank account setup and welcome bonus processing.
