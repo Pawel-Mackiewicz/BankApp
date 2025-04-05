@@ -33,5 +33,10 @@
     "name": "app.thymeleaf.enabled",
     "type": "java.lang.String",
     "description": "Enable Thymeleaf template engine"
+  },
+  {
+    "name": "spring.flyway.placeholders.bank_password",
+    "type": "java.lang.String",
+    "description": "Bank password for bank account"
   }
 ]}
