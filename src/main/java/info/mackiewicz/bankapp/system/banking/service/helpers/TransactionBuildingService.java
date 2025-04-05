@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.banking.service;
+package info.mackiewicz.bankapp.system.banking.service.helpers;
 
 import java.math.BigDecimal;
 
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class TransactionBuilderService {
+public class TransactionBuildingService {
     
     private final IbanAnalysisService ibanAnalysisService;
 

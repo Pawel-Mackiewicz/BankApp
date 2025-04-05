@@ -11,6 +11,8 @@ import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.system.banking.api.dto.BankingOperationRequest;
 import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
+import info.mackiewicz.bankapp.system.banking.service.helpers.AccountSecurityService;
+import info.mackiewicz.bankapp.system.banking.service.helpers.TransactionBuildingService;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -23,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TransferOperationService {
 
-    private final TransactionBuilderService transactionBuilderService;
+    private final TransactionBuildingService transactionBuilderService;
     private final AccountSecurityService accountSecurityService;
     private final TransactionService transactionService;
 

@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,9 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.context.ActiveProfiles;
 
 import info.mackiewicz.bankapp.account.model.Account;
@@ -51,21 +46,6 @@ import lombok.extern.slf4j.Slf4j;
 @DisplayName("Concurrent Transactions Integration Tests")
 class ConcurrentTransactionIntegrationTest {
 
-    @TestConfiguration
-    static class TestConfig {
-        @Bean(name = "testExecutor")
-        public Executor testExecutor() {
-            ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-            executor.setCorePoolSize(10);
-            executor.setMaxPoolSize(50);
-            executor.setQueueCapacity(200);
-            executor.setThreadNamePrefix("TestAsync-");
-            executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-            executor.initialize();
-            return executor;
-        }
-    }
-
     @Autowired
     private AccountService accountService;
 
@@ -88,7 +68,7 @@ class ConcurrentTransactionIntegrationTest {
         totalInitialBalance = BigDecimal.ZERO;
 
         // Create test users (we need separate users as there's a 3 account limit per user)
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             User user = createTestUser(i);
             testUsers.add(user);
             
@@ -119,7 +99,7 @@ class ConcurrentTransactionIntegrationTest {
         Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(15))
+            .atMost(Duration.ofSeconds(60))
             .untilAsserted(() -> {
                 verifyTransactionResults(transactions);
                 verifySystemBalance();
@@ -129,9 +109,10 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle multiple withdrawals from same account correctly")
     void testMultipleWithdrawals() {
+        log.info("Starting multiple withdrawals test with ID: {}", testRunId);
+        int numberOfWithdrawals = 20;
         Account sourceAccount = testAccounts.get(0);
         BigDecimal initialBalance = sourceAccount.getBalance();
-        int numberOfWithdrawals = 10;
         BigDecimal withdrawalAmount = initialBalance.divide(BigDecimal.valueOf(numberOfWithdrawals * 2), 2, RoundingMode.HALF_UP);
         
         for (int i = 0; i < numberOfWithdrawals; i++) {
@@ -163,9 +144,10 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle parallel deposits to same account correctly")
     void testParallelDeposits() {
+        log.info("Starting parallel deposits test with ID: {}", testRunId);
+        int numberOfDeposits = 20;
         Account destinationAccount = testAccounts.get(0);
         BigDecimal initialBalance = destinationAccount.getBalance();
-        int numberOfDeposits = 15;
         BigDecimal depositAmount = BigDecimal.valueOf(100);
         
         List<Transaction> transactions = new ArrayList<>();
@@ -202,7 +184,8 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle chain transfers (A→B→C) correctly")
     void testChainTransfers() {
-        int numberOfChains = 5;
+        log.info("Starting chain transfers test with ID: {}", testRunId);
+        int numberOfChains = 20;
         List<Transaction> transactions = new ArrayList<>();
 
         for (int i = 0; i < numberOfChains; i++) {
@@ -234,7 +217,8 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle bidirectional transfers correctly")
     void testBidirectionalTransfers() {
-        int numberOfPairs = 5;
+        log.info("Starting bidirectional transfers test with ID: {}", testRunId);
+        int numberOfPairs = 20;
         List<Transaction> transactions = new ArrayList<>();
         // Store initial balances for all accounts that will participate in transfers
         Map<Integer, BigDecimal> initialBalances = new HashMap<>();
@@ -284,7 +268,8 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle circular chain transfers (A→B→C→A) correctly")
     void testCircularChainTransfers() {
-        int numberOfChains = 10;
+        log.info("Starting circular chain transfers test with ID: {}", testRunId);
+        int numberOfChains = 20;
         List<Transaction> transactions = new ArrayList<>();
         BigDecimal transferAmount = BigDecimal.valueOf(100);
         // Store initial balances for all accounts that will participate in transfers
@@ -337,6 +322,7 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle edge cases correctly")
     void testEdgeCases() {
+        log.info("Starting edge cases test with ID: {}", testRunId);
         // Test zero balance account
         Account zeroBalanceAccount = testAccounts.get(0);
         accountService.withdraw(zeroBalanceAccount, zeroBalanceAccount.getBalance()); // Set balance to zero

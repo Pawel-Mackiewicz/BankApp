@@ -6,7 +6,7 @@ RUN mvn clean package
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
-COPY --from=builder /app/target/BankApp-0.4.5.jar app.jar
+COPY --from=builder /app/target/BankApp-0.4.6.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

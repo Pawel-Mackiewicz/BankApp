@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import info.mackiewicz.bankapp.account.util.IbanGenerator;
-import info.mackiewicz.bankapp.system.banking.service.IbanAnalysisService;
+import info.mackiewicz.bankapp.system.banking.service.helpers.IbanAnalysisService;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 
 /**
