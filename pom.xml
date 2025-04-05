@@ -11,7 +11,7 @@
     </parent>
     <groupId>info.mackiewicz</groupId>
     <artifactId>BankApp</artifactId>
-    <version>0.4.5</version>
+    <version>0.4.6</version>
     <name>bankapp</name>
     <description>BankApp</description>
     <url />
