@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.banking.service;
+package info.mackiewicz.bankapp.system.banking.service.helpers;
 
 import org.iban4j.Iban;
 import org.springframework.stereotype.Service;
