@@ -1,1 +1,0 @@
-web: java -jar target/BankApp-0.1.8.jar

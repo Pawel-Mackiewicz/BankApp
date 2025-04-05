@@ -18,9 +18,9 @@ import org.mockito.quality.Strictness;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
-import info.mackiewicz.bankapp.system.banking.service.AccountSecurityService;
-import info.mackiewicz.bankapp.system.banking.service.TransactionBuilderService;
 import info.mackiewicz.bankapp.system.banking.service.TransferOperationService;
+import info.mackiewicz.bankapp.system.banking.service.helpers.AccountSecurityService;
+import info.mackiewicz.bankapp.system.banking.service.helpers.TransactionBuildingService;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -37,7 +37,7 @@ public abstract class BaseTransferServiceTest {
     protected AccountServiceInterface accountService;
 
     @Mock
-    protected TransactionBuilderService transactionBuilderService;
+    protected TransactionBuildingService transactionBuilderService;
 
     @Mock
     protected AccountSecurityService accountSecurityService;

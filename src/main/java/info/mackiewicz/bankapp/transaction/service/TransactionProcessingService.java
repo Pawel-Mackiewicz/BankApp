@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
+import info.mackiewicz.bankapp.transaction.exception.TransactionAccountConflictException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -78,6 +80,10 @@ class TransactionProcessingService {
             // Process the transaction
             executeTransaction(transaction);
         } catch (TransactionValidationException e) {
+            errorHandler.handleValidationError(transaction, e);
+        } catch (InsufficientFundsException e) {
+            errorHandler.handleInsufficientFundsError(transaction, e);
+        } catch (TransactionAccountConflictException e) {
             errorHandler.handleValidationError(transaction, e);
         } catch (Exception e) {
             errorHandler.handleUnexpectedError(transaction, e);
