@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ import org.springframework.test.context.ActiveProfiles;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.util.Util;
+import info.mackiewicz.bankapp.system.locking.LockingConfig;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
@@ -45,6 +47,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
+@EnableConfigurationProperties(LockingConfig.class)
+@DisplayName("Concurrent Transactions Integration Tests")
 class ConcurrentTransactionIntegrationTest {
 
     @TestConfiguration
@@ -101,7 +105,8 @@ class ConcurrentTransactionIntegrationTest {
     @Test
     @DisplayName("Should handle multiple concurrent transactions correctly")
     void testConcurrentTransactions() {
-        int numberOfTransactions = 20;
+        log.info("Starting concurrent transactions test with ID: {}", testRunId);
+        int numberOfTransactions = 100;
         List<Transaction> transactions = new ArrayList<>();
 
         for (int i = 0; i < numberOfTransactions; i++) {
@@ -127,7 +132,7 @@ class ConcurrentTransactionIntegrationTest {
         Account sourceAccount = testAccounts.get(0);
         BigDecimal initialBalance = sourceAccount.getBalance();
         int numberOfWithdrawals = 10;
-        BigDecimal withdrawalAmount = initialBalance.divide(BigDecimal.valueOf(numberOfWithdrawals * 2));
+        BigDecimal withdrawalAmount = initialBalance.divide(BigDecimal.valueOf(numberOfWithdrawals * 2), 2, RoundingMode.HALF_UP);
         
         for (int i = 0; i < numberOfWithdrawals; i++) {
             createWithdrawal(sourceAccount, withdrawalAmount);
@@ -390,7 +395,7 @@ class ConcurrentTransactionIntegrationTest {
             destinationAccount = testAccounts.get(random.nextInt(testAccounts.size()));
         } while (destinationAccount.equals(sourceAccount));
 
-        BigDecimal maxAmount = sourceAccount.getBalance().multiply(BigDecimal.valueOf(0.9));
+        BigDecimal maxAmount = sourceAccount.getBalance().multiply(BigDecimal.valueOf(0.3));
         BigDecimal amount = BigDecimal.valueOf(random.nextDouble() * maxAmount.doubleValue())
             .setScale(2, RoundingMode.HALF_UP);
 
