@@ -44,36 +44,33 @@ public class AccountLockingStrategy implements LockingStrategy {
         final long startTime = System.currentTimeMillis();
         
         int attempts = 0;
-        while (attempts < lockingConfig.maxAttempts()) {
-            try {
+        try {
+            while (attempts < lockingConfig.maxAttempts()) {
                 if (tryAcquireLock(lock, resourceId, attempts)) {
-                    log.debug("Successfully acquired lock for resource ID: {} after {} attempts", 
+                    log.debug("Successfully acquired lock for resource ID: {} after {} attempts",
                         resourceId, attempts + 1);
+                    lockCounter.incrementAndGet();
                     return;
                 }
                 attempts++;
                 if (attempts < lockingConfig.maxAttempts()) {
                     handleBackoff(attempts, resourceId);
                 }
-            } catch (InterruptedException e) {
-                long totalTime = System.currentTimeMillis() - startTime;
-                log.error("Thread interrupted while acquiring lock for resource ID: {} after {} attempts and {}ms",
-                    resourceId, attempts + 1, totalTime);
-                handleInterruptedException(resourceId, attempts, startTime, e);
             }
+            
+            log.error("Failed to acquire lock for resource ID: {} after {} attempts",
+                resourceId, lockingConfig.maxAttempts());
+            handleMaxAttemptsExceeded(resourceId, startTime);
+        } catch (InterruptedException e) {
+            long totalTime = System.currentTimeMillis() - startTime;
+            log.error("Thread interrupted while acquiring lock for resource ID: {} after {} attempts and {}ms",
+                resourceId, attempts + 1, totalTime);
+            handleInterruptedException(resourceId, attempts, startTime, e);
         }
-        
-        log.error("Failed to acquire lock for resource ID: {} after {} attempts",
-            resourceId, lockingConfig.maxAttempts());
-        handleMaxAttemptsExceeded(resourceId, startTime);
     }
 
     private boolean tryAcquireLock(ReentrantLock lock, Integer resourceId, int attempts) throws InterruptedException {
-        if (lock.tryLock(lockingConfig.timeout(), TimeUnit.MILLISECONDS)) {
-            lockCounter.incrementAndGet();
-            return true;
-        }
-        return false;
+        return lock.tryLock(lockingConfig.timeout(), TimeUnit.MILLISECONDS);
     }
 
     private void handleBackoff(int attempts, Integer resourceId) throws InterruptedException {
