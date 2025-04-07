@@ -97,7 +97,7 @@ class AccountLockingStrategyTest {
 
                 assertThatThrownBy(() -> future.get(5, TimeUnit.SECONDS))
                         .hasCauseInstanceOf(AccountLockException.class)
-                        .getCause()
+                        .cause()
                         .hasMessageContaining("Failed to acquire lock after maximum attempts");
             } finally {
                 executor.shutdownNow();
