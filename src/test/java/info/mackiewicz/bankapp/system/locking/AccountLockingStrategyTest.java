@@ -28,9 +28,6 @@ class AccountLockingStrategyTest {
     @Autowired
     private AccountLockingStrategy lockingStrategy;
 
-    @Autowired
-    private LockingConfig lockingConfig;
-
     private static final Integer TEST_RESOURCE_ID = 1;
 
     @BeforeEach
