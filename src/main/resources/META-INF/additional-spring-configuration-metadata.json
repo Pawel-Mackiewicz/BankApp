@@ -1,5 +1,25 @@
 {"properties": [
   {
+    "name": "app.locking.max-attempts",
+    "type": "java.lang.String",
+    "description": "Maximum number of attempts for locking"
+  },
+  {
+    "name": "app.locking.timeout",
+    "type": "java.lang.String",
+    "description": "Timeout for locking in milliseconds"
+  },
+  {
+    "name": "app.locking.base-delay",
+    "type": "java.lang.String",
+    "description": "Base delay between retry attempts for locking"
+  },
+  {
+    "name": "app.locking.max-delay",
+    "type": "java.lang.String",
+    "description": "Maximum delay between retry attempts for locking"
+  },
+  {
     "name": "app.resend.api-key",
     "type": "java.lang.String",
     "description": "API key for Resend email service"
