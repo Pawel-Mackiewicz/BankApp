@@ -17,6 +17,9 @@ public record LockingConfig(int maxAttempts,
             baseDelay = 100;
         if (maxDelay <= 0)
             maxDelay = 2000;
+        // Ensure maxDelay is at least equal to baseDelay
+        if (maxDelay < baseDelay)
+            maxDelay = baseDelay;
         if (timeout <= 0)
             timeout = 200;
     }
