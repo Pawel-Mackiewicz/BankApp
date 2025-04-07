@@ -33,6 +33,7 @@ spring:
         properties:
             hibernate: 
                 dialect: org.hibernate.dialect.MySQL8Dialect
+                '[show_sql]': false
                 '[format_sql]': true
                 '[globally_quoted_identifiers]': true
     # Flyway configuration
