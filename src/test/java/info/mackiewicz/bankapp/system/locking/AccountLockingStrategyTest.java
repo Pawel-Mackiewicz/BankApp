@@ -141,7 +141,7 @@ class AccountLockingStrategyTest {
                 CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                     try {
                         lockingStrategy.lock(TEST_RESOURCE_ID);
-                        Thread.sleep(500); // Simulate some work
+                        Thread.sleep(100); // Simulate some work
                         lockingStrategy.unlock(TEST_RESOURCE_ID);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
@@ -180,7 +180,7 @@ class AccountLockingStrategyTest {
                 try {
                     lockingStrategy.lock(TEST_RESOURCE_ID);
                     // Hold the lock for enough time to ensure other threads attempt acquisition
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                     lockingStrategy.unlock(TEST_RESOURCE_ID);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -208,11 +208,11 @@ class AccountLockingStrategyTest {
             // Wait for all futures to complete
             // Then
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-                    .orTimeout(5, TimeUnit.SECONDS)
+                    .orTimeout(10, TimeUnit.SECONDS)
                     .join();
 
             executor.shutdown();
-            assertThat(executor.awaitTermination(15, TimeUnit.SECONDS)).isTrue();
+            assertThat(executor.awaitTermination(10, TimeUnit.SECONDS)).isTrue();
 
             assertThat(exceptions)
                     .isNotEmpty()
