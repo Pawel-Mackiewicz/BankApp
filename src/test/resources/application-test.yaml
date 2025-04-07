@@ -1,0 +1,61 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: false
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        '[show_sql]': false
+        '[format_sql]': true
+        dialect: org.hibernate.dialect.H2Dialect
+  transaction:
+    default-timeout: 30s
+    rollback-on-commit-failure: true
+  mail:
+    host: localhost
+    port: 3025
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+  security:
+    user:
+      name: testuser
+      password: testpass
+  flyway:
+    enabled: false
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+app:
+  resend:
+    api-key: test-api-key
+  locking:
+    max-attempts: 3
+    base-delay: 100
+    max-delay: 2000
+    timeout: 200
+
+test:
+  concurrent:
+    max-threads: 5
+  retry:
+    max-attempts: 3
+    delay: 100

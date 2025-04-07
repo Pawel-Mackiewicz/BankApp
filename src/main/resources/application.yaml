@@ -1,7 +1,7 @@
 # Server configuration
 server:
     address: 0.0.0.0
-    port: ${PORT}
+    port: ${PORT:8080}
 
 # Application variables
 spring:
@@ -11,8 +11,8 @@ spring:
     # Spring Security
     security:
         user:
-            name: ${SPRING_SECURITY_USER_NAME}
-            password: ${SPRING_SECURITY_USER_PASSWORD}
+            name: ${SPRING_SECURITY_USER_NAME:testuser}
+            password: ${SPRING_SECURITY_USER_PASSWORD:testpass}
     # Database configuration
     datasource:
         url: ${DB_URL}
@@ -33,6 +33,7 @@ spring:
         properties:
             hibernate: 
                 dialect: org.hibernate.dialect.MySQL8Dialect
+                '[show_sql]': false
                 '[format_sql]': true
                 '[globally_quoted_identifiers]': true
     # Flyway configuration
@@ -45,17 +46,6 @@ spring:
         placeholders:
             bank_password: ${BANK_PASSWORD:password}
 
-# Email configuration
-## Resend API configuration
-app: 
-    resend:
-        api-key: ${RESEND_API_KEY}
-    ## Application base URL (for generating links in emails)
-    base-url: ${APP_BASE_URL}
-    ## Frontend configuration
-    thymeleaf:
-        enabled: ${THYMELEAF_ENABLED:true}
-
 # Swagger / OpenAPI configuration
 springdoc:
     swagger-ui:
@@ -63,6 +53,24 @@ springdoc:
     default-produces-media-type: application/json
     show-actuator: false
     model-and-view-allowed: true
+    
+app: 
+    # Email configuration
+    ## Resend API configuration
+    resend:
+        api-key: ${RESEND_API_KEY:test-api-key}
+    ## Application base URL (for generating links in emails)
+    base-url: ${APP_BASE_URL:http://localhost:8080}
+    ## Frontend configuration
+    thymeleaf:
+        enabled: ${THYMELEAF_ENABLED:true}
+    ## Account locking configuration
+    locking:
+        max-attempts: 5
+        base-delay: 100
+        max-delay: 2000
+        timeout: 200
+
 
 # # Logging configuration
 # logging:
