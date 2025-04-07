@@ -60,6 +60,29 @@
         </encoder>
     </appender>
 
+    <!-- Test file appender -->
+    <appender name="TEST_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/test.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/test.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+        <appender name="TEST_ROOT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/test-root.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/test-root.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <!-- Configuration for production environment -->
     <springProfile name="prod">
         <!-- Loggers for production profile -->
@@ -152,6 +175,20 @@
         <root level="INFO">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="DEBUG_FILE" />
+        </root>
+    </springProfile>
+
+    <!-- Configuration for test environment -->
+    <springProfile name="test">
+        <!-- Application logger -->
+        <logger name="info.mackiewicz.bankapp" level="DEBUG" additivity="false">
+            <appender-ref ref="TEST_FILE" />
+        </logger>
+
+        <!-- Root logger -->
+        <root level="WARN">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="TEST_ROOT_FILE" />
         </root>
     </springProfile>
 </configuration>
