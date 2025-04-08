@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.system.banking.service.transfer;
 import org.springframework.stereotype.Service;
 
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
+import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.shared.exception.IbanAnalysisException;
 import info.mackiewicz.bankapp.system.banking.api.dto.EmailTransferRequest;
@@ -29,7 +30,7 @@ public class EmailTransferService {
      * @param transferRequest The request containing transfer details
      * @param user            The user initiating the transfer
      * @return A response containing details of the transfer
-     * @throws OwnerAccountNotFoundException if no account is found with the given email
+     * @throws OwnerAccountsNotFoundException if no account is found with the given email
      * @throws AccountOwnershipException      if the user does not own the source account
      * @throws TransactionBuildingException   if the transaction cannot be built
      * @throws TransactionValidationException if the transaction fails validation

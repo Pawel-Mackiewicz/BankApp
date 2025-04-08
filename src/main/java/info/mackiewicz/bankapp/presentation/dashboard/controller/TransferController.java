@@ -108,7 +108,8 @@ public class TransferController {
     @PostMapping("/external")
     public String handleExternalTransfer(
             @AuthenticationPrincipal User user,
-            WebTransferRequest request,
+            @Valid WebTransferRequest request,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
         log.info("Processing external transfer request for user: {}, source IBAN: {}, recipient IBAN: {}, amount: {}",
                 user.getId(), request.getSourceIban(), request.getRecipientIban(), request.getAmount());
