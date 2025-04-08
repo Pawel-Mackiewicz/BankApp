@@ -25,6 +25,14 @@ public class TestAccountBuilder {
     private static final int RANDOM_INT = new Random().nextInt(20);
     private static final BigDecimal BALANCE = BigDecimal.valueOf(1000.00);
 
+    /**
+     * Creates a new Account instance with a zero balance.
+     *
+     * <p>This method delegates to {@link #createTestAccountWithBalance(BigDecimal)} using {@code BigDecimal.ZERO}
+     * to generate a test account configured for testing purposes.</p>
+     *
+     * @return a test Account initialized with a balance of zero
+     */
     public static Account createTestAccount() {
         return createTestAccountWithBalance(BigDecimal.ZERO);
     }
@@ -47,6 +55,16 @@ public class TestAccountBuilder {
         return account;
     }
 
+    /**
+     * Creates a test account with the specified owner.
+     *
+     * <p>This method generates a new test account, assigns it a unique IBAN, sets a default balance,
+     * and associates it with the provided owner. If the owner does not have an existing account collection,
+     * one is initialized, and the new account is added to it.</p>
+     *
+     * @param owner the user to be set as the account owner
+     * @return the newly created test account linked to the given owner
+     */
     public static Account createTestAccountWithOwner(User owner) {
         Account account = createTestAccount();
         String iban = getNextIban();
@@ -60,6 +78,16 @@ public class TestAccountBuilder {
         return account;
     }
 
+    /**
+     * Creates a test account with a randomly generated owner.
+     *
+     * <p>
+     * This method generates a random test user and uses the Account factory to create an account for that user.
+     * It then sets predetermined test values for the account's ID and balance.
+     * </p>
+     *
+     * @return a new Account instance with a random owner, fixed test ID, and default balance
+     */
     public static Account createTestAccountWithRandomOwner() {
         User owner = TestUserBuilder.createRandomTestUser();
         Account account = Account.factory().createAccount(owner);
@@ -68,6 +96,15 @@ public class TestAccountBuilder {
         return account;
     }
 
+    /**
+     * Creates a test account with a predefined test user as the owner.
+     *
+     * <p>This method generates an Account instance associated with a test user constructed by the TestUserBuilder.
+     * The account is initialized with a unique identifier (set to a random integer) and a default balance.
+     * </p>
+     *
+     * @return a new Account instance with a test owner, unique ID, and default balance
+     */
     public static Account createTestAccountWithSameOwner() {
         User owner = TestUserBuilder.createTestUser();
         Account account = Account.factory().createAccount(owner);

@@ -22,6 +22,18 @@ public class TransactionAssembler {
 
     private final Map<Class<?>, TransactionAssemblyStrategy<?>> assemblyStrategies;
 
+    /**
+     * Assembles a Transaction for an external transfer using the provided WebTransferRequest.
+     *
+     * <p>
+     * This method delegates the transaction assembly to the generic {@link #assembleTransaction(Object)}
+     * method, which selects an appropriate strategy based on the request type.
+     * </p>
+     *
+     * @param request the web transfer request containing details for the external transfer
+     * @return the assembled Transaction
+     * @throws IllegalArgumentException if no transaction assembly strategy is available for the request type
+     */
     public Transaction assembleExternalTransfer(WebTransferRequest request) {
         return assembleTransaction(request);
     }

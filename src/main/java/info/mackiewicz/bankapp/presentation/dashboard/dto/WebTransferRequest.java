@@ -4,7 +4,12 @@ import info.mackiewicz.bankapp.transaction.model.TransactionType;
 
 public interface WebTransferRequest {
 
-    String getSourceIban();
+    /**
+ * Returns the source IBAN for the web transfer request.
+ *
+ * @return the source IBAN as a String
+ */
+String getSourceIban();
 
     String getRecipientIban();
 

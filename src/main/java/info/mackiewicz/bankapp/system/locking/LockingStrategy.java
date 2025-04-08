@@ -6,9 +6,22 @@ import info.mackiewicz.bankapp.account.exception.AccountLockException;
 
 public interface LockingStrategy {
 
-    AtomicInteger getLockCounter();
+    /**
+ * Returns the counter tracking the number of lock attempts.
+ *
+ * <p>The returned counter is incremented with every attempt to acquire a lock and can be used for
+ * monitoring and debugging locking behavior.</p>
+ *
+ * @return an AtomicInteger representing the cumulative count of lock attempts
+ */
+AtomicInteger getLockCounter();
 
-    AtomicInteger getUnlockCounter();
+    /**
+ * Retrieves the counter that tracks the number of unlock attempts.
+ *
+ * @return an AtomicInteger representing the unlock attempt counter.
+ */
+AtomicInteger getUnlockCounter();
 
     /**
      * Attempts to lock the resource with the given ID.

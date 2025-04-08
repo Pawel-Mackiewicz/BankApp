@@ -34,6 +34,18 @@ public class TransferResponse {
      */
     private TransactionInfo transactionInfo;
 
+    /**
+     * Constructs a new TransferResponse encapsulating transfer details by converting provided
+     * domain objects into their corresponding DTO representations.
+     *
+     * <p>The source and target account instances are transformed into AccountInfo objects using the
+     * AccountInfoAdapter, and the transaction instance is converted into a TransactionInfo using the
+     * TransactionInfoAdapter.</p>
+     *
+     * @param sourceAccount the source account for the transfer
+     * @param targetAccount the target account for the transfer
+     * @param transactionInfo the transaction details associated with the transfer
+     */
     public TransferResponse(Account sourceAccount, Account targetAccount, Transaction transactionInfo) {
         this.sourceAccount = AccountInfoAdapter.fromAccount(sourceAccount);
         this.targetAccount = AccountInfoAdapter.fromAccount(targetAccount);

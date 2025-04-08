@@ -66,8 +66,14 @@ class TransactionProcessingService {
     }
 
     /**
-     * Processes a transaction safely, catching and handling all types of exceptions.
-     * Centralizes all error handling using TransactionErrorHandler.
+     * Safely processes a transaction by validating its integrity and eligibility before executing it.
+     * <p>
+     * This method first performs necessary validations to ensure the transaction meets all processing requirements.
+     * It then attempts to execute the transaction. If a validation error, insufficient funds, account conflict,
+     * or any other unexpected exception occurs, the error is handled gracefully by delegating to the TransactionErrorHandler.
+     * </p>
+     *
+     * @param transaction the transaction to be processed safely
      */
     private void processSafely(Transaction transaction) {
         try {

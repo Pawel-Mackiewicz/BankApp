@@ -16,10 +16,42 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
  */
 public interface TransactionInfo {
 
-    Integer getId();
-    BigDecimal getAmount();
-    String getTitle();
-    String getStatus();
-    String getType();
-    LocalDateTime getDate();
+    /**
+ * Returns the unique identifier of the transaction.
+ *
+ * @return the transaction's unique ID
+ */
+Integer getId();
+    /**
+ * Returns the monetary amount involved in the transaction.
+ *
+ * <p>This value is represented as a BigDecimal to maintain precision for financial calculations.</p>
+ *
+ * @return the transaction amount
+ */
+BigDecimal getAmount();
+    /**
+ * Returns the title or description of the transaction.
+ *
+ * @return the title or description of the transaction
+ */
+String getTitle();
+    /**
+ * Returns the current status of the transaction.
+ *
+ * @return the status of the transaction as a string
+ */
+String getStatus();
+    /**
+ * Returns the type of the transaction.
+ *
+ * @return a string representing the transaction type
+ */
+String getType();
+    /**
+ * Returns the date and time when the transaction occurred.
+ *
+ * @return the transaction date and time
+ */
+LocalDateTime getDate();
 }

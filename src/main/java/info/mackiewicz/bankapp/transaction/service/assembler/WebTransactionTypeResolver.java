@@ -11,15 +11,18 @@ import lombok.extern.slf4j.Slf4j;
 public class WebTransactionTypeResolver {
 
     /**
-     * Resolves the transaction type based on the request data.
-     * If the recipient IBAN is null, then recipient email should not be null, so
-     * it's an TRANSFER_INTERNAL.
-     * Otherwise, it's an TRANSFER_OWN if the recipient IBAN is owned by the same
-     * user as the source IBAN.
-     * Otherwise, it's the transaction type from the request.
+     * Determines the transaction type for a web transfer request.
      *
-     * @param request the transfer request
-     * @return resolved transaction type
+     * <p>The method evaluates the request and selects the transaction type based on the following criteria:
+     * <ul>
+     *   <li>If the recipient IBAN is absent, the transaction is classified as an internal transfer (TRANSFER_INTERNAL).</li>
+     *   <li>If the recipient IBAN is present and belongs to the same owner as the source IBAN,
+     *   the transaction is classified as an own-account transfer (TRANSFER_OWN).</li>
+     *   <li>Otherwise, the transaction type provided within the request is used.</li>
+     * </ul>
+     *
+     * @param request the web transfer request carrying transaction details
+     * @return the resolved transaction type
      */
     public <T extends WebTransferRequest> TransactionType resolveTransactionType(T request) {
         log.debug("Resolving transaction type for request with source IBAN: {}", request.getSourceIban());
@@ -34,15 +37,14 @@ public class WebTransactionTypeResolver {
     }
 
     /**
-     * Checks if the transfer is through email.
-     * It's a job of the validator to ensure that at least one of the fields is not
-     * null and that the recipient email is not null if the recipient IBAN is null.
-     * If the recipient IBAN is null, then recipient email should not be null,
-     * so it's an TRANSFER_INTERNAL, because only internal transfers can have a null IBAN.
-     * 
-     * @param <T>
-     * @param request
-     * @return true if the transfer is through email, false otherwise
+     * Determines if a transfer should be processed as an internal transaction.
+     *
+     * <p>This method returns {@code true} when the recipient IBAN in the request is {@code null},
+     * indicating the transfer is conducted via email and should be treated as an internal transfer.
+     * It assumes that the request has been pre-validated to include at least one valid recipient identifier.
+     *
+     * @param request the web transfer request containing transfer details
+     * @return {@code true} if the recipient IBAN is {@code null}; {@code false} otherwise
      */
     private <T extends WebTransferRequest> boolean isThroughEmail(T request) {
         log.debug("Checking if the transfer is through email");
@@ -54,14 +56,14 @@ public class WebTransactionTypeResolver {
     }
 
     /**
-     * Checks if the source and recipient IBANs have the same owner.
-     * Checking is done by comparing the 6th to 25th characters of the IBANs.
-     * If they are the same, then the IBANs have the same owner.
-     * 
-     * @param <T>     type of TransferRequest
-     * @param request the transfer request
-     * @return true if the source and recipient IBANs have the same owner, false
-     *         otherwise
+     * Determines whether the source and recipient IBANs in the provided web transfer request indicate ownership by the same account holder.
+     * <p>
+     * The check is performed by comparing the substring from the 6th to the 25th character of each IBAN.
+     * </p>
+     *
+     * @param <T> the type that extends WebTransferRequest
+     * @param request the web transfer request containing the IBANs to compare
+     * @return true if the designated IBAN substrings match, indicating the same owner; false otherwise
      */
     private <T extends WebTransferRequest> boolean isSameOwner(T request) {
         log.debug("Checking if the source and recipient IBANs have the same owner");

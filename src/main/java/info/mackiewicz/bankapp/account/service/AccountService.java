@@ -72,33 +72,76 @@ public class AccountService implements AccountServiceInterface {
         return accountQueryService.getAccountsByOwnersUsername(username);
     }
 
+    /**
+     * Retrieves all accounts associated with the specified owner's identifier.
+     *
+     * @param id the unique identifier of the account owner
+     * @return a list of accounts linked to the owner, or an empty list if no accounts are found
+     */
     @Override
     public List<Account> getAccountsByOwnersId(Integer id) {
         return accountQueryService.getAccountsByOwnersId(id);
     }
 
+    /**
+     * Retrieves the account associated with the specified owner's email.
+     *
+     * <p><strong>Deprecated:</strong> This legacy method accepts the email as a {@code String}. Use
+     * {@link #getAccountByOwnersEmail(Email)} with an {@code Email} object for improved type safety.
+     *
+     * @param recipientEmail the email address of the account owner
+     * @return the account associated with the specified email, or {@code null} if no such account exists
+     * @deprecated Use {@link #getAccountByOwnersEmail(Email)} instead.
+     */
     @Deprecated
     @Override
     public Account getAccountByOwnersEmail(String recipientEmail) {
         return accountQueryService.findAccountByOwnersEmail(recipientEmail);
     }
 
+    /**
+     * Retrieves the account associated with the specified owner's email.
+     *
+     * @param recipientEmail the validated Email object representing the account owner's email address
+     * @return the account corresponding to the provided email address
+     */
     @Override
     public Account getAccountByOwnersEmail(Email recipientEmail) {
         return accountQueryService.getAccountByOwnersEmail(recipientEmail);
     }
 
+    /**
+     * Retrieves the account associated with the specified IBAN.
+     *
+     * @param iban the account's IBAN as a String
+     * @return the account corresponding to the given IBAN
+     * @deprecated Use {@link #getAccountByIban(Iban)} for improved type-safety with validated IBAN objects.
+     */
     @Deprecated
     @Override
     public Account getAccountByIban(String iban) {
         return accountQueryService.getAccountByIban(iban);
     }
 
+    /**
+     * Retrieves an account corresponding to the provided IBAN.
+     *
+     * @param iban the IBAN identifying the account to retrieve
+     * @return the account associated with the specified IBAN
+     */
     @Override
     public Account getAccountByIban(Iban iban) {
         return accountQueryService.getAccountByIban(iban);
     }
 
+    /**
+     * Checks whether an account exists for the specified email address.
+     *
+     * Delegates the existence check to the account query service.
+     *
+     * @param email the email address to search for an associated account
+     * @return true if an account is found for the given email, false otherwise
+     */
     @Override
     public boolean existsByEmail(String email) {
         return accountQueryService.existsByEmail(email);

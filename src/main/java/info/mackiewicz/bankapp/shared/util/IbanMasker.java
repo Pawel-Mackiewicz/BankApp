@@ -21,6 +21,15 @@ public class IbanMasker {
         return iban.substring(0, 4) + "****" + iban.substring(iban.length() - 4);
     }
 
+    /**
+     * Masks an IBAN by converting the provided IBAN object to its string representation and then obscuring its middle portion.
+     *
+     * <p>This method retains the first four and the last four characters of the IBAN, replacing any intermediate characters with asterisks.
+     * The actual masking logic is delegated to the string-based maskIban method.</p>
+     *
+     * @param iban the IBAN object to mask
+     * @return a masked IBAN string with only the first and last four characters visible
+     */
     public String maskIban(Iban iban) {
         return maskIban(iban.toString());
     }

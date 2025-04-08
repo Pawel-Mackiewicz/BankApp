@@ -105,11 +105,22 @@ public class TransferController {
         return "redirect:/dashboard";
     }
 
+    /**
+     * Processes an external transfer request.
+     *
+     * <p>
+     * Validates that the authenticated user owns the account associated with the source IBAN provided in the request, assembles a transaction
+     * for an external transfer, and registers the transaction. On success, a confirmation message is added to the flash attributes before
+     * redirecting to the dashboard; on failure, an error message is recorded instead.
+     * </p>
+     *
+     * @param request the external transfer request containing the source IBAN, recipient IBAN, and transfer amount
+     * @return the redirect URL to the dashboard
+     */
     @PostMapping("/external")
     public String handleExternalTransfer(
             @AuthenticationPrincipal User user,
-            @Valid WebTransferRequest request,
-            BindingResult bindingResult,
+            WebTransferRequest request,
             RedirectAttributes redirectAttributes) {
         log.info("Processing external transfer request for user: {}, source IBAN: {}, recipient IBAN: {}, amount: {}",
                 user.getId(), request.getSourceIban(), request.getRecipientIban(), request.getAmount());

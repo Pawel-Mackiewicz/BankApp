@@ -114,12 +114,12 @@ public interface AccountServiceInterface {
         void deleteAccountById(int id);
 
         /**
-         * Checks if an account exists by the owner's email address.
-         *
-         * @param email The email address to check
-         * @return true if an account exists with the specified email, false otherwise
-         * @throws IllegalArgumentException if email is null or has invalid format
-         */
+ * Determines if an account is associated with the specified email address.
+ *
+ * @param email the email address to check; must be non-null and in a valid format
+ * @return {@code true} if an account exists with the specified email, {@code false} otherwise
+ * @throws IllegalArgumentException if {@code email} is null or its format is invalid
+ */
         boolean existsByEmail(@jakarta.validation.constraints.Email(message = "Invalid email format") String email);
 
         /**

@@ -18,31 +18,64 @@ public class TransactionInfoAdapter implements TransactionInfo {
     
     private final Transaction transaction;
     
+    /**
+     * Returns the unique identifier of the underlying transaction.
+     *
+     * @return the transaction's ID
+     */
     @Override
     public Integer getId() {
         return transaction.getId();
     }
     
+    /**
+     * Returns the monetary amount of the transaction.
+     *
+     * @return the transaction amount as a BigDecimal.
+     */
     @Override
     public BigDecimal getAmount() {
         return transaction.getAmount();
     }
     
+    /**
+     * Retrieves the title of the underlying transaction.
+     *
+     * @return the transaction's title
+     */
     @Override
     public String getTitle() {
         return transaction.getTitle();
     }
     
+    /**
+     * Returns the name of the transaction's status.
+     *
+     * @return the name of the transaction's status
+     */
     @Override
     public String getStatus() {
         return transaction.getStatus().getName();
     }
     
+    /**
+     * Returns the name of the transaction's type.
+     *
+     * <p>This method retrieves and returns the name associated with the transaction type
+     * from the underlying Transaction object.</p>
+     *
+     * @return the transaction type name
+     */
     @Override
     public String getType() {
         return transaction.getType().getName();
     }
     
+    /**
+     * Retrieves the date of the underlying transaction.
+     *
+     * @return the transaction date as a LocalDateTime
+     */
     @Override
     public LocalDateTime getDate() {
         return transaction.getDate();

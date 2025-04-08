@@ -20,9 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 public class DifferentAccountsValidator implements ConstraintValidator<DifferentAccounts, Object> {
 
     /**
-     * Initializes the validator with the annotation settings.
-     * 
-     * @param constraintAnnotation the annotation instance
+     * No operation for initializing the validator.
+     * <p>
+     * This method fulfills the {@code ConstraintValidator} interface contract but requires no setup,
+     * as this validator does not maintain any state.
+     * </p>
+     *
+     * @param constraintAnnotation the DifferentAccounts annotation instance (unused)
      */
     @Override
     public void initialize(DifferentAccounts constraintAnnotation) {
@@ -30,14 +34,17 @@ public class DifferentAccountsValidator implements ConstraintValidator<Different
     }
 
     /**
-     * Validates that the source and destination accounts in a transfer request are
-     * different.
-     * Handles both internal and external transfer request types.
-     * 
-     * @param value   the object to validate (expected to be a transfer request)
+     * Validates that the source and destination IBANs in a {@link WebTransferRequest} are different.
+     * <p>
+     * Returns {@code true} if the IBANs differ or if either is null (allowing other validations,
+     * such as {@code @NotNull}, to handle null values). If the input is {@code null}, validation is bypassed.
+     * For any other type, an {@link UnsupportedValidationTypeException} is thrown.
+     * </p>
+     *
+     * @param value the transfer request to validate (expected to be a {@link WebTransferRequest})
      * @param context the validation context
-     * @return true if accounts are different or if validation is not applicable,
-     *         false otherwise
+     * @return {@code true} if the IBANs are different or if validation is bypassed; {@code false} if the IBANs are identical
+     * @throws UnsupportedValidationTypeException if the provided value is not a {@link WebTransferRequest}
      */
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
@@ -59,6 +66,16 @@ public class DifferentAccountsValidator implements ConstraintValidator<Different
         }
     }
 
+    /**
+     * Validates that a transfer does not occur between the same account.
+     *
+     * <p>This method checks if both provided IBANs are non-null and distinct.
+     * If either IBAN is null, it returns {@code true} to allow other validators to handle null checks.</p>
+     *
+     * @param sourceIban the IBAN of the account initiating the transfer
+     * @param recipientIban the IBAN of the account receiving the transfer
+     * @return {@code true} if the IBANs are different or if either is null, {@code false} otherwise
+     */
     private boolean validateTransfer(String sourceIban, String recipientIban) {
         log.debug("Validating IBAN transfer: sourceIban={}, recipientIban={}",
                 sourceIban, recipientIban);
