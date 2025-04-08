@@ -26,7 +26,7 @@ import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.utils.TestIbanProvider;
 
@@ -145,7 +145,7 @@ class AccountQueryServiceTest {
     void findAccountByOwnersEmail_WhenAccountExists_ShouldReturnAccount() {
         // given
         String emailStr = "jan.kowalski@example.com";
-        Email email = new Email(emailStr);
+        EmailAddress email = new EmailAddress(emailStr);
         when(accountRepository.findFirstByOwner_email(email))
             .thenReturn(Optional.of(testAccount));
 

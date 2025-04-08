@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.api.dto;
 
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
@@ -19,11 +19,11 @@ public class EmailTransferRequest extends BankingOperationRequest {
     @NotBlank
     private String destinationEmail;
 
-    public Email getDestinationEmail() {
-        return new Email(destinationEmail);
+    public EmailAddress getDestinationEmail() {
+        return new EmailAddress(destinationEmail);
     }
 
-    public void setDestinationEmail(Email email) {
+    public void setDestinationEmail(EmailAddress email) {
         this.destinationEmail = email.getValue();
     }
 }

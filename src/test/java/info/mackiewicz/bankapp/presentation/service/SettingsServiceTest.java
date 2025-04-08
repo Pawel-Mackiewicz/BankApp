@@ -20,7 +20,7 @@ import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
 import info.mackiewicz.bankapp.security.service.PasswordValidationService;
 import info.mackiewicz.bankapp.security.service.UsernameValidationService;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
 
@@ -53,7 +53,7 @@ class SettingsServiceTest {
         user.setUsername("testuser");
         user.setFirstname("Test");
         user.setLastname("User");
-        user.setEmail(new Email("test@example.com"));
+        user.setEmail(new EmailAddress("test@example.com"));
         user.setPhoneNumber(new PhoneNumber("123456789"));
         user.setPassword("currentPassword");
         return user;

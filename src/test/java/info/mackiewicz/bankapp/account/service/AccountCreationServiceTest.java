@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -54,7 +54,7 @@ class AccountCreationServiceTest {
         testUser.setLastname("Doe");
         testUser.setDateOfBirth(LocalDate.of(1990, 1, 1));
         testUser.setUsername("johndoe");
-        testUser.setEmail(new Email("john@example.com"));
+        testUser.setEmail(new EmailAddress("john@example.com"));
         testUser.setPhoneNumber(new PhoneNumber("+48123456789"));
         
         testAccount = Account.factory().createAccount(testUser);

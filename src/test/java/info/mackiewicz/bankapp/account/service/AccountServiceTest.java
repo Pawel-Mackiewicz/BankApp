@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
@@ -46,7 +46,7 @@ class AccountServiceTest {
     private static final Integer TEST_USER_ID = 1;
     private static final Pesel TEST_PESEL = new Pesel("12345678901");
     private static final String TEST_USERNAME = "testuser";
-    private static final Email TEST_EMAIL = new Email("test@example.com");
+    private static final EmailAddress TEST_EMAIL = new EmailAddress("test@example.com");
 
     @BeforeEach
     void setUp() {

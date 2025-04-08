@@ -24,7 +24,7 @@ import info.mackiewicz.bankapp.security.exception.TokenCreationException;
 import info.mackiewicz.bankapp.security.exception.UnexpectedTokenValidationException;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
@@ -125,7 +125,7 @@ class PasswordResetServiceTest {
         when(mockToken.getUserEmail()).thenReturn(TEST_EMAIL);
         when(mockToken.getFullName()).thenReturn(TEST_FULL_NAME);
         when(passwordResetTokenService.getValidatedToken(TEST_TOKEN)).thenReturn(mockToken);
-        Email testEmail = new Email(TEST_EMAIL);
+        EmailAddress testEmail = new EmailAddress(TEST_EMAIL);
         doThrow(new RuntimeException("Password update failed"))
             .when(userService).changeUsersPassword(testEmail, NEW_PASSWORD);
 
@@ -157,7 +157,7 @@ class PasswordResetServiceTest {
             .hasMessage("Failed to send confirmation");
 
         verify(passwordResetTokenService).consumeToken(mockToken);
-        verify(userService).changeUsersPassword(new Email(TEST_EMAIL), NEW_PASSWORD);
+        verify(userService).changeUsersPassword(new EmailAddress(TEST_EMAIL), NEW_PASSWORD);
     }
 
     @Test
@@ -176,7 +176,7 @@ class PasswordResetServiceTest {
         // then
         inOrder.verify(passwordResetTokenService).getValidatedToken(TEST_TOKEN);
         inOrder.verify(passwordResetTokenService).consumeToken(mockToken);
-        inOrder.verify(userService).changeUsersPassword(new Email(TEST_EMAIL), NEW_PASSWORD);
+        inOrder.verify(userService).changeUsersPassword(new EmailAddress(TEST_EMAIL), NEW_PASSWORD);
         inOrder.verify(emailService).sendPasswordResetConfirmation(TEST_EMAIL, TEST_FULL_NAME);
         inOrder.verifyNoMoreInteractions();
     }

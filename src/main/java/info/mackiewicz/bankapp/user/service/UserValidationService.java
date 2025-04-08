@@ -10,7 +10,7 @@ import info.mackiewicz.bankapp.user.exception.InvalidAgeException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import lombok.RequiredArgsConstructor;
@@ -127,9 +127,9 @@ public class UserValidationService {
      *
      * @param email The email to validate as Email value object
      * @throws UserValidationException if the email already exists
-     * @see Email
+     * @see EmailAddress
      */
-    public void validateEmailUnique(Email email) {
+    public void validateEmailUnique(EmailAddress email) {
         log.debug("Validating email uniqueness: {}", email);
         if (userQueryService.userExistsByEmail(email)) {
             log.warn("Attempt to use existing email: {}", email);

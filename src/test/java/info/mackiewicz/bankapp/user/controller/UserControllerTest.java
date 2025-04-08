@@ -37,7 +37,7 @@ import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
 import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -88,7 +88,7 @@ class UserControllerTest {
                                 .withLastname("Doe")
                                 .withPesel(new Pesel("12345678901"))
                                 .withDateOfBirth(LocalDate.of(1990, 1, 1))
-                                .withEmail(new Email("test@test.com"))
+                                .withEmail(new EmailAddress("test@test.com"))
                                 .withPhoneNumber(new PhoneNumber("+48123456789"))
                                 .withPassword("Test123!@#")
                                 .build();
@@ -255,7 +255,7 @@ void fixedCreateUserTest() throws Exception {
                                 .withLastname("Doe")
                                 .withPesel(new Pesel("12345678902"))
                                 .withDateOfBirth(LocalDate.of(1992, 1, 1))
-                                .withEmail(new Email("jane@test.com"))
+                                .withEmail(new EmailAddress("jane@test.com"))
                                 .withPhoneNumber(new PhoneNumber("+48987654321"))
                                 .withPassword("Test123!@#")
                                 .build();

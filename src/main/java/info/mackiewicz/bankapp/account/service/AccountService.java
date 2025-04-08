@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -84,7 +84,7 @@ public class AccountService implements AccountServiceInterface {
     }
 
     @Override
-    public Account getAccountByOwnersEmail(Email recipientEmail) {
+    public Account getAccountByOwnersEmail(EmailAddress recipientEmail) {
         return accountQueryService.getAccountByOwnersEmail(recipientEmail);
     }
 

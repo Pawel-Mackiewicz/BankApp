@@ -9,7 +9,7 @@ import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.user.exception.InvalidPeselFormatException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
@@ -95,11 +95,11 @@ public class UserQueryService {
      * @return The user with the specified email
      * @throws UserNotFoundException if no user is found with the given email
      * @throws IllegalArgumentException if the email format is invalid
-     * @see Email
+     * @see EmailAddress
      */
     User getUserByEmail(String email) {
         log.debug("Querying user by email string: {}", email);
-        return getUserByEmail(new Email(email));
+        return getUserByEmail(new EmailAddress(email));
     }
 
     /**
@@ -108,9 +108,9 @@ public class UserQueryService {
      * @param email The email address as an Email value object
      * @return The user with the specified email
      * @throws UserNotFoundException if no user is found with the given email
-     * @see Email
+     * @see EmailAddress
      */
-    User getUserByEmail(Email email) {
+    User getUserByEmail(EmailAddress email) {
         log.debug("Querying user by email object: {}", email);
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> {
@@ -159,11 +159,11 @@ public class UserQueryService {
      * @param email The email to check as a string
      * @return true if a user exists with the email, false otherwise
      * @throws InvalidEmailFormatException if the email format is invalid
-     * @see Email
+     * @see EmailAddress
      */
     boolean userExistsByEmail(String email) {
         log.debug("Checking if user exists by email string: {}", email);
-        return userExistsByEmail(new Email(email));
+        return userExistsByEmail(new EmailAddress(email));
     }
 
     /**
@@ -171,9 +171,9 @@ public class UserQueryService {
      *
      * @param email The email to check as an Email value object
      * @return true if a user exists with the email, false otherwise
-     * @see Email
+     * @see EmailAddress
      */
-    public boolean userExistsByEmail(Email email) {
+    public boolean userExistsByEmail(EmailAddress email) {
         log.debug("Checking if user exists by Email object: {}", email);
         boolean exists = userRepository.existsByEmail(email);
         log.debug("User with email {} {} in the system", email, exists ? "exists" : "does not exist");

@@ -5,7 +5,7 @@ import info.mackiewicz.bankapp.user.exception.InvalidAgeException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import org.junit.jupiter.api.DisplayName;
@@ -105,7 +105,7 @@ class UserValidationServiceTest {
         @Test
         @DisplayName("Should pass for unique email")
         void shouldPassForUniqueEmail() {
-            Email email = new Email("unique@example.com");
+            EmailAddress email = new EmailAddress("unique@example.com");
             when(userQueryService.userExistsByEmail(email)).thenReturn(false);
 
             assertThatCode(() -> userValidationService.validateEmailUnique(email))
@@ -115,7 +115,7 @@ class UserValidationServiceTest {
         @Test
         @DisplayName("Should throw exception for duplicate email")
         void shouldThrowExceptionForDuplicateEmail() {
-            Email email = new Email("existing@example.com");
+            EmailAddress email = new EmailAddress("existing@example.com");
             when(userQueryService.userExistsByEmail(email)).thenReturn(true);
 
             assertThatThrownBy(() -> userValidationService.validateEmailUnique(email))

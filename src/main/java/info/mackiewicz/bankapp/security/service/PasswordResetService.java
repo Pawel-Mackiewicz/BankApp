@@ -16,7 +16,7 @@ import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -110,7 +110,7 @@ public class PasswordResetService {
 
         log.debug("Validating reset token: {}", tokenId);
         PasswordResetToken token = validateAndRetrieveToken(request.getToken());
-        Email email = new Email(token.getUserEmail());
+        EmailAddress email = new EmailAddress(token.getUserEmail());
         String newPassword = request.getPassword();
         String fullNameOfUser = token.getFullName();
         log.debug("Token validated successfully.");
@@ -128,7 +128,7 @@ public class PasswordResetService {
         log.info("Password reset completed successfully for user: {} (token: {})", email, tokenId);
     }
 
-    private void updateUserPassword(Email email, String newPassword) {
+    private void updateUserPassword(EmailAddress email, String newPassword) {
         try {
             userService.changeUsersPassword(email, newPassword);
         } catch (Exception e) {

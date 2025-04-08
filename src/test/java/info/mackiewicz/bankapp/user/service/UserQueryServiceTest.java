@@ -21,7 +21,7 @@ import org.mockito.MockitoAnnotations;
 
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
 
@@ -168,7 +168,7 @@ class UserQueryServiceTest {
         void getUserByEmail_withStringParameter_whenUserExists_shouldReturnUser() {
             // given
             String emailStr = "jan.kowalski@example.com";
-            Email email = new Email(emailStr);
+            EmailAddress email = new EmailAddress(emailStr);
             User expectedUser = new User();
             expectedUser.setEmail(email);
 
@@ -187,7 +187,7 @@ class UserQueryServiceTest {
         @DisplayName("Should return user when email exists (Email parameter)")
         void getUserByEmail_withEmailParameter_whenUserExists_shouldReturnUser() {
             // given
-            Email email = new Email("jan.kowalski@example.com");
+            EmailAddress email = new EmailAddress("jan.kowalski@example.com");
             User expectedUser = new User();
             expectedUser.setEmail(email);
 
@@ -206,7 +206,7 @@ class UserQueryServiceTest {
         @DisplayName("Should throw UserNotFoundException when email does not exist")
         void getUserByEmail_whenUserDoesNotExist_shouldThrowException() {
             // given
-            Email email = new Email("nonexistent@example.com");
+            EmailAddress email = new EmailAddress("nonexistent@example.com");
             when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
             // when & then
@@ -289,7 +289,7 @@ class UserQueryServiceTest {
         void userExistsByEmail_withStringParameter_whenEmailExists_shouldReturnTrue() {
             // given
             String emailStr = "jan.kowalski@example.com";
-            Email email = new Email(emailStr);
+            EmailAddress email = new EmailAddress(emailStr);
             when(userRepository.existsByEmail(email)).thenReturn(true);
 
             // when
@@ -304,7 +304,7 @@ class UserQueryServiceTest {
         @DisplayName("Should return true when email exists (Email parameter)")
         void userExistsByEmail_withEmailParameter_whenEmailExists_shouldReturnTrue() {
             // given
-            Email email = new Email("jan.kowalski@example.com");
+            EmailAddress email = new EmailAddress("jan.kowalski@example.com");
             when(userRepository.existsByEmail(email)).thenReturn(true);
 
             // when
@@ -319,7 +319,7 @@ class UserQueryServiceTest {
         @DisplayName("Should return false when email does not exist")
         void userExistsByEmail_whenEmailDoesNotExist_shouldReturnFalse() {
             // given
-            Email email = new Email("nonexistent@example.com");
+            EmailAddress email = new EmailAddress("nonexistent@example.com");
             when(userRepository.existsByEmail(email)).thenReturn(false);
 
             // when

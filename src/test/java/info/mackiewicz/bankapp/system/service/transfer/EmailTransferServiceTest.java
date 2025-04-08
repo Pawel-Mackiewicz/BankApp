@@ -22,7 +22,7 @@ import info.mackiewicz.bankapp.system.banking.api.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
 import info.mackiewicz.bankapp.system.banking.service.transfer.EmailTransferService;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 
 @ExtendWith(MockitoExtension.class)
 class EmailTransferServiceTest extends BaseTransferServiceTest {
@@ -38,7 +38,7 @@ class EmailTransferServiceTest extends BaseTransferServiceTest {
     @DisplayName("Should successfully handle email transfer")
     void shouldSuccessfullyHandleEmailTransfer() {
         // Arrange
-        Email destEmail = new Email("recipient@example.com");
+        EmailAddress destEmail = new EmailAddress("recipient@example.com");
         EmailTransferRequest request = createEmailTransferRequest(SOURCE_IBAN, destEmail);
         
         when(accountService.getAccountByOwnersEmail(eq(destEmail)))
@@ -67,7 +67,7 @@ class EmailTransferServiceTest extends BaseTransferServiceTest {
     @DisplayName("Should throw exception when destination email not found")
     void shouldThrowExceptionWhenDestinationEmailNotFound() {
         // Arrange
-        Email destEmail = new Email("nonexistent@example.com");
+        EmailAddress destEmail = new EmailAddress("nonexistent@example.com");
         EmailTransferRequest request = createEmailTransferRequest(SOURCE_IBAN, destEmail);
         
         when(accountService.getAccountByOwnersEmail(eq(destEmail)))
@@ -92,7 +92,7 @@ class EmailTransferServiceTest extends BaseTransferServiceTest {
     @DisplayName("Should throw exception when user is not owner of source account")
     void shouldThrowExceptionWhenUserIsNotOwnerOfSourceAccount() {
         // Arrange
-        Email destEmail = new Email("recipient@example.com");
+        EmailAddress destEmail = new EmailAddress("recipient@example.com");
         EmailTransferRequest request = createEmailTransferRequest(SOURCE_IBAN, destEmail);
             
         when(operationsService.handleTransfer(
@@ -111,7 +111,7 @@ class EmailTransferServiceTest extends BaseTransferServiceTest {
     @DisplayName("Should throw exception when transaction validation fails")
     void shouldThrowExceptionWhenTransactionValidationFails() {
         // Arrange
-        Email destEmail = new Email("recipient@example.com");
+        EmailAddress destEmail = new EmailAddress("recipient@example.com");
         EmailTransferRequest request = createEmailTransferRequest(SOURCE_IBAN, destEmail);
                 
         when(operationsService.handleTransfer(
@@ -126,7 +126,7 @@ class EmailTransferServiceTest extends BaseTransferServiceTest {
                 .isInstanceOf(TransactionValidationException.class);
     }
 
-    private EmailTransferRequest createEmailTransferRequest(Iban sourceIban, Email destEmail) {
+    private EmailTransferRequest createEmailTransferRequest(Iban sourceIban, EmailAddress destEmail) {
         EmailTransferRequest request = new EmailTransferRequest();
         request.setSourceIban(sourceIban);
         request.setDestinationEmail(destEmail);
