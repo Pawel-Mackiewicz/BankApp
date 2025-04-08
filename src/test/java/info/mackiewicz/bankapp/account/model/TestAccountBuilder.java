@@ -25,6 +25,14 @@ public class TestAccountBuilder {
     private static final int RANDOM_INT = new Random().nextInt(20);
     private static final BigDecimal BALANCE = BigDecimal.valueOf(1000.00);
 
+    /**
+     * Creates a new Account instance with a balance of zero.
+     *
+     * <p>This utility method returns a test account by delegating to 
+     * {@code createTestAccountWithBalance} with a balance of {@code BigDecimal.ZERO}.</p>
+     *
+     * @return a new Account with an initial zero balance
+     */
     public static Account createTestAccount() {
         return createTestAccountWithBalance(BigDecimal.ZERO);
     }
@@ -47,6 +55,16 @@ public class TestAccountBuilder {
         return account;
     }
 
+    /**
+     * Creates a test Account for the specified owner with a unique IBAN and a default balance.
+     *
+     * <p>This method initializes a new account by setting a generated IBAN, assigning the provided owner,
+     * and setting the balance to a predefined constant. It also ensures that the owner's account collection
+     * is initialized before adding the new account.</p>
+     *
+     * @param owner the User to be set as the owner of the account
+     * @return the newly created Account associated with the specified owner
+     */
     public static Account createTestAccountWithOwner(User owner) {
         Account account = createTestAccount();
         String iban = getNextIban();
@@ -60,6 +78,16 @@ public class TestAccountBuilder {
         return account;
     }
 
+    /**
+     * Creates a test Account instance with a randomly generated owner.
+     *
+     * <p>This method generates a random test user using {@code TestUserBuilder.createRandomTestUser()}, creates an Account
+     * instance via the account factory, and sets its ID and balance using reflection. The account ID is set to a predefined
+     * random integer constant, and the balance is set to a default test value.
+     * </p>
+     *
+     * @return a new Account instance with a random owner, preset account ID, and default balance.
+     */
     public static Account createTestAccountWithRandomOwner() {
         User owner = TestUserBuilder.createRandomTestUser();
         Account account = Account.factory().createAccount(owner);
@@ -68,6 +96,13 @@ public class TestAccountBuilder {
         return account;
     }
 
+    /**
+     * Creates a test Account instance with a fixed test owner.
+     *
+     * <p>This method generates a test user using TestUserBuilder and creates an Account for that user. It then assigns a predetermined ID (RANDOM_INT) and initializes the account balance to the default value (BALANCE).
+     *
+     * @return the newly created Account instance with a test user as its owner
+     */
     public static Account createTestAccountWithSameOwner() {
         User owner = TestUserBuilder.createTestUser();
         Account account = Account.factory().createAccount(owner);

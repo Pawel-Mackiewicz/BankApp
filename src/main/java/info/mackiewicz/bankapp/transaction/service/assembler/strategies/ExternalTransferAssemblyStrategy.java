@@ -24,6 +24,15 @@ public class ExternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
     private final AccountService accountService;
     private final WebTransactionTypeResolver transactionTypeResolver;
 
+    /**
+     * Assembles a Transaction for the external transfer request.
+     *
+     * <p>This method logs the transfer details, retrieves the source and destination accounts using the request's IBAN information, 
+     * and determines the appropriate transaction type. It then delegates to the superclass to assemble and return the final Transaction.</p>
+     *
+     * @param request the external transfer request containing transfer details
+     * @return the assembled Transaction representing the external transfer
+     */
     @Override
     public Transaction assembleTransaction(ExternalTransferRequest request) {
         logTransferRequest(request);
@@ -35,12 +44,28 @@ public class ExternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
         return super.assembleTransaction(request, sourceAccount, destinationAccount, resolvedType);
     }
 
+    /**
+     * Logs the details of an external transfer request.
+     *
+     * <p>This method logs an informational message with the source IBAN, recipient IBAN, and transfer amount
+     * provided by the external transfer request.
+     *
+     * @param request the external transfer request containing the transfer details
+     */
     @Override
     protected <T extends WebTransferRequest> void logTransferRequest(T request) {
         log.info("Assembling external transfer from IBAN: {} to IBAN: {}, amount: {}",
                 request.getSourceIban(), request.getRecipientIban(), request.getAmount());
     }
 
+    /**
+     * Retrieves the source account for an external transfer transaction.
+     *
+     * <p>This method extracts the source IBAN from the provided {@code WebTransferRequest} and obtains the corresponding account using the account service.
+     *
+     * @param request the external transfer request containing the source IBAN
+     * @return the account associated with the provided source IBAN
+     */
     @Override
     protected <T extends WebTransferRequest> Account getSourceAccount(T request) {
         log.debug("Finding source account by IBAN: {}", request.getSourceIban());
@@ -49,6 +74,17 @@ public class ExternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
         return sourceAccount;
     }
 
+    /**
+     * Retrieves the destination account for the given web transfer request.
+     *
+     * <p>
+     * The destination account is obtained by searching for the recipient's IBAN provided in the transfer request.
+     * </p>
+     *
+     * @param <T> a subtype of WebTransferRequest containing transfer details, including the recipient's IBAN
+     * @param request the web transfer request with recipient IBAN information
+     * @return the destination account corresponding to the recipient's IBAN
+     */
     @Override
     protected <T extends WebTransferRequest> Account getDestinationAccount(T request) {
         log.debug("Finding destination account by IBAN: {}", request.getRecipientIban());

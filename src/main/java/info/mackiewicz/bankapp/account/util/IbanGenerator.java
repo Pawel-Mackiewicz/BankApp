@@ -40,11 +40,19 @@ public final class IbanGenerator {
     }
 
     /**
-     * Generates the account number part of the IBAN.
-     * DO NOT CHANGE THIS IMPLEMENTATION, IT'S A BANKING STANDARD.
-     * @param userId The user's unique identifier
-     * @param accountCounter The sequential number of the account for the user
-     * @return A 16-digit account number string
+     * Generates the account number portion of a Polish IBAN in accordance with banking standards.
+     *
+     * <p>This method creates a 16-digit account number by concatenating:
+     * <ul>
+     *   <li>A fixed 4-digit prefix ("0000")</li>
+     *   <li>An 8-digit encoded user ID obtained by multiplying the user ID by 13</li>
+     *   <li>A 4-digit formatted account counter</li>
+     * </ul>
+     * Do not modify this implementation.
+     *
+     * @param userId the user's unique identifier used for encoding the account number
+     * @param accountCounter the sequential account number for the user
+     * @return a 16-digit account number string
      */
     private final String generateAccountNumber(Integer userId, Integer accountCounter) {
         // Encoded User ID

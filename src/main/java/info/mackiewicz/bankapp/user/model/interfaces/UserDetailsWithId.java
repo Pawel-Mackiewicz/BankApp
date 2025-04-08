@@ -4,6 +4,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserDetailsWithId extends UserDetails {
 
-    Integer getId();
+    /**
+ * Retrieves the unique identifier for the user.
+ *
+ * @return the user ID as an Integer
+ */
+Integer getId();
 
 }

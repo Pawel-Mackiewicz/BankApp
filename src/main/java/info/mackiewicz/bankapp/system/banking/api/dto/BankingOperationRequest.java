@@ -50,18 +50,42 @@ public abstract class BankingOperationRequest {
     @NotBlank(message = "Title cannot be blank")
     private String title;
 
+    /**
+     * Returns the source account IBAN as an {@link Iban} object.
+     *
+     * <p>This method converts the stored IBAN string to its corresponding {@code Iban}
+     * representation using {@link Iban#valueOf(String)}.</p>
+     *
+     * @return an {@link Iban} representing the source account IBAN
+     */
     public Iban getSourceIban() {
         return Iban.valueOf(sourceIban);
     }
 
+    /**
+     * Sets the source IBAN using the provided Iban instance by converting it to a String.
+     *
+     * @param iban the Iban object representing the source account's IBAN
+     */
     public void setSourceIban(Iban iban) {
         this.sourceIban = iban.toString();
     }
 
+    /**
+     * Sets the source account's IBAN using its string representation.
+     *
+     * @param iban the IBAN string to be assigned as the source account's IBAN
+     */
     public void setSourceIban(String iban) {
         this.sourceIban = iban;
     }
 
+    /**
+     * Constructs a new BankingOperationRequest.
+     *
+     * <p>Initializes the temporary transaction ID (tempId) by computing the number of milliseconds
+     * elapsed from the start of the current month (with the day truncated) until the current moment.
+     */
     public BankingOperationRequest() {
         tempId = ChronoUnit.MILLIS.between(
             LocalDateTime.now().withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),

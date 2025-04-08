@@ -33,12 +33,17 @@ import jakarta.validation.Valid;
 public interface BankingOperationsControllerInterface {
 
     /**
-     * Transfers funds between accounts
-     * 
-     * @param request transfer details including source account IBAN, destination account IBAN and amount
-     * @param authUser authenticated user details, who has access to the source account
-     * @return response with transaction result
-     */
+             * Transfers funds from a source account to a destination account using IBAN identifiers.
+             *
+             * <p>
+             * The transfer request must include the source IBAN, destination IBAN, and transfer amount.
+             * Ensure that the destination IBAN has been validated via the GET /api/validate-iban endpoint before initiating the transfer.
+             * </p>
+             *
+             * @param request transfer details including source IBAN, destination IBAN, and amount
+             * @param authUser authenticated user owning the source account
+             * @return a ResponseEntity encapsulating the result of the transfer transaction
+             */
     @Operation(
         summary = "Transfer funds using IBAN", 
         description = "Transfers funds from source account to destination account using IBAN identifiers. \n\n" +
@@ -180,12 +185,15 @@ public interface BankingOperationsControllerInterface {
 
 
     /**
-     * Transfers funds to an email address
-     * 
-     * @param request transfer details including source account, destination email (which will be resolved to IBAN) and amount
-     * @param authUser authenticated user details, who has access to the source account
-     * @return response with transaction result
-     */
+             * Transfers funds from a source account to a recipient account using the recipient's email address.
+             *
+             * <p>This method resolves the provided email to an IBAN before processing the transfer.
+             * It is recommended to validate the recipient's email using the GET /api/validate-email endpoint prior to initiating the transaction.</p>
+             *
+             * @param request the transfer details, including the source IBAN, destination email, transfer amount, and title
+             * @param authUser the authenticated user details ensuring access to the source account
+             * @return a ResponseEntity encapsulating the result of the transfer operation
+             */
     @Operation(
         summary = "Transfer funds using email", 
         description = "Transfers funds from source account to the account associated with the provided email address. \n\n" +

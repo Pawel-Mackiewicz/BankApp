@@ -19,10 +19,26 @@ public class EmailTransferRequest extends BankingOperationRequest {
     @NotBlank
     private String destinationEmail;
 
+    /**
+     * Returns a new Email instance using the stored destination email address.
+     *
+     * <p>This method creates an Email object from the destinationEmail field, providing a
+     * strongly-typed representation for email transfer operations.
+     *
+     * @return an Email object representing the destination email address
+     */
     public Email getDestinationEmail() {
         return new Email(destinationEmail);
     }
 
+    /**
+     * Sets the destination email address for this transfer request.
+     *
+     * <p>This method assigns the email's string value to the destination email field,
+     * which is used to identify the recipient of the transfer.</p>
+     *
+     * @param email the Email object containing the new destination address
+     */
     public void setDestinationEmail(Email email) {
         this.destinationEmail = email.getValue();
     }

@@ -69,13 +69,16 @@ public interface AccountServiceInterface {
     List<Account> getAllAccounts();
 
     /**
-     * Finds an account by its IBAN (International Bank Account Number).
-     *
-     * @param iban The IBAN to search for
-     * @return An {@link Account} with the specified IBAN
-     * @throws IllegalArgumentException if iban is null or empty
-     * @deprecated Use {@link #getAccountByIban(Iban)} instead.
-     */
+ * Retrieves an account linked to the specified IBAN (International Bank Account Number).
+ *
+ * <p>This method is deprecated and will be removed in a future release. Use
+ * {@link #getAccountByIban(Iban)} for improved type safety and error handling.</p>
+ *
+ * @param iban the IBAN to search for; must be non-null and non-empty
+ * @return the {@link Account} associated with the provided IBAN
+ * @throws IllegalArgumentException if the specified IBAN is null or empty
+ * @deprecated Use {@link #getAccountByIban(Iban)} instead.
+ */
     Account getAccountByIban(String iban);
 
     /**
@@ -97,12 +100,12 @@ public interface AccountServiceInterface {
     Account getAccountByOwnersEmail(@jakarta.validation.constraints.Email(message = "Invalid email format") String recipientEmail);
 
     /**
-     * Finds an account by the owner's email address.
-     *
-     * @param recipientEmail The email address to search for
-     * @return An {@link Account} belonging to the owner with the specified email address
-     * @throws info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException if no account is found with the given email
-     */
+ * Retrieves an account associated with the specified owner's email.
+ *
+ * @param recipientEmail the validated Email instance representing the owner's email address
+ * @return the Account associated with the provided email
+ * @throws info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException if no account is found for the given email
+ */
     Account getAccountByOwnersEmail(Email recipientEmail);
 
         /**

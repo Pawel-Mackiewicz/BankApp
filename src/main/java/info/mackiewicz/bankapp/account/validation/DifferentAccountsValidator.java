@@ -30,14 +30,17 @@ public class DifferentAccountsValidator implements ConstraintValidator<Different
     }
 
     /**
-     * Validates that the source and destination accounts in a transfer request are
-     * different.
-     * Handles both internal and external transfer request types.
-     * 
-     * @param value   the object to validate (expected to be a transfer request)
+     * Validates that the source and destination accounts in a transfer request are different.
+     * <p>
+     * This method processes instances of {@code WebTransferRequest} by comparing the source and recipient
+     * IBANs, returning {@code true} if they are different. If the provided value is {@code null}, the
+     * validation is bypassed to allow other constraints (such as {@code @NotNull}) to handle null checks.
+     * For any unsupported type, an {@link UnsupportedValidationTypeException} is thrown.
+     *
+     * @param value   the transfer request to validate; expected to be a {@code WebTransferRequest}
      * @param context the validation context
-     * @return true if accounts are different or if validation is not applicable,
-     *         false otherwise
+     * @return {@code true} if the IBANs are different or if validation is not applicable (e.g., when the value is {@code null})
+     * @throws UnsupportedValidationTypeException if the provided value is not a {@code WebTransferRequest}
      */
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
@@ -59,6 +62,17 @@ public class DifferentAccountsValidator implements ConstraintValidator<Different
         }
     }
 
+    /**
+     * Validates that the source and recipient IBANs are distinct.
+     * <p>
+     * If either IBAN is {@code null}, the method returns {@code true} to allow for external null validations.
+     * Otherwise, it returns {@code true} if the IBANs are different and {@code false} if they are identical.
+     * </p>
+     *
+     * @param sourceIban    the IBAN of the source account
+     * @param recipientIban the IBAN of the recipient account
+     * @return {@code true} if the IBANs are different or if either is {@code null}; {@code false} if both are identical
+     */
     private boolean validateTransfer(String sourceIban, String recipientIban) {
         log.debug("Validating IBAN transfer: sourceIban={}, recipientIban={}",
                 sourceIban, recipientIban);

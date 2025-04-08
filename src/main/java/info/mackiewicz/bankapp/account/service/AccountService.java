@@ -72,33 +72,74 @@ public class AccountService implements AccountServiceInterface {
         return accountQueryService.getAccountsByOwnersUsername(username);
     }
 
+    /**
+     * Retrieves accounts associated with a specific owner's ID.
+     *
+     * @param id the unique identifier of the account owner
+     * @return a list of accounts belonging to the specified owner, or an empty list if none are found
+     */
     @Override
     public List<Account> getAccountsByOwnersId(Integer id) {
         return accountQueryService.getAccountsByOwnersId(id);
     }
 
+    /**
+     * Retrieves an account by the owner's email address.
+     *
+     * @param recipientEmail the email address associated with the account owner
+     * @return the account corresponding to the specified email
+     * @deprecated Use {@link #getAccountByOwnersEmail(Email)} instead.
+     */
     @Deprecated
     @Override
     public Account getAccountByOwnersEmail(String recipientEmail) {
         return accountQueryService.findAccountByOwnersEmail(recipientEmail);
     }
 
+    /**
+     * Retrieves the account associated with the specified owner's email.
+     *
+     * @param recipientEmail the owner's email encapsulated in an Email value object
+     * @return the account corresponding to the provided email
+     */
     @Override
     public Account getAccountByOwnersEmail(Email recipientEmail) {
         return accountQueryService.getAccountByOwnersEmail(recipientEmail);
     }
 
+    /**
+     * Retrieves an account by its IBAN provided as a String.
+     *
+     * @param iban the IBAN of the account as a String
+     * @return the account associated with the specified IBAN
+     *
+     * @deprecated Use {@link #getAccountByIban(Iban)} instead for enhanced type safety.
+     */
     @Deprecated
     @Override
     public Account getAccountByIban(String iban) {
         return accountQueryService.getAccountByIban(iban);
     }
 
+    /**
+     * Retrieves an account by its IBAN.
+     *
+     * Delegates the query to the account query service to locate and return the account associated with the given IBAN.
+     *
+     * @param iban the IBAN representing the international bank account number to search for
+     * @return the account corresponding to the provided IBAN
+     */
     @Override
     public Account getAccountByIban(Iban iban) {
         return accountQueryService.getAccountByIban(iban);
     }
 
+    /**
+     * Checks whether an account exists for the specified email address.
+     *
+     * @param email the email address to check for an associated account
+     * @return true if an account with the given email exists, false otherwise
+     */
     @Override
     public boolean existsByEmail(String email) {
         return accountQueryService.existsByEmail(email);

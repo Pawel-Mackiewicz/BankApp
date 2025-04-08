@@ -27,6 +27,15 @@ public class BankAppApplication {
     @Value("${server.address}")
     private String serverAddress;
 
+    /**
+     * Serves as the entry point for the BankAppApplication Spring Boot application.
+     *
+     * <p>This method bootstraps the application by invoking
+     * {@link org.springframework.boot.SpringApplication#run(Class, String[])}
+     * with BankAppApplication as the primary source.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(BankAppApplication.class, args);
     }

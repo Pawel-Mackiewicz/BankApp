@@ -132,6 +132,11 @@ public class Account implements AccountInfo {
         return new AccountOwnerDTO(owner);
     }
     
+    /**
+     * Returns the full name of the account owner.
+     *
+     * @return the account owner's full name
+     */
     @Override
     public String getOwnerFullname() {
         return owner.getFullName();
@@ -177,10 +182,9 @@ public class Account implements AccountInfo {
     }
 
     /**
-     * Returns a hash code value for this account.
-     * The hash code is based on the account ID and IBAN.
+     * Returns a hash code value for this account based solely on its IBAN.
      *
-     * @return A hash code value for this account
+     * @return a hash code computed from the account's IBAN
      */
     @Override
     public int hashCode() {

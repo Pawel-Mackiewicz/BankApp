@@ -25,12 +25,15 @@ import jakarta.validation.ConstraintViolationException;
 public class ValidationErrorProcessor {
 
     /**
-     * Extracts validation errors from a MethodArgumentNotValidException.
-     * Converts field errors into a list of ValidationError objects.
+     * Extracts and converts both field and global validation errors from a
+     * MethodArgumentNotValidException into a list of ValidationError objects.
      *
-     * @param ex the method argument validation exception to process
-     * @return list of ValidationError objects containing field names, error
-     *         messages, and rejected values
+     * <p>This method processes the binding result of the exception by mapping each field error
+     * using the convert method and each global error using the convertGlobal method, then
+     * concatenates them into a single list.</p>
+     *
+     * @param ex the MethodArgumentNotValidException containing validation errors
+     * @return a combined list of ValidationError objects representing field and global errors
      * @see org.springframework.web.bind.MethodArgumentNotValidException
      * @see info.mackiewicz.bankapp.shared.web.dto.ValidationError
      */

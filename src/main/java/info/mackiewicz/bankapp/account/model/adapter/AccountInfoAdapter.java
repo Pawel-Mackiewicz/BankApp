@@ -15,20 +15,35 @@ public class AccountInfoAdapter implements AccountInfo {
     
     private final Account account;
     
+    /**
+         * Returns the formatted IBAN from the associated account.
+         *
+         * <p>This method delegates the call to the underlying account instance to obtain the IBAN
+         * in its formatted form.</p>
+         *
+         * @return the formatted IBAN as a String
+         */
     @Override
     public String getFormattedIban() {
         return account.getFormattedIban();
     }
     
+    /**
+     * Retrieves the full name of the account owner.
+     *
+     * @return the account owner's full name
+     */
     @Override
     public String getOwnerFullname() {
         return account.getOwnerFullname();
     }
     
     /**
-     * Creates an AccountInfo adapter from an Account object.
-     * @return an AccountInfo adapter.
-     * @throws NullPointerException if the account is null.
+     * Creates an AccountInfo adapter from the specified Account instance.
+     *
+     * @param account the Account instance to wrap; must not be null.
+     * @return a new AccountInfo adapter that exposes the account's information.
+     * @throws NullPointerException if the account parameter is null.
      * @see AccountInfo
      * @see Account
      */

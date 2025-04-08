@@ -15,9 +15,9 @@ public interface AccountInfo {
     String getFormattedIban();
     
     /**
-     * Retrieves the account owner's first and last name.
-     *
-     * @return the owner's full name as a String.
-     */
+ * Returns the full name of the account owner.
+ *
+ * @return the full name of the account owner as a String.
+ */
     String getOwnerFullname();
 }

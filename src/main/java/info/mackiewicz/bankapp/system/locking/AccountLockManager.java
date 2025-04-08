@@ -21,12 +21,14 @@ public class AccountLockManager {
     private final LockingStrategy lockingStrategy;
 
     /**
-     * Acquires locks for the specified accounts in a deadlock-free manner.
-     * If both accounts are provided, locks are acquired in order of account IDs.
-     * If only one account is provided, only that account is locked.
+     * Acquires locks for one or two accounts in a deadlock-free manner.
+     * <p>
+     * When both accounts are provided (non-null), it locks them in order based on their IDs to prevent deadlocks.
+     * If only one account is provided, the method locks that account.
+     * </p>
      *
-     * @param from Source account to lock, may be null if not applicable
-     * @param to   Destination account to lock, may be null if not applicable
+     * @param from the source account to lock, or null if not applicable
+     * @param to   the destination account to lock, or null if not applicable
      */
     public void lockAccounts(Account from, Account to) {
         if (from != null && to != null) {
@@ -57,6 +59,15 @@ public class AccountLockManager {
         }
     }
 
+    /**
+     * Acquires locks for two accounts in a consistent order to prevent deadlocks.
+     *
+     * <p>This method locks the account with the smaller ID first, ensuring that the order
+     * of acquisition is predictable and deadlock-free.
+     *
+     * @param acc1 the first account
+     * @param acc2 the second account
+     */
     private void lockTwoAccounts(Account acc1, Account acc2) {
         if (acc1.getId() < acc2.getId()) {
             lock(acc1);
@@ -67,6 +78,16 @@ public class AccountLockManager {
         }
     }
 
+    /**
+     * Releases locks for two accounts in reverse order of acquisition based on their IDs.
+     * <p>
+     * This method ensures that the account with the larger ID is unlocked first, maintaining
+     * a consistent unlocking sequence that mirrors the locking order, which helps in preventing deadlocks.
+     * </p>
+     *
+     * @param acc1 the first account involved in the unlock operation
+     * @param acc2 the second account involved in the unlock operation
+     */
     private void unlockTwoAccounts(Account acc1, Account acc2) {
         if (acc1.getId() < acc2.getId()) {
             unlock(acc2);
@@ -77,11 +98,27 @@ public class AccountLockManager {
         }
     }
 
+    /**
+     * Acquires a lock for the specified account.
+     *
+     * <p>Logs a debug message indicating the lock acquisition for the account using its unique ID,
+     * then delegates the locking operation to the configured locking strategy.
+     *
+     * @param account the account to lock; must not be null
+     */
     private void lock(Account account) {
         log.debug("Acquiring lock for account ID: {}", account.getId());
         lockingStrategy.lock(account.getId());
     }
 
+    /**
+     * Releases the lock associated with the specified account.
+     *
+     * This method logs the unlocking action and delegates to the locking strategy to release
+     * the lock using the account's identifier.
+     *
+     * @param account the account whose lock is being released
+     */
     private void unlock(Account account) {
         log.debug("Releasing lock for account ID: {}", account.getId());
         lockingStrategy.unlock(account.getId());
