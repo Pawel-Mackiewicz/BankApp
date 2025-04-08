@@ -38,12 +38,10 @@ spring:
       password: testpass
   flyway:
     enabled: false
-
 server:
   error:
     include-message: always
     include-binding-errors: always
-
 app:
   resend:
     api-key: test-api-key
@@ -52,7 +50,6 @@ app:
     base-delay: 100
     max-delay: 2000
     timeout: 200
-
 test:
   concurrent:
     max-threads: 5

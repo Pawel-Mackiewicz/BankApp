@@ -15,6 +15,7 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -27,11 +28,13 @@ import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.system.locking.LockingConfig;
 import info.mackiewicz.bankapp.testutils.config.TestConfig;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.utils.TestIbanProvider;
 
 @WebMvcTest(AccountController.class)
+@EnableConfigurationProperties(LockingConfig.class)
 @Import(TestConfig.class)
 class AccountControllerTest {
     @Autowired

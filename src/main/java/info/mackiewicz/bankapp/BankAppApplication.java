@@ -6,13 +6,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import info.mackiewicz.bankapp.system.locking.LockingConfig;
+
 @SpringBootApplication
 @EnableAsync
 @EnableScheduling
+@EnableConfigurationProperties(LockingConfig.class)
 public class BankAppApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(BankAppApplication.class);
