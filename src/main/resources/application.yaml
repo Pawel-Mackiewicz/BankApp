@@ -11,8 +11,8 @@ spring:
     # Spring Security
     security:
         user:
-            name: ${SPRING_SECURITY_USER_NAME:testuser}
-            password: ${SPRING_SECURITY_USER_PASSWORD:testpass}
+            name: ${SPRING_SECURITY_USER_NAME}
+            password: ${SPRING_SECURITY_USER_PASSWORD}
     # Database configuration
     datasource:
         url: ${DB_URL}
