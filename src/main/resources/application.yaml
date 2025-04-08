@@ -33,6 +33,7 @@ spring:
         properties:
             hibernate: 
                 dialect: org.hibernate.dialect.MySQL8Dialect
+                '[show_sql]': false
                 '[format_sql]': true
                 '[globally_quoted_identifiers]': true
     # Flyway configuration
@@ -57,7 +58,7 @@ app:
     # Email configuration
     ## Resend API configuration
     resend:
-        api-key: ${RESEND_API_KEY}
+        api-key: ${RESEND_API_KEY:test-api-key}
     ## Application base URL (for generating links in emails)
     base-url: ${APP_BASE_URL:http://localhost:8080}
     ## Frontend configuration
