@@ -17,10 +17,10 @@ public class BankAppApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(BankAppApplication.class);
 
-    @Value("${server.port:8080}")
+    @Value("${server.port}")
     private int serverPort;
 
-    @Value("${server.address:0.0.0.0}")
+    @Value("${server.address}")
     private String serverAddress;
 
     public static void main(String[] args) {

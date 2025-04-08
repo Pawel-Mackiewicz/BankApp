@@ -22,6 +22,8 @@ jobs:
     
     - name: Build with Maven
       run: mvn -B clean verify
+      env:
+        SPRING_PROFILES_ACTIVE: test
     
     - name: Upload Test Results
       if: always()
