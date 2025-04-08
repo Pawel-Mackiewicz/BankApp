@@ -20,9 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class AccountLockingStrategy implements LockingStrategy {
-    
+
     private final LockingConfig lockingConfig;
-  
 
     @Getter
     private final AtomicInteger lockCounter = new AtomicInteger(0);
@@ -34,38 +33,38 @@ public class AccountLockingStrategy implements LockingStrategy {
      * Attempts to lock a resource with the given ID.
      * Uses exponential backoff with jitter in case of failure.
      *
-     * @param resourceId ID of the resource to lock
+     * @param accountId ID of the account to lock
      * @throws AccountLockException if failed to acquire the lock
      */
     @Override
-    public void lock(Integer resourceId) {
-        log.debug("Attempting to acquire lock for resource ID: {}", resourceId);
-        ReentrantLock lock = LockingUtils.getOrCreateLock(resourceId);
+    public void lock(Integer accountId) {
+        log.debug("Attempting to acquire lock for resource ID: {}", accountId);
+        ReentrantLock lock = LockingUtils.getOrCreateLock(accountId);
         final long startTime = System.currentTimeMillis();
-        
+
         int attempts = 0;
         try {
             while (attempts < lockingConfig.maxAttempts()) {
-                if (tryAcquireLock(lock, resourceId, attempts)) {
+                if (tryAcquireLock(lock, accountId, attempts)) {
                     log.debug("Successfully acquired lock for resource ID: {} after {} attempts",
-                        resourceId, attempts + 1);
+                            accountId, attempts + 1);
                     lockCounter.incrementAndGet();
                     return;
                 }
                 attempts++;
                 if (attempts < lockingConfig.maxAttempts()) {
-                    handleBackoff(attempts, resourceId);
+                    handleBackoff(attempts, accountId);
                 }
             }
-            
+
             log.error("Failed to acquire lock for resource ID: {} after {} attempts",
-                resourceId, lockingConfig.maxAttempts());
-            handleMaxAttemptsExceeded(resourceId, startTime);
+                    accountId, lockingConfig.maxAttempts());
+            handleMaxAttemptsExceeded(accountId, startTime);
         } catch (InterruptedException e) {
             long totalTime = System.currentTimeMillis() - startTime;
             log.error("Thread interrupted while acquiring lock for resource ID: {} after {} attempts and {}ms",
-                resourceId, attempts + 1, totalTime);
-            handleInterruptedException(resourceId, attempts, startTime, e);
+                    accountId, attempts + 1, totalTime);
+            handleInterruptedException(accountId, attempts, startTime, e);
         }
     }
 
@@ -80,23 +79,29 @@ public class AccountLockingStrategy implements LockingStrategy {
 
     private void handleInterruptedException(Integer resourceId, int attempts, long startTime, InterruptedException e) {
         Thread.currentThread().interrupt();
+        // release the lock if it was acquired before the interruption
+        // this is a best effort approach, as the lock may not be held by this thread
+        // anymore
+        ReentrantLock lock = LockingUtils.getOrCreateLock(resourceId);
+        if (lock.isHeldByCurrentThread()) {
+            lock.unlock();
+            unlockCounter.incrementAndGet();
+        }
         throw new AccountLockException(
-            "Thread was interrupted while trying to acquire lock",
-            resourceId,
-            attempts + 1,
-            System.currentTimeMillis() - startTime,
-            true
-        );
+                "Thread was interrupted while trying to acquire lock",
+                resourceId,
+                attempts + 1,
+                System.currentTimeMillis() - startTime,
+                true);
     }
 
     private void handleMaxAttemptsExceeded(Integer resourceId, long startTime) {
         throw new AccountLockException(
-            "Failed to acquire lock after maximum attempts",
-            resourceId,
-            lockingConfig.maxAttempts(),
-            System.currentTimeMillis() - startTime,
-            false
-        );
+                "Failed to acquire lock after maximum attempts",
+                resourceId,
+                lockingConfig.maxAttempts(),
+                System.currentTimeMillis() - startTime,
+                false);
     }
 
     /**
@@ -108,10 +113,8 @@ public class AccountLockingStrategy implements LockingStrategy {
     public void unlock(Integer resourceId) {
         log.debug("Releasing lock for resource ID: {}", resourceId);
         ReentrantLock lock = LockingUtils.getOrCreateLock(resourceId);
-        if (lock != null) {
-            tryUnlock(resourceId, lock);
-            log.debug("Successfully released lock for resource ID: {}", resourceId);
-        }
+        tryUnlock(resourceId, lock);
+        log.debug("Successfully released lock for resource ID: {}", resourceId);
     }
 
     private void tryUnlock(Integer resourceId, ReentrantLock lock) {

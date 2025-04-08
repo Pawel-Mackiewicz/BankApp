@@ -21,9 +21,9 @@ public interface LockingStrategy {
     void lock(Integer resourceId);
 
     /**
-     * Zwalnia blokadę zasobu.
+     * Releases the resource lock.
      *
-     * @param resourceId ID zasobu do odblokowania
+     * @param resourceId ID of the resource to unlock
      */
     void unlock(Integer resourceId);
 
