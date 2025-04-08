@@ -72,33 +72,78 @@ public class AccountService implements AccountServiceInterface {
         return accountQueryService.getAccountsByOwnersUsername(username);
     }
 
+    /**
+     * Retrieves the accounts associated with the specified owner's ID.
+     *
+     * @param id the unique identifier of the account owner
+     * @return a list of accounts owned by the provided ID
+     */
     @Override
     public List<Account> getAccountsByOwnersId(Integer id) {
         return accountQueryService.getAccountsByOwnersId(id);
     }
 
+    /**
+     * Retrieves the account associated with the specified owner's email address.
+     *
+     * <p>This deprecated method is maintained for backward compatibility. It delegates the lookup
+     * to the account query service using a plain {@code String} for the email address.
+     * For improved type safety, use the overloaded method that accepts an {@code Email} object.</p>
+     *
+     * @param recipientEmail the email address of the account owner
+     * @return the account corresponding to the provided email address
+     * @deprecated Use {@link #getAccountByOwnersEmail(Email)} instead.
+     */
     @Deprecated
     @Override
     public Account getAccountByOwnersEmail(String recipientEmail) {
         return accountQueryService.findAccountByOwnersEmail(recipientEmail);
     }
 
+    /**
+     * Retrieves an account associated with the specified owner's email.
+     *
+     * @param recipientEmail the email object representing the account owner's email address
+     * @return the account corresponding to the given email
+     */
     @Override
     public Account getAccountByOwnersEmail(Email recipientEmail) {
         return accountQueryService.getAccountByOwnersEmail(recipientEmail);
     }
 
+    /**
+     * Retrieves an account by its IBAN.
+     *
+     * <p>This method is deprecated and accepts the IBAN as a String. Use 
+     * {@link #getAccountByIban(Iban)} instead for improved type safety.</p>
+     *
+     * @param iban the International Bank Account Number as a String
+     * @return the account corresponding to the provided IBAN
+     * @deprecated Use {@link #getAccountByIban(Iban)} instead.
+     */
     @Deprecated
     @Override
     public Account getAccountByIban(String iban) {
         return accountQueryService.getAccountByIban(iban);
     }
 
+    /**
+     * Retrieves an account corresponding to the specified IBAN.
+     *
+     * @param iban the IBAN value used to find the account
+     * @return the account associated with the provided IBAN
+     */
     @Override
     public Account getAccountByIban(Iban iban) {
         return accountQueryService.getAccountByIban(iban);
     }
 
+    /**
+     * Checks whether an account exists for the specified email address.
+     *
+     * @param email the email address to check
+     * @return true if an account with the provided email exists; false otherwise
+     */
     @Override
     public boolean existsByEmail(String email) {
         return accountQueryService.existsByEmail(email);

@@ -22,6 +22,16 @@ public class TransactionAssembler {
 
     private final Map<Class<?>, TransactionAssemblyStrategy<?>> assemblyStrategies;
 
+    /**
+     * Assembles a Transaction object based on a web transfer request.
+     *
+     * <p>This method delegates the construction of a Transaction to an internal assembly process 
+     * that selects the appropriate strategy based on the request type. The provided 
+     * {@code WebTransferRequest} contains all necessary details for creating the transaction.</p>
+     *
+     * @param request the web transfer request with transfer details
+     * @return the assembled Transaction corresponding to the provided web transfer request
+     */
     public Transaction assembleExternalTransfer(WebTransferRequest request) {
         return assembleTransaction(request);
     }

@@ -19,15 +19,21 @@ import lombok.extern.slf4j.Slf4j;
 public class IbanAnalysisService {
 
     /**
-     * Resolves the type of transfer between two accounts based on their IBAN
-     * details.
+     * Determines the transfer type between two IBANs as external, internal, or own.
+     * <p>
+     * A transfer is classified as:
+     * <ul>
+     *   <li>{@code TRANSFER_EXTERNAL} if the IBANs belong to different banks,</li>
+     *   <li>{@code TRANSFER_INTERNAL} if they belong to the same bank but different owners,</li>
+     *   <li>{@code TRANSFER_OWN} if they belong to the same bank and owner.</li>
+     * </ul>
+     * <p>
+     * If an error occurs during the analysis, an {@code IbanAnalysisException} is thrown.
      *
-     * @param sourceIban      The IBAN of the source account
-     * @param destinationIban The IBAN of the destination account
-     * @return TransactionType indicating whether this is an external transfer
-     *         (different banks),
-     *         internal transfer (same bank, but different owner), or own transfer
-     *         (same owner, same bank)
+     * @param sourceIban      the IBAN of the source account
+     * @param destinationIban the IBAN of the destination account
+     * @return the determined {@code TransactionType} indicating the nature of the transfer
+     * @throws IbanAnalysisException if an error occurs while resolving the transfer type
      */
     public TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
         log.debug("Resolving transfer type for \n" +
@@ -52,11 +58,13 @@ public class IbanAnalysisService {
     }
 
     /**
-     * Determines if two accounts belong to the same owner by comparing
-     * it's account numbers.
+     * Checks if the two provided IBAN accounts are owned by the same individual.
      *
-     * @param sourceIban      The IBAN of the first account
-     * @param destinationIban The IBAN of the second account
+     * <p>Compares the account numbers while ignoring the first four characters,
+     * which are always zeros.</p>
+     *
+     * @param sourceIban the IBAN of the first account
+     * @param destinationIban the IBAN of the second account
      * @return true if both accounts belong to the same owner, false otherwise
      */
     public boolean isSameOwner(Iban sourceIban, Iban destinationIban) {

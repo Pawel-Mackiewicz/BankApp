@@ -34,6 +34,14 @@ public class TransferResponse {
      */
     private TransactionInfo transactionInfo;
 
+    /**
+     * Constructs a TransferResponse by converting the provided source account, target account, and transaction details
+     * into their corresponding DTO representations.
+     *
+     * @param sourceAccount the account from which funds are transferred
+     * @param targetAccount the account to which funds are transferred
+     * @param transactionInfo the transaction details associated with the transfer
+     */
     public TransferResponse(Account sourceAccount, Account targetAccount, Transaction transactionInfo) {
         this.sourceAccount = AccountInfoAdapter.fromAccount(sourceAccount);
         this.targetAccount = AccountInfoAdapter.fromAccount(targetAccount);

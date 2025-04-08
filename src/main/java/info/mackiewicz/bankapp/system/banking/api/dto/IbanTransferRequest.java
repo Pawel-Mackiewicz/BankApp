@@ -19,10 +19,22 @@ public class IbanTransferRequest extends BankingOperationRequest {
     @ValidIban
     private String recipientIban;
 
+    /**
+     * Returns the recipient IBAN as an Iban object.
+     *
+     * <p>This method converts the stored recipient IBAN string to an Iban instance by invoking {@link Iban#valueOf(String)}.
+     *
+     * @return an Iban object corresponding to the recipient IBAN
+     */
     public Iban getRecipientIban() {
         return Iban.valueOf(recipientIban);
     }
 
+    /**
+     * Sets the recipient IBAN field using the string representation of the provided Iban object.
+     *
+     * @param iban the Iban object to be converted and stored as the recipient IBAN
+     */
     public void setRecipientIban(Iban iban) {
         this.recipientIban = iban.toString();
     }

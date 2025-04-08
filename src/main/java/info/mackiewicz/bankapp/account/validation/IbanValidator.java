@@ -19,11 +19,28 @@ import jakarta.validation.ConstraintValidatorContext;
  */
 public class IbanValidator implements ConstraintValidator<ValidIban, String> {
 
+    /**
+     * Initializes the validator.
+     *
+     * <p>This implementation does nothing as no initialization is required.
+     *
+     * @param constraintAnnotation the ValidIban annotation instance (unused)
+     */
     @Override
     public void initialize(ValidIban constraintAnnotation) {
         // No initialization needed for this validator
     }
 
+    /**
+     * Validates the provided IBAN string.
+     *
+     * <p>This method treats null values and strings that are empty or contain only whitespace as valid,
+     * allowing additional annotations like {@code @NotNull} or {@code @NotBlank} to enforce non-nullity
+     * or non-emptiness. For non-empty strings, it returns the result of {@code IbanUtil.isValid(value)}.</p>
+     *
+     * @param value the IBAN string to validate
+     * @return {@code true} if {@code value} is null, empty, or valid per {@code IbanUtil}; {@code false} otherwise
+     */
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         

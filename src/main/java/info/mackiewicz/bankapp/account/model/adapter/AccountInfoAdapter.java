@@ -15,11 +15,21 @@ public class AccountInfoAdapter implements AccountInfo {
     
     private final Account account;
     
+    /**
+     * Retrieves the formatted International Bank Account Number (IBAN) from the associated Account.
+     *
+     * @return the formatted IBAN string.
+     */
     @Override
     public String getFormattedIban() {
         return account.getFormattedIban();
     }
     
+    /**
+     * Returns the account owner's full name.
+     *
+     * @return the full name of the account owner
+     */
     @Override
     public String getOwnerFullname() {
         return account.getOwnerFullname();

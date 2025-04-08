@@ -22,6 +22,16 @@ public class OwnTransferAssemblyStrategy extends BaseTransactionAssemblyStrategy
 
     private final AccountService accountService;
 
+    /**
+     * Assembles a Transaction from the provided own transfer request.
+     *
+     * <p>This method logs the own transfer request, retrieves the source and destination accounts,
+     * sets the transaction type to {@code TRANSFER_OWN}, and delegates the transaction assembly to the
+     * superclass after converting the request to a {@code WebTransferRequest}.</p>
+     *
+     * @param request the own transfer request containing details required for the transaction
+     * @return the assembled Transaction corresponding to the own transfer
+     */
     @Override
     public Transaction assembleTransaction(OwnTransferRequest request) {
         logTransferRequest(request);
@@ -33,6 +43,14 @@ public class OwnTransferAssemblyStrategy extends BaseTransactionAssemblyStrategy
         return super.assembleTransaction((WebTransferRequest) request, sourceAccount, destinationAccount, resolvedType);
     }
 
+    /**
+     * Logs details of an own transfer request.
+     *
+     * <p>This method extracts the source account ID, destination account ID, and transfer amount from the provided web transfer request,
+     * assuming it is an instance of OwnTransferRequest, and logs the information for auditing purposes.</p>
+     *
+     * @param request the web transfer request containing own transfer details
+     */
     @Override
     protected <T extends WebTransferRequest> void logTransferRequest(T request) {
         OwnTransferRequest ownRequest = (OwnTransferRequest) request;
@@ -40,6 +58,15 @@ public class OwnTransferAssemblyStrategy extends BaseTransactionAssemblyStrategy
                 ownRequest.getSourceAccountId(), ownRequest.getDestinationAccountId(), ownRequest.getAmount());
     }
 
+    /**
+     * Retrieves the source account for an own transfer transaction.
+     *
+     * <p>This method casts the provided transfer request to an OwnTransferRequest to extract
+     * the source account ID, then uses the account service to fetch and return the corresponding account.
+     *
+     * @param request the transfer request containing the source account ID
+     * @return the account associated with the provided source account ID
+     */
     @Override
     protected <T extends WebTransferRequest> Account getSourceAccount(T request) {
         OwnTransferRequest ownRequest = (OwnTransferRequest) request;
@@ -49,6 +76,15 @@ public class OwnTransferAssemblyStrategy extends BaseTransactionAssemblyStrategy
         return sourceAccount;
     }
 
+    /**
+     * Retrieves the destination account for an own transfer.
+     *
+     * <p>This method extracts the destination account ID from the provided transfer request,
+     * logs the lookup process, and returns the corresponding Account object.</p>
+     *
+     * @param request the WebTransferRequest containing the destination account details
+     * @return the Account corresponding to the destination account ID specified in the request
+     */
     @Override
     protected <T extends WebTransferRequest> Account getDestinationAccount(T request) {
         OwnTransferRequest ownRequest = (OwnTransferRequest) request;

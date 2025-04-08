@@ -61,12 +61,33 @@ class AccountQueryService {
         return getAccountsByOwnerCriteria(username, accountRepository::findAccountsByOwner_username, "username");
     }
 
+    /**
+     * Retrieves a list of accounts associated with the specified owner ID.
+     *
+     * <p>This method converts the provided numeric ID into a String and delegates the search
+     * to {@code getAccountsByOwnerCriteria} using "ID" as the criteria name.</p>
+     *
+     * @param id the unique identifier of the account owner
+     * @return a list of accounts belonging to the specified owner
+     * @throws OwnerAccountsNotFoundException if no accounts are found for the given owner ID
+     */
     List<Account> getAccountsByOwnersId(Integer id) {
         return getAccountsByOwnerCriteria(id.toString(),
                 value -> accountRepository.findAccountsByOwner_id(Integer.parseInt(value)),
                 "ID");
     }
 
+    /**
+     * Retrieves the first account associated with the given owner's email.
+     * <p>
+     * Searches for an account corresponding to the specified email and returns it if found.
+     * If no account is linked to the email, an {@link OwnerAccountsNotFoundException} is thrown.
+     * </p>
+     *
+     * @param recipientEmail the email of the account owner
+     * @return the account associated with the given email
+     * @throws OwnerAccountsNotFoundException if no account is found for the specified email
+     */
     Account getAccountByOwnersEmail(Email recipientEmail) {
         log.debug("Finding account by owner's email: {}", recipientEmail);
         return accountRepository.findFirstByOwner_email(recipientEmail)
@@ -74,15 +95,41 @@ class AccountQueryService {
                         String.format("User with email %s does not have any account.", recipientEmail)));
     }
 
+    /**
+     * Retrieves the account associated with the given email address by converting the string into an {@code Email} object.
+     *
+     * <p>This method is deprecated and will be removed in future versions. Use {@link #getAccountByOwnersEmail(Email)}
+     * instead for a type-safe approach.
+     *
+     * @param email the email address as a string to be converted into an {@code Email} object
+     * @return the account associated with the provided email address
+     * @deprecated Use {@link #getAccountByOwnersEmail(Email)} instead.
+     */
     @Deprecated
     Account findAccountByOwnersEmail(String email) {
         return getAccountByOwnersEmail(new Email(email));
     }
 
+    /**
+     * Retrieves the account associated with the provided IBAN.
+     *
+     * <p>This method converts the IBAN from its string representation into an Iban object and then delegates the
+     * lookup to {@link #getAccountByIban(Iban)}. An AccountNotFoundByIbanException is thrown if no matching account is found.</p>
+     *
+     * @param iban the IBAN in string format
+     * @return the account corresponding to the given IBAN
+     */
     Account getAccountByIban(String iban) {
         return getAccountByIban(Iban.valueOf(iban));
     }
 
+    /**
+     * Retrieves an account by its IBAN.
+     *
+     * @param iban the IBAN used to locate the account
+     * @return the account associated with the specified IBAN
+     * @throws AccountNotFoundByIbanException if no account is found with the given IBAN
+     */
     Account getAccountByIban(Iban iban) {
         log.debug("Finding account by IBAN: {}", iban.toFormattedString());
         return accountRepository.findByIban(iban)

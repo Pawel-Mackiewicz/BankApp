@@ -32,6 +32,14 @@ public class InternalTransferRequest implements WebTransferRequest {
 
     private TransactionType transactionType = TransactionType.TRANSFER_INTERNAL;
 
+    /**
+     * Determines if the transfer request contains sufficient recipient information.
+     *
+     * <p>This method validates the request by checking whether either the recipient IBAN or the recipient email
+     * is provided as a non-null and non-empty string, ensuring that at least one valid recipient identifier is specified.</p>
+     *
+     * @return true if either the recipient IBAN or the recipient email is provided and non-empty; false otherwise
+     */
     public boolean isValid() {
         // Check if either recipientIban or recipientEmail is provided
         return (recipientIban != null && !recipientIban.trim().isEmpty())

@@ -80,15 +80,17 @@ public class TransferOperationService {
     }
 
     /**
-     * Creates a transfer transaction using the transfer request and accounts.
-     * Transaction is registered in the system.
+     * Constructs a transfer transaction using the provided transfer request and account details.
      *
-     * @param transferRequest    The request containing transfer details
-     * @param sourceAccount      The source account for the transfer
-     * @param destinationAccount The destination account for the transfer
-     * @return The created transaction
-     * @throws TransactionBuildingException   if the transaction cannot be built
-     * @throws TransactionValidationException if the transaction fails validation
+     * This method builds a transaction by extracting the transfer amount and title from the request and combining them with
+     * the specified source and destination accounts.
+     *
+     * @param transferRequest the request containing the transfer details, including amount and title
+     * @param sourceAccount the account from which funds are transferred
+     * @param destinationAccount the account to which funds are transferred
+     * @return the constructed transfer transaction
+     * @throws TransactionBuildingException if the transaction cannot be built
+     * @throws TransactionValidationException if the constructed transaction fails validation
      */
     private Transaction createTransferTransaction(BankingOperationRequest transferRequest, Account sourceAccount,
             Account destinationAccount) {

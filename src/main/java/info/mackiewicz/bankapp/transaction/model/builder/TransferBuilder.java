@@ -63,6 +63,17 @@ public class TransferBuilder extends AbstractTransactionBuilder<TransferBuilder>
         }
     }
     
+    /**
+     * Builds a new Transaction after validating transfer details.
+     * <p>
+     * This method performs validation on the transaction parameters and creates a base transaction,
+     * setting both the source and destination accounts. If validation fails or an error occurs during
+     * transaction creation, it throws a TransactionBuildingException with a message that includes the
+     * ID of the source account.
+     *
+     * @return the constructed Transaction object
+     * @throws TransactionBuildingException if the transaction is invalid or an error occurs during building
+     */
     @Override
     public Transaction build() {
         try {

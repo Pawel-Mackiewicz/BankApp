@@ -57,6 +57,16 @@ public class AccountLockManager {
         }
     }
 
+    /**
+     * Acquires locks for two accounts in ascending order of their IDs to prevent deadlocks.
+     *
+     * <p>This method compares the IDs of the two accounts and locks them in order, ensuring that the account
+     * with the smaller ID is locked first. This consistent order of locking prevents deadlocks when multiple account locks
+     * are acquired concurrently.
+     *
+     * @param acc1 the first account to lock
+     * @param acc2 the second account to lock
+     */
     private void lockTwoAccounts(Account acc1, Account acc2) {
         if (acc1.getId() < acc2.getId()) {
             lock(acc1);
@@ -67,6 +77,15 @@ public class AccountLockManager {
         }
     }
 
+    /**
+     * Releases locks for two accounts in reverse order of acquisition.
+     *
+     * <p>The method determines the unlock order based on the account IDs to ensure that the account locked last is unlocked first,
+     * thereby maintaining a consistent unlocking order that helps prevent deadlocks.</p>
+     *
+     * @param acc1 the first account involved in the unlocking operation
+     * @param acc2 the second account involved in the unlocking operation
+     */
     private void unlockTwoAccounts(Account acc1, Account acc2) {
         if (acc1.getId() < acc2.getId()) {
             unlock(acc2);
@@ -77,11 +96,27 @@ public class AccountLockManager {
         }
     }
 
+    /**
+     * Acquires a lock for the specified account.
+     *
+     * <p>This method logs a debug message with the account's ID and delegates the lock operation
+     * to the configured locking strategy.</p>
+     *
+     * @param account the account to lock
+     */
     private void lock(Account account) {
         log.debug("Acquiring lock for account ID: {}", account.getId());
         lockingStrategy.lock(account.getId());
     }
 
+    /**
+     * Releases the lock for the specified account.
+     *
+     * This method logs the unlocking operation and delegates to the configured locking strategy
+     * using the account's unique identifier.
+     *
+     * @param account the account whose lock is to be released
+     */
     private void unlock(Account account) {
         log.debug("Releasing lock for account ID: {}", account.getId());
         lockingStrategy.unlock(account.getId());

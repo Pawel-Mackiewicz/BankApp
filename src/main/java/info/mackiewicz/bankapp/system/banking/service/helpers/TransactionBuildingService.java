@@ -44,7 +44,16 @@ public class TransactionBuildingService {
                 .build();
     }
 
-        private TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
+        /**
+     * Determines the transaction type based on the source and destination IBANs.
+     *
+     * <p>This method delegates the resolution of the transfer type to the IbanAnalysisService.</p>
+     *
+     * @param sourceIban the IBAN of the account initiating the transfer
+     * @param destinationIban the IBAN of the account receiving the transfer
+     * @return the resolved TransactionType based on the provided IBANs
+     */
+    private TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
         return ibanAnalysisService.resolveTransferType(sourceIban, destinationIban);
     }
 }
