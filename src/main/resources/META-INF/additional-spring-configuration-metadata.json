@@ -1,22 +1,22 @@
 {"properties": [
   {
     "name": "app.locking.max-attempts",
-    "type": "java.lang.String",
+    "type": "java.lang.Integer",
     "description": "Maximum number of attempts for locking"
   },
   {
     "name": "app.locking.timeout",
-    "type": "java.lang.String",
+    "type": "java.lang.Long",
     "description": "Timeout for locking in milliseconds"
   },
   {
     "name": "app.locking.base-delay",
-    "type": "java.lang.String",
+    "type": "java.lang.Long",
     "description": "Base delay between retry attempts for locking"
   },
   {
     "name": "app.locking.max-delay",
-    "type": "java.lang.String",
+    "type": "java.lang.Long",
     "description": "Maximum delay between retry attempts for locking"
   },
   {
@@ -31,22 +31,22 @@
   },
   {
     "name": "test.transaction.timeout",
-    "type": "java.lang.String",
+    "type": "java.lang.Long",
     "description": "A description for 'test.transaction.timeout'"
   },
   {
     "name": "test.concurrent.max-threads",
-    "type": "java.lang.String",
+    "type": "java.lang.Integer",
     "description": "A description for 'test.concurrent.max-threads'"
   },
   {
     "name": "test.retry.max-attempts",
-    "type": "java.lang.String",
+    "type": "java.lang.Integer",
     "description": "A description for 'test.retry.max-attempts'"
   },
   {
     "name": "test.retry.delay",
-    "type": "java.lang.String",
+    "type": "java.lang.Long",
     "description": "A description for 'test.retry.delay'"
   },
   {

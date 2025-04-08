@@ -134,7 +134,7 @@ class AccountServiceTest {
     }
 
     @Test
-    void findAccountByOwnersEmail_ShouldDelegateToQueryService() {
+    void getAccountByOwnersEmail_ShouldDelegateToQueryService() {
         // Arrange
         when(accountQueryService.findAccountByOwnersEmail(TEST_EMAIL.getValue())).thenReturn(testAccount);
 
@@ -147,7 +147,7 @@ class AccountServiceTest {
     }
 
     @Test
-    void findAccountByIban_ShouldDelegateToQueryService() {
+    void getAccountByIban_ShouldDelegateToQueryService() {
         // Arrange
         String iban = testAccount.getIban().toString();
         when(accountQueryService.getAccountByIban(iban)).thenReturn(testAccount);
