@@ -18,14 +18,14 @@ import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // For JPA
-public class Email {
+public class EmailAddress {
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
         "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
     );
 
     private String value;
 
-    public Email(String email) {
+    public EmailAddress(String email) {
         validate(email);
         this.value = email.toLowerCase();
     }

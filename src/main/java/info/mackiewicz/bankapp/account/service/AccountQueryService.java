@@ -12,7 +12,7 @@ import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +67,7 @@ class AccountQueryService {
                 "ID");
     }
 
-    Account getAccountByOwnersEmail(Email recipientEmail) {
+    Account getAccountByOwnersEmail(EmailAddress recipientEmail) {
         log.debug("Finding account by owner's email: {}", recipientEmail);
         return accountRepository.findFirstByOwner_email(recipientEmail)
                 .orElseThrow(() -> new OwnerAccountsNotFoundException(
@@ -76,7 +76,7 @@ class AccountQueryService {
 
     @Deprecated
     Account findAccountByOwnersEmail(String email) {
-        return getAccountByOwnersEmail(new Email(email));
+        return getAccountByOwnersEmail(new EmailAddress(email));
     }
 
     Account getAccountByIban(String iban) {
@@ -89,13 +89,13 @@ class AccountQueryService {
         .orElseThrow(() -> new AccountNotFoundByIbanException("Account with IBAN " + iban.toFormattedString() + " not found."));
     }
 
-    boolean existsByEmail(Email email) {
+    boolean existsByEmail(EmailAddress email) {
         log.debug("Checking if account exists by email: {}", email);
         return accountRepository.existsByOwner_email(email);
     }
 
     boolean existsByEmail(String email) {
-        return existsByEmail(new Email(email));
+        return existsByEmail(new EmailAddress(email));
     }
 
 }

@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.user.model.interfaces.AccountOwner;
 import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -61,7 +61,7 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
 
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "email", unique = true, nullable = false))
-    private Email email;
+    private EmailAddress email;
 
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "phone_number", unique = true, nullable = false))
@@ -104,7 +104,7 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
     }
     
     User(String password, Pesel pesel, String firstname, String lastname, LocalDate dateOfBirth,
-            Email email, PhoneNumber phoneNumber) {
+            EmailAddress email, PhoneNumber phoneNumber) {
         this();
         this.password = password;
         this.pesel = pesel;
@@ -160,7 +160,7 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
         this.pesel = pesel;
     }
     
-    public void setEmail(Email email) {
+    public void setEmail(EmailAddress email) {
         this.email = email;
     }
     
@@ -176,7 +176,7 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
     
     @Deprecated
     public void setEmail(String email) {
-        this.email = new Email(email);
+        this.email = new EmailAddress(email);
     }
     
     @Deprecated

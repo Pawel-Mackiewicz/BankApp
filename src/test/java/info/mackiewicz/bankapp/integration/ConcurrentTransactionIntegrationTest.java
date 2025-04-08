@@ -33,7 +33,7 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
@@ -355,7 +355,7 @@ class ConcurrentTransactionIntegrationTest {
         user.setPesel(new Pesel(pesel));
         user.setFirstname("Test");
         user.setLastname("User");
-        user.setEmail(new Email("test.user" + uniqueSuffix + "@test.com"));
+        user.setEmail(new EmailAddress("test.user" + uniqueSuffix + "@test.com"));
         user.setPassword("Password123!");
         user.setPhoneNumber(new PhoneNumber(paddedNumber(hashCode, index)));
         user.setDateOfBirth(LocalDate.of(1999, 1, (index % 28) + 1)); // Match PESEL date

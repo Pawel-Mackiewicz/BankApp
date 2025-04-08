@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.account.service.interfaces;
 
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import org.iban4j.Iban;
 
 import java.math.BigDecimal;
@@ -103,7 +103,7 @@ public interface AccountServiceInterface {
      * @return An {@link Account} belonging to the owner with the specified email address
      * @throws info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException if no account is found with the given email
      */
-    Account getAccountByOwnersEmail(Email recipientEmail);
+    Account getAccountByOwnersEmail(EmailAddress recipientEmail);
 
         /**
          * Deletes an account with the specified ID.

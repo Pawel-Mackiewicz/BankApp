@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.user.service;
 
 import info.mackiewicz.bankapp.security.service.PasswordService;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +61,7 @@ public class UserOperationsService {
      * @throws IllegalArgumentException if the email format is invalid
      */
     @Transactional
-    void changeUsersPassword(Email email, String newPassword) {
+    void changeUsersPassword(EmailAddress email, String newPassword) {
         log.info("Starting password change process for user with email: {}", email);
         log.debug("Encoding new password");
         String encodedPassword = passwordService.encodePassword(newPassword);
@@ -82,7 +82,7 @@ public class UserOperationsService {
 
     @Transactional
     void changeUsersPassword(String email, String newPassword) {
-        changeUsersPassword(new Email(email), newPassword);
+        changeUsersPassword(new EmailAddress(email), newPassword);
     }
 
     /**

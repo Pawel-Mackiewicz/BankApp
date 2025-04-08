@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.user.service;
 
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class UsernameGeneratorServiceTest {
         User user = new User();
         user.setFirstname("John");
         user.setLastname("Doe");
-        user.setEmail(new Email("john.doe@example.com"));
+        user.setEmail(new EmailAddress("john.doe@example.com"));
 
         User generatedUser = generatorService.generateUsername(user);
 

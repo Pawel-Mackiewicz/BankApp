@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Random;
 
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
@@ -29,7 +29,7 @@ public class TestUserBuilder {
         user.setId(generateNextId());
         user.setFirstname("Test");
         user.setLastname("User");
-        user.setEmail(new Email(generateRandomEmail()));
+        user.setEmail(new EmailAddress(generateRandomEmail()));
         user.setPesel(new Pesel(generateRandomPesel()));
         user.setPhoneNumber(new PhoneNumber(generateRandomPhoneNumber()));
         user.setPassword(PASSWORD);
@@ -46,7 +46,7 @@ public class TestUserBuilder {
         User user = new User();
         user.setFirstname("Test");
         user.setLastname("User");
-        user.setEmail(new Email(generateRandomEmail()));
+        user.setEmail(new EmailAddress(generateRandomEmail()));
         user.setPesel(new Pesel(generateRandomPesel()));
         user.setPhoneNumber(new PhoneNumber(generateRandomPhoneNumber()));
         user.setPassword(PASSWORD);
@@ -64,7 +64,7 @@ public class TestUserBuilder {
         user.setId(1);
         user.setFirstname("Test");
         user.setLastname("User");
-        user.setEmail(new Email("test@" + DOMAIN));
+        user.setEmail(new EmailAddress("test@" + DOMAIN));
         user.setPesel(new Pesel(PESEL));
         user.setPhoneNumber(new PhoneNumber(PHONE_NUMBER));
         user.setPassword(PASSWORD);
@@ -82,7 +82,7 @@ public class TestUserBuilder {
         user.setId(0);
         user.setFirstname("System");
         user.setLastname("Bank");
-        user.setEmail(new Email("system@bank.com"));
+        user.setEmail(new EmailAddress("system@bank.com"));
         user.setPesel(new Pesel("00000000000"));
         user.setPhoneNumber(new PhoneNumber("000000000"));
         user.setPassword("SystemBank123!");

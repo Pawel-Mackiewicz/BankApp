@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.user.model;
 import java.time.LocalDate;
 
 import info.mackiewicz.bankapp.user.exception.InvalidUserDataException;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
@@ -91,7 +91,7 @@ public class UserBuilder {
          * @param email user's email as a value object
          * @return PhoneNumberStep to continue building the User
          */
-        PhoneNumberStep withEmail(Email email);
+        PhoneNumberStep withEmail(EmailAddress email);
     }
     
     public interface PhoneNumberStep {
@@ -140,7 +140,7 @@ public class UserBuilder {
         private String firstname;
         private String lastname;
         private Pesel pesel;
-        private Email email;
+        private EmailAddress email;
         private PhoneNumber phoneNumber;
         private String password;
         private LocalDate dateOfBirth;
@@ -177,12 +177,12 @@ public class UserBuilder {
         
         @Override
         public PhoneNumberStep withEmail(String email) {
-            this.email = new Email(email);
+            this.email = new EmailAddress(email);
             return this;
         }
         
         @Override
-        public PhoneNumberStep withEmail(Email email) {
+        public PhoneNumberStep withEmail(EmailAddress email) {
             this.email = email;
             return this;
         }

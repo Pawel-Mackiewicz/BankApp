@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.user.service;
 
 import info.mackiewicz.bankapp.security.service.PasswordService;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.Email;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,7 +74,7 @@ class UserOperationsServiceTest {
         String emailStr = "test@example.com";
         String newPassword = "newPassword";
         String encodedPassword = "encodedNewPassword";
-        Email email = new Email(emailStr);
+        EmailAddress email = new EmailAddress(emailStr);
 
         when(passwordService.encodePassword(newPassword)).thenReturn(encodedPassword);
         doNothing().when(userRepository).updatePasswordByEmail(email, encodedPassword);
@@ -87,7 +87,7 @@ class UserOperationsServiceTest {
 
     @Test
     void changeUsersPassword_shouldUpdatePasswordByEmailObject() {
-        Email email = new Email("test@example.com");
+        EmailAddress email = new EmailAddress("test@example.com");
         String newPassword = "newPassword";
         String encodedPassword = "encodedNewPassword";
 
@@ -107,7 +107,7 @@ class UserOperationsServiceTest {
         User user = new User();
         user.setId(userId);
         user.setUsername("userToDelete");
-        user.setEmail(new Email("delete@test.com"));
+        user.setEmail(new EmailAddress("delete@test.com"));
 
         when(userQueryService.getUserById(userId)).thenReturn(user);
         doNothing().when(userRepository).delete(user);
