@@ -44,7 +44,6 @@ import info.mackiewicz.bankapp.transaction.service.TransactionService;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
-@TestPropertySource(locations = "classpath:application-test.properties")
 public class UserRegistrationIntegrationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(UserRegistrationIntegrationTest.class);
