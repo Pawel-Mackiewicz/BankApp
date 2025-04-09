@@ -1,15 +1,15 @@
 package info.mackiewicz.bankapp.system.locking;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.springframework.stereotype.Component;
-
 import info.mackiewicz.bankapp.account.exception.AccountLockException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Implementation of resource locking strategy using exponential backoff.
@@ -38,46 +38,51 @@ public class AccountLockingStrategy implements LockingStrategy {
      */
     @Override
     public void lock(Integer accountId) {
-        log.debug("Attempting to acquire lock for resource ID: {}", accountId);
-        ReentrantLock lock = LockingUtils.getOrCreateLock(accountId);
-        final long startTime = System.currentTimeMillis();
-
-        int attempts = 0;
+        MDC.put("accountId", accountId.toString());
         try {
-            while (attempts < lockingConfig.maxAttempts()) {
-                if (tryAcquireLock(lock, accountId, attempts)) {
-                    log.debug("Successfully acquired lock for resource ID: {} after {} attempts",
-                            accountId, attempts + 1);
-                    lockCounter.incrementAndGet();
-                    return;
-                }
-                attempts++;
-                if (attempts < lockingConfig.maxAttempts()) {
-                    handleBackoff(attempts, accountId);
-                }
-            }
+            log.debug("Attempting to acquire lock");
+            ReentrantLock lock = LockingUtils.getOrCreateLock(accountId);
+            final long startTime = System.currentTimeMillis();
 
-            log.error("Failed to acquire lock for resource ID: {} after {} attempts",
-                    accountId, lockingConfig.maxAttempts());
-            handleMaxAttemptsExceeded(accountId, startTime);
-        } catch (InterruptedException e) {
-            long totalTime = System.currentTimeMillis() - startTime;
-            log.error("Thread interrupted while acquiring lock for resource ID: {} after {} attempts and {}ms",
-                    accountId, attempts + 1, totalTime);
-            handleInterruptedException(accountId, attempts, startTime, e);
+            int attempts = 0;
+            try {
+                while (attempts < lockingConfig.maxAttempts()) {
+                    if (tryAcquireLock(lock)) {
+                        log.debug("Successfully acquired lock after {} attempts",
+                                attempts + 1);
+                        lockCounter.incrementAndGet();
+                        return;
+                    }
+                    attempts++;
+                    if (attempts < lockingConfig.maxAttempts()) {
+                        handleBackoff(attempts);
+                    }
+                }
+
+                log.error("Failed to acquire lock after {} attempts",
+                        lockingConfig.maxAttempts());
+                handleMaxAttemptsExceeded(accountId, startTime);
+            } catch (InterruptedException e) {
+                long totalTime = System.currentTimeMillis() - startTime;
+                log.error("Thread interrupted while acquiring lock after {} attempts and {}ms",
+                        attempts + 1, totalTime);
+                handleInterruptedException(accountId, attempts, startTime);
+            }
+        } finally {
+            MDC.clear();
         }
     }
 
-    private boolean tryAcquireLock(ReentrantLock lock, Integer resourceId, int attempts) throws InterruptedException {
+    private boolean tryAcquireLock(ReentrantLock lock) throws InterruptedException {
         return lock.tryLock(lockingConfig.timeout(), TimeUnit.MILLISECONDS);
     }
 
-    private void handleBackoff(int attempts, Integer resourceId) throws InterruptedException {
-        long backoffDelay = LockingUtils.calculateBackoffDelay(attempts, lockingConfig);
+    private void handleBackoff(int attempts) throws InterruptedException {
+        long backoffDelay = LockingUtils.calculateBackoffDelay(attempts, lockingConfig.maxDelay(), lockingConfig.baseDelay());
         Thread.sleep(backoffDelay);
     }
 
-    private void handleInterruptedException(Integer resourceId, int attempts, long startTime, InterruptedException e) {
+    private void handleInterruptedException(Integer resourceId, int attempts, long startTime) {
         Thread.currentThread().interrupt();
         // release the lock if it was acquired before the interruption
         // this is a best effort approach, as the lock may not be held by this thread
@@ -111,10 +116,15 @@ public class AccountLockingStrategy implements LockingStrategy {
      */
     @Override
     public void unlock(Integer resourceId) {
-        log.debug("Releasing lock for resource ID: {}", resourceId);
-        ReentrantLock lock = LockingUtils.getOrCreateLock(resourceId);
-        tryUnlock(resourceId, lock);
-        log.debug("Successfully released lock for resource ID: {}", resourceId);
+        MDC.put("accountId", resourceId.toString());
+        try {
+            log.debug("Releasing lock");
+            ReentrantLock lock = LockingUtils.getOrCreateLock(resourceId);
+            tryUnlock(resourceId, lock);
+            log.debug("Successfully released lock");
+        } finally {
+            MDC.clear();
+        }
     }
 
     private void tryUnlock(Integer resourceId, ReentrantLock lock) {
