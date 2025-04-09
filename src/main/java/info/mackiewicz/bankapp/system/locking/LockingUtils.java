@@ -13,10 +13,10 @@ public class LockingUtils {
         return locks.computeIfAbsent(resourceId, k -> new ReentrantLock());
     }
 
-    public static long calculateBackoffDelay(int attempt, LockingConfig lockingConfig) {
+    public static long calculateBackoffDelay(int attempt, long maxDelay, long baseDelay) {
         long delay = Math.min(
-            lockingConfig.maxDelay(),
-            lockingConfig.baseDelay() * (long) Math.pow(2, attempt)
+                maxDelay,
+                baseDelay * (long) Math.pow(2, attempt)
         );
         long jitter = (long) (delay * 0.25);
         return delay + random.nextLong(-jitter, jitter);
