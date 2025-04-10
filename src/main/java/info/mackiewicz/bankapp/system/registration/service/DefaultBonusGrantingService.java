@@ -35,7 +35,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class DefaultBonusGrantingService implements BonusGrantingService {
 
-    private static final String DEFAULT_TITLE = "Welcome bonus";
+    public static final String DEFAULT_TITLE = "Welcome bonus";
 
     private final BankAccountProvider bankAccountProvider;
     private final AccountService accountService;
