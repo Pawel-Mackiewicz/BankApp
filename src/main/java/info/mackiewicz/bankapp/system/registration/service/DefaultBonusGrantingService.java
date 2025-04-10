@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.system.registration.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.shared.util.BankAccountProvider;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.NonNull;
@@ -34,28 +35,18 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class DefaultBonusGrantingService implements BonusGrantingService {
 
-    private static final Iban DEFAULT_BANK_IBAN = Iban.valueOf("PL66485112340000000000000000");
     private static final String DEFAULT_TITLE = "Welcome bonus";
 
+    private final BankAccountProvider bankAccountProvider;
     private final AccountService accountService;
     private final TransactionService transactionService;
 
 
-    /**
-     * Grants a welcome bonus to a newly registered user by transferring the specified amount
-     * from the default bank account to the recipient's account.
-     *
-     * @param recipientIban the IBAN of the recipient's account
-     * @param amount        the amount of the welcome bonus to be transferred
-     */
     //TODO: Write down all exceptions that can be thrown.
     @Override
     public void grantWelcomeBonus(@NonNull Iban recipientIban, @NonNull BigDecimal amount) {
-        Account bank = getAccount(DEFAULT_BANK_IBAN);
-        log.trace("Gathered bank account");
-        Account recipient = getAccount(recipientIban);
-        log.trace("Gathered recipient account");
-        Transaction transaction = buildWelcomeBonusTransaction(recipient, bank, amount);
+
+        Transaction transaction = buildWelcomeBonusTransaction(recipientIban, amount);
         log.trace("Built welcome bonus transaction");
         Transaction registeredTransaction = transactionService.registerTransaction(transaction);
         log.trace("Registered welcome bonus transaction");
@@ -64,14 +55,17 @@ public class DefaultBonusGrantingService implements BonusGrantingService {
 
     }
 
-    private Account getAccount(Iban iban) {
-        return accountService.getAccountByIban(iban);
-    }
+    //Transactions are build from Ibans for future developement.
+    // So we don't have to rework the public `grantWelcomeBonus` method.
+    private Transaction buildWelcomeBonusTransaction(Iban recipientIban, BigDecimal amount) {
+        Account bank = bankAccountProvider.getBankAccount();
+        log.trace("Gathered bank account");
+        Account recipient = accountService.getAccountByIban(recipientIban);
+        log.trace("Gathered recipient account");
 
-    private Transaction buildWelcomeBonusTransaction(Account recipientAccount, Account bankAccount, BigDecimal amount) {
         return Transaction.buildTransfer()
-                .from(bankAccount)
-                .to(recipientAccount)
+                .from(bank)
+                .to(recipient)
                 .asInternalTransfer()
                 .withAmount(amount)
                 .withTitle(DEFAULT_TITLE)

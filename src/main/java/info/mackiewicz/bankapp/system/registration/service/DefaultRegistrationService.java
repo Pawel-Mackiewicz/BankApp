@@ -27,6 +27,7 @@ public class DefaultRegistrationService implements RegistrationService {
     private final BonusGrantingService bonusGrantingService;
     private final EmailService emailService;
 
+    //TODO: STWÓRZ BANK ACCOUNT PROVIDER
     public User registerUser(RegistrationRequest request) {
         MDC.put("Email Address", request.getEmail());
         try {
@@ -42,7 +43,6 @@ public class DefaultRegistrationService implements RegistrationService {
             Account newAccount = accountService.createAccount(createdUser.getId());
             MDC.put("Account ID", newAccount.getId().toString());
             log.debug("Created new account");
-
 
             bonusGrantingService.grantWelcomeBonus(newAccount.getIban(), DEFAULT_WELCOME_BONUS_AMOUNT);
             log.debug("Welcome bonus granted");
