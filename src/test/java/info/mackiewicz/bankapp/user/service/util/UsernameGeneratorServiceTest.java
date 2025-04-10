@@ -38,9 +38,8 @@ class UsernameGeneratorServiceTest {
         user.setLastname("Doe");
         user.setEmail(new EmailAddress("john.doe@example.com"));
 
-        User generatedUser = generatorService.generateUsername(user);
+        String username = generatorService.generateUsername(user.getFirstname(), user.getLastname(), user.getEmail().toString());
 
-        String username = generatedUser.getUsername();
         assertTrue(username.startsWith("john.doe"));
         assertTrue(username.substring("john.doe".length()).matches("\\d{6}"));
         logger.info("testGenerateUsernameByUser: Test passed");
