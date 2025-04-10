@@ -1,9 +1,4 @@
-package info.mackiewicz.bankapp.user.service;
-
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+package info.mackiewicz.bankapp.user.service.crud;
 
 import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.user.exception.InvalidPeselFormatException;
@@ -15,6 +10,10 @@ import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Service responsible for querying user data from the database. Provides methods for retrieving
@@ -24,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @see info.mackiewicz.bankapp.user.model.User
  * @see info.mackiewicz.bankapp.user.repository.UserRepository
- * @see info.mackiewicz.bankapp.shared.exception.UserNotFoundException
+ * @see UserNotFoundException
  */
 @RequiredArgsConstructor
 @Slf4j
@@ -41,12 +40,10 @@ public class UserQueryService {
      * @throws UserNotFoundException if no user is found with the given ID
      * @see User
      */
-    User getUserById(Integer id) {
+    public User getUserById(Integer id) {
         log.debug("Querying user by ID: {}", id);
         return userRepository.findById(id)
-                .orElseThrow(() -> {
-                    return new UserNotFoundException("User not found with id: " + id);
-                });
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
     /**
@@ -59,13 +56,11 @@ public class UserQueryService {
      * @see User
      */
     @Transactional
-    User getUserByIdWithPessimisticLock(Integer id) {
+    public User getUserByIdWithPessimisticLock(Integer id) {
         log.debug("Querying user by ID with pessimistic lock: {}", id);
         try {
             return userRepository.findByIdWithPessimisticLock(id)
-                    .orElseThrow(() -> {
-                        return new UserNotFoundException("User not found with id: " + id);
-                    });
+                    .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         } catch (Exception e) {
             log.error("Error while acquiring pessimistic lock for user ID: {}", id, e);
             throw e;
@@ -80,12 +75,10 @@ public class UserQueryService {
      * @throws UserNotFoundException if no user is found with the given username
      * @see User
      */
-    User getUserByUsername(String username) {
+    public User getUserByUsername(String username) {
         log.debug("Querying user by username: {}", username);
         return userRepository.findByUsername(username)
-            .orElseThrow(() -> {
-                return new UserNotFoundException("User not found with username: " + username);
-            });
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
     }
 
     /**
@@ -93,11 +86,11 @@ public class UserQueryService {
      *
      * @param email The email address as a string
      * @return The user with the specified email
-     * @throws UserNotFoundException if no user is found with the given email
+     * @throws UserNotFoundException    if no user is found with the given email
      * @throws IllegalArgumentException if the email format is invalid
      * @see EmailAddress
      */
-    User getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         log.debug("Querying user by email string: {}", email);
         return getUserByEmail(new EmailAddress(email));
     }
@@ -110,12 +103,10 @@ public class UserQueryService {
      * @throws UserNotFoundException if no user is found with the given email
      * @see EmailAddress
      */
-    User getUserByEmail(EmailAddress email) {
+    public User getUserByEmail(EmailAddress email) {
         log.debug("Querying user by email object: {}", email);
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> {
-                    return new UserNotFoundException("User not found with email: " + email);
-                });
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
     }
 
     /**
@@ -124,7 +115,7 @@ public class UserQueryService {
      * @return A list of all users
      * @see User
      */
-    List<User> getAllUsers() {
+    public List<User> getAllUsers() {
         log.debug("Querying all users from database");
         List<User> users = userRepository.findAll();
         log.debug("Found {} users in database", users.size());
@@ -137,7 +128,7 @@ public class UserQueryService {
      * @param id The unique identifier of the user
      * @return true if the user exists, false otherwise
      */
-    boolean userExistsById(Integer id) {
+    public boolean userExistsById(Integer id) {
         log.debug("Checking if user exists by ID: {}", id);
         return userRepository.existsById(id);
     }
@@ -148,7 +139,7 @@ public class UserQueryService {
      * @param username The username to check
      * @return true if the username exists, false otherwise
      */
-    boolean userExistsByUsername(String username) {
+    public boolean userExistsByUsername(String username) {
         log.debug("Checking if username exists: {}", username);
         return userRepository.existsByUsername(username);
     }
@@ -161,7 +152,7 @@ public class UserQueryService {
      * @throws InvalidEmailFormatException if the email format is invalid
      * @see EmailAddress
      */
-    boolean userExistsByEmail(String email) {
+    public boolean userExistsByEmail(String email) {
         log.debug("Checking if user exists by email string: {}", email);
         return userExistsByEmail(new EmailAddress(email));
     }

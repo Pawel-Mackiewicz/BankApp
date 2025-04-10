@@ -1,14 +1,16 @@
 package info.mackiewicz.bankapp.user.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.user.service.crud.UserCreationService;
+import info.mackiewicz.bankapp.user.service.crud.UserOperationsService;
+import info.mackiewicz.bankapp.user.service.crud.UserQueryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Facade service that coordinates all user-related operations by delegating to specialized services.

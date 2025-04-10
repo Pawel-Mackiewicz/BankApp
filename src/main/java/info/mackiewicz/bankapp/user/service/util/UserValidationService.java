@@ -1,9 +1,4 @@
-package info.mackiewicz.bankapp.user.service;
-
-import java.time.LocalDate;
-import java.time.Period;
-
-import org.springframework.stereotype.Service;
+package info.mackiewicz.bankapp.user.service.util;
 
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.exception.InvalidAgeException;
@@ -13,8 +8,13 @@ import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
+import info.mackiewicz.bankapp.user.service.crud.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.Period;
 
 /**
  * Service responsible for validating user data before operations like creation
@@ -31,14 +31,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UserValidationService {
 
-    private final UserQueryService userQueryService;
-
     // Only allow letters (English and Polish)
     private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
-    
     // Age constraints
     private static final int MINIMUM_AGE = 18;
     private static final int MAXIMUM_AGE = 120;
+    private final UserQueryService userQueryService;
 
     /**
      * Performs all necessary validations for a new user creation.
@@ -49,24 +47,21 @@ public class UserValidationService {
      *
      * @param user The user object to validate
      * @throws UserValidationException if any of the unique fields (username,
-     *                                  email, PESEL) already exist
-     * @throws InvalidAgeException if the user's age is less than 18 or greater than 120
+     *                                 email, PESEL) already exist
+     * @throws InvalidAgeException     if the user's age is less than 18 or greater than 120
      * @see User
      */
     public void validateNewUser(User user) {
         log.info("Starting validation for new user registration");
-        log.debug("Validating user data: username={}, email={}",
-                user.getUsername(),
-                user.getEmail() != null ? user.getEmail().toString() : "null");
 
-        if(user.getFirstname() != null) {
-          validateName(user.getFirstname());
+        if (user.getFirstname() != null) {
+            validateName(user.getFirstname());
         }
 
-        if(user.getLastname() != null) {
+        if (user.getLastname() != null) {
             validateName(user.getLastname());
         }
-        
+
         if (user.getUsername() != null) {
             validateUsernameUnique(user.getUsername());
         }
@@ -79,7 +74,7 @@ public class UserValidationService {
         if (user.getPhoneNumber() != null) {
             validatePhoneNumberUnique(user.getPhoneNumber());
         }
-        
+
         if (user.getDateOfBirth() != null) {
             validateAge(user.getDateOfBirth());
         }
@@ -182,27 +177,27 @@ public class UserValidationService {
      */
     public void validateAge(LocalDate birthDate) {
         log.debug("Validating user age based on birth date: {}", birthDate);
-        
+
         if (birthDate == null) {
             log.warn("Birth date is null, cannot validate age");
             throw new InvalidAgeException("Birth date is required");
         }
-        
+
         LocalDate currentDate = LocalDate.now();
         int age = Period.between(birthDate, currentDate).getYears();
-        
+
         log.debug("Calculated user age: {} years", age);
-        
+
         if (age < MINIMUM_AGE) {
             log.warn("User age validation failed: user is under minimum age of {}", MINIMUM_AGE);
             throw new InvalidAgeException("User must be at least " + MINIMUM_AGE + " years old");
         }
-        
+
         if (age > MAXIMUM_AGE) {
             log.warn("User age validation failed: user exceeds maximum age of {}", MAXIMUM_AGE);
             throw new InvalidAgeException("User cannot be older than " + MAXIMUM_AGE + " years old");
         }
-        
+
         log.debug("User age validation successful: {} years", age);
     }
 }

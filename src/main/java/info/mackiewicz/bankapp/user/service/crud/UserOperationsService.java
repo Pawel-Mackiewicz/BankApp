@@ -1,9 +1,11 @@
-package info.mackiewicz.bankapp.user.service;
+package info.mackiewicz.bankapp.user.service.crud;
 
 import info.mackiewicz.bankapp.security.service.PasswordService;
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
+import info.mackiewicz.bankapp.user.service.util.UserValidationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,14 +40,14 @@ public class UserOperationsService {
      * @see User
      */
     @Transactional
-    User updateUser(User user) {
+    public User updateUser(User user) {
         log.info("Starting user update process for ID: {}", user.getId());
         log.debug("Validating user existence");
         userValidationService.validateUserExists(user.getId());
-        
+
         log.debug("Ensuring password is encoded for user: {}", user.getUsername());
         user = passwordService.ensurePasswordEncoded(user);
-        
+
         log.debug("Saving updated user data");
         User saved = userRepository.save(user);
         log.info("Successfully updated user. ID: {}, username: {}", saved.getId(), saved.getUsername());
@@ -56,16 +58,16 @@ public class UserOperationsService {
      * Changes a user's password by their email address.
      * The new password will be encoded before saving.
      *
-     * @param email The email address of the user
+     * @param email       The email address of the user
      * @param newPassword The new password (in plain text)
      * @throws IllegalArgumentException if the email format is invalid
      */
     @Transactional
-    void changeUsersPassword(EmailAddress email, String newPassword) {
+    public void changeUsersPassword(EmailAddress email, String newPassword) {
         log.info("Starting password change process for user with email: {}", email);
         log.debug("Encoding new password");
-        String encodedPassword = passwordService.encodePassword(newPassword);
-        
+        String encodedPassword = passwordService.ensurePasswordEncoded(newPassword);
+
         log.debug("Updating password in database");
         userRepository.updatePasswordByEmail(email, encodedPassword);
         log.info("Successfully changed password for user with email: {}", email);
@@ -75,13 +77,13 @@ public class UserOperationsService {
      * Changes a user's password by their email address.
      * The new password will be encoded before saving.
      *
-     * @param email The email address of the user
+     * @param email       The email address of the user
      * @param newPassword The new password (in plain text)
      * @throws IllegalArgumentException if the email format is invalid
      */
 
     @Transactional
-    void changeUsersPassword(String email, String newPassword) {
+    public void changeUsersPassword(String email, String newPassword) {
         changeUsersPassword(new EmailAddress(email), newPassword);
     }
 
@@ -93,13 +95,13 @@ public class UserOperationsService {
      * @throws UserNotFoundException if the user does not exist
      */
     @Transactional
-    void deleteUser(Integer id) {
+    public void deleteUser(Integer id) {
         log.info("Starting user deletion process for ID: {}", id);
-        
+
         log.debug("Validating user existence");
         User user = userQueryService.getUserById(id);
         log.debug("Found user to delete: {}", user.getUsername());
-        
+
         log.debug("Performing user deletion");
         userRepository.delete(user);
         log.info("Successfully deleted user. ID: {}, username: {}", id, user.getUsername());
