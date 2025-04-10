@@ -1,6 +1,10 @@
 package info.mackiewicz.bankapp.user.service.crud;
 
 import info.mackiewicz.bankapp.security.service.PasswordService;
+import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
+import info.mackiewicz.bankapp.user.exception.InvalidAgeException;
+import info.mackiewicz.bankapp.user.exception.UserFieldNullException;
+import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
 import info.mackiewicz.bankapp.user.service.util.UserValidationService;
@@ -46,7 +50,13 @@ public class UserCreationService {
      *
      * @param user The user object containing the information for the new user
      * @return The created user with generated ID and all fields processed
-     * @throws info.mackiewicz.bankapp.user.exception.UsernameException
+     * @throws UserFieldNullException if any of the required fields in the User
+     *                                object is null.
+     * @throws UserValidationException if the name validation fails for any name.
+     * @throws DuplicatedUserException if the username, email address, PESEL, or
+     *                                 phone number is already in use.
+     * @throws InvalidAgeException if the user's age is less than 18 or greater
+     *                             than 120 years old.
      */
     @Transactional
     public User createUser(User user) {

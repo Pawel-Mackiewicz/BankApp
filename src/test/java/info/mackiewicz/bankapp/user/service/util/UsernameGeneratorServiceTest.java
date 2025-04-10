@@ -61,7 +61,7 @@ class UsernameGeneratorServiceTest {
     }
 
     @Test
-    void testGenerateUsernameWithDiacritics() throws Exception {
+    void testGenerateUsernameWithDiacritics() {
         logger.info("testGenerateUsernameWithDiacritics: Starting test");
         String firstname = "Żółć";
         String lastname = "Ćma";

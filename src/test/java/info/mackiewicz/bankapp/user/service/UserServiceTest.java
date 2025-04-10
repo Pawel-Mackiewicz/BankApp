@@ -4,7 +4,6 @@ import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.crud.UserCreationService;
 import info.mackiewicz.bankapp.user.service.crud.UserOperationsService;
 import info.mackiewicz.bankapp.user.service.crud.UserQueryService;
-import info.mackiewicz.bankapp.user.service.util.UserValidationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,9 +28,6 @@ class UserServiceTest {
 
     @Mock
     private UserOperationsService userOperationsService;
-
-    @Mock
-    private UserValidationService userValidationService;
 
     @InjectMocks
     private UserService userService;
