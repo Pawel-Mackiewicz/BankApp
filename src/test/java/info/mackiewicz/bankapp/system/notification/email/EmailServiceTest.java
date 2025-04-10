@@ -1,7 +1,6 @@
-package info.mackiewicz.bankapp.notification.email;
+package info.mackiewicz.bankapp.system.notification.email;
 
-import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
-
+import info.mackiewicz.bankapp.system.notification.email.template.EmailTemplateProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +9,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmailServiceTest {

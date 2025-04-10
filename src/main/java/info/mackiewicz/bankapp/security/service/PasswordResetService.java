@@ -1,18 +1,10 @@
 package info.mackiewicz.bankapp.security.service;
 
-import org.springframework.stereotype.Service;
-
-import info.mackiewicz.bankapp.notification.email.EmailService;
-import info.mackiewicz.bankapp.notification.email.exception.EmailSendingException;
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
-import info.mackiewicz.bankapp.security.exception.PasswordChangeException;
-import info.mackiewicz.bankapp.security.exception.TokenCreationException;
-import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
-import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.security.exception.UnexpectedTokenValidationException;
-import info.mackiewicz.bankapp.security.exception.UsedTokenException;
+import info.mackiewicz.bankapp.security.exception.*;
 import info.mackiewicz.bankapp.security.model.PasswordResetToken;
+import info.mackiewicz.bankapp.system.notification.email.EmailService;
+import info.mackiewicz.bankapp.system.notification.email.exception.EmailSendingException;
 import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
@@ -21,6 +13,7 @@ import info.mackiewicz.bankapp.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @RequiredArgsConstructor

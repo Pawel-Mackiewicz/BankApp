@@ -1,17 +1,6 @@
 package info.mackiewicz.bankapp.testutils.config;
 
-import org.mockito.Mockito;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import info.mackiewicz.bankapp.notification.email.EmailSender;
-import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
 import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
 import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
 import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingInterceptor;
@@ -19,6 +8,15 @@ import info.mackiewicz.bankapp.shared.web.error.mapping.ApiExceptionToErrorMappe
 import info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor;
 import info.mackiewicz.bankapp.shared.web.response.RestResponseFactory;
 import info.mackiewicz.bankapp.shared.web.util.RequestUriHandler;
+import info.mackiewicz.bankapp.system.notification.email.EmailSender;
+import info.mackiewicz.bankapp.system.notification.email.template.EmailTemplateProvider;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @TestConfiguration
 @EnableWebMvc

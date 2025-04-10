@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.notification.email.template;
+package info.mackiewicz.bankapp.system.notification.email.template;
 
 /**
  * Base class for all email templates.

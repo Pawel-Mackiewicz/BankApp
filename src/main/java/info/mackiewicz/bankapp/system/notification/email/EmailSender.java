@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.notification.email;
+package info.mackiewicz.bankapp.system.notification.email;
 
 /**
  * Interface for email sending functionality.

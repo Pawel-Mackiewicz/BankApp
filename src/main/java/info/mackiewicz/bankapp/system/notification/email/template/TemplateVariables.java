@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.notification.email.template;
+package info.mackiewicz.bankapp.system.notification.email.template;
 
 import java.util.HashMap;
 import java.util.Map;
