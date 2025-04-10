@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @Service
 public class DefaultRegistrationService implements RegistrationService {
 
-    private static final BigDecimal DEFAULT_WELCOME_BONUS_AMOUNT = BigDecimal.valueOf(1000);
+    public static final BigDecimal DEFAULT_WELCOME_BONUS_AMOUNT = BigDecimal.valueOf(1000);
 
     private final UserService userService;
     private final RegistrationMapper registrationMapper;
