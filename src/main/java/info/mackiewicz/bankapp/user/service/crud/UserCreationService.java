@@ -67,6 +67,10 @@ public class UserCreationService {
     }
 
     private User generateUsername(User user) {
+
+        // Skip username generation if user already has a username defined
+        if (user.getUsername() != null) return user;
+
         String username = usernameGeneratorService.generateUsername(user.getFirstname(), user.getLastname(), user.getEmail().toString());
         user.setUsername(username);
         return user;
