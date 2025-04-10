@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.user.service;
 
-import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
-import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.user.exception.*;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.service.crud.UserCreationService;
@@ -35,10 +34,13 @@ public class UserService {
     /**
      * Creates a new user in the system.
      *
+     *
      * @param user The user object containing the information for the new user
      * @return The created user with generated ID
-     * @throws IllegalStateException if required fields are missing or invalid   
-     * @throws IllegalArgumentException if any unique fields (username, email, PESEL) already exist
+     * @throws UserFieldNullException if any of the required fields in the User object is null
+     * @throws UserValidationException if the name validation fails for any name
+     * @throws DuplicatedUserException if the username, email address, PESEL, or phone number is already in use
+     * @throws InvalidAgeException if the user's age is less than 18 or greater than 120 years old
      */
     public User createUser(User user) {
         return userCreationService.createUser(user);
