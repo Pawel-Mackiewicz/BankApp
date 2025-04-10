@@ -1,11 +1,10 @@
 package info.mackiewicz.bankapp.user.service;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.service.crud.UserCreationService;
+import info.mackiewicz.bankapp.user.service.crud.UserOperationsService;
+import info.mackiewicz.bankapp.user.service.crud.UserQueryService;
+import info.mackiewicz.bankapp.user.service.util.UserValidationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,7 +13,9 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import info.mackiewicz.bankapp.user.model.User;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 class UserServiceTest {
 

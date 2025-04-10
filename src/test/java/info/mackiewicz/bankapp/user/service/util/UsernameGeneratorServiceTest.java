@@ -1,8 +1,8 @@
-package info.mackiewicz.bankapp.user.service;
+package info.mackiewicz.bankapp.user.service.util;
 
+import info.mackiewicz.bankapp.user.exception.UsernameException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -119,11 +119,11 @@ class UsernameGeneratorServiceTest {
     @Test
     void testNullInputValidation() {
         logger.info("testNullInputValidation: Starting test");
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(UsernameException.class, () ->
             generatorService.generateUsername(null, "Doe", "email@example.com"));
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(UsernameException.class, () ->
             generatorService.generateUsername("John", null, "email@example.com"));
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(UsernameException.class, () ->
             generatorService.generateUsername("John", "Doe", null));
         logger.info("testNullInputValidation: Test passed");
     }
