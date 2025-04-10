@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.user.service.util;
 
 import com.ibm.icu.text.Transliterator;
-import info.mackiewicz.bankapp.system.registration.exception.UsernameException;
+import info.mackiewicz.bankapp.user.exception.UsernameException;
 import info.mackiewicz.bankapp.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class UsernameGeneratorService {
      */
     public String generateUsername(String firstname, String lastname, String email) {
         if (isEmpty(firstname) || isEmpty(lastname) || isEmpty(email)) {
-            throw new UsernameException("Firstname, lastname and email cannot be null or empty");
+            throw new info.mackiewicz.bankapp.user.exception.UsernameException("Firstname, lastname and email cannot be null or empty");
         }
         log.debug("Generating username...");
         String baseUsername = generateBaseUsername(firstname, lastname);
