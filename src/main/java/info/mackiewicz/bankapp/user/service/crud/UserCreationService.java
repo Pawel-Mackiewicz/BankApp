@@ -46,7 +46,7 @@ public class UserCreationService {
      *
      * @param user The user object containing the information for the new user
      * @return The created user with generated ID and all fields processed
-     * @throws info.mackiewicz.bankapp.system.registration.exception.UsernameException
+     * @throws info.mackiewicz.bankapp.user.exception.UsernameException
      */
     @Transactional
     public User createUser(User user) {
