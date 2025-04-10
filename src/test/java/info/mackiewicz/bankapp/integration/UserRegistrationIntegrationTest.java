@@ -1,22 +1,17 @@
 package info.mackiewicz.bankapp.integration;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.math.BigDecimal;
-
-import org.junit.jupiter.api.BeforeAll;
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.testutils.TestUserRegistrationDtoBuilder;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.user.model.User;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -31,13 +26,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.notification.email.EmailService;
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
-import info.mackiewicz.bankapp.testutils.TestUserRegistrationDtoBuilder;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import java.math.BigDecimal;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc

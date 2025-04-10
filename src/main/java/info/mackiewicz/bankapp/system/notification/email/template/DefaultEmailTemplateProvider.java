@@ -1,11 +1,10 @@
-package info.mackiewicz.bankapp.notification.email.template;
+package info.mackiewicz.bankapp.system.notification.email.template;
 
+import info.mackiewicz.bankapp.system.notification.email.EmailContent;
+import info.mackiewicz.bankapp.system.notification.email.template.templates.PasswordResetConfirmationTemplate;
+import info.mackiewicz.bankapp.system.notification.email.template.templates.PasswordResetEmailTemplate;
+import info.mackiewicz.bankapp.system.notification.email.template.templates.WelcomeEmailTemplate;
 import org.springframework.stereotype.Component;
-
-import info.mackiewicz.bankapp.notification.email.EmailContent;
-import info.mackiewicz.bankapp.notification.email.template.templates.PasswordResetConfirmationTemplate;
-import info.mackiewicz.bankapp.notification.email.template.templates.PasswordResetEmailTemplate;
-import info.mackiewicz.bankapp.notification.email.template.templates.WelcomeEmailTemplate;
 
 /**
  * Default implementation of EmailTemplateProvider using specific template classes.

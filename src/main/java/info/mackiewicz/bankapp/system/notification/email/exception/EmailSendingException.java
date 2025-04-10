@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.notification.email.exception;
+package info.mackiewicz.bankapp.system.notification.email.exception;
 
 public class EmailSendingException extends RuntimeException {
 

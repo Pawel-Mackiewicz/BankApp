@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.notification.email;
+package info.mackiewicz.bankapp.system.notification.email;
 
 import com.resend.Resend;
 import com.resend.core.exception.ResendException;

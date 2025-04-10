@@ -1,6 +1,6 @@
-package info.mackiewicz.bankapp.notification.email.template;
+package info.mackiewicz.bankapp.system.notification.email.template;
 
-import info.mackiewicz.bankapp.notification.email.EmailContent;
+import info.mackiewicz.bankapp.system.notification.email.EmailContent;
 
 /**
  * Interface for email template management.

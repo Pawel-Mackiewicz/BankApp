@@ -1,13 +1,18 @@
 package info.mackiewicz.bankapp.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-
+import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
+import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
+import info.mackiewicz.bankapp.security.exception.UsedTokenException;
+import info.mackiewicz.bankapp.security.model.PasswordResetToken;
+import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
+import info.mackiewicz.bankapp.security.service.PasswordResetService;
+import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.security.service.TokenOperationsService;
+import info.mackiewicz.bankapp.system.notification.email.EmailService;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +23,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
-import info.mackiewicz.bankapp.notification.email.EmailService;
-import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
-import info.mackiewicz.bankapp.security.exception.UsedTokenException;
-import info.mackiewicz.bankapp.security.model.PasswordResetToken;
-import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
-import info.mackiewicz.bankapp.security.service.PasswordResetService;
-import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
-import info.mackiewicz.bankapp.security.service.TokenOperationsService;
-import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.repository.UserRepository;
-import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles("test")

@@ -1,11 +1,10 @@
-package info.mackiewicz.bankapp.notification.email;
+package info.mackiewicz.bankapp.system.notification.email;
 
+import info.mackiewicz.bankapp.system.notification.email.exception.EmailSendingException;
+import info.mackiewicz.bankapp.system.notification.email.template.EmailTemplateProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import info.mackiewicz.bankapp.notification.email.exception.EmailSendingException;
-import info.mackiewicz.bankapp.notification.email.template.EmailTemplateProvider;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service for sending various types of emails.

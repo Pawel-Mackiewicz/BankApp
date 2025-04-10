@@ -1,7 +1,7 @@
-package info.mackiewicz.bankapp.notification.email.template.templates;
+package info.mackiewicz.bankapp.system.notification.email.template.templates;
 
-import info.mackiewicz.bankapp.notification.email.template.EmailTemplate;
-import info.mackiewicz.bankapp.notification.email.template.TemplateVariables;
+import info.mackiewicz.bankapp.system.notification.email.template.EmailTemplate;
+import info.mackiewicz.bankapp.system.notification.email.template.TemplateVariables;
 
 /**
  * Password reset confirmation email template.
