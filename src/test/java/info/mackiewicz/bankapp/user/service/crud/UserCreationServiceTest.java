@@ -1,8 +1,11 @@
-package info.mackiewicz.bankapp.user.service;
+package info.mackiewicz.bankapp.user.service.crud;
 
 import info.mackiewicz.bankapp.security.service.PasswordService;
 import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
+import info.mackiewicz.bankapp.user.service.util.UserValidationService;
+import info.mackiewicz.bankapp.user.service.util.UsernameGeneratorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -40,23 +43,35 @@ class UserCreationServiceTest {
         // Given
         User inputUser = new User();
         inputUser.setPassword("rawPassword");
-
+        inputUser.setFirstname("Jan");
+        inputUser.setLastname("Kowalski");
+        inputUser.setEmail(new EmailAddress("jan.kowalski@example.com"));
+    
         User userWithGeneratedUsername = new User();
         userWithGeneratedUsername.setPassword("rawPassword");
+        userWithGeneratedUsername.setFirstname("Jan");
+        userWithGeneratedUsername.setLastname("Kowalski");
+        userWithGeneratedUsername.setEmail(new EmailAddress("jan.kowalski@example.com"));
         userWithGeneratedUsername.setUsername("generatedUsername");
 
         User userWithEncodedPassword = new User();
         userWithEncodedPassword.setPassword("encodedPassword");
         userWithEncodedPassword.setUsername("generatedUsername");
-
+        userWithEncodedPassword.setFirstname("Jan");
+        userWithEncodedPassword.setLastname("Kowalski");
+        userWithEncodedPassword.setEmail(new EmailAddress("jan.kowalski@example.com"));
+    
         User savedUser = new User();
         savedUser.setId(1);
         savedUser.setPassword("encodedPassword");
         savedUser.setUsername("generatedUsername");
-
+        savedUser.setFirstname("Jan");
+        savedUser.setLastname("Kowalski");
+        savedUser.setEmail(new EmailAddress("jan.kowalski@example.com"));
+    
         // When
         doNothing().when(userValidationService).validateNewUser(inputUser);
-        when(usernameGeneratorService.generateUsername(inputUser)).thenReturn(userWithGeneratedUsername);
+        when(usernameGeneratorService.generateUsername(inputUser.getFirstname(), inputUser.getLastname(), inputUser.getEmail().toString())).thenReturn("generatedUsername");
         when(passwordService.ensurePasswordEncoded(userWithGeneratedUsername)).thenReturn(userWithEncodedPassword);
         when(userRepository.save(userWithEncodedPassword)).thenReturn(savedUser);
 
@@ -68,9 +83,9 @@ class UserCreationServiceTest {
         assertEquals("generatedUsername", result.getUsername());
         assertEquals("encodedPassword", result.getPassword());
 
-        verify(usernameGeneratorService).generateUsername(inputUser);
-        verify(passwordService).ensurePasswordEncoded(userWithGeneratedUsername);
-        verify(userRepository).save(userWithEncodedPassword);
+        verify(usernameGeneratorService).generateUsername(inputUser.getFirstname(), inputUser.getLastname(), inputUser.getEmail().toString());
+        verify(passwordService).ensurePasswordEncoded(any(User.class));
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
@@ -102,7 +117,7 @@ class UserCreationServiceTest {
         assertEquals("existingUsername", result.getUsername());
         assertEquals("encodedPassword", result.getPassword());
 
-        verify(usernameGeneratorService, never()).generateUsername(any());
+        verify(usernameGeneratorService, never()).generateUsername(anyString(), anyString(), anyString());
         verify(passwordService).ensurePasswordEncoded(inputUser);
         verify(userRepository).save(userWithEncodedPassword);
     }

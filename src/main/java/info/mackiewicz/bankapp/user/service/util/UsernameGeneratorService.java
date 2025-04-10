@@ -1,13 +1,10 @@
-package info.mackiewicz.bankapp.user.service;
-
-import java.util.Objects;
-
-import org.springframework.stereotype.Service;
+package info.mackiewicz.bankapp.user.service.util;
 
 import com.ibm.icu.text.Transliterator;
-
+import info.mackiewicz.bankapp.user.exception.UsernameException;
 import info.mackiewicz.bankapp.user.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 /**
  * Service responsible for generating unique usernames based on user's personal information.
@@ -15,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  * where:
  * - firstname and lastname are converted to lowercase and stripped of diacritical marks
  * - uniqueID is a 6-digit number derived from the user's email hash
- *
+ * <p>
  * Example: "jan.kowalski123456"
  *
  * @see User
@@ -24,45 +21,33 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UsernameGeneratorService {
 
-    /**
-     * Generates and sets a username for the given user based on their personal information.
-     * The username is created using firstname, lastname and email. Diacritical marks are removed.
-     *
-     * @param user The user object containing firstname, lastname and email
-     * @return The user object with generated username set
-     * @throws IllegalArgumentException if firstname, lastname or email is null
-     */
-    public User generateUsername(User user) {
-        Objects.requireNonNull(user, "User cannot be null");
-        log.debug("Starting username generation for user with email: {}", user.getEmail());
-        String username = generateUsername(user.getFirstname(), user.getLastname(), user.getEmail().toString());
-        user.setUsername(username);
-        log.info("Generated username '{}' for user with email: {}", username, user.getEmail());
-        return user;
-    }
-    
+
     /**
      * Generates a username from the provided personal information.
      * The username consists of firstname.lastname followed by a unique identifier.
      *
      * @param firstname The user's first name
-     * @param lastname The user's last name
-     * @param email The user's email address used for generating unique identifier
+     * @param lastname  The user's last name
+     * @param email     The user's email address used for generating unique identifier
      * @return Generated username string
-     * @throws IllegalArgumentException if any parameter is null
+     * @throws UsernameException if any argument is null or empty
      */
     public String generateUsername(String firstname, String lastname, String email) {
-        if (firstname == null || lastname == null || email == null) {
-            throw new IllegalArgumentException("Firstname, lastname and email cannot be null");
+        if (isEmpty(firstname) || isEmpty(lastname) || isEmpty(email)) {
+            throw new info.mackiewicz.bankapp.user.exception.UsernameException("Firstname, lastname and email cannot be null or empty");
         }
-        log.debug("Generating username for firstname: {}, lastname: {}", firstname, lastname);
+        log.debug("Generating username...");
         String baseUsername = generateBaseUsername(firstname, lastname);
-        log.debug("Generated base username: {}", baseUsername);
+        log.trace("Generated base username: {}", baseUsername);
         String uniqueId = generateUniqueID(email);
-        log.debug("Generated unique ID: {}", uniqueId);
+        log.trace("Generated unique ID: {}", uniqueId);
         String fullUsername = baseUsername + uniqueId;
-        log.debug("Final username: {}", fullUsername);
+        log.trace("Final username: {}", fullUsername);
         return fullUsername;
+    }
+
+    private boolean isEmpty(String string) {
+        return string == null || string.isBlank();
     }
 
     /**
@@ -70,7 +55,7 @@ public class UsernameGeneratorService {
      * Removes diacritical marks and converts to lowercase.
      *
      * @param firstname The user's first name
-     * @param lastname The user's last name
+     * @param lastname  The user's last name
      * @return Base username in format "firstname.lastname"
      */
     private String generateBaseUsername(String firstname, String lastname) {

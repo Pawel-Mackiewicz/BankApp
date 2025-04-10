@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.user.service;
+package info.mackiewicz.bankapp.user.service.util;
 
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.exception.InvalidAgeException;
@@ -8,6 +8,7 @@ import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
+import info.mackiewicz.bankapp.user.service.crud.UserQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

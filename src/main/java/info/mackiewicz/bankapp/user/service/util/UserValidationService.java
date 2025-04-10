@@ -1,20 +1,17 @@
-package info.mackiewicz.bankapp.user.service;
+package info.mackiewicz.bankapp.user.service.util;
 
-import java.time.LocalDate;
-import java.time.Period;
-
-import org.springframework.stereotype.Service;
-
-import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
-import info.mackiewicz.bankapp.user.exception.InvalidAgeException;
-import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
-import info.mackiewicz.bankapp.user.exception.UserValidationException;
+import info.mackiewicz.bankapp.user.exception.*;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
+import info.mackiewicz.bankapp.user.service.crud.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.Period;
 
 /**
  * Service responsible for validating user data before operations like creation
@@ -31,60 +28,64 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UserValidationService {
 
-    private final UserQueryService userQueryService;
-
     // Only allow letters (English and Polish)
     private static final String LETTERS_REGEX = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
-    
     // Age constraints
     private static final int MINIMUM_AGE = 18;
     private static final int MAXIMUM_AGE = 120;
+    private final UserQueryService userQueryService;
 
     /**
-     * Performs all necessary validations for a new user creation.
-     * Validates the user's first name, last name, username, email, PESEL and phone number.
-     * Validates that the first name and last name contain only letters (English and Polish) if they are provided.
-     * Validates uniqueness of username, email and PESEL if they are provided.
-     * Validates that the user is at least 18 years old and not older than 120 years.
+     * Validates the provided User object to ensure all required fields are valid
+     * and meet the application's registration criteria. This method performs the
+     * following checks:
+     * - Ensures no required field is null.
+     * - Validates the format and content of first and last names.
+     * - Ensures the username is unique across the system.
+     * - Ensures the email address is unique across the system.
+     * - Ensures the PESEL number is unique across the system.
+     * - Ensures the phone number is unique across the system.
+     * - Verifies that the user's age meets the application's age constraints.
      *
-     * @param user The user object to validate
-     * @throws UserValidationException if any of the unique fields (username,
-     *                                  email, PESEL) already exist
-     * @throws InvalidAgeException if the user's age is less than 18 or greater than 120
-     * @see User
+     * @param user The User object to validate. It must contain all necessary data
+     *             for registration, including first name, last name, username,
+     *             email, PESEL, phone number, and date of birth.
+     * @throws UserFieldNullException if any of the required fields in the User
+     *                                object is null.
+     * @throws UserValidationException if the name validation fails for any name.
+     * @throws DuplicatedUserException if the username, email address, PESEL, or
+     *                                 phone number is already in use.
+     * @throws InvalidAgeException if the user's age is less than 18 or greater
+     *                             than 120 years old.
      */
     public void validateNewUser(User user) {
         log.info("Starting validation for new user registration");
-        log.debug("Validating user data: username={}, email={}",
-                user.getUsername(),
-                user.getEmail() != null ? user.getEmail().toString() : "null");
 
-        if(user.getFirstname() != null) {
-          validateName(user.getFirstname());
-        }
+        checkNulls(user);
 
-        if(user.getLastname() != null) {
-            validateName(user.getLastname());
-        }
-        
-        if (user.getUsername() != null) {
-            validateUsernameUnique(user.getUsername());
-        }
-        if (user.getEmail() != null) {
-            validateEmailUnique(user.getEmail());
-        }
-        if (user.getPesel() != null) {
-            validatePeselUnique(user.getPesel());
-        }
-        if (user.getPhoneNumber() != null) {
-            validatePhoneNumberUnique(user.getPhoneNumber());
-        }
-        
-        if (user.getDateOfBirth() != null) {
-            validateAge(user.getDateOfBirth());
-        }
+        validateName(user.getFirstname());
+        validateName(user.getLastname());
+        validateUsernameUnique(user.getUsername());
+        validateEmailUnique(user.getEmail());
+        validatePeselUnique(user.getPesel());
+        validatePhoneNumberUnique(user.getPhoneNumber());
+        validateAge(user.getDateOfBirth());
 
         log.info("Successfully completed validation for new user registration");
+    }
+
+    private void checkNulls(User user) {
+        if (
+                user.getFirstname() == null ||
+                        user.getLastname() == null ||
+                        user.getEmail() == null ||
+                        user.getPesel() == null ||
+                        user.getPhoneNumber() == null ||
+                        user.getDateOfBirth() == null
+        ) {
+            log.warn("Null values detected in user object: {}", user);
+            throw new UserFieldNullException("Null values detected in user object");
+        }
     }
 
     private void validateName(String name) {
@@ -182,27 +183,27 @@ public class UserValidationService {
      */
     public void validateAge(LocalDate birthDate) {
         log.debug("Validating user age based on birth date: {}", birthDate);
-        
+
         if (birthDate == null) {
             log.warn("Birth date is null, cannot validate age");
             throw new InvalidAgeException("Birth date is required");
         }
-        
+
         LocalDate currentDate = LocalDate.now();
         int age = Period.between(birthDate, currentDate).getYears();
-        
+
         log.debug("Calculated user age: {} years", age);
-        
+
         if (age < MINIMUM_AGE) {
             log.warn("User age validation failed: user is under minimum age of {}", MINIMUM_AGE);
             throw new InvalidAgeException("User must be at least " + MINIMUM_AGE + " years old");
         }
-        
+
         if (age > MAXIMUM_AGE) {
             log.warn("User age validation failed: user exceeds maximum age of {}", MAXIMUM_AGE);
             throw new InvalidAgeException("User cannot be older than " + MAXIMUM_AGE + " years old");
         }
-        
+
         log.debug("User age validation successful: {} years", age);
     }
 }
