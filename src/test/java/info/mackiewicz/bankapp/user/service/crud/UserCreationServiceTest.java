@@ -117,7 +117,7 @@ class UserCreationServiceTest {
         assertEquals("existingUsername", result.getUsername());
         assertEquals("encodedPassword", result.getPassword());
 
-        verify(usernameGeneratorService, never()).generateUsername(any());
+        verify(usernameGeneratorService, never()).generateUsername(anyString(), anyString(), anyString());
         verify(passwordService).ensurePasswordEncoded(inputUser);
         verify(userRepository).save(userWithEncodedPassword);
     }

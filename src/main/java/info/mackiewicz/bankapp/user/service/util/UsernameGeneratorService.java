@@ -22,13 +22,6 @@ import org.springframework.stereotype.Service;
 public class UsernameGeneratorService {
 
 
-    @Deprecated
-    public User generateUsername(User user) {
-        String username = generateUsername(user.getFirstname(), user.getLastname(), user.getEmail().toString());
-        user.setUsername(username);
-        return user;
-    }
-
     /**
      * Generates a username from the provided personal information.
      * The username consists of firstname.lastname followed by a unique identifier.
