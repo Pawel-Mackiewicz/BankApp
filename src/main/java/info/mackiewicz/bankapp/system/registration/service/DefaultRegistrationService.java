@@ -2,11 +2,9 @@ package info.mackiewicz.bankapp.system.registration.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.notification.email.EmailService;
+import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationMapper;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +18,13 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 @Service
 public class DefaultRegistrationService implements RegistrationService {
-    private final UserService userService;
 
+    private static final BigDecimal DEFAULT_WELCOME_BONUS_AMOUNT = BigDecimal.valueOf(1000);
+
+    private final UserService userService;
     private final RegistrationMapper registrationMapper;
     private final AccountService accountService;
-    private final TransactionService transactionService;
+    private final BonusGrantingService bonusGrantingService;
     private final EmailService emailService;
 
     public User registerUser(RegistrationRequest request) {
@@ -36,32 +36,20 @@ public class DefaultRegistrationService implements RegistrationService {
             log.debug("Mapped registration DTO to User entity");
 
             User createdUser = userService.createUser(user);
-            log.debug("Created user with ID: {}", createdUser.getId());
+            MDC.put("User ID", createdUser.getId().toString());
+            log.debug("User created");
 
             Account newAccount = accountService.createAccount(createdUser.getId());
-            log.debug("Created new account for user with ID: {}", newAccount.getId());
+            MDC.put("Account ID", newAccount.getId().toString());
+            log.debug("Created new account");
 
-            Account bankAccount = accountService.getAccountById(-1);
-            log.trace("Retrieved bank system account");
 
-            Transaction transaction = Transaction.buildTransfer()
-                    .from(bankAccount)
-                    .to(newAccount)
-                    .asInternalTransfer()
-                    .withAmount(new BigDecimal("1000"))
-                    .withTitle("Welcome bonus")
-                    .build();
-            log.debug("Prepared welcome bonus transaction");
-
-            Transaction registeredTransaction = transactionService.registerTransaction(transaction);
-            log.debug("Registered welcome bonus transaction");
-
-            // Process the transaction to update account balances immediately
-            transactionService.processTransactionById(registeredTransaction.getId());
-            log.debug("Processed welcome bonus transaction for user with ID: {}", createdUser.getId());
+            bonusGrantingService.grantWelcomeBonus(newAccount.getIban(), DEFAULT_WELCOME_BONUS_AMOUNT);
+            log.debug("Welcome bonus granted");
 
             emailService.sendWelcomeEmail(createdUser.getEmail().toString(), createdUser.getFullName(),
                     createdUser.getUsername());
+            log.debug("Welcome email sent");
             log.info("Completed user registration process for user: {}", createdUser.getUsername());
 
             return createdUser;
