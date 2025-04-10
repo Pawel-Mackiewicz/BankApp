@@ -1,9 +1,10 @@
-package info.mackiewicz.bankapp.user.service;
+package info.mackiewicz.bankapp.user.service.crud;
 
 import info.mackiewicz.bankapp.security.service.PasswordService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
+import info.mackiewicz.bankapp.user.service.util.UserValidationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -76,12 +77,12 @@ class UserOperationsServiceTest {
         String encodedPassword = "encodedNewPassword";
         EmailAddress email = new EmailAddress(emailStr);
 
-        when(passwordService.encodePassword(newPassword)).thenReturn(encodedPassword);
+        when(passwordService.ensurePasswordEncoded(newPassword)).thenReturn(encodedPassword);
         doNothing().when(userRepository).updatePasswordByEmail(email, encodedPassword);
 
         userOperationsService.changeUsersPassword(emailStr, newPassword);
 
-        verify(passwordService).encodePassword(newPassword);
+        verify(passwordService).ensurePasswordEncoded(newPassword);
         verify(userRepository).updatePasswordByEmail(email, encodedPassword);
     }
 
@@ -91,12 +92,12 @@ class UserOperationsServiceTest {
         String newPassword = "newPassword";
         String encodedPassword = "encodedNewPassword";
 
-        when(passwordService.encodePassword(newPassword)).thenReturn(encodedPassword);
+        when(passwordService.ensurePasswordEncoded(newPassword)).thenReturn(encodedPassword);
         doNothing().when(userRepository).updatePasswordByEmail(email, encodedPassword);
 
         userOperationsService.changeUsersPassword(email, newPassword);
 
-        verify(passwordService).encodePassword(newPassword);
+        verify(passwordService).ensurePasswordEncoded(newPassword);
         verify(userRepository).updatePasswordByEmail(email, encodedPassword);
     }
 

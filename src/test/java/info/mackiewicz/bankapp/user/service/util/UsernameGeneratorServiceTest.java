@@ -1,8 +1,8 @@
-package info.mackiewicz.bankapp.user.service;
+package info.mackiewicz.bankapp.user.service.util;
 
+import info.mackiewicz.bankapp.user.exception.UsernameException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,9 +38,8 @@ class UsernameGeneratorServiceTest {
         user.setLastname("Doe");
         user.setEmail(new EmailAddress("john.doe@example.com"));
 
-        User generatedUser = generatorService.generateUsername(user);
+        String username = generatorService.generateUsername(user.getFirstname(), user.getLastname(), user.getEmail().toString());
 
-        String username = generatedUser.getUsername();
         assertTrue(username.startsWith("john.doe"));
         assertTrue(username.substring("john.doe".length()).matches("\\d{6}"));
         logger.info("testGenerateUsernameByUser: Test passed");
@@ -61,7 +60,7 @@ class UsernameGeneratorServiceTest {
     }
 
     @Test
-    void testGenerateUsernameWithDiacritics() throws Exception {
+    void testGenerateUsernameWithDiacritics() {
         logger.info("testGenerateUsernameWithDiacritics: Starting test");
         String firstname = "Żółć";
         String lastname = "Ćma";
@@ -119,11 +118,11 @@ class UsernameGeneratorServiceTest {
     @Test
     void testNullInputValidation() {
         logger.info("testNullInputValidation: Starting test");
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(UsernameException.class, () ->
             generatorService.generateUsername(null, "Doe", "email@example.com"));
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(UsernameException.class, () ->
             generatorService.generateUsername("John", null, "email@example.com"));
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(UsernameException.class, () ->
             generatorService.generateUsername("John", "Doe", null));
         logger.info("testNullInputValidation: Test passed");
     }
