@@ -5,6 +5,7 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationMapper;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
+import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.user.model.User;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -51,6 +53,9 @@ class DefaultRegistrationServiceTest {
         request.setEmail("john.doe@example.com");
         request.setPassword("StrongP@ss123");
         request.setConfirmPassword("StrongP@ss123");
+        request.setPesel("12345678901");
+        request.setPhoneNumber("+48123456789");
+        request.setDateOfBirth(LocalDate.parse("1997-07-07"));
         return request;
     }
 
@@ -61,16 +66,25 @@ class DefaultRegistrationServiceTest {
         User savedUser = TestUserBuilder.createTestUser();
         Account account = TestAccountBuilder.createTestAccount(1, BigDecimal.ZERO, savedUser);
 
+        RegistrationResponse expectedResponse = new RegistrationResponse(
+                user.getFirstname(),
+                user.getLastname(),
+                user.getEmail().toString(),
+                user.getUsername()
+        );
+
         when(registrationMapper.toUser(request)).thenReturn(user);
         when(userService.createUser(user)).thenReturn(savedUser);
         when(accountService.createAccount(savedUser.getId())).thenReturn(account);
+        when(registrationMapper.toResponse(savedUser)).thenReturn(expectedResponse);
 
-        User result = registrationService.registerUser(request);
+        RegistrationResponse result = registrationService.registerUser(request);
 
         assertNotNull(result);
-        assertEquals(savedUser.getId(), result.getId());
-        assertEquals(savedUser.getFirstname(), result.getFirstname());
-        assertEquals(savedUser.getLastname(), result.getLastname());
+        assertEquals(savedUser.getEmail().toString(), result.email());
+        assertEquals(savedUser.getFirstname(), result.firstname());
+        assertEquals(savedUser.getLastname(), result.lastname());
+        assertEquals(savedUser.getUsername(), result.username());
 
         verify(registrationMapper).toUser(request);
         verify(userService).createUser(user);
