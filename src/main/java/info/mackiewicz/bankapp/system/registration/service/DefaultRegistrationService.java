@@ -27,7 +27,6 @@ public class DefaultRegistrationService implements RegistrationService {
     private final BonusGrantingService bonusGrantingService;
     private final EmailService emailService;
 
-    //TODO: STWÓRZ BANK ACCOUNT PROVIDER
     public User registerUser(RegistrationRequest request) {
         MDC.put("Email Address", request.getEmail());
         try {
