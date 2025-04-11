@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,6 +27,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DefaultRegistrationServiceTest {
+
+    @Value("${bankapp.registration.WelcomeBonusAmount:1000}")
+    private BigDecimal defaultWelcomeBonusAmount;
 
     @Mock
     private UserService userService;
@@ -89,7 +93,7 @@ class DefaultRegistrationServiceTest {
         verify(registrationMapper).toUser(request);
         verify(userService).createUser(user);
         verify(accountService).createAccount(savedUser.getId());
-        verify(bonusGrantingService).grantWelcomeBonus(account.getIban(), DefaultRegistrationService.DEFAULT_WELCOME_BONUS_AMOUNT);
+        verify(bonusGrantingService).grantWelcomeBonus(account.getIban(), defaultWelcomeBonusAmount);
         verify(emailService).sendWelcomeEmail(savedUser.getEmail().toString(), savedUser.getFullName(), savedUser.getUsername());
     }
 
@@ -133,7 +137,7 @@ class DefaultRegistrationServiceTest {
         when(userService.createUser(user)).thenReturn(savedUser);
         when(accountService.createAccount(savedUser.getId())).thenReturn(account);
         doThrow(new RuntimeException("Bonus granting failed")).when(bonusGrantingService)
-                .grantWelcomeBonus(account.getIban(), DefaultRegistrationService.DEFAULT_WELCOME_BONUS_AMOUNT);
+                .grantWelcomeBonus(account.getIban(), defaultWelcomeBonusAmount);
 
         Exception exception = org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class,
                 () -> registrationService.registerUser(request));
@@ -143,7 +147,7 @@ class DefaultRegistrationServiceTest {
         verify(registrationMapper).toUser(request);
         verify(userService).createUser(user);
         verify(accountService).createAccount(savedUser.getId());
-        verify(bonusGrantingService).grantWelcomeBonus(account.getIban(), DefaultRegistrationService.DEFAULT_WELCOME_BONUS_AMOUNT);
+        verify(bonusGrantingService).grantWelcomeBonus(account.getIban(), defaultWelcomeBonusAmount);
         verifyNoInteractions(emailService);
     }
 }

@@ -11,6 +11,7 @@ import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,9 @@ import java.math.BigDecimal;
 @Service
 public class DefaultRegistrationService implements RegistrationService {
 
-    public static final BigDecimal DEFAULT_WELCOME_BONUS_AMOUNT = BigDecimal.valueOf(1000);
+    @Value("${bankapp.registration.WelcomeBonusAmount:1000}")
+    private BigDecimal defaultWelcomeBonusAmount;
+
 
     private final UserService userService;
     private final RegistrationMapper registrationMapper;
@@ -46,7 +49,7 @@ public class DefaultRegistrationService implements RegistrationService {
             MDC.put("Account ID", newAccount.getId().toString());
             log.debug("Created new account");
 
-            bonusGrantingService.grantWelcomeBonus(newAccount.getIban(), DEFAULT_WELCOME_BONUS_AMOUNT);
+            bonusGrantingService.grantWelcomeBonus(newAccount.getIban(), defaultWelcomeBonusAmount);
             log.debug("Welcome bonus granted");
 
             emailService.sendWelcomeEmail(createdUser.getEmail().toString(), createdUser.getFullName(),

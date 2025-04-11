@@ -71,6 +71,10 @@ app:
         max-delay: 2000
         timeout: 200
 
+bankapp:
+    registration:
+        WelcomeBonusAmount: 1000
+
 
 # # Logging configuration
 # logging:
