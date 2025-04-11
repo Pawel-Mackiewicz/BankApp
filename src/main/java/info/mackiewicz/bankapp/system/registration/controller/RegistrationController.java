@@ -56,7 +56,16 @@ public interface RegistrationController {
                     description = "User already exists",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = BaseApiError.class)))
+                            schema = @Schema(implementation = BaseApiError.class,
+                                    example = """
+                                            {
+                                              "status": "CONFLICT",
+                                              "title": "USER_ALREADY_EXISTS",
+                                              "message": "User with these credentials already exists.",
+                                              "path": "/api/registration/register",
+                                              "timestamp": "11-04-2025 16:18:29"
+                                            }
+                                            """)))
     })
     ResponseEntity<RegistrationResponse> registerUser(RegistrationRequest request);
 }
