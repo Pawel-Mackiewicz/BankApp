@@ -174,11 +174,11 @@
             <version>9.1.0</version>
             <type>pom</type>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.github.cdimascio/dotenv-java -->
+        <!-- https://mvnrepository.com/artifact/me.paulschwarz/spring-dotenv -->
         <dependency>
-            <groupId>io.github.cdimascio</groupId>
-            <artifactId>dotenv-java</artifactId>
-            <version>3.2.0</version>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>
