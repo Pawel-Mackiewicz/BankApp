@@ -6,7 +6,6 @@ import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,21 +29,9 @@ public interface RegistrationController {
             description = "User registration details",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = RegistrationRequest.class),
-                    examples = {
-                            @ExampleObject(name = "Standard registration", value = "{\n" +
-                                    "  \"email\": \"user@example.com\",\n" +
-                                    "  \"password\": \"secureP@ssword123\",\n" +
-                                    "  \"confirmPassword\": \"secureP@ssword123\",\n" +
-                                    "  \"firstName\": \"John\",\n" +
-                                    "  \"lastName\": \"Smith\",\n" +
-                                    "  \"pesel\": \"12345678901\",\n" +
-                                    "  \"phoneNumber\": \"+48123456789\",\n" +
-                                    "  \"dateOfBirth\": \"1990-01-01\"\n" +
-
-                                    "}"
-                            )
-                    }))
+                    schema = @Schema(implementation = RegistrationRequest.class)
+            )
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",

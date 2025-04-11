@@ -28,9 +28,12 @@ public class RegistrationRequest implements PasswordConfirmation {
 
     @NotBlank(message = "Firstname is required")
     @Pattern(regexp = ValidationConstants.NAME_PATTERN, message = "Firstname can only contain letters")
+    @Schema(description = "Firstname can only contain letters", example = "John")
     private String firstname;
 
     @NotBlank(message = "Lastname is required")
+    @Pattern(regexp = ValidationConstants.NAME_PATTERN, message = "Lastname can only contain letters")
+    @Schema(description = "Lastname can only contain letters", example = "Smith")
     private String lastname;
 
     @NotNull(message = "Date of Birth is required")
@@ -38,7 +41,8 @@ public class RegistrationRequest implements PasswordConfirmation {
     @AgeRange
     @Schema(description = "Date of birth in the format yyyy-MM-dd." +
             " User must be at least 18 years old." +
-            " User cannot be older than 120 years old")
+            " User cannot be older than 120 years old",
+    example = "1997-07-07")
     private LocalDate dateOfBirth;
 
     @NotBlank(message = "PESEL is required")
@@ -47,15 +51,17 @@ public class RegistrationRequest implements PasswordConfirmation {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Please provide a valid email address")
+    @Schema(description = "Email must be a valid email address", example = "john.smith@example.com")
     private String email;
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = ValidationConstants.PHONE_NUMBER_PATTERN, message = "Invalid phone number format. Use +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX format")
+    @Schema(description = "Phone number must be in the format +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX", example = "+487987654321")
     private String phoneNumber;
 
+    @Password
     @Schema(description = "Password must be at least 8 characters long, contain at least one digit, " +
             "one lowercase letter, one uppercase letter, and one special character from the set: @$!%*?&", minLength = 8, pattern = ValidationConstants.PASSWORD_PATTERN, example = "StrongP@ss123")
-    @Password
     private String password;
 
     @NotBlank(message = "Password confirmation is required")
