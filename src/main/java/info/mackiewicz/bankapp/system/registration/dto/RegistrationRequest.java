@@ -56,7 +56,7 @@ public class RegistrationRequest implements PasswordConfirmation {
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = ValidationConstants.PHONE_NUMBER_PATTERN, message = "Invalid phone number format. Use +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX format")
-    @Schema(description = "Phone number must be in the format +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX", example = "+487987654321")
+    @Schema(description = "Phone number must be in the format +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX", example = "+48798754321")
     private String phoneNumber;
 
     @Password
