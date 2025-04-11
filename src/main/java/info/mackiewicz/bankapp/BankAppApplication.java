@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp;
 
+import info.mackiewicz.bankapp.system.locking.LockingConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,8 +11,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import info.mackiewicz.bankapp.system.locking.LockingConfig;
 
 @SpringBootApplication
 @EnableAsync
@@ -27,9 +26,7 @@ public class BankAppApplication {
     @Value("${server.address}")
     private String serverAddress;
 
-    public static void main(String[] args) {
-        SpringApplication.run(BankAppApplication.class, args);
-    }
+    public static void main(String[] args) {SpringApplication.run(BankAppApplication.class, args);}
 
     @EventListener(ApplicationReadyEvent.class)
     public void logServerConfiguration() {

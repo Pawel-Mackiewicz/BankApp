@@ -1,12 +1,13 @@
 package info.mackiewicz.bankapp.shared.web.dto;
 
-import java.time.LocalDateTime;
-import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 import info.mackiewicz.bankapp.shared.web.dto.interfaces.ApiErrorResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+import java.time.LocalDateTime;
 
 /**
  * Standard implementation of the ApiErrorResponse interface for error handling in REST API responses.
@@ -32,13 +33,16 @@ import lombok.Getter;
 @Getter
 public class BaseApiError implements ApiErrorResponse {
     /** The HTTP status code representing the type of error */
-    private HttpStatus status;
+    @Schema(example = "BAD_REQUEST")
+    private final HttpStatus status;
     
     /** Category or type of the error */
-    private String title;
+    @Schema(example = "VALIDATION_ERROR")
+    private final String title;
     
     /** Detailed description of the error */
-    private String message;
+    @Schema(example = "Validation failed. Please check your input and try again.")
+    private final String message;
     
     /** The URI path where the error occurred */
     private String path;
@@ -48,7 +52,7 @@ public class BaseApiError implements ApiErrorResponse {
      * Formatted as dd-MM-yyyy HH:mm:ss in JSON responses
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime timestamp;
+    private final LocalDateTime timestamp;
 
     /**
      * Creates a new error response with manual status, title and message.

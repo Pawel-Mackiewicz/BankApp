@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp.shared.config;
 
+import info.mackiewicz.bankapp.security.service.CustomUserDetailsService;
+import info.mackiewicz.bankapp.user.service.AdminUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-
-import info.mackiewicz.bankapp.security.service.CustomUserDetailsService;
-import info.mackiewicz.bankapp.user.service.AdminUserService;
 
 @Configuration
 @EnableWebSecurity
@@ -81,6 +80,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/password/**").permitAll()
+                        .requestMatchers("/api/registration/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(basic -> basic
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))

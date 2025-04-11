@@ -76,6 +76,7 @@ public interface AccountServiceInterface {
      * @throws IllegalArgumentException if iban is null or empty
      * @deprecated Use {@link #getAccountByIban(Iban)} instead.
      */
+    @Deprecated
     Account getAccountByIban(String iban);
 
     /**

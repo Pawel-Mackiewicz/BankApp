@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.shared.web.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Value;
 
 /**
@@ -26,6 +27,7 @@ public class ValidationError {
      * This could be a single field name (e.g., "email") or a path to a nested field
      * (e.g., "user.address.zipCode").
      */
+    @Schema(example = "email")
     String field;
 
     /**
@@ -33,6 +35,7 @@ public class ValidationError {
      * Should provide clear guidance on how to fix the validation error
      * (e.g., "Email must be a valid email address").
      */
+    @Schema(example = "Invalid email format")
     String message;
 
     /**
@@ -40,5 +43,6 @@ public class ValidationError {
      * This helps clients identify which specific input caused the validation failure.
      * May be null if the field was missing entirely.
      */
+    @Schema(example = "john.doe!exa.mp-le")
     String rejectedValue;
 }
