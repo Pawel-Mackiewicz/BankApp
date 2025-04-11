@@ -74,6 +74,9 @@ app:
 bankapp:
     registration:
         WelcomeBonusAmount: 1000
+    bank:
+        account:
+            iban: PL66485112340000000000000000
 
 
 # # Logging configuration
