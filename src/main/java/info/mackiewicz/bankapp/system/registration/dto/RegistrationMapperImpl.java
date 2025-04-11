@@ -22,7 +22,7 @@ public class RegistrationMapperImpl implements RegistrationMapper {
     @Override
     public RegistrationResponse toResponse(User user) {
         return RegistrationResponse.builder()
-                .withEmail(user.getEmail())
+                .withEmail(user.getEmail().getValue())
                 .withUsername(user.getUsername())
                 .withFirstname(user.getFirstname())
                 .withLastname(user.getLastname())
