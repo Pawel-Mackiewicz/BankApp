@@ -11,7 +11,7 @@
     </parent>
     <groupId>info.mackiewicz</groupId>
     <artifactId>BankApp</artifactId>
-    <version>0.4.6</version>
+    <version>0.4.7-SNAPSHOT</version>
     <name>bankapp</name>
     <description>BankApp</description>
     <url />
@@ -25,7 +25,7 @@
         <connection>scm:git:https://github.com/Pawel-Mackiewicz/BankApp.git</connection>
         <developerConnection>scm:git:git@github.com:Pawel-Mackiewicz/BankApp.git</developerConnection>
         <url>https://github.com/Pawel-Mackiewicz/BankApp</url>
-        <tag>BankApp-0.1.9-SNAPSHOT</tag>
+        <tag>BankApp-0.4.7-SNAPSHOT</tag>
     </scm>
     <properties>
         <mysql.connector.version>8.4.0</mysql.connector.version>
@@ -174,10 +174,11 @@
             <version>9.1.0</version>
             <type>pom</type>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.github.cdimascio/dotenv-java -->
         <dependency>
-            <groupId>me.paulschwarz</groupId>
-            <artifactId>spring-dotenv</artifactId>
-            <version>4.0.0</version>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>3.2.0</version>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>
@@ -186,10 +187,11 @@
         </dependency>
 
         <!-- MAIL INTEGRATION-->
+        <!-- https://mvnrepository.com/artifact/com.resend/resend-java -->
         <dependency>
             <groupId>com.resend</groupId>
             <artifactId>resend-java</artifactId>
-            <version>4.1.1</version>
+            <version>4.2.0</version>
         </dependency>
     </dependencies>
     <build>
@@ -204,11 +206,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
-                    <configuration>
                         <argLine>
-                            ${argLine}
-                            -javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.15.11/byte-buddy-agent-1.15.11.jar</argLine>
-                    </configuration>
+                            -javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.15.11/byte-buddy-agent-1.15.11.jar
+                        </argLine>
                 </configuration>
             </plugin>
             <plugin>

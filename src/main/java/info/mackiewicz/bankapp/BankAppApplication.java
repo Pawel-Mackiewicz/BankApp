@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp;
 
+import info.mackiewicz.bankapp.system.locking.LockingConfig;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,8 +12,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import info.mackiewicz.bankapp.system.locking.LockingConfig;
 
 @SpringBootApplication
 @EnableAsync
@@ -28,6 +28,9 @@ public class BankAppApplication {
     private String serverAddress;
 
     public static void main(String[] args) {
+        Dotenv dotenv = Dotenv.load();
+        dotenv.entries()
+                .forEach(e -> System.setProperty(e.getKey(), e.getValue()));
         SpringApplication.run(BankAppApplication.class, args);
     }
 
