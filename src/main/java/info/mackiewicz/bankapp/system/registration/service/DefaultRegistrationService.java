@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -28,8 +29,9 @@ public class DefaultRegistrationService implements RegistrationService {
     private final BonusGrantingService bonusGrantingService;
     private final EmailService emailService;
 
+    @Transactional
     public RegistrationResponse registerUser(RegistrationRequest request) {
-        MDC.put("Email Address", request.getEmail());
+        MDC.put("Email Address", request.getEmail().toString());
         try {
             log.info("Starting user registration process for email: {}", request.getEmail());
 
