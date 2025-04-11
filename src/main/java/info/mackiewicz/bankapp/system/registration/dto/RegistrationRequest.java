@@ -5,6 +5,9 @@ import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
 import info.mackiewicz.bankapp.shared.util.Util;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.validation.AgeRange;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -67,5 +70,17 @@ public class RegistrationRequest implements PasswordConfirmation {
     @NotBlank(message = "Password confirmation is required")
     @Schema(description = "Password confirmation must match the password", example = "StrongP@ss123")
     private String confirmPassword;
+
+    public Pesel getPesel() {
+        return new Pesel(pesel);
+    }
+
+    public EmailAddress getEmail() {
+        return new EmailAddress(email);
+    }
+
+    public PhoneNumber getPhoneNumber() {
+        return new PhoneNumber(phoneNumber);
+    }
 
 }
