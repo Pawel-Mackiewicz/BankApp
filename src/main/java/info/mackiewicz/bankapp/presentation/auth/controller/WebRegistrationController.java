@@ -7,7 +7,8 @@ import info.mackiewicz.bankapp.user.exception.UserValidationException;
 import info.mackiewicz.bankapp.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,14 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RequiredArgsConstructor
 @Controller
-public class RegistrationController {
+public class WebRegistrationController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebRegistrationController.class);
     private final UserRegistrationService registrationService;
 
     @GetMapping("/register")
