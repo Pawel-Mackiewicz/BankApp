@@ -5,6 +5,7 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationMapper;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
+import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class DefaultRegistrationService implements RegistrationService {
     private final BonusGrantingService bonusGrantingService;
     private final EmailService emailService;
 
-    public User registerUser(RegistrationRequest request) {
+    public RegistrationResponse registerUser(RegistrationRequest request) {
         MDC.put("Email Address", request.getEmail());
         try {
             log.info("Starting user registration process for email: {}", request.getEmail());
@@ -51,7 +52,8 @@ public class DefaultRegistrationService implements RegistrationService {
             log.debug("Welcome email sent");
             log.info("Completed user registration process for user: {}", createdUser.getUsername());
 
-            return createdUser;
+            return registrationMapper.toResponse(createdUser);
+
         } finally {
             MDC.clear();
         }
