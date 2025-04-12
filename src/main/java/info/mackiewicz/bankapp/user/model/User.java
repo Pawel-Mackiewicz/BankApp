@@ -1,19 +1,6 @@
 package info.mackiewicz.bankapp.user.model;
 
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.user.model.interfaces.AccountOwner;
 import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
@@ -21,18 +8,19 @@ import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Represents a regular bank user.
@@ -89,17 +77,17 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
    
     
     /**
-     * Default constructor for JPA.
+     * Default constructor for JPA and testing
      * For new user creation use static factory method {@link User#builder()}.
      */
     public User() {
         super(); // Initialize base fields
-        roles = new HashSet<>(); // Initialize roles set
-        addDefaultRoles();
+        initalizeDefaultRoles();
         accounts = new HashSet<>();
         accountCounter = 0;
     }
-    private void addDefaultRoles() {
+    private void initalizeDefaultRoles() {
+        roles = new HashSet<>();
         roles.add("ROLE_USER");
     }
     
@@ -131,6 +119,35 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
     public static UserBuilder.FirstnameStep builder() {
         return UserBuilder.builder();
     }
+    
+    /**
+     * Creates a test user builder for creating User objects in test environments.
+     * This builder provides default values for all required fields, making it easier
+     * to create valid User objects for testing purposes without specifying all fields.
+     * <p>
+     * Unlike the standard {@link #builder()} method, this test builder initializes all
+     * required fields with sensible test values and provides a fluent API to override
+     * only the fields that need to be customized for a specific test case.
+     * <p>
+     * Example usage:
+     * <pre>
+     * // Create a user with all default test values
+     * User defaultTestUser = User.testBuilder().build();
+     * 
+     * // Create a user with customized fields
+     * User customTestUser = User.testBuilder()
+     *     .withFirstname("John")
+     *     .withLastname("Doe")
+     *     .withEmail("john.doe@example.com")
+     *     .build();
+     * </pre>
+     * 
+     * @return A TestUserBuilder instance with pre-initialized default values
+     * @see TestUserBuilder For more details on available customization options
+     */
+    public static TestUserBuilder testBuilder() {
+        return TestUserBuilder.aUser();
+    }
 
         /**
      * Returns the collection of granted authorities based on the user's roles.
@@ -155,33 +172,17 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
         String last = lastname == null ? "" : lastname.trim();
         return first + " " + last;
     }
-    
+
     public void setPesel(Pesel pesel) {
         this.pesel = pesel;
     }
-    
+
     public void setEmail(EmailAddress email) {
         this.email = email;
     }
     
     public void setPhoneNumber(PhoneNumber phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-    
-    
-    @Deprecated
-    public void setPesel(String pesel) {
-        this.pesel = new Pesel(pesel);
-    }
-    
-    @Deprecated
-    public void setEmail(String email) {
-        this.email = new EmailAddress(email);
-    }
-    
-    @Deprecated
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = new PhoneNumber(phoneNumber);
     }
 
     @Override
