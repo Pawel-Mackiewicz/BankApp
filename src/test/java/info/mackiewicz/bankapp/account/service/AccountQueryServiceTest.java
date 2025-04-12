@@ -1,15 +1,16 @@
 package info.mackiewicz.bankapp.account.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.testutils.TestIbanProvider;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,17 +19,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
-import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
-import info.mackiewicz.bankapp.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
-import info.mackiewicz.bankapp.utils.TestIbanProvider;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AccountQueryServiceTest {
@@ -85,7 +83,7 @@ class AccountQueryServiceTest {
     @Test
     void getAllAccounts_ShouldReturnAllAccounts() {
         // given
-        List<Account> accounts = Arrays.asList(testAccount);
+        List<Account> accounts = Collections.singletonList(testAccount);
         when(accountRepository.findAll()).thenReturn(accounts);
 
         // when
@@ -100,7 +98,7 @@ class AccountQueryServiceTest {
     @Test
     void getAccountsByOwnersPESEL_WhenAccountsExist_ShouldReturnAccounts() {
         // given
-        List<Account> accounts = Arrays.asList(testAccount);
+        List<Account> accounts = Collections.singletonList(testAccount);
         when(accountRepository.findAccountsByOwner_pesel(new Pesel("12345678901")))
             .thenReturn(Optional.of(accounts));
 
@@ -128,7 +126,7 @@ class AccountQueryServiceTest {
     @Test
     void getAccountsByOwnersUsername_WhenAccountsExist_ShouldReturnAccounts() {
         // given
-        List<Account> accounts = Arrays.asList(testAccount);
+        List<Account> accounts = Collections.singletonList(testAccount);
         when(accountRepository.findAccountsByOwner_username("jkowalski"))
             .thenReturn(Optional.of(accounts));
 
@@ -188,7 +186,7 @@ class AccountQueryServiceTest {
     @Test
     void getAccountsByOwnersId_WhenAccountsExist_ShouldReturnAccounts() {
         // given
-        List<Account> accounts = Arrays.asList(testAccount);
+        List<Account> accounts = Collections.singletonList(testAccount);
         when(accountRepository.findAccountsByOwner_id(1))
             .thenReturn(Optional.of(accounts));
 

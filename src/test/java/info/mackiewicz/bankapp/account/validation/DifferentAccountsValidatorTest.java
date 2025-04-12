@@ -1,21 +1,17 @@
 package info.mackiewicz.bankapp.account.validation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import info.mackiewicz.bankapp.account.exception.UnsupportedValidationTypeException;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.ExternalTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
+import info.mackiewicz.bankapp.testutils.TestIbanProvider;
+import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import info.mackiewicz.bankapp.account.exception.UnsupportedValidationTypeException;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.ExternalTransferRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
-import info.mackiewicz.bankapp.utils.TestIbanProvider;
-import jakarta.validation.ConstraintValidatorContext;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for DifferentAccountsValidator ensuring correct validation
