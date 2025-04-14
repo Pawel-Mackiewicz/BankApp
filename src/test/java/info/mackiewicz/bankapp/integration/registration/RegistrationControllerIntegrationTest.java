@@ -28,7 +28,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+/**
+ * Integration tests for the registration controller.
+ * Verifies that API endpoints correctly process valid and invalid registration requests.
+ */
+/**
+ * Integration tests for the registration controller.
+ * Verifies that the registration API endpoints correctly process valid requests
+ * and properly reject invalid registration data with appropriate error messages.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")

@@ -20,6 +20,16 @@ import java.math.BigDecimal;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+/**
+ * Default implementation of the RegistrationService interface.
+ * Handles user registration, including user creation, account setup,
+ * welcome bonus granting, and sending a welcome email.
+ */
+public class DefaultRegistrationService implements RegistrationService {
+ * Default implementation of the RegistrationService interface.
+ * Handles the user registration process, including user creation, account creation,
+ * welcome bonus granting, and welcome email sending.
+ */
 public class DefaultRegistrationService implements RegistrationService {
 
     @Value("${bankapp.registration.WelcomeBonusAmount:1000}")
@@ -33,6 +43,13 @@ public class DefaultRegistrationService implements RegistrationService {
     private final EmailService emailService;
 
     @Transactional
+    /**
+     * Registers a new user with the system.
+     * Creates a user account, grants welcome bonus, and sends a welcome email.
+     *
+     * @param request DTO containing user registration data
+     * @return DTO with information about the newly registered user
+     */
     public RegistrationResponse registerUser(RegistrationRequest request) {
         MDC.put("Email Address", request.getEmail().toString());
         try {

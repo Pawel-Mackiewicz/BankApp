@@ -19,6 +19,11 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Tests for the RegistrationMapperImpl class.
+ * Validates that mapping between RegistrationRequest, User entity, and 
+ * RegistrationResponse DTOs functions correctly.
+ */
 class RegistrationMapperImplTest {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistrationMapperImplTest.class);
