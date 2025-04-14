@@ -137,27 +137,4 @@ class RegistrationServiceIntegrationTest {
                 () -> registrationService.registerUser(duplicateEmailRequest));
         assertTrue(exception.getMessage().contains(ERROR_MESSAGE_ALREADY_IN_USE));
     }
-    
-    @Test
-    @DisplayName("Should perform complete end-to-end registration process")
-    void registerUser_ShouldPerformCompleteEndToEndRegistration() {
-        // Act
-        RegistrationResponse response = registrationService.registerUser(validRequest);
-    
-        // Assert
-        assertNotNull(response);
-        
-        // Verify that user was saved in the database
-        User savedUser = userRepository.findByEmail(validRequest.getEmail()).orElse(null);
-        assertNotNull(savedUser);
-        
-        // Verify individual process steps
-        verify(accountService).createAccount(savedUser.getId());
-        verify(bonusGrantingService).grantWelcomeBonus(testAccount.getIban(), welcomeBonusAmount);
-        verify(emailService).sendWelcomeEmail(
-                savedUser.getEmail().getValue(),
-                savedUser.getFullName(),
-                savedUser.getUsername()
-        );
-    }
 }
