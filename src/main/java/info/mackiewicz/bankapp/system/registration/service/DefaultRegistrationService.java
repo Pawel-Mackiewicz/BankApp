@@ -52,15 +52,23 @@ public class DefaultRegistrationService implements RegistrationService {
             bonusGrantingService.grantWelcomeBonus(newAccount.getIban(), defaultWelcomeBonusAmount);
             log.debug("Welcome bonus granted");
 
-            emailService.sendWelcomeEmail(createdUser.getEmail().toString(), createdUser.getFullName(),
-                    createdUser.getUsername());
-            log.debug("Welcome email sent");
-            log.info("Completed user registration process for user: {}", createdUser.getUsername());
+            sendWelcomeEmail(createdUser);
 
+            log.info("Completed user registration process");
             return registrationMapper.toResponse(createdUser);
 
         } finally {
             MDC.clear();
+        }
+    }
+
+    private void sendWelcomeEmail(User createdUser) {
+        try {
+            emailService.sendWelcomeEmail(createdUser.getEmail().toString(), createdUser.getFullName(),
+                    createdUser.getUsername());
+            log.debug("Welcome email sent");
+        } catch (Exception e) {
+            log.error("Welcome email could not be sent");
         }
     }
 }
