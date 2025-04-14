@@ -1,21 +1,16 @@
 package info.mackiewicz.bankapp.account.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
+import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
+import info.mackiewicz.bankapp.testutils.TestIbanProvider;
+import info.mackiewicz.bankapp.user.model.User;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import info.mackiewicz.bankapp.account.model.dto.AccountOwnerDTO;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.utils.TestIbanProvider;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class AccountTest {
 
@@ -60,7 +55,7 @@ class AccountTest {
         // then
         assertTrue(formattedIban.contains(" "));
         assertEquals(unformattedIban.length() + 6, formattedIban.length()); // 6 spaces in formatted IBAN
-        assertTrue(formattedIban.replace(" ", "").equals(unformattedIban));
+        assertEquals(formattedIban.replace(" ", ""), unformattedIban);
     }
 
     @Test

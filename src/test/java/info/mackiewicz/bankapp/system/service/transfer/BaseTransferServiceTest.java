@@ -1,10 +1,18 @@
 package info.mackiewicz.bankapp.system.service.transfer;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
+import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
+import info.mackiewicz.bankapp.system.banking.service.TransferOperationService;
+import info.mackiewicz.bankapp.system.banking.service.helpers.AccountSecurityService;
+import info.mackiewicz.bankapp.system.banking.service.helpers.TransactionBuildingService;
+import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
+import info.mackiewicz.bankapp.testutils.TestIbanProvider;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,19 +23,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
-import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
-import info.mackiewicz.bankapp.system.banking.service.TransferOperationService;
-import info.mackiewicz.bankapp.system.banking.service.helpers.AccountSecurityService;
-import info.mackiewicz.bankapp.system.banking.service.helpers.TransactionBuildingService;
-import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
-import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
-import info.mackiewicz.bankapp.utils.TestIbanProvider;
+import java.math.BigDecimal;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
