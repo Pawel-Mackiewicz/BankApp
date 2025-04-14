@@ -32,7 +32,7 @@ public class DefaultRegistrationController  implements RegistrationController{
     @Override
     public ResponseEntity<RegistrationResponse> registerDemoUser(@Valid @RequestBody DemoRegistrationRequest request) {
 
-        RegistrationResponse response = demoRegistrationService.registerUser(request.getEmail());
+        RegistrationResponse response = demoRegistrationService.registerDemoUser(request);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
