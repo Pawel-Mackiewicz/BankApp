@@ -1,18 +1,14 @@
 package info.mackiewicz.bankapp.account.controller;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Arrays;
-import java.util.Collections;
-
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.system.locking.LockingConfig;
+import info.mackiewicz.bankapp.testutils.TestIbanProvider;
+import info.mackiewicz.bankapp.testutils.config.TestConfig;
+import info.mackiewicz.bankapp.user.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,15 +19,14 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
-import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.system.locking.LockingConfig;
-import info.mackiewicz.bankapp.testutils.config.TestConfig;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.utils.TestIbanProvider;
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AccountController.class)
 @EnableConfigurationProperties(LockingConfig.class)

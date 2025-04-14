@@ -1,8 +1,7 @@
-package info.mackiewicz.bankapp.utils;
-
-import org.iban4j.Iban;
+package info.mackiewicz.bankapp.testutils;
 
 import info.mackiewicz.bankapp.account.util.IbanGenerator;
+import org.iban4j.Iban;
 
 /**
  * Helper class providing test IBAN numbers for unit tests.

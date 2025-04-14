@@ -20,6 +20,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+/**
+ * User registration DTO.
+ * <p>
+ * Contains personal data (first name, last name, PESEL, date of birth),
+ * contact details (email, phone) and password with confirmation.
+ * <p>
+ * Includes field validation and domain object conversion.
+ */
+
 @Getter
 @Setter
 @Schema(description = "Registration request DTO")
@@ -50,6 +59,7 @@ public class RegistrationRequest implements PasswordConfirmation {
 
     @NotBlank(message = "PESEL is required")
     @Pattern(regexp = "\\d{11}", message = "PESEL must be exactly 11 digits")
+    @Schema(description = "PESEL must be exactly 11 digits. PESEL must be unique.", example = "12345678901")
     private String pesel;
 
     @NotBlank(message = "Email is required")
