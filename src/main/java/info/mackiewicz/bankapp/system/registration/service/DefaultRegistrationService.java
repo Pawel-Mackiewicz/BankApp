@@ -68,7 +68,7 @@ public class DefaultRegistrationService implements RegistrationService {
                     createdUser.getUsername());
             log.debug("Welcome email sent");
         } catch (Exception e) {
-            log.error("Welcome email could not be sent");
+            log.error("Welcome email could not be sent", e);
         }
     }
 }
