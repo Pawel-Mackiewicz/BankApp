@@ -73,7 +73,7 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
      */
     public User() {
         super(); // Initialize base fields
-        initalizeDefaultRoles();
+        initializeDefaultRoles();
         accounts = new HashSet<>();
         accountCounter = 0;
     }
@@ -105,7 +105,7 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
         return UserBuilder.builder();
     }
 
-    private void initalizeDefaultRoles() {
+    private void initializeDefaultRoles() {
         roles = new HashSet<>();
         roles.add("ROLE_USER");
     }
