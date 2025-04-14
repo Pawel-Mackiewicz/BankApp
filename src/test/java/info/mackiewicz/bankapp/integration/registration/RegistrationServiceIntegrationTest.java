@@ -39,9 +39,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+/**
+ * Integration tests for the RegistrationService implementation.
+ * Verifies that user registration is correctly handled including validations and duplicate-checking.
+ */
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
+/**
+ * Integration tests for the RegistrationService implementation.
+ * Verifies that the registration service correctly handles user registration,
+ * including validation, duplicate checking, and integration with other services.
+ */
 class RegistrationServiceIntegrationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistrationServiceIntegrationTest.class);

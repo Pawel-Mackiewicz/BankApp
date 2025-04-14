@@ -39,8 +39,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * End-to-end tests validating the complete registration process, from controller to database,
- * considering interactions between all components.
+ * End-to-end tests for the registration process.
+ * Tests the complete flow from API request through service layer to database persistence.
+ */
  */
 @SpringBootTest
 @AutoConfigureMockMvc

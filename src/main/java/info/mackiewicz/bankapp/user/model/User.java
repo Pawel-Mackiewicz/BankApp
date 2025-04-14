@@ -124,10 +124,28 @@ public class User extends BaseUser implements PersonalInfo, AccountOwner {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Returns the next sequential account number for this user.
+     * This method is synchronized to ensure thread safety.
+     *
+     * @return the next available account number
+     */
+    public synchronized Integer getNextAccountNumber() {
+        return ++accountCounter;
+    }
+     *
+     * @return The next available account number
+     */
     public synchronized Integer getNextAccountNumber() {
         return ++accountCounter;
     }
 
+    /**
+     * Returns the user's full name by concatenating firstname and lastname.
+     * Handles null values by substituting with empty strings and trims whitespace.
+     *
+     * @return The user's full name
+     */
     public String getFullName() {
         String first = firstname == null ? "" : firstname.trim();
         String last = lastname == null ? "" : lastname.trim();

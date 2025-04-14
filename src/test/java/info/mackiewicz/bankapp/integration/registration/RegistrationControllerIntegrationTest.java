@@ -29,10 +29,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Integration tests for the registration controller.
+ * Verifies that the registration API endpoints correctly process valid requests
+ * and properly reject invalid registration data with appropriate error messages.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
+/**
+ * Integration tests for the registration controller.
+ * Verifies that API endpoints correctly process valid and invalid registration requests.
+ */
 class RegistrationControllerIntegrationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistrationControllerIntegrationTest.class);
