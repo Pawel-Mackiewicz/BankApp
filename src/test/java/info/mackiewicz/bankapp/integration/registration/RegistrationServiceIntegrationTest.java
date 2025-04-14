@@ -48,15 +48,13 @@ class RegistrationServiceIntegrationTest {
     private static final String TEST_EMAIL = "jan.kowalski@example.com";
     private static final String TEST_FIRSTNAME = "Jan";
     private static final String TEST_LASTNAME = "Kowalski";
-    private static final String TEST_FULLNAME = "Jan Kowalski";
+    private static final String TEST_FULLNAME = TEST_FIRSTNAME + " " + TEST_LASTNAME;
     private static final String TEST_DUPLICATE_FIRSTNAME = "Anna";
     private static final String TEST_DUPLICATE_LASTNAME = "Nowak";
     private static final String TEST_DUPLICATE_PESEL = "98765432101";
     private static final String TEST_DUPLICATE_PHONE = "+48987654321";
     private static final String TEST_DUPLICATE_BIRTHDATE_STR = "1995-05-05";
     private static final String ERROR_MESSAGE_ALREADY_IN_USE = "already in use";
-    private static final String TEST_PHONE = "+48123456789";
-    private static final String TEST_PESEL = "12345678901";
     private static final String MINIMUM_AGE_BIRTHDATE_STR = LocalDate.now().minusYears(18).toString();
     private static final BigDecimal CUSTOM_BONUS_AMOUNT = new BigDecimal("2000");
 
