@@ -36,8 +36,14 @@ class AccountQueryServiceTest {
     @InjectMocks
     private AccountQueryService accountQueryService;
 
-    private Account testAccount;
     private User owner;
+    private Account getTestAccount() {
+        Account account = TestAccountBuilder.createTestAccountWithOwner(owner);
+        Iban testIban = TestIbanProvider.getIbanObject(0);
+        TestAccountBuilder.setField(account, "iban", testIban);
+        TestAccountBuilder.setField(account, "id", 1);
+        return account;
+    }
 
     @BeforeEach
     void setUp() {
@@ -47,16 +53,12 @@ class AccountQueryServiceTest {
         owner.setFirstname("Jan");
         owner.setLastname("Kowalski");
         owner.setUsername("jkowalski");
-
-        testAccount = TestAccountBuilder.createTestAccountWithOwner(owner);
-        Iban testIban = TestIbanProvider.getIbanObject(0);
-        TestAccountBuilder.setField(testAccount, "iban", testIban);
-        TestAccountBuilder.setField(testAccount, "id", 1);
     }
 
     @Test
     void getAccountById_WhenAccountExists_ShouldReturnAccount() {
         // given
+        Account testAccount = getTestAccount();
         when(accountRepository.findById(1)).thenReturn(Optional.of(testAccount));
 
         // when
@@ -82,6 +84,7 @@ class AccountQueryServiceTest {
     @Test
     void getAllAccounts_ShouldReturnAllAccounts() {
         // given
+        Account testAccount = getTestAccount();
         List<Account> accounts = Collections.singletonList(testAccount);
         when(accountRepository.findAll()).thenReturn(accounts);
 
@@ -90,13 +93,14 @@ class AccountQueryServiceTest {
 
         // then
         assertEquals(1, result.size());
-        assertEquals(testAccount, result.get(0));
+        assertEquals(testAccount, result.getFirst());
         verify(accountRepository).findAll();
     }
 
     @Test
     void getAccountsByOwnersPESEL_WhenAccountsExist_ShouldReturnAccounts() {
         // given
+        Account testAccount = getTestAccount();
         List<Account> accounts = Collections.singletonList(testAccount);
         when(accountRepository.findAccountsByOwner_pesel(new Pesel("12345678901")))
             .thenReturn(Optional.of(accounts));
@@ -106,7 +110,7 @@ class AccountQueryServiceTest {
 
         // then
         assertEquals(1, result.size());
-        assertEquals(testAccount, result.get(0));
+        assertEquals(testAccount, result.getFirst());
         verify(accountRepository).findAccountsByOwner_pesel(new Pesel("12345678901"));
     }
 
@@ -125,6 +129,7 @@ class AccountQueryServiceTest {
     @Test
     void getAccountsByOwnersUsername_WhenAccountsExist_ShouldReturnAccounts() {
         // given
+        Account testAccount = getTestAccount();
         List<Account> accounts = Collections.singletonList(testAccount);
         when(accountRepository.findAccountsByOwner_username("jkowalski"))
             .thenReturn(Optional.of(accounts));
@@ -134,20 +139,21 @@ class AccountQueryServiceTest {
 
         // then
         assertEquals(1, result.size());
-        assertEquals(testAccount, result.get(0));
+        assertEquals(testAccount, result.getFirst());
         verify(accountRepository).findAccountsByOwner_username("jkowalski");
     }
 
     @Test
     void findAccountByOwnersEmail_WhenAccountExists_ShouldReturnAccount() {
         // given
+        Account testAccount = getTestAccount();
         String emailStr = "jan.kowalski@example.com";
         EmailAddress email = new EmailAddress(emailStr);
         when(accountRepository.findFirstByOwner_email(email))
             .thenReturn(Optional.of(testAccount));
 
         // when
-        Account result = accountQueryService.findAccountByOwnersEmail(emailStr);
+        Account result = accountQueryService.getAccountByOwnersEmail(email);
 
         // then
         assertNotNull(result);
@@ -158,6 +164,7 @@ class AccountQueryServiceTest {
     @Test
     void getAccountByIban_WhenAccountExists_ShouldReturnAccount() {
         // given
+        Account testAccount = getTestAccount();
         Iban testIban = TestIbanProvider.getIbanObject(0);
         when(accountRepository.findByIban(testIban)).thenReturn(Optional.of(testAccount));
 
@@ -185,6 +192,7 @@ class AccountQueryServiceTest {
     @Test
     void getAccountsByOwnersId_WhenAccountsExist_ShouldReturnAccounts() {
         // given
+        Account testAccount = getTestAccount();
         List<Account> accounts = Collections.singletonList(testAccount);
         when(accountRepository.findAccountsByOwner_id(1))
             .thenReturn(Optional.of(accounts));
@@ -194,7 +202,7 @@ class AccountQueryServiceTest {
 
         // then
         assertEquals(1, result.size());
-        assertEquals(testAccount, result.get(0));
+        assertEquals(testAccount, result.getFirst());
         verify(accountRepository).findAccountsByOwner_id(1);
     }
 }
