@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.system.registration.controller;
 
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
+import info.mackiewicz.bankapp.system.registration.dto.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,4 +69,11 @@ public interface RegistrationController {
                                             """)))
     })
     ResponseEntity<RegistrationResponse> registerUser(RegistrationRequest request);
+
+    @Operation(
+            summary = "Register a new demo user",
+            description = "Creates a new demo user in the system. The user will be registered with the provided email address."
+    )
+    @PostMapping("/demo")
+    ResponseEntity<RegistrationResponse> registerDemoUser(DemoRegistrationRequest request);
 }
