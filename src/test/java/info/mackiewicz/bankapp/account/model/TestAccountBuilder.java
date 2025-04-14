@@ -33,26 +33,16 @@ public class TestAccountBuilder {
             Account account = new Account();
             setField(account, "balance", balance);
             setField(account, "id", RANDOM_INT);
+            setField(account, "iban", Iban.valueOf(getNextIban()));
             return account;
         } catch (Exception e) {
             throw new RuntimeException("Failed to create test account", e);
         }
     }
 
-    public static Account createTestAccountWithId(Integer id) {
-        Account account = createTestAccount();
-        setField(account, "id", id);
-        String iban = getNextIban();
-        setField(account, "iban", Iban.valueOf(iban));
-        return account;
-    }
-
     public static Account createTestAccountWithOwner(User owner) {
-        Account account = createTestAccount();
-        String iban = getNextIban();
-        setField(account, "iban", Iban.valueOf(iban));
+        Account account = createTestAccountWithBalance(BALANCE);
         setField(account, "owner", owner);
-        setField(account, "balance", BALANCE);
         if (owner.getAccounts() == null) {
             owner.setAccounts(new HashSet<>());
         }
