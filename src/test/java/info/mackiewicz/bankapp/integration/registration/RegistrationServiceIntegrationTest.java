@@ -12,7 +12,6 @@ import info.mackiewicz.bankapp.testutils.TestRequestFactory;
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
-import info.mackiewicz.bankapp.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,9 +55,6 @@ class RegistrationServiceIntegrationTest {
 
     @Autowired
     private RegistrationService registrationService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -137,9 +133,8 @@ class RegistrationServiceIntegrationTest {
         duplicateEmailRequest.setDateOfBirth(LocalDate.parse(TEST_DUPLICATE_BIRTHDATE_STR));
     
         // Act & Assert
-        Exception exception = assertThrows(DuplicatedUserException.class, () -> {
-            registrationService.registerUser(duplicateEmailRequest);
-        });
+        Exception exception = assertThrows(DuplicatedUserException.class,
+                () -> registrationService.registerUser(duplicateEmailRequest));
         assertTrue(exception.getMessage().contains(ERROR_MESSAGE_ALREADY_IN_USE));
     }
     
