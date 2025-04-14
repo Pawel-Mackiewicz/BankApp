@@ -8,11 +8,13 @@ import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
  */
 public class DuplicatedUserException extends UserBaseException {
 
+    private static final ErrorCode ERROR_CODE = ErrorCode.USER_ALREADY_EXISTS;
+
     public DuplicatedUserException(String message) {
-        super(message, ErrorCode.USER_ALREADY_EXISTS);
+        super(message, ERROR_CODE);
     }
 
     public DuplicatedUserException(String message, Throwable cause) {
-        super(message, cause, ErrorCode.USER_ALREADY_EXISTS);
+        super(message, cause, ERROR_CODE);
     }
 }

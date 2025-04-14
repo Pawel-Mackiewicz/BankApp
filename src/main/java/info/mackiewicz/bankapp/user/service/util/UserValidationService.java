@@ -103,7 +103,7 @@ public class UserValidationService {
         log.debug("Validating phone number uniqueness: {}", phoneNumber);
         if (userQueryService.userExistsByPhoneNumber(phoneNumber)) {
             log.warn("Attempt to use existing phone number: {}", phoneNumber);
-            throw new DuplicatedUserException("Phone number already in use: " + phoneNumber);
+            throw new DuplicatedPhoneNumberException("Phone number already in use: " + phoneNumber);
         }
         log.debug("Phone number {} is unique", phoneNumber);
     }
@@ -112,13 +112,13 @@ public class UserValidationService {
      * Validates that the given username is unique in the system.
      *
      * @param username The username to validate
-     * @throws UserValidationException if the username already exists
+     * @throws DuplicatedUsernameException if the username already exists
      */
     public void validateUsernameUnique(String username) {
         log.debug("Validating username uniqueness: {}", username);
         if (userQueryService.userExistsByUsername(username)) {
             log.warn("Attempt to use existing username: {}", username);
-            throw new DuplicatedUserException("Username already in use: " + username);
+            throw new DuplicatedUsernameException("Username already in use: " + username);
         }
         log.debug("Username {} is unique", username);
     }
@@ -127,14 +127,14 @@ public class UserValidationService {
      * Validates that the given email address is unique in the system.
      *
      * @param email The email to validate as Email value object
-     * @throws UserValidationException if the email already exists
+     * @throws DuplicatedEmailException if the email already exists
      * @see EmailAddress
      */
     public void validateEmailUnique(EmailAddress email) {
         log.debug("Validating email uniqueness: {}", email);
         if (userQueryService.userExistsByEmail(email)) {
             log.warn("Attempt to use existing email: {}", email);
-            throw new DuplicatedUserException("Email already in use");
+            throw new DuplicatedEmailException("Email already in use: " + email.toString());
         }
         log.debug("Email {} is unique", email);
     }
@@ -143,14 +143,14 @@ public class UserValidationService {
      * Validates that the given PESEL number is unique in the system.
      *
      * @param pesel The PESEL to validate as Pesel value object
-     * @throws UserValidationException if the PESEL already exists
+     * @throws DuplicatedPeselException if the PESEL already exists
      * @see Pesel
      */
     public void validatePeselUnique(Pesel pesel) {
         log.debug("Validating PESEL uniqueness: {}", pesel);
         if (userQueryService.userExistsByPesel(pesel)) {
             log.warn("Attempt to use existing PESEL: {}", pesel);
-            throw new DuplicatedUserException("PESEL already in use: " + pesel);
+            throw new DuplicatedPeselException("PESEL already in use: " + pesel);
         }
         log.debug("PESEL {} is unique", pesel);
     }
