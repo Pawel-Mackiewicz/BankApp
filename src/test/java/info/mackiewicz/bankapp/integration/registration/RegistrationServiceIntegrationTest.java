@@ -40,6 +40,16 @@ import static org.mockito.Mockito.when;
 class RegistrationServiceIntegrationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistrationServiceIntegrationTest.class);
+    private static final String TEST_EMAIL = "jan.kowalski@example.com";
+    private static final String TEST_FIRSTNAME = "Jan";
+    private static final String TEST_LASTNAME = "Kowalski";
+    private static final String TEST_FULLNAME = "Jan Kowalski";
+    private static final String TEST_DUPLICATE_FIRSTNAME = "Anna";
+    private static final String TEST_DUPLICATE_LASTNAME = "Nowak";
+    private static final String TEST_DUPLICATE_PESEL = "98765432101";
+    private static final String TEST_DUPLICATE_PHONE = "+48987654321";
+    private static final String TEST_DUPLICATE_BIRTHDATE_STR = "1995-05-05";
+    private static final String ERROR_MESSAGE_ALREADY_IN_USE = "already in use";
 
     @Value("${bankapp.registration.WelcomeBonusAmount:1000}")
     private BigDecimal welcomeBonusAmount;
@@ -65,9 +75,11 @@ class RegistrationServiceIntegrationTest {
     private RegistrationRequest validRequest;
     private Account testAccount;
 
+    private static final String LOG_SETUP_MESSAGE = "Setting up integration test for registration service";
+    
     @BeforeEach
     void setUp() {
-        logger.info("Setting up integration test for registration service");
+        logger.info(LOG_SETUP_MESSAGE);
         
         // Prepare test account
         testAccount = TestAccountBuilder.createTestAccount();
@@ -77,7 +89,7 @@ class RegistrationServiceIntegrationTest {
         // Prepare valid registration request using TestRequestFactory
         validRequest = TestRequestFactory.createValidRegistrationRequest();
         // Set constant email for duplicate checking tests
-        validRequest.setEmail("jan.kowalski@example.com");
+        validRequest.setEmail(TEST_EMAIL);
     }
 
     @Test
@@ -88,25 +100,25 @@ class RegistrationServiceIntegrationTest {
     
         // Assert
         assertNotNull(response);
-        assertEquals("Jan", response.firstname());
-        assertEquals("Kowalski", response.lastname());
-        assertEquals("jan.kowalski@example.com", response.email());
+        assertEquals(TEST_FIRSTNAME, response.firstname());
+        assertEquals(TEST_LASTNAME, response.lastname());
+        assertEquals(TEST_EMAIL, response.email());
         assertNotNull(response.username());
     
         // Verify service calls
         verify(accountService).createAccount(any(Integer.class));
         verify(bonusGrantingService).grantWelcomeBonus(eq(testAccount.getIban()), eq(welcomeBonusAmount));
         verify(emailService).sendWelcomeEmail(
-                eq("jan.kowalski@example.com"),
-                eq("Jan Kowalski"),
+                eq(TEST_EMAIL),
+                eq(TEST_FULLNAME),
                 any(String.class)
         );
     
         // Verify that user was saved in the database
         User savedUser = userRepository.findByEmail(validRequest.getEmail()).orElse(null);
         assertNotNull(savedUser);
-        assertEquals("Jan", savedUser.getFirstname());
-        assertEquals("Kowalski", savedUser.getLastname());
+        assertEquals(TEST_FIRSTNAME, savedUser.getFirstname());
+        assertEquals(TEST_LASTNAME, savedUser.getLastname());
     }
     
     @Test
@@ -117,18 +129,18 @@ class RegistrationServiceIntegrationTest {
     
         // Prepare a second request with the same email but different data
         RegistrationRequest duplicateEmailRequest = TestRequestFactory.createValidRegistrationRequest();
-        duplicateEmailRequest.setFirstname("Anna");
-        duplicateEmailRequest.setLastname("Nowak");
-        duplicateEmailRequest.setEmail("jan.kowalski@example.com"); // Same email
-        duplicateEmailRequest.setPesel("98765432101");
-        duplicateEmailRequest.setPhoneNumber("+48987654321");
-        duplicateEmailRequest.setDateOfBirth(LocalDate.parse("1995-05-05"));
+        duplicateEmailRequest.setFirstname(TEST_DUPLICATE_FIRSTNAME);
+        duplicateEmailRequest.setLastname(TEST_DUPLICATE_LASTNAME);
+        duplicateEmailRequest.setEmail(TEST_EMAIL); // Same email
+        duplicateEmailRequest.setPesel(TEST_DUPLICATE_PESEL);
+        duplicateEmailRequest.setPhoneNumber(TEST_DUPLICATE_PHONE);
+        duplicateEmailRequest.setDateOfBirth(LocalDate.parse(TEST_DUPLICATE_BIRTHDATE_STR));
     
         // Act & Assert
         Exception exception = assertThrows(DuplicatedUserException.class, () -> {
             registrationService.registerUser(duplicateEmailRequest);
         });
-        assertTrue(exception.getMessage().contains("already in use"));
+        assertTrue(exception.getMessage().contains(ERROR_MESSAGE_ALREADY_IN_USE));
     }
     
     @Test
