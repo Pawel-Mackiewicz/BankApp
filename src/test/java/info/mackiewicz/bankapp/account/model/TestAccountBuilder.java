@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.account.model;
 
+import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.user.model.User;
 import org.iban4j.Iban;
@@ -7,7 +8,6 @@ import org.iban4j.Iban;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -15,12 +15,6 @@ import java.util.Random;
  */
 public class TestAccountBuilder {
 
-    private static final List<String> TEST_IBANS = List.of(
-            "PL66485112340000000000000000",
-            "PL52485112340000170000000001",
-            "PL65485112340000340000000001",
-            "PL78485112340000510000000001");
-    private static int currentIbanIndex = 0;
     private static final int RANDOM_INT = new Random().nextInt(20);
     private static final BigDecimal BALANCE = BigDecimal.valueOf(1000.00);
 
@@ -76,16 +70,7 @@ public class TestAccountBuilder {
         }
     }
 
-    /**
-     * Returns a valid test IBAN string
-     */
-    public static String getTestIban() {
-        return getNextIban();
-    }
-
     private static String getNextIban() {
-        String iban = TEST_IBANS.get(currentIbanIndex);
-        currentIbanIndex = (currentIbanIndex + 1) % TEST_IBANS.size();
-        return iban;
+        return TestIbanProvider.getNextIban();
     }
 }
