@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.testutils;
 
+import info.mackiewicz.bankapp.system.registration.dto.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
 
 import java.time.LocalDate;
@@ -39,6 +40,53 @@ public class TestRequestFactory {
         request.setPesel(TEST_PESEL);
         request.setPhoneNumber(TEST_PHONE_NUMBER);
         request.setDateOfBirth(LocalDate.now().minusYears(TEST_VALID_AGE_YEARS));
+        return request;
+    }
+
+    /**
+     * Creates a valid demo registration request.
+     *
+     * @return DemoRegistrationRequest object with valid test data
+     */
+    public static DemoRegistrationRequest createValidDemoRegistrationRequest() {
+        DemoRegistrationRequest request = new DemoRegistrationRequest();
+        request.setEmail(TEST_EMAIL_BASE + random.nextInt(TEST_EMAIL_RANDOM_BOUND) + TEST_EMAIL_DOMAIN);
+        request.setPassword(TEST_PASSWORD);
+        request.setConfirmPassword(TEST_PASSWORD);
+        return request;
+    }
+
+    /**
+     * Creates a demo registration request with an invalid email.
+     *
+     * @return DemoRegistrationRequest object with an invalid email
+     */
+    public static DemoRegistrationRequest createDemoRegistrationRequestWithInvalidEmail() {
+        DemoRegistrationRequest request = createValidDemoRegistrationRequest();
+        request.setEmail("invalid-email"); // Invalid email format
+        return request;
+    }
+
+    /**
+     * Creates a demo registration request with an invalid password.
+     *
+     * @return DemoRegistrationRequest object with an invalid password
+     */
+    public static DemoRegistrationRequest createDemoRegistrationRequestWithInvalidPassword() {
+        DemoRegistrationRequest request = createValidDemoRegistrationRequest();
+        request.setPassword("short"); // Too short password
+        request.setConfirmPassword("short");
+        return request;
+    }
+
+    /**
+     * Creates a demo registration request with non-matching passwords.
+     *
+     * @return DemoRegistrationRequest object with non-matching password and confirmPassword
+     */
+    public static DemoRegistrationRequest createDemoRegistrationRequestWithNonMatchingPasswords() {
+        DemoRegistrationRequest request = createValidDemoRegistrationRequest();
+        request.setConfirmPassword(TEST_PASSWORD + "Different");
         return request;
     }
 

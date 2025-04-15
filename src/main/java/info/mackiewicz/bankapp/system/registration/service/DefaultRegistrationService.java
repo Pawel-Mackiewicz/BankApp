@@ -25,7 +25,6 @@ public class DefaultRegistrationService implements RegistrationService {
     @Value("${bankapp.registration.WelcomeBonusAmount:1000}")
     private BigDecimal defaultWelcomeBonusAmount;
 
-
     private final UserService userService;
     private final RegistrationMapper registrationMapper;
     private final AccountService accountService;

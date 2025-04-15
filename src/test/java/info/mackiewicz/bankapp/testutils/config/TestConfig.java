@@ -45,7 +45,7 @@ public class TestConfig {
 
     @Bean
     public ApiErrorLogger apiErrorLogger() {
-        return new ApiErrorLogger();
+        return new ApiErrorLogger(true);
     }
 
     @Bean

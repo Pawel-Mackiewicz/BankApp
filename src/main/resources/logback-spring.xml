@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+
+    <!-- Static patterns definition -->
+    <property name="CONSOLE_LOG_PATTERN" value="%d{HH:mm:ss} %highlight(%-5level) %cyan(%logger{36}) [%X] - %msg%n" />
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [%X] - %msg%n" />
+    <property name="SQL_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] SQL %-5level %logger{36} [%X] - %msg%n" />
+
     <!-- Appenders for both profiles -->
     <!-- Console appender for both profiles -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss} %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
     <!-- Console SQL Appender  -->
     <appender name="SQL_MARKER" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] SQL %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${SQL_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
@@ -23,7 +29,7 @@
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
@@ -34,7 +40,7 @@
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
@@ -45,7 +51,7 @@
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
@@ -56,7 +62,7 @@
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
@@ -68,7 +74,7 @@
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
@@ -79,7 +85,7 @@
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 

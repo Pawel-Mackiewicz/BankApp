@@ -10,7 +10,6 @@ import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.validation.AgeRange;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -63,7 +62,7 @@ public class RegistrationRequest implements PasswordConfirmation {
     private String pesel;
 
     @NotBlank(message = "Email is required")
-    @Email(message = "Please provide a valid email address")
+    @Pattern(regexp = ValidationConstants.EMAIL_PATTERN, message = "Invalid email format")
     @Schema(description = "Email must be a valid email address", example = "john.smith@example.com")
     private String email;
 

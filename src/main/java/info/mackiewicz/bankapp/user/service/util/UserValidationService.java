@@ -50,13 +50,13 @@ public class UserValidationService {
      * @param user The User object to validate. It must contain all necessary data
      *             for registration, including first name, last name, username,
      *             email, PESEL, phone number, and date of birth.
-     * @throws UserFieldNullException if any of the required fields in the User
-     *                                object is null.
-     * @throws UserValidationException if the name validation fails for any name.
-     * @throws DuplicatedUserException if the username, email address, PESEL, or
-     *                                 phone number is already in use.
-     * @throws InvalidAgeException if the user's age is less than 18 or greater
-     *                             than 120 years old.
+     * @throws UserFieldNullException if any of the required fields in the User object is null
+     * @throws UserValidationException if the name validation fails for firstname or lastname
+     * @throws InvalidAgeException if the user's age is less than 18 or greater than 120 years old
+     * @throws DuplicatedEmailException if the email adress is already in use
+     * @throws DuplicatedUsernameException if the username is already in use
+     * @throws DuplicatedPeselException if the PESEL number is already in use
+     * @throws DuplicatedPhoneNumberException if the phone number is already in use
      */
     public void validateNewUser(User user) {
         log.info("Starting validation for new user registration");
