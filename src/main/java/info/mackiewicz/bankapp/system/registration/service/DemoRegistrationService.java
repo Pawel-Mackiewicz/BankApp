@@ -43,7 +43,7 @@ public class DemoRegistrationService {
             if (e instanceof DuplicatedEmailException) {
                 throw e;
             }
-            throw new DemoRegistrationException("Registration failed");
+            throw new DemoRegistrationException("Registration failed", e);
         }
     }
 }
