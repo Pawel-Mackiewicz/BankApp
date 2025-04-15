@@ -62,7 +62,7 @@ public interface RegistrationController {
                                               "status": "CONFLICT",
                                               "title": "USER_ALREADY_EXISTS",
                                               "message": "User with these credentials already exists.",
-                                              "path": "/api/registration/register",
+                                              "path": "/api/registration/regular",
                                               "timestamp": "11-04-2025 16:18:29"
                                             }
                                             """)))
@@ -104,7 +104,7 @@ public interface RegistrationController {
                                               "status": "CONFLICT",
                                               "title": "USER_ALREADY_EXISTS",
                                               "message": "User with these credentials already exists.",
-                                              "path": "/api/registration/register",
+                                              "path": "/api/registration/demo",
                                               "timestamp": "11-04-2025 16:18:29"
                                             }
                                             """)))

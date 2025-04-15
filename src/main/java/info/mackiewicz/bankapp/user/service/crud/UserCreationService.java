@@ -59,7 +59,7 @@ public class UserCreationService {
     public User createUser(User user) {
 
         User userWithUsername = generateUsername(user);
-        log.debug("Generated username: {}", user.getUsername());
+        log.debug("Generated username: {}", userWithUsername.getUsername());
 
         User validatedUser = validateNewUser(userWithUsername);
         log.debug("Validated new user data");

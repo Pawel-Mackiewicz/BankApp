@@ -29,7 +29,6 @@ public class DemoRegistrationServiceTest {
     private static final String TEST_LASTNAME = "Smith";
     private static final String TEST_USERNAME = "john.smith12345";
 
-
     @Mock
     private RegistrationService registrationService;
 
@@ -123,7 +122,7 @@ public class DemoRegistrationServiceTest {
         verify(requestFactory, times(1)).createDemoRegistrationRequest(demoRequest.getEmail(), demoRequest.getPassword());
         verify(registrationService, times(1)).registerUser(registrationRequest);
     }
-    
+
     @Test
     void givenInvalidPassword_whenRegisterDemoUser_thenThrowDemoRegistrationException() {
         // Prepare demo registration request with weak password
