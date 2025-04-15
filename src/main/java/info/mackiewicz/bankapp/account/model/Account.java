@@ -56,6 +56,10 @@ public class Account implements AccountInfo {
     @Getter
     private BigDecimal balance;
 
+    /**
+     * The portion of the balance that is currently available for transactions.
+     * This may differ from the total balance due to pending transactions or holds.
+     */
     @Getter
     private BigDecimal availableBalance;
 
@@ -79,6 +83,7 @@ public class Account implements AccountInfo {
     Account(User owner, int userAccountNumber, Iban iban) {
         this.creationDate = LocalDateTime.now();
         this.balance = BigDecimal.ZERO;
+        this.availableBalance = BigDecimal.ZERO;
         this.owner = owner;
         this.userAccountNumber = userAccountNumber;
         this.iban = iban;

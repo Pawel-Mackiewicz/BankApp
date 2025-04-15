@@ -8,12 +8,13 @@ import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/api/registration")
@@ -24,7 +25,7 @@ public interface RegistrationController {
             summary = "Register a new user",
             description = "Creates a new user in the system. The user will be registered with the provided details."
     )
-    @RequestBody(
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
             required = true,
             description = "User registration details",
             content = @Content(
@@ -68,7 +69,7 @@ public interface RegistrationController {
                                             """)))
     })
     @PostMapping("/regular")
-    ResponseEntity<RegistrationResponse> registerUser(RegistrationRequest request);
+    ResponseEntity<RegistrationResponse> registerUser(@Valid @RequestBody RegistrationRequest request);
 
     @Operation(
             summary = "Register a new demo user",
@@ -110,5 +111,5 @@ public interface RegistrationController {
                                             """)))
     })
     @PostMapping("/demo")
-    ResponseEntity<RegistrationResponse> registerDemoUser(DemoRegistrationRequest request);
+    ResponseEntity<RegistrationResponse> registerDemoUser(@Valid @RequestBody DemoRegistrationRequest request);
 }

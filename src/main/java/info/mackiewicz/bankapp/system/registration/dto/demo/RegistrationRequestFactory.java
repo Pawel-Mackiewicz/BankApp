@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.system.registration.dto.demo;
 
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -24,7 +25,7 @@ public class RegistrationRequestFactory {
     private static final String DEFAULT_LASTNAME = "User";
 
 
-    public RegistrationRequest createDemoRegistrationRequest(EmailAddress email, String password) {
+    public RegistrationRequest createDemoRegistrationRequest(@NonNull EmailAddress email, @NonNull String password) {
         RegistrationRequest request = new RegistrationRequest();
 
         request.setEmail(email.getValue());
