@@ -61,13 +61,13 @@ public class UserCreationService {
     @Transactional
     public User createUser(User user) {
 
-        User validatedUser = validateNewUser(user);
-        log.debug("Validated new user data");
-
-        User userWithUsername = generateUsername(validatedUser);
+        User userWithUsername = generateUsername(user);
         log.debug("Generated username: {}", user.getUsername());
 
-        User userWithPassword = passwordService.ensurePasswordEncoded(userWithUsername);
+        User validatedUser = validateNewUser(userWithUsername);
+        log.debug("Validated new user data");
+
+        User userWithPassword = passwordService.ensurePasswordEncoded(validatedUser);
         log.debug("Password encoded");
 
         User savedUser = userRepository.save(userWithPassword);
