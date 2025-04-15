@@ -79,8 +79,10 @@ bankapp:
             iban: PL66485112340000000000000000
 
 
-# # Logging configuration
-# logging:
+ # Logging configuration
+    logging:
+     stacktrace:
+         enabled: false
 #     level:
 #         root: INFO
 #         info:
