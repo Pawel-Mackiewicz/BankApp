@@ -1,13 +1,14 @@
 package info.mackiewicz.bankapp.system.registration.dto;
 
 import info.mackiewicz.bankapp.user.model.User;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RegistrationMapperImpl implements RegistrationMapper {
 
     @Override
-    public User toUser(RegistrationRequest request) {
+    public User toUser(@NonNull RegistrationRequest request) {
         return User.builder()
                 .withFirstname(request.getFirstname())
                 .withLastname(request.getLastname())
@@ -20,7 +21,7 @@ public class RegistrationMapperImpl implements RegistrationMapper {
     }
 
     @Override
-    public RegistrationResponse toResponse(User user) {
+    public RegistrationResponse toResponse(@NonNull User user) {
         return RegistrationResponse.builder()
                 .withEmail(user.getEmail().getValue())
                 .withUsername(user.getUsername())

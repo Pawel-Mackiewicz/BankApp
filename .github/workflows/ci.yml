@@ -10,25 +10,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 21
-      uses: actions/setup-java@v3
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B clean verify
-      env:
-        SPRING_PROFILES_ACTIVE: test
-    - name: Upload Test Results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-results
-        path: target/surefire-reports/
-    - name: Upload Coverage Report
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: target/site/jacoco/
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B clean verify
+        env:
+          SPRING_PROFILES_ACTIVE: test
+
+      # Check if files exist
+      - name: Check if test results and coverage reports exist
+        uses: andstor/file-existence-action@v3.0.0
+        id: check_files
+        with:
+          files: "target/surefire-reports/, target/site/jacoco/"
+
+      # Fail the build if files don't exist
+      - name: Fail if files don't exist
+        if: steps.check_files.outputs.files_exists == 'false'
+        run: |
+          echo "Missing test results or coverage report files!"
+          exit 1
+
+      # Continue with an upload only if files exist
+      - name: Upload Test Results
+        if: steps.check_files.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: target/surefire-reports/
+
+      - name: Upload Coverage Report
+        if: steps.check_files.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: target/site/jacoco/

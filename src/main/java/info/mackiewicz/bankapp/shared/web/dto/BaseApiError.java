@@ -45,7 +45,7 @@ public class BaseApiError implements ApiErrorResponse {
     private final String message;
     
     /** The URI path where the error occurred */
-    private String path;
+    private final String path;
     
     /**
      * Timestamp when the error occurred
@@ -83,6 +83,7 @@ public class BaseApiError implements ApiErrorResponse {
         this.title = title;
         this.message = message;
         this.timestamp = LocalDateTime.now();
+        this.path = null;
     }
 
     /**
