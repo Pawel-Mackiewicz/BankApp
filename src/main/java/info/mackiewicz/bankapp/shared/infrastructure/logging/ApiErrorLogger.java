@@ -1,12 +1,12 @@
 package info.mackiewicz.bankapp.shared.infrastructure.logging;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
-import org.springframework.stereotype.Component;
-
 import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * Component responsible for standardized error logging across the application.
@@ -36,7 +36,11 @@ public class ApiErrorLogger {
      * Flag to determine whether to log the stack trace or not.
      * Set to true for development and false for production.
      */
-    private static final boolean LOG_STACKTRACE = false;
+    private final boolean logStacktrace;
+
+    public ApiErrorLogger(@Value("${logging.stacktrace.enabled:false}") boolean logStacktrace) {
+        this.logStacktrace = logStacktrace;
+    }
 
 
 
@@ -53,7 +57,7 @@ public class ApiErrorLogger {
      * @see ErrorCode#INTERNAL_ERROR
      */
     public void logError(ErrorCode error, Exception ex, String path) {
-        String message = formatErrorMessage(error, ex, path, LOG_STACKTRACE);
+        String message = formatErrorMessage(error, ex, path, logStacktrace);
 
         if (error == ErrorCode.INTERNAL_ERROR) {
             log.error(message, ex);
@@ -81,13 +85,12 @@ public class ApiErrorLogger {
      */
     private String formatErrorMessage(ErrorCode error, Exception ex, String path, boolean logStackTrace) {
             
-            String message = String.format(
+            return String.format(
                     "Error occurred: %s, Path: %s, Message: %s\nStackTrace: %s",
                     error.name(),
                     path,
                     ex.getMessage(),
                     logStackTrace ? getStackTrace(ex) : "Stack trace logging is disabled.");
-            return message;
         }
 
     /**
@@ -100,14 +103,14 @@ public class ApiErrorLogger {
      * @param ex the exception to get the stack trace from
      * @return complete stack trace as a formatted string
      * @see StringWriter
-     * @see PrintWriter#printStackTrace()
+     * @see Throwable#printStackTrace()
      */
         private String getStackTrace(Exception ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             ex.printStackTrace(pw);
-            String stackTrace = sw.toString();
-            return stackTrace;
+
+            return sw.toString();
         }
 
 }

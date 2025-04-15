@@ -1,10 +1,7 @@
 package info.mackiewicz.bankapp.user.service.crud;
 
 import info.mackiewicz.bankapp.security.service.PasswordService;
-import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
-import info.mackiewicz.bankapp.user.exception.InvalidAgeException;
-import info.mackiewicz.bankapp.user.exception.UserFieldNullException;
-import info.mackiewicz.bankapp.user.exception.UserValidationException;
+import info.mackiewicz.bankapp.user.exception.*;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
 import info.mackiewicz.bankapp.user.service.util.UserValidationService;
@@ -50,24 +47,24 @@ public class UserCreationService {
      *
      * @param user The user object containing the information for the new user
      * @return The created user with generated ID and all fields processed
-     * @throws UserFieldNullException if any of the required fields in the User
-     *                                object is null.
-     * @throws UserValidationException if the name validation fails for any name.
-     * @throws DuplicatedUserException if the username, email address, PESEL, or
-     *                                 phone number is already in use.
-     * @throws InvalidAgeException if the user's age is less than 18 or greater
-     *                             than 120 years old.
+     * @throws UserFieldNullException if any of the required fields in the User object is null
+     * @throws UserValidationException if the name validation fails for firstname or lastname
+     * @throws InvalidAgeException if the user's age is less than 18 or greater than 120 years old
+     * @throws DuplicatedEmailException if the email adress is already in use
+     * @throws DuplicatedUsernameException if the username is already in use
+     * @throws DuplicatedPeselException if the PESEL number is already in use
+     * @throws DuplicatedPhoneNumberException if the phone number is already in use
      */
     @Transactional
     public User createUser(User user) {
 
-        User validatedUser = validateNewUser(user);
+        User userWithUsername = generateUsername(user);
+        log.debug("Generated username: {}", userWithUsername.getUsername());
+
+        User validatedUser = validateNewUser(userWithUsername);
         log.debug("Validated new user data");
 
-        User userWithUsername = generateUsername(validatedUser);
-        log.debug("Generated username: {}", user.getUsername());
-
-        User userWithPassword = passwordService.ensurePasswordEncoded(userWithUsername);
+        User userWithPassword = passwordService.ensurePasswordEncoded(validatedUser);
         log.debug("Password encoded");
 
         User savedUser = userRepository.save(userWithPassword);

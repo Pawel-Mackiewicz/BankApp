@@ -1,86 +1,88 @@
 # Server configuration
 server:
-    address: 0.0.0.0
-    port: ${PORT:8080}
+  address: 0.0.0.0
+  port: ${PORT:8080}
 
 # Application variables
 spring:
-    profiles:
-        ## Active profile ([dev, test, prod])
-        active: ${SPRING_PROFILES_ACTIVE:prod}
-    # Spring Security
-    security:
-        user:
-            name: ${SPRING_SECURITY_USER_NAME}
-            password: ${SPRING_SECURITY_USER_PASSWORD}
-    # Database configuration
-    datasource:
-        url: ${DB_URL}
-        username: ${DB_USERNAME}
-        password: ${DB_PASSWORD}
-        driver-class-name: com.mysql.cj.jdbc.Driver  
-        # Connection pool settings
-        hikari:
-            maximum-pool-size: 5
-            minimum-idle: 2
-            connection-timeout: 20000
-            idle-timeout: 300000
-    # JPA / Hibernate settings
-    jpa:
-        hibernate.ddl-auto: update
-        show-sql: false
-        open-in-view: false
-        properties:
-            hibernate: 
-                dialect: org.hibernate.dialect.MySQL8Dialect
-                '[show_sql]': false
-                '[format_sql]': true
-                '[globally_quoted_identifiers]': true
-    # Flyway configuration
-    flyway:
-        enabled: true
-        locations: classpath:db/migration
-        baseline-on-migrate: true
-        baseline-version: 1.0
-        placeholder-replacement: true
-        placeholders:
-            bank_password: ${BANK_PASSWORD:password}
+  profiles:
+    ## Active profile ([dev, test, prod])
+    active: ${SPRING_PROFILES_ACTIVE:prod}
+  # Spring Security
+  security:
+    user:
+      name: ${SPRING_SECURITY_USER_NAME}
+      password: ${SPRING_SECURITY_USER_PASSWORD}
+  # Database configuration
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # Connection pool settings
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+  # JPA / Hibernate settings
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        '[show_sql]': false
+        '[format_sql]': true
+        '[globally_quoted_identifiers]': true
+  # Flyway configuration
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 1.0
+    placeholder-replacement: true
+    placeholders:
+      bank_password: ${BANK_PASSWORD:password}
 
 # Swagger / OpenAPI configuration
 springdoc:
-    swagger-ui:
-        docExpansion: list
-    default-produces-media-type: application/json
-    show-actuator: false
-    model-and-view-allowed: true
-    
-app: 
-    # Email configuration
-    ## Resend API configuration
-    resend:
-        api-key: ${RESEND_API_KEY}
-    ## Application base URL (for generating links in emails)
-    base-url: ${APP_BASE_URL:http://localhost:8080}
-    ## Frontend configuration
-    thymeleaf:
-        enabled: ${THYMELEAF_ENABLED:true}
-    ## Account locking configuration
-    locking:
-        max-attempts: 5
-        base-delay: 100
-        max-delay: 2000
-        timeout: 200
+  swagger-ui:
+    docExpansion: list
+  default-produces-media-type: application/json
+  show-actuator: false
+  model-and-view-allowed: true
+
+app:
+  # Email configuration
+  ## Resend API configuration
+  resend:
+    api-key: ${RESEND_API_KEY}
+  ## Application base URL (for generating links in emails)
+  base-url: ${APP_BASE_URL:http://localhost:8080}
+  ## Frontend configuration
+  thymeleaf:
+    enabled: ${THYMELEAF_ENABLED:true}
+  ## Account locking configuration
+  locking:
+    max-attempts: 5
+    base-delay: 100
+    max-delay: 2000
+    timeout: 200
 
 bankapp:
-    registration:
-        WelcomeBonusAmount: 1000
-    bank:
-        account:
-            iban: PL66485112340000000000000000
+  registration:
+    WelcomeBonusAmount: 1000
+  bank:
+    account:
+      iban: PL66485112340000000000000000
 
 
-# # Logging configuration
-# logging:
+  # Logging configuration
+logging:
+  stacktrace:
+    enabled: false
 #     level:
 #         root: INFO
 #         info:
