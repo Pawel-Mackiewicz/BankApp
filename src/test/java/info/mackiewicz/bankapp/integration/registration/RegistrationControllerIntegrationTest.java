@@ -216,6 +216,8 @@ class RegistrationControllerIntegrationTest {
         mockMvc.perform(post(DEMO_REGISTRATION_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[?(@.field=='confirmPassword')]").exists());
+
     }
 }

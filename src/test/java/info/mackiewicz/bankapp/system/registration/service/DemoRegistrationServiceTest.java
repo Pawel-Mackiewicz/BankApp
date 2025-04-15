@@ -6,6 +6,7 @@ import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import info.mackiewicz.bankapp.system.registration.dto.demo.RegistrationRequestFactory;
 import info.mackiewicz.bankapp.system.registration.exception.DemoRegistrationException;
 import info.mackiewicz.bankapp.user.exception.DuplicatedEmailException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -45,10 +46,7 @@ public class DemoRegistrationServiceTest {
     @Test
     void givenValidDemoRequest_whenRegisterDemoUser_thenReturnRegistrationResponse() {
         // Prepare demo registration request with valid credentials
-        DemoRegistrationRequest demoRequest = new DemoRegistrationRequest();
-        demoRequest.setEmail(VALID_EMAIL);
-        demoRequest.setPassword(STRONG_PASSWORD);
-        demoRequest.setConfirmPassword(STRONG_PASSWORD);
+        DemoRegistrationRequest demoRequest = getDemoRegistrationRequest(VALID_EMAIL, STRONG_PASSWORD);
 
         // Mock registration request and prepare expected response
         RegistrationRequest registrationRequest = mock(RegistrationRequest.class);
@@ -77,13 +75,11 @@ public class DemoRegistrationServiceTest {
         verify(registrationService, times(1)).registerUser(registrationRequest);
     }
 
+
     @Test
     void givenDuplicateEmail_whenRegisterDemoUser_thenThrowDuplicatedEmailException() {
         // Prepare demo registration request with duplicate email
-        DemoRegistrationRequest demoRequest = new DemoRegistrationRequest();
-        demoRequest.setEmail(DUPLICATE_EMAIL);
-        demoRequest.setPassword(STRONG_PASSWORD);
-        demoRequest.setConfirmPassword(STRONG_PASSWORD);
+        DemoRegistrationRequest demoRequest = getDemoRegistrationRequest(DUPLICATE_EMAIL, STRONG_PASSWORD);
 
         // Mock registration request
         RegistrationRequest registrationRequest = mock(RegistrationRequest.class);
@@ -103,10 +99,7 @@ public class DemoRegistrationServiceTest {
     @Test
     void givenUnexpectedException_whenRegisterDemoUser_thenThrowDemoRegistrationException() {
         // Prepare demo registration request
-        DemoRegistrationRequest demoRequest = new DemoRegistrationRequest();
-        demoRequest.setEmail(INVALID_EMAIL);
-        demoRequest.setPassword(STRONG_PASSWORD);
-        demoRequest.setConfirmPassword(STRONG_PASSWORD);
+        DemoRegistrationRequest demoRequest = getDemoRegistrationRequest(INVALID_EMAIL, STRONG_PASSWORD);
 
         // Mock registration request
         RegistrationRequest registrationRequest = mock(RegistrationRequest.class);
@@ -126,10 +119,7 @@ public class DemoRegistrationServiceTest {
     @Test
     void givenInvalidPassword_whenRegisterDemoUser_thenThrowDemoRegistrationException() {
         // Prepare demo registration request with weak password
-        DemoRegistrationRequest demoRequest = new DemoRegistrationRequest();
-        demoRequest.setEmail(TEST_EMAIL);
-        demoRequest.setPassword(WEAK_PASSWORD);
-        demoRequest.setConfirmPassword(WEAK_PASSWORD);
+        DemoRegistrationRequest demoRequest = getDemoRegistrationRequest(TEST_EMAIL, WEAK_PASSWORD);
 
         // Configure mock to throw exception for invalid password
         when(requestFactory.createDemoRegistrationRequest(demoRequest.getEmail(), demoRequest.getPassword()))
@@ -141,5 +131,10 @@ public class DemoRegistrationServiceTest {
         // Verify mock interactions
         verify(requestFactory, times(1)).createDemoRegistrationRequest(demoRequest.getEmail(), demoRequest.getPassword());
         verifyNoInteractions(registrationService);
+    }
+
+    @NotNull
+    private static DemoRegistrationRequest getDemoRegistrationRequest(String email, String password) {
+        return new DemoRegistrationRequest(email, password, password);
     }
 }

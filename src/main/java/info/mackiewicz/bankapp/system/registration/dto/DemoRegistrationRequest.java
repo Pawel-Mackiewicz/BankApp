@@ -8,13 +8,17 @@ import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Schema(description = "Registration request DTO for demo users")
 @PasswordMatches
+@AllArgsConstructor
+@NoArgsConstructor
 public class DemoRegistrationRequest implements PasswordConfirmation {
 
     @NotBlank(message = "Email is required")
