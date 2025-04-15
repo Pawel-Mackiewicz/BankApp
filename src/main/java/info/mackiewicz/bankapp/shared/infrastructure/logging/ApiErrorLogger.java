@@ -85,13 +85,12 @@ public class ApiErrorLogger {
      */
     private String formatErrorMessage(ErrorCode error, Exception ex, String path, boolean logStackTrace) {
             
-            String message = String.format(
+            return String.format(
                     "Error occurred: %s, Path: %s, Message: %s\nStackTrace: %s",
                     error.name(),
                     path,
                     ex.getMessage(),
                     logStackTrace ? getStackTrace(ex) : "Stack trace logging is disabled.");
-            return message;
         }
 
     /**
@@ -110,8 +109,8 @@ public class ApiErrorLogger {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             ex.printStackTrace(pw);
-            String stackTrace = sw.toString();
-            return stackTrace;
+
+            return sw.toString();
         }
 
 }
