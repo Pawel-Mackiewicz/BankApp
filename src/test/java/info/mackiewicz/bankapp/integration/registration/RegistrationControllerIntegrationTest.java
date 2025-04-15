@@ -39,7 +39,7 @@ class RegistrationControllerIntegrationTest {
     private static final String TEST_EMAIL = "jan.kowalski@example.com";
     private static final String TEST_FIRSTNAME = "Jan";
     private static final String TEST_LASTNAME = "Kowalski";
-    private static final String REGISTRATION_ENDPOINT = "/api/registration/register";
+    private static final String REGISTRATION_ENDPOINT = "/api/registration/regular";
     private static final String DATE_OF_BIRTH_FIELD = "dateOfBirth";
     private static final String FIRSTNAME_FIELD = "firstname";
     private static final String PESEL_FIELD = "pesel";
