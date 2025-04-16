@@ -57,13 +57,6 @@ public class Account implements AccountInfo {
     private BigDecimal balance;
 
     /**
-     * The portion of the balance that is currently available for transactions.
-     * This may differ from the total balance due to pending transactions or holds.
-     */
-    @Getter
-    private BigDecimal availableBalance;
-
-    /**
      * Default constructor for JPA.
      * This constructor is package-private to prevent direct instantiation.
      * Use {@link AccountService} to create new accounts.
@@ -83,7 +76,6 @@ public class Account implements AccountInfo {
     Account(User owner, int userAccountNumber, Iban iban) {
         this.creationDate = LocalDateTime.now();
         this.balance = BigDecimal.ZERO;
-        this.availableBalance = BigDecimal.ZERO;
         this.owner = owner;
         this.userAccountNumber = userAccountNumber;
         this.iban = iban;
