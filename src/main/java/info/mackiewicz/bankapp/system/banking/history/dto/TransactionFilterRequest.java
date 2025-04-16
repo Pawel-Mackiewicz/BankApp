@@ -2,12 +2,11 @@ package info.mackiewicz.bankapp.system.banking.history.dto;
 
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Pattern;
+import lombok.*;
 import org.hibernate.query.SortDirection;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,7 +18,8 @@ import java.time.LocalDateTime;
  * Allows specifying filtering criteria, sorting, and pagination parameters
  * when retrieving or exporting transactions.
  */
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
     description = "Object containing parameters for filtering and paginating transactions",
     name = "TransactionFilter"
 )
-public class TransactionFilterDTO {
+public class TransactionFilterRequest {
 
         @Schema(
             description = "Account ID for which to filter transactions",
@@ -60,6 +60,7 @@ public class TransactionFilterDTO {
             example = "2023-01-01T00:00:00"
         )
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @Nullable
         private LocalDateTime dateFrom;
 
         @Schema(
@@ -67,30 +68,35 @@ public class TransactionFilterDTO {
             example = "2023-12-31T23:59:59"
         )
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @Nullable
         private LocalDateTime dateTo;
 
         @Schema(
             description = "Type of transaction (e.g., TRANSFER_OWN, DEPOSIT, WITHDRAWAL)",
             example = "TRANSFER_OWN"
         )
+        @Nullable
         private TransactionType type;
 
         @Schema(
             description = "Minimum amount for filtering transactions",
             example = "100.00"
         )
+        @Nullable
         private BigDecimal amountFrom;
 
         @Schema(
             description = "Maximum amount for filtering transactions",
             example = "1000.00"
         )
+        @Nullable
         private BigDecimal amountTo;
 
         @Schema(
             description = "Search query for filtering transactions (searches in title and account details)",
             example = "Grocery Store"
         )
+        @Nullable
         private String query;
 
         @Schema(
@@ -99,6 +105,7 @@ public class TransactionFilterDTO {
             defaultValue = "date"
         )
         @Builder.Default
+        @Pattern(regexp = "^(date|amount|type)$", message = "Sort field must be one of: date, amount, type")
         private String sortBy = "date";
 
         @Schema(
