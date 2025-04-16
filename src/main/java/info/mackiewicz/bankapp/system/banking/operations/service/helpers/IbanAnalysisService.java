@@ -1,12 +1,11 @@
-package info.mackiewicz.bankapp.system.banking.service.helpers;
-
-import org.iban4j.Iban;
-import org.springframework.stereotype.Service;
+package info.mackiewicz.bankapp.system.banking.operations.service.helpers;
 
 import info.mackiewicz.bankapp.shared.exception.IbanAnalysisException;
 import info.mackiewicz.bankapp.shared.util.IbanMasker;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.extern.slf4j.Slf4j;
+import org.iban4j.Iban;
+import org.springframework.stereotype.Service;
 
 /**
  * Service for analyzing and working with IBAN (International Bank Account

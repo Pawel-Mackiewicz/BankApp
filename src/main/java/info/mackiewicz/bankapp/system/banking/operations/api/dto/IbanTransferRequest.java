@@ -1,13 +1,12 @@
-package info.mackiewicz.bankapp.system.banking.api.dto;
+package info.mackiewicz.bankapp.system.banking.operations.api.dto;
 
-
-import org.iban4j.Iban;
 
 import info.mackiewicz.bankapp.account.validation.ValidIban;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Setter;
 import lombok.ToString;
+import org.iban4j.Iban;
 
 @Schema(description = "Request object for transferring money to an IBAN account")
 @ToString(callSuper = true)

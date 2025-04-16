@@ -1,10 +1,4 @@
-package info.mackiewicz.bankapp.system.banking.api.dto;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
-import org.iban4j.Iban;
+package info.mackiewicz.bankapp.system.banking.operations.api.dto;
 
 import info.mackiewicz.bankapp.account.validation.ValidIban;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -16,6 +10,11 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.iban4j.Iban;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Class representing a banking operation request.

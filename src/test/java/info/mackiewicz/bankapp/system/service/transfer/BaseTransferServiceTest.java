@@ -2,10 +2,10 @@ package info.mackiewicz.bankapp.system.service.transfer;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
-import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
-import info.mackiewicz.bankapp.system.banking.service.TransferOperationService;
-import info.mackiewicz.bankapp.system.banking.service.helpers.AccountSecurityService;
-import info.mackiewicz.bankapp.system.banking.service.helpers.TransactionBuildingService;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
+import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;
+import info.mackiewicz.bankapp.system.banking.operations.service.helpers.AccountSecurityService;
+import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionBuildingService;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;

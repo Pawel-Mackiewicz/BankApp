@@ -1,18 +1,17 @@
-package info.mackiewicz.bankapp.system.banking.api;
+package info.mackiewicz.bankapp.system.banking.operations.api;
 
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.EmailTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
+import info.mackiewicz.bankapp.system.banking.operations.service.transfer.EmailTransferService;
+import info.mackiewicz.bankapp.system.banking.operations.service.transfer.IbanTransferService;
+import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import info.mackiewicz.bankapp.system.banking.api.dto.EmailTransferRequest;
-import info.mackiewicz.bankapp.system.banking.api.dto.IbanTransferRequest;
-import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
-import info.mackiewicz.bankapp.system.banking.service.transfer.EmailTransferService;
-import info.mackiewicz.bankapp.system.banking.service.transfer.IbanTransferService;
-import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController

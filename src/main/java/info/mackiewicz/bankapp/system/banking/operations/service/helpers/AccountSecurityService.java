@@ -1,7 +1,4 @@
-package info.mackiewicz.bankapp.system.banking.service.helpers;
-
-import org.iban4j.Iban;
-import org.springframework.stereotype.Service;
+package info.mackiewicz.bankapp.system.banking.operations.service.helpers;
 
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
@@ -9,6 +6,8 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.iban4j.Iban;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service

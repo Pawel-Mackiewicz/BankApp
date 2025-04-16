@@ -1,13 +1,13 @@
 package info.mackiewicz.bankapp.system.service.transfer;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.function.Supplier;
-
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
+import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.EmailTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
+import info.mackiewicz.bankapp.system.banking.operations.service.transfer.EmailTransferService;
+import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,14 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
-import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.system.banking.api.dto.EmailTransferRequest;
-import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
-import info.mackiewicz.bankapp.system.banking.service.transfer.EmailTransferService;
-import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
+import java.util.function.Supplier;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmailTransferServiceTest extends BaseTransferServiceTest {

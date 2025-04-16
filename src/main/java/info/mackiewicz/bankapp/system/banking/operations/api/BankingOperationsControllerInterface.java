@@ -1,16 +1,10 @@
-package info.mackiewicz.bankapp.system.banking.api;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+package info.mackiewicz.bankapp.system.banking.operations.api;
 
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
-import info.mackiewicz.bankapp.system.banking.api.dto.EmailTransferRequest;
-import info.mackiewicz.bankapp.system.banking.api.dto.IbanTransferRequest;
-import info.mackiewicz.bankapp.system.banking.api.dto.TransferResponse;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.EmailTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,6 +16,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Interface defining basic banking operations API endpoints.

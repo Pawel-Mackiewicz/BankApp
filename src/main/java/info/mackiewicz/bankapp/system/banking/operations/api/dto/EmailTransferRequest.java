@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.banking.api.dto;
+package info.mackiewicz.bankapp.system.banking.operations.api.dto;
 
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
