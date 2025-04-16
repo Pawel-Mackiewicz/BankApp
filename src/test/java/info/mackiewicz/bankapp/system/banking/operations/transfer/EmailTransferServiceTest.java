@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.service.transfer;
+package info.mackiewicz.bankapp.system.banking.operations.transfer;
 
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;

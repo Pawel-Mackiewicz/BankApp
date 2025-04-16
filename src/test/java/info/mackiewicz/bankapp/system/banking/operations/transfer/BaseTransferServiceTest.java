@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.service.transfer;
+package info.mackiewicz.bankapp.system.banking.operations.transfer;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
