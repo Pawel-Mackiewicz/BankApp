@@ -1,16 +1,15 @@
 package info.mackiewicz.bankapp.system.banking.history.service;
 
-import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
-import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterDTO;
+import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.history.export.TransactionExporter;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
+import org.hibernate.query.SortDirection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,9 +36,6 @@ class TransactionHistoryServiceTest {
     private TransactionService transactionService;
     
     @Mock
-    private AccountService accountService;
-    
-    @Mock
     private TransactionFilterService filterService;
     
     @Mock
@@ -49,27 +45,25 @@ class TransactionHistoryServiceTest {
     private TransactionHistoryService transactionHistoryService;
 
     private User testUser;
-    private Integer testUserId;
-    private Integer otherUserId;
     private Account testAccount;
     private Account destinationAccount;
-    private TransactionFilterDTO filter;
+    private TransactionFilterRequest filter;
     private List<Transaction> transactions;
 
     @BeforeEach
     void setUp() {
         // Create test user and accounts
         testUser = TestUserBuilder.createTestUser();
-        testUserId = testUser.getId();
-        otherUserId = TestUserBuilder.createRandomTestUser().getId();
-        
+
         testAccount = TestAccountBuilder.createTestAccount(1, BigDecimal.valueOf(1000), testUser);
         destinationAccount = TestAccountBuilder.createTestAccount(2, BigDecimal.valueOf(2000), TestUserBuilder.createRandomTestUser());
 
-        filter = TransactionFilterDTO.builder()
+        filter = TransactionFilterRequest.builder()
                 .accountId(testAccount.getId())
                 .page(0)
                 .size(20)
+                .sortBy("date")
+                .sortDirection(SortDirection.DESCENDING)
                 .build();
 
         // Create test transactions
@@ -96,15 +90,14 @@ class TransactionHistoryServiceTest {
     }
 
     @Test
-    void getTransactionHistory_WhenUserOwnsAccount_ReturnsTransactions() {
+    void getTransactionHistory_ReturnsFilteredAndPaginatedTransactions() {
         // Given
-        when(accountService.getAccountById(testAccount.getId())).thenReturn(testAccount);
         when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt())).thenReturn(transactions);
         when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any()))
                 .thenReturn(transactions);
 
         // When
-        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUserId, filter);
+        Page<Transaction> result = transactionHistoryService.getTransactionHistory(filter);
 
         // Then
         assertNotNull(result);
@@ -113,26 +106,15 @@ class TransactionHistoryServiceTest {
     }
 
     @Test
-    void getTransactionHistory_WhenUserDoesNotOwnAccount_ThrowsAccessDeniedException() {
-        // Given
-        when(accountService.getAccountById(testAccount.getId())).thenReturn(testAccount);
-
-        // When/Then
-        assertThrows(AccountOwnershipException.class, 
-            () -> transactionHistoryService.getTransactionHistory(otherUserId, filter));
-    }
-
-    @Test
     void getTransactionHistory_WhenNoTransactions_ReturnsEmptyPage() {
         // Given
-        when(accountService.getAccountById(testAccount.getId())).thenReturn(testAccount);
         when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt()))
                 .thenReturn(Collections.emptyList());
         when(filterService.filterTransactions(eq(Collections.emptyList()), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Collections.emptyList());
 
         // When
-        Page<Transaction> result = transactionHistoryService.getTransactionHistory(testUserId, filter);
+        Page<Transaction> result = transactionHistoryService.getTransactionHistory(filter);
 
         // Then
         assertNotNull(result);
@@ -141,9 +123,32 @@ class TransactionHistoryServiceTest {
     }
 
     @Test
+    void getTransactionHistory_WhenPageBeyondAvailableData_ReturnsEmptyPage() {
+        // Given
+        when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt())).thenReturn(transactions);
+        when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any()))
+                .thenReturn(transactions);
+        
+        TransactionFilterRequest pageOutOfBoundsFilter = TransactionFilterRequest.builder()
+                .accountId(testAccount.getId())
+                .page(10) // Far beyond available data
+                .size(20)
+                .sortBy("date")
+                .sortDirection(SortDirection.DESCENDING)
+                .build();
+
+        // When
+        Page<Transaction> result = transactionHistoryService.getTransactionHistory(pageOutOfBoundsFilter);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(2, result.getTotalElements()); // The total size should still be correct
+        assertTrue(result.getContent().isEmpty()); // But content should be empty
+    }
+
+    @Test
     void exportTransactions_WhenValidFormat_ReturnsExportedData() {
         // Given
-        when(accountService.getAccountById(testAccount.getId())).thenReturn(testAccount);
         when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt())).thenReturn(transactions);
         when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any()))
                 .thenReturn(transactions);
@@ -152,7 +157,7 @@ class TransactionHistoryServiceTest {
                 .thenReturn(ResponseEntity.ok("test".getBytes()));
 
         // When
-        ResponseEntity<byte[]> result = transactionHistoryService.exportTransactions(testUserId, filter, "csv");
+        ResponseEntity<byte[]> result = transactionHistoryService.exportTransactions(filter, "csv");
 
         // Then
         assertNotNull(result);
@@ -163,14 +168,13 @@ class TransactionHistoryServiceTest {
     @Test
     void exportTransactions_WhenInvalidFormat_ThrowsException() {
         // Given
-        when(accountService.getAccountById(testAccount.getId())).thenReturn(testAccount);
-        when(csvExporter.getFormat()).thenReturn("csv");
         when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt())).thenReturn(transactions);
         when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any()))
                 .thenReturn(transactions);
+        when(csvExporter.getFormat()).thenReturn("csv");
 
         // When/Then
         assertThrows(UnsupportedExporterException.class,
-            () -> transactionHistoryService.exportTransactions(testUserId, filter, "invalid"));
+            () -> transactionHistoryService.exportTransactions(filter, "invalid"));
     }
 }

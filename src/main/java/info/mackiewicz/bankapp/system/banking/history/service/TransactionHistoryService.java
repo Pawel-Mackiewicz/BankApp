@@ -1,12 +1,8 @@
 package info.mackiewicz.bankapp.system.banking.history.service;
 
-import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.exception.TransactionFilterException;
 import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
-import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterDTO;
+import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.history.export.TransactionExporter;
 import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -31,7 +27,6 @@ public class TransactionHistoryService {
     private static final SortDirection DEFAULT_SORT_DIRECTION = SortDirection.DESCENDING;
 
     private final TransactionService transactionService;
-    private final AccountService accountService;
     private final TransactionFilterService filterService;
     private final List<TransactionExporter> exporters;
 
@@ -41,12 +36,10 @@ public class TransactionHistoryService {
      * @param userId the ID of the user who owns the account
      * @param filter the filter criteria for transactions
      * @return a paginated list of transactions
-     * @throws AccountOwnershipException if the user does not own the account
      * @throws TransactionFilterException if the filter criteria are invalid
      * @throws NoTransactionsForAccountException if no transactions are found for the account
      */
-    public Page<Transaction> getTransactionHistory(Integer userId, TransactionFilterDTO filter) {
-        verifyAccountOwnership(userId, filter.getAccountId());
+    public Page<Transaction> getTransactionHistory(TransactionFilterRequest filter) {
         List<Transaction> transactions = getFilteredAndSortedTransactions(filter);
         return createPaginatedResponse(transactions, filter.getPage(), filter.getSize());
     }
@@ -58,33 +51,15 @@ public class TransactionHistoryService {
      * @param filter  the filter criteria for transactions
      * @param format  the export format (e.g., CSV, PDF)
      * @return a ResponseEntity containing the exported transactions as a byte array
-     * @throws AccountNotFoundByIdException if the account does not exist
-     * @throws AccountOwnershipException if the user does not own the account
      * @throws TransactionFilterException if the filter criteria are invalid
      * @throws NoTransactionsForAccountException if no transactions are found for the account
      * @throws UnsupportedExporterException if the export format is not supported
      */
-    public ResponseEntity<byte[]> exportTransactions(Integer userId, TransactionFilterDTO filter, String format) {
-        verifyAccountOwnership(userId, filter.getAccountId());
+    public ResponseEntity<byte[]> exportTransactions(TransactionFilterRequest filter, String format) {
         filter.setSortBy(DEFAULT_SORT_FIELD);
         filter.setSortDirection(DEFAULT_SORT_DIRECTION);
         List<Transaction> transactions = getFilteredAndSortedTransactions(filter);
         return findExporter(format).exportTransactions(transactions);
-    }
-
-    /**
-     * Verifies if the user owns the specified account.
-     *
-     * @param userId    the ID of the user
-     * @param accountId the ID of the account
-     * @throws AccountNotFoundByIdException if the account does not exist
-     * @throws AccountOwnershipException if the account does not belong to the user
-     */
-    private void verifyAccountOwnership(Integer userId, Integer accountId) {
-        Account account = accountService.getAccountById(accountId);
-        if (!account.getOwner().getId().equals(userId)) {
-            throw new AccountOwnershipException("Account " + accountId + " doesn't belong to user with ID: " + userId);
-        }
     }
 
     /**
@@ -95,7 +70,7 @@ public class TransactionHistoryService {
      * @throws TransactionFilterException if the filter criteria are invalid
      * @throws NoTransactionsForAccountException if no transactions are found for the account
      */
-    private List<Transaction> getFilteredAndSortedTransactions(TransactionFilterDTO filter) {
+    private List<Transaction> getFilteredAndSortedTransactions(TransactionFilterRequest filter) {
         List<Transaction> transactions = transactionService.getRecentTransactions(filter.getAccountId(), MAX_RECENT_TRANSACTIONS);
         List<Transaction> filteredTransactions = filterService.filterTransactions(
                 transactions, filter.getDateFrom(), filter.getDateTo(),
