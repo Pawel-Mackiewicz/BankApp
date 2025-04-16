@@ -12,6 +12,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A service implementation for exporting financial transactions in CSV format.
+ * This class generates a CSV file from a list of transactions and prepares it
+ * for download via an HTTP response.
+ */
 @Service
 public class CsvTransactionExporter implements TransactionExporter {
     
@@ -22,6 +27,13 @@ public class CsvTransactionExporter implements TransactionExporter {
         return "csv";
     }
 
+    /**
+     * Exports a list of financial transactions in CSV format and returns the resulting file
+     * as an HTTP response entity.
+     *
+     * @param transactions the list of transactions to be exported; each transaction contains details such as date, amount, type, accounts involved, title, and status
+     * @return a ResponseEntity containing the generated CSV file as a byte array, with appropriate HTTP headers set for file download
+     */
     @Override
     public ResponseEntity<byte[]> exportTransactions(List<Transaction> transactions) {
         StringBuilder csv = new StringBuilder();
