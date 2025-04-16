@@ -29,19 +29,21 @@ public class IbanAnalysisService {
      *         (same owner, same bank)
      */
     public TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
-        log.debug("Resolving transfer type for \n" +
-                  "source IBAN: {}\n" +
-                  "destination IBAN: {}", IbanMasker.maskIban(sourceIban), IbanMasker.maskIban(destinationIban));
+        log.debug("""
+                Resolving transfer type for\s
+                source IBAN: {}
+                destination IBAN: {}""", IbanMasker.maskIban(sourceIban), IbanMasker.maskIban(destinationIban));
 
         try {
             TransactionType type = !isSameBank(sourceIban, destinationIban) ? TransactionType.TRANSFER_EXTERNAL
                                  : !isSameOwner(sourceIban, destinationIban) ? TransactionType.TRANSFER_INTERNAL
                                  : TransactionType.TRANSFER_OWN;
 
-            log.debug("Transfer type for \n" +
-                     "source IBAN: {}\n" +
-                     "destination IBAN: {}\n" +
-                     "is {}", IbanMasker.maskIban(sourceIban), IbanMasker.maskIban(destinationIban), type);
+            log.debug("""
+                    Transfer type for\s
+                    source IBAN: {}
+                    destination IBAN: {}
+                    is {}""", IbanMasker.maskIban(sourceIban), IbanMasker.maskIban(destinationIban), type);
 
             return type;
         } catch (Exception e) {

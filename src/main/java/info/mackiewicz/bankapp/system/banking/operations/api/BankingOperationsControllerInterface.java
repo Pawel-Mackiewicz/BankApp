@@ -55,24 +55,27 @@ public interface BankingOperationsControllerInterface {
                     @ExampleObject(
                         name = "Successful transfer",
                         summary = "Example of a successful transfer response",
-                        value = "{\n" +
-                                "  \"sourceAccount\": {\n" +
-                                "    \"fullNameOfOwner\": \"John Smith\",\n" +
-                                "    \"iban\": \"PL12345678901234567890123456\"\n" +
-                                "  },\n\n" +
-                                "  \"targetAccount\": {\n" +
-                                "    \"fullNameOfOwner\": \"Alice Johnson\",\n" +
-                                "    \"iban\": \"PL09876543210987654321098765\"\n" +
-                                "  },\n\n" +
-                                "  \"transactionInfo\": {\n" +
-                                "    \"id\": 123,\n" +
-                                "    \"amount\": 100.50,\n" +
-                                "    \"type\": \"TRANSFER_INTERNAL\",\n" +
-                                "    \"title\": \"Services\",\n" +
-                                "    \"date\": \"2023-04-01T12:34:56Z\",\n" +
-                                "    \"status\": \"DONE\"\n" +
-                                "  }\n" +
-                                "}"
+                        value = """
+                                {
+                                  "sourceAccount": {
+                                    "fullNameOfOwner": "John Smith",
+                                    "iban": "PL12345678901234567890123456"
+                                  },
+                                
+                                  "targetAccount": {
+                                    "fullNameOfOwner": "Alice Johnson",
+                                    "iban": "PL09876543210987654321098765"
+                                  },
+                                
+                                  "transactionInfo": {
+                                    "id": 123,
+                                    "amount": 100.50,
+                                    "type": "TRANSFER_INTERNAL",
+                                    "title": "Services",
+                                    "date": "2023-04-01T12:34:56Z",
+                                    "status": "DONE"
+                                  }
+                                }"""
                     )
                 }
             )
@@ -87,31 +90,33 @@ public interface BankingOperationsControllerInterface {
                     @ExampleObject(
                         name = "Validation error",
                         summary = "Example of a validation error response",
-                        value = "{\n" +
-                                "  \"path\": \"/api/banking/transfer/iban\",\n" +
-                                "  \"errors\": [\n" +
-                                "    {\n" +
-                                "      \"field\": \"recipientIban\",\n" +
-                                "      \"message\": \"Invalid IBAN format\",\n" +
-                                "      \"rejectedValue\": \"PL9148511340003570000000002\"\n" +
-                                "    }\n" +
-                                "  ],\n" +
-                                "  \"status\": \"BAD_REQUEST\",\n" +
-                                "  \"title\": \"VALIDATION_ERROR\",\n" +
-                                "  \"message\": \"Validation failed. Please check your input and try again.\",\n" +
-                                "  \"timestamp\": \"04-04-2025 13:35:07\"\n" +
-                                "}"
+                        value = """
+                                {
+                                  "path": "/api/banking/transfer/iban",
+                                  "errors": [
+                                    {
+                                      "field": "recipientIban",
+                                      "message": "Invalid IBAN format",
+                                      "rejectedValue": "PL9148511340003570000000002"
+                                    }
+                                  ],
+                                  "status": "BAD_REQUEST",
+                                  "title": "VALIDATION_ERROR",
+                                  "message": "Validation failed. Please check your input and try again.",
+                                  "timestamp": "04-04-2025 13:35:07"
+                                }"""
                     ),
                     @ExampleObject(
                         name = "Insufficient funds error",
                         summary = "Example of an insufficient funds error response",
-                        value = "{\n" +
-                                "  \"path\": \"/api/banking/transfer/iban\",\n" +
-                                "  \"status\": \"BAD_REQUEST\",\n" +
-                                "  \"title\": \"INSUFFICIENT_FUNDS\",\n" +
-                                "  \"message\": \"Insufficient funds for this transaction. Please check your balance and try again.\",\n" +
-                                "  \"timestamp\": \"04-04-2025 13:35:07\"\n" +
-                                "}"
+                        value = """
+                                {
+                                  "path": "/api/banking/transfer/iban",
+                                  "status": "BAD_REQUEST",
+                                  "title": "INSUFFICIENT_FUNDS",
+                                  "message": "Insufficient funds for this transaction. Please check your balance and try again.",
+                                  "timestamp": "04-04-2025 13:35:07"
+                                }"""
                     )
                 }
             )
@@ -126,13 +131,14 @@ public interface BankingOperationsControllerInterface {
                     @ExampleObject(
                         name = "Account ownership error",
                         summary = "Example of an account ownership error response",
-                        value = "{\n" +
-                                "  \"path\": \"/api/banking/transfer/iban\",\n" +
-                                "  \"status\": \"FORBIDDEN\",\n" +
-                                "  \"title\": \"ACCOUNT_OWNERSHIP_ERROR\",\n" +
-                                "  \"message\": \"You do not have permission to access this account.\",\n" +
-                                "  \"timestamp\": \"04-04-2025 13:35:07\"\n" +
-                                "}"
+                        value = """
+                                {
+                                  "path": "/api/banking/transfer/iban",
+                                  "status": "FORBIDDEN",
+                                  "title": "ACCOUNT_OWNERSHIP_ERROR",
+                                  "message": "You do not have permission to access this account.",
+                                  "timestamp": "04-04-2025 13:35:07"
+                                }"""
                     )
                 }
             )
@@ -147,13 +153,14 @@ public interface BankingOperationsControllerInterface {
                     @ExampleObject(
                         name = "Account not found error",
                         summary = "Example of an account not found error response",
-                        value = "{\n" +
-                                "  \"path\": \"/api/banking/transfer/iban\",\n" +
-                                "  \"status\": \"NOT_FOUND\",\n" +
-                                "  \"title\": \"ACCOUNT_NOT_FOUND\",\n" +
-                                "  \"message\": \"Account not found.\",\n" +
-                                "  \"timestamp\": \"04-04-2025 13:35:07\"\n" +
-                                "}"
+                        value = """
+                                {
+                                  "path": "/api/banking/transfer/iban",
+                                  "status": "NOT_FOUND",
+                                  "title": "ACCOUNT_NOT_FOUND",
+                                  "message": "Account not found.",
+                                  "timestamp": "04-04-2025 13:35:07"
+                                }"""
                     )
                 }
             )
@@ -187,8 +194,10 @@ public interface BankingOperationsControllerInterface {
      */
     @Operation(
         summary = "Transfer funds using email", 
-        description = "Transfers funds from source account to the account associated with the provided email address. \n\n" +
-                     "Before making transfer, you should **validate recipient's email using GET /api/validate-email** endpoint."
+        description = """
+                Transfers funds from source account to the account associated with the provided email address.\s
+                
+                Before making transfer, you should **validate recipient's email using GET /api/validate-email** endpoint."""
     )
     @PostMapping("/transfer/email")
     @ApiResponses(value = {
@@ -199,24 +208,25 @@ public interface BankingOperationsControllerInterface {
                         @ExampleObject(
                             name = "Successful email transfer",
                             summary = "Example of a successful transfer using email",
-                            value = "{\n" +
-                                    "  \"sourceAccount\": {\n" +
-                                    "    \"formattedIban\": \"PL91 4851 1234 0000 5700 0000 0002\",\n" +
-                                    "    \"ownerFullname\": \"Marian Ziolkowski\"\n" +
-                                    "  },\n" +
-                                    "  \"targetAccount\": {\n" +
-                                    "    \"formattedIban\": \"PL92 4851 1234 0000 2300 0000 0001\",\n" +
-                                    "    \"ownerFullname\": \"Pablo Picasso\"\n" +
-                                    "  },\n" +
-                                    "  \"transactionInfo\": {\n" +
-                                    "    \"id\": 81,\n" +
-                                    "    \"type\": \"TRANSFER_INTERNAL\",\n" +
-                                    "    \"date\": \"2025-04-04T16:15:34.6386211\",\n" +
-                                    "    \"title\": \"string\",\n" +
-                                    "    \"amount\": 0.01,\n" +
-                                    "    \"status\": \"NEW\"\n" +
-                                    "  }\n" +
-                                    "}"
+                            value = """
+                                    {
+                                      "sourceAccount": {
+                                        "formattedIban": "PL91 4851 1234 0000 5700 0000 0002",
+                                        "ownerFullname": "Marian Ziolkowski"
+                                      },
+                                      "targetAccount": {
+                                        "formattedIban": "PL92 4851 1234 0000 2300 0000 0001",
+                                        "ownerFullname": "Pablo Picasso"
+                                      },
+                                      "transactionInfo": {
+                                        "id": 81,
+                                        "type": "TRANSFER_INTERNAL",
+                                        "date": "2025-04-04T16:15:34.6386211",
+                                        "title": "string",
+                                        "amount": 0.01,
+                                        "status": "NEW"
+                                      }
+                                    }"""
                         )
                     })),
         @ApiResponse(
@@ -229,31 +239,33 @@ public interface BankingOperationsControllerInterface {
                     @ExampleObject(
                         name = "Insufficient funds error",
                         summary = "Example of an insufficient funds error response",
-                        value = "{\n" +
-                                "  \"path\": \"/api/banking/transfer/email\",\n" +
-                                "  \"status\": \"BAD_REQUEST\",\n" +
-                                "  \"title\": \"INSUFFICIENT_FUNDS\",\n" +
-                                "  \"message\": \"Insufficient funds for this transaction. Please check your balance and try again.\",\n" +
-                                "  \"timestamp\": \"04-04-2025 13:35:07\"\n" +
-                                "}"
+                        value = """
+                                {
+                                  "path": "/api/banking/transfer/email",
+                                  "status": "BAD_REQUEST",
+                                  "title": "INSUFFICIENT_FUNDS",
+                                  "message": "Insufficient funds for this transaction. Please check your balance and try again.",
+                                  "timestamp": "04-04-2025 13:35:07"
+                                }"""
                     ),
                     @ExampleObject(
                         name = "Validation error",
                         summary = "Example of a validation error response",
-                        value = "{\n" +
-                                "  \"path\": \"/api/banking/transfer/iban\",\n" +
-                                "  \"errors\": [\n" +
-                                "    {\n" +
-                                "      \"field\": \"recipientIban\",\n" +
-                                "      \"message\": \"Invalid IBAN format\",\n" +
-                                "      \"rejectedValue\": \"PL9148511340003570000000002\"\n" +
-                                "    }\n" +
-                                "  ],\n" +
-                                "  \"status\": \"BAD_REQUEST\",\n" +
-                                "  \"title\": \"VALIDATION_ERROR\",\n" +
-                                "  \"message\": \"Validation failed. Please check your input and try again.\",\n" +
-                                "  \"timestamp\": \"04-04-2025 13:35:07\"\n" +
-                                "}"
+                        value = """
+                                {
+                                  "path": "/api/banking/transfer/iban",
+                                  "errors": [
+                                    {
+                                      "field": "recipientIban",
+                                      "message": "Invalid IBAN format",
+                                      "rejectedValue": "PL9148511340003570000000002"
+                                    }
+                                  ],
+                                  "status": "BAD_REQUEST",
+                                  "title": "VALIDATION_ERROR",
+                                  "message": "Validation failed. Please check your input and try again.",
+                                  "timestamp": "04-04-2025 13:35:07"
+                                }"""
                     )
                 }
             )
@@ -268,13 +280,14 @@ public interface BankingOperationsControllerInterface {
                     @ExampleObject(
                         name = "Account ownership error",
                         summary = "Example of an account ownership error response",
-                        value = "{\n" +
-                                "  \"path\": \"/api/banking/transfer/email\",\n" +
-                                "  \"status\": \"FORBIDDEN\",\n" +
-                                "  \"title\": \"ACCOUNT_OWNERSHIP_ERROR\",\n" +
-                                "  \"message\": \"You do not have permission to access this account.\",\n" +
-                                "  \"timestamp\": \"04-04-2025 13:35:07\"\n" +
-                                "}"
+                        value = """
+                                {
+                                  "path": "/api/banking/transfer/email",
+                                  "status": "FORBIDDEN",
+                                  "title": "ACCOUNT_OWNERSHIP_ERROR",
+                                  "message": "You do not have permission to access this account.",
+                                  "timestamp": "04-04-2025 13:35:07"
+                                }"""
                     )
                 }
             )
@@ -289,24 +302,26 @@ public interface BankingOperationsControllerInterface {
                     @ExampleObject(
                         name = "Account not found error",
                         summary = "Example of an account not found error response",
-                        value = "{\n" +
-                                "  \"path\": \"/api/banking/transfer/email\",\n" +
-                                "  \"status\": \"NOT_FOUND\",\n" +
-                                "  \"title\": \"ACCOUNT_NOT_FOUND\",\n" +
-                                "  \"message\": \"Account not found.\",\n" +
-                                "  \"timestamp\": \"04-04-2025 13:35:07\"\n" +
-                                "}"
+                        value = """
+                                {
+                                  "path": "/api/banking/transfer/email",
+                                  "status": "NOT_FOUND",
+                                  "title": "ACCOUNT_NOT_FOUND",
+                                  "message": "Account not found.",
+                                  "timestamp": "04-04-2025 13:35:07"
+                                }"""
                     ),
                     @ExampleObject(
                         name = "Destination account not found error",
                         summary = "Example of a destination account not found with a given email error response",
-                        value = "{\n" +
-                                "  \"path\": \"/api/banking/transfer/email\",\n" +
-                                "  \"status\": \"NOT_FOUND\",\n" +
-                                "  \"title\": \"ACCOUNT_OWNER_NOT_FOUND\",\n" +
-                                "  \"message\": \"Account not found.\",\n" +
-                                "  \"timestamp\": \"04-04-2025 13:35:07\"\n" +
-                                "}"
+                        value = """
+                                {
+                                  "path": "/api/banking/transfer/email",
+                                  "status": "NOT_FOUND",
+                                  "title": "ACCOUNT_OWNER_NOT_FOUND",
+                                  "message": "Account not found.",
+                                  "timestamp": "04-04-2025 13:35:07"
+                                }"""
                     )
                 }
             )
@@ -323,12 +338,13 @@ public interface BankingOperationsControllerInterface {
                         @ExampleObject(
                             name = "Email transfer",
                             summary = "Example of a transfer using recipient's email address",
-                            value = "{\n" +
-                                    "  \"sourceIban\": \"PL12345678901234567890123456\",\n" +
-                                    "  \"amount\": 100.50,\n" +
-                                    "  \"title\": \"Transfer for Jan\",\n" +
-                                    "  \"destinationEmail\": \"jan.kowalski@example.com\"\n" +
-                                    "}"
+                            value = """
+                                    {
+                                      "sourceIban": "PL12345678901234567890123456",
+                                      "amount": 100.50,
+                                      "title": "Transfer for Jan",
+                                      "destinationEmail": "jan.kowalski@example.com"
+                                    }"""
                         )
                     })
             @Valid @RequestBody EmailTransferRequest request, 

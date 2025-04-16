@@ -54,7 +54,7 @@ public class SecurityConfig {
         http
                 .securityMatcher("/api/settings/**")
                 .userDetailsService(userDetailsService)
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authz -> authz
