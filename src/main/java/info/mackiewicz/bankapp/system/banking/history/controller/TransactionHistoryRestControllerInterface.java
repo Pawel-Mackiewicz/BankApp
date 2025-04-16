@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.history.controller;
 
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
-import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterDTO;
+import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -75,7 +75,7 @@ public interface TransactionHistoryRestControllerInterface {
             ) User user,
             @Parameter(
                 description = "Transaction filter options", 
-                schema = @Schema(implementation = TransactionFilterDTO.class),
+                schema = @Schema(implementation = TransactionFilterRequest.class),
                 examples = {
                     @ExampleObject(
                         name = "Basic Filtering",
@@ -88,7 +88,7 @@ public interface TransactionHistoryRestControllerInterface {
                         value = "{\"accountId\":123, \"amountFrom\":100.00, \"amountTo\":500.00, \"dateFrom\":\"2025-01-01T00:00:00\", \"dateTo\":\"2025-03-30T23:59:59\", \"type\":\"TRANSFER_OWN\", \"sortDirection\":\"DESCENDING\", \"sortBy\":\"date\", \"page\":0, \"size\":10, \"query\":\"Store\"}"
                     )
                 }
-            ) @Valid TransactionFilterDTO filter);
+            ) @Valid TransactionFilterRequest filter);
 
     @Operation(
         summary = "Export filtered transactions", 
@@ -138,7 +138,7 @@ public interface TransactionHistoryRestControllerInterface {
             ) User user,
             @Parameter(
                 description = "Transaction filter options", 
-                schema = @Schema(implementation = TransactionFilterDTO.class),
+                schema = @Schema(implementation = TransactionFilterRequest.class),
                 examples = {
                     @ExampleObject(
                         name = "Basic Export Filtering", 
@@ -151,7 +151,7 @@ public interface TransactionHistoryRestControllerInterface {
                         value = "{\"accountId\":123, \"amountFrom\":100.00, \"amountTo\":500.00, \"dateFrom\":\"2025-01-01T00:00:00\", \"dateTo\":\"2025-03-30T23:59:59\", \"type\":\"TRANSFER_OWN\", \"sortDirection\":\"DESCENDING\", \"sortBy\":\"date\", \"page\":0, \"size\":100, \"query\":\"Store\"}"
                     )
                 }
-            ) @Valid TransactionFilterDTO filter,
+            ) @Valid TransactionFilterRequest filter,
             @Parameter(
                 description = "Export format (supported formats: csv, pdf)", 
                 examples = {
