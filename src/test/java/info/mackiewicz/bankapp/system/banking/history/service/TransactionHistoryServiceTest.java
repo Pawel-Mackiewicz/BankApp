@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.presentation.dashboard.service;
+package info.mackiewicz.bankapp.system.banking.history.service;
 
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
@@ -6,8 +6,6 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
 import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterDTO;
 import info.mackiewicz.bankapp.system.banking.history.export.TransactionExporter;
-import info.mackiewicz.bankapp.system.banking.history.service.TransactionFilterService;
-import info.mackiewicz.bankapp.system.banking.history.service.TransactionHistoryService;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;

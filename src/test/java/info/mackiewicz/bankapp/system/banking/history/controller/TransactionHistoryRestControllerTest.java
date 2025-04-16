@@ -1,6 +1,5 @@
-package info.mackiewicz.bankapp.presentation.dashboard.controller;
+package info.mackiewicz.bankapp.system.banking.history.controller;
 
-import info.mackiewicz.bankapp.system.banking.history.controller.TransactionHistoryRestController;
 import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterDTO;
 import info.mackiewicz.bankapp.system.banking.history.service.TransactionHistoryService;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
