@@ -33,7 +33,7 @@ const TransactionState = {
 
 // API Functions
 const TransactionAPI = {
-    buildUrl(baseUrl = '/api/transaction-history') {
+    buildUrl(baseUrl = '/api/banking/history') {
         const params = new URLSearchParams();
         params.append('accountId', TransactionState.filters.accountId);
         
@@ -247,7 +247,7 @@ window.exportTransactions = function(format) {
     });
     params.append('format', format);
 
-    window.location.href = `/api/transaction-history/export?${params.toString()}`;
+    window.location.href = `/api/banking/history/export?${params.toString()}`;
 };
 
 // Initialization

@@ -2,11 +2,10 @@ package info.mackiewicz.bankapp.transaction.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
-import info.mackiewicz.bankapp.presentation.dashboard.service.TransactionFilterService;
+import info.mackiewicz.bankapp.system.banking.history.service.TransactionFilterService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.user.model.User;
-
 import org.hibernate.query.SortDirection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +49,7 @@ class TransactionFilterServiceTest {
 
         // Assert
         assertEquals(2, filteredTransactions.size());
-        assertTrue(filteredTransactions.stream().allMatch(t -> !t.getDate().isBefore(dateFrom)));
+        assertTrue(filteredTransactions.stream().noneMatch(t -> t.getDate().isBefore(dateFrom)));
     }
     
     @Test
@@ -64,7 +63,7 @@ class TransactionFilterServiceTest {
 
         // Assert
         assertEquals(2, filteredTransactions.size());
-        assertTrue(filteredTransactions.stream().allMatch(t -> !t.getDate().isAfter(dateTo)));
+        assertTrue(filteredTransactions.stream().noneMatch(t -> t.getDate().isAfter(dateTo)));
     }
     
     @Test
@@ -188,7 +187,7 @@ class TransactionFilterServiceTest {
 
         // Assert
         assertEquals(1, filteredTransactions.size());
-        assertTrue(filteredTransactions.get(0).getTitle().toLowerCase().contains(searchQuery));
+        assertTrue(filteredTransactions.getFirst().getTitle().toLowerCase().contains(searchQuery));
     }
 
     @Test
@@ -281,7 +280,7 @@ class TransactionFilterServiceTest {
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
-            assertTrue(transactions.get(i).getDate().compareTo(transactions.get(i + 1).getDate()) <= 0);
+            assertFalse(transactions.get(i).getDate().isAfter(transactions.get(i + 1).getDate()));
         }
     }
 
@@ -295,7 +294,7 @@ class TransactionFilterServiceTest {
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
-            assertTrue(transactions.get(i).getDate().compareTo(transactions.get(i + 1).getDate()) >= 0);
+            assertFalse(transactions.get(i).getDate().isBefore(transactions.get(i + 1).getDate()));
         }
     }
 
@@ -365,7 +364,7 @@ class TransactionFilterServiceTest {
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
-            assertTrue(transactions.get(i).getDate().compareTo(transactions.get(i + 1).getDate()) <= 0);
+            assertFalse(transactions.get(i).getDate().isAfter(transactions.get(i + 1).getDate()));
         }
     }
 }

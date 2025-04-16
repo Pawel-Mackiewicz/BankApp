@@ -1,18 +1,15 @@
 package info.mackiewicz.bankapp.shared.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import info.mackiewicz.bankapp.account.util.IbanGenerator;
+import info.mackiewicz.bankapp.system.banking.operations.service.helpers.IbanAnalysisService;
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import info.mackiewicz.bankapp.account.util.IbanGenerator;
-import info.mackiewicz.bankapp.system.banking.service.helpers.IbanAnalysisService;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the IbanAnalysisService class.
