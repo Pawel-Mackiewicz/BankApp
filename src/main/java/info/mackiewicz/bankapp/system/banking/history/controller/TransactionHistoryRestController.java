@@ -10,12 +10,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/api/transaction-history")
 @RequiredArgsConstructor
 public class TransactionHistoryRestController implements TransactionHistoryRestControllerInterface {
 
@@ -24,7 +25,6 @@ public class TransactionHistoryRestController implements TransactionHistoryRestC
     private final TransactionHistoryService transactionHistoryService;
 
     @Override
-    @GetMapping
     public ResponseEntity<Page<Transaction>> getTransactions(
             @AuthenticationPrincipal User user, 
             @ModelAttribute TransactionFilterDTO filter
@@ -34,7 +34,6 @@ public class TransactionHistoryRestController implements TransactionHistoryRestC
     }
 
     @Override
-    @GetMapping("/export")
     public ResponseEntity<byte[]> exportTransactions(
             @AuthenticationPrincipal User user,
             @ModelAttribute TransactionFilterDTO filter,

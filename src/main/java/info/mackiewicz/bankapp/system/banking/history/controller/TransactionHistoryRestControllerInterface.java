@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @SecurityRequirement(name = "cookieAuth")
 @Tag(name = "Transaction History", description = "Operations for managing and exporting banking transaction history")
-@RequestMapping("/api/transaction-history")
+@RequestMapping("/api/banking/history")
 public interface TransactionHistoryRestControllerInterface {
 
     @Operation(
