@@ -3,7 +3,6 @@ package info.mackiewicz.bankapp.integration;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.history.service.TransactionHistoryService;
-import info.mackiewicz.bankapp.system.shared.AccountAuthorizationService;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.user.model.User;
@@ -45,11 +44,6 @@ class TransactionHistoryRestControllerIntegrationTest {
     @MockitoBean
     private TransactionHistoryService transactionHistoryService;
 
-    @Autowired
-    private AccountAuthorizationService accountAuthorizationService;
-
-    private Page<Transaction> transactionPage;
-
     @NotNull
     private static User getTestUser(int accountId) {
         User testUser = new User();
@@ -64,7 +58,7 @@ class TransactionHistoryRestControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        transactionPage = new PageImpl<>(Collections.emptyList());
+        Page<Transaction> transactionPage = new PageImpl<>(Collections.emptyList());
 
         when(transactionHistoryService.getTransactionHistory(any(TransactionFilterRequest.class)))
                 .thenReturn(transactionPage);

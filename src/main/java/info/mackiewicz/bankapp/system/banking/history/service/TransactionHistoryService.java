@@ -33,7 +33,6 @@ public class TransactionHistoryService {
     /**
      * Retrieves a paginated list of transactions for a given user and account.
      *
-     * @param userId the ID of the user who owns the account
      * @param filter the filter criteria for transactions
      * @return a paginated list of transactions
      * @throws TransactionFilterException if the filter criteria are invalid
@@ -47,7 +46,6 @@ public class TransactionHistoryService {
     /**
      * Exports transactions for a given user and account in the specified format.
      *
-     * @param userId the ID of the user
      * @param filter  the filter criteria for transactions
      * @param format  the export format (e.g., CSV, PDF)
      * @return a ResponseEntity containing the exported transactions as a byte array
