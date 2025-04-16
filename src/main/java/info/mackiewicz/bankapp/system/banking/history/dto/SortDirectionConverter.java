@@ -2,14 +2,14 @@ package info.mackiewicz.bankapp.system.banking.history.dto;
 
 import org.hibernate.query.SortDirection;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SortDirectionConverter implements Converter<String, SortDirection> {
 
     @Override
-    public SortDirection convert(@NonNull String source) {
+    public SortDirection convert(@Nullable String source) {
         if (source == null || source.isEmpty()) {
             return SortDirection.DESCENDING; // Default value if null or empty
         }

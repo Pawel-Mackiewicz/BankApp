@@ -32,7 +32,7 @@ public class TransactionFilterDTO {
         @Schema(
             description = "Account ID for which to filter transactions",
             example = "49",
-            required = true
+            requiredMode = Schema.RequiredMode.REQUIRED
         )
         @NotNull
         private Integer accountId;
