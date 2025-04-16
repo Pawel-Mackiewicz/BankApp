@@ -94,7 +94,7 @@ public interface TransactionHistoryRestControllerInterface {
         summary = "Export filtered transactions", 
         description = """
                 Exports transactions for a specific account in the requested format (default: CSV).<br>
-                Supports the same filtering criteria as the GET transaction-history endpoint.
+                Supports the same filtering criteria as the GET /history endpoint.
                 
                 User information is automatically extracted from the current session.
                 
