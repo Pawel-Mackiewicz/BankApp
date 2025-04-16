@@ -2,11 +2,10 @@ package info.mackiewicz.bankapp.transaction.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
-import info.mackiewicz.bankapp.presentation.dashboard.service.TransactionFilterService;
+import info.mackiewicz.bankapp.system.banking.history.service.TransactionFilterService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.user.model.User;
-
 import org.hibernate.query.SortDirection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TransactionFilterServiceTest {
 
@@ -281,7 +281,7 @@ class TransactionFilterServiceTest {
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
-            assertTrue(transactions.get(i).getDate().compareTo(transactions.get(i + 1).getDate()) <= 0);
+            assertTrue(!transactions.get(i).getDate().isAfter(transactions.get(i + 1).getDate()));
         }
     }
 
@@ -295,7 +295,7 @@ class TransactionFilterServiceTest {
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
-            assertTrue(transactions.get(i).getDate().compareTo(transactions.get(i + 1).getDate()) >= 0);
+            assertTrue(!transactions.get(i).getDate().isBefore(transactions.get(i + 1).getDate()));
         }
     }
 
@@ -365,7 +365,7 @@ class TransactionFilterServiceTest {
 
         // Assert
         for (int i = 0; i < transactions.size() - 1; i++) {
-            assertTrue(transactions.get(i).getDate().compareTo(transactions.get(i + 1).getDate()) <= 0);
+            assertTrue(!transactions.get(i).getDate().isAfter(transactions.get(i + 1).getDate()));
         }
     }
 }

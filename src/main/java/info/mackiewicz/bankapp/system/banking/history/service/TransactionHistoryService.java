@@ -1,7 +1,18 @@
-package info.mackiewicz.bankapp.presentation.dashboard.service;
+package info.mackiewicz.bankapp.system.banking.history.service;
 
-import java.util.List;
-
+import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
+import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.presentation.exception.TransactionFilterException;
+import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
+import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterDTO;
+import info.mackiewicz.bankapp.system.banking.history.export.TransactionExporter;
+import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.query.SortDirection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -9,19 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
-import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
-import info.mackiewicz.bankapp.presentation.dashboard.service.export.TransactionExporter;
-import info.mackiewicz.bankapp.presentation.exception.TransactionFilterException;
-import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
-import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 
 @Slf4j
 @Service

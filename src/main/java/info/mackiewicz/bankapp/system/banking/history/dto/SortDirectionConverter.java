@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.presentation.dashboard.dto;
+package info.mackiewicz.bankapp.system.banking.history.dto;
 
 import org.hibernate.query.SortDirection;
 import org.springframework.core.convert.converter.Converter;

@@ -1,21 +1,16 @@
-package info.mackiewicz.bankapp.presentation.dashboard.controller;
+package info.mackiewicz.bankapp.system.banking.history.controller;
 
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
-import info.mackiewicz.bankapp.presentation.dashboard.service.TransactionHistoryService;
+import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterDTO;
+import info.mackiewicz.bankapp.system.banking.history.service.TransactionHistoryService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Validated

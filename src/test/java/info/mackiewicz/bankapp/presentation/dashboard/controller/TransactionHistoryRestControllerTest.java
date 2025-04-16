@@ -1,14 +1,11 @@
 package info.mackiewicz.bankapp.presentation.dashboard.controller;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-
+import info.mackiewicz.bankapp.system.banking.history.controller.TransactionHistoryRestController;
+import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterDTO;
+import info.mackiewicz.bankapp.system.banking.history.service.TransactionHistoryService;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,11 +17,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import info.mackiewicz.bankapp.presentation.dashboard.dto.TransactionFilterDTO;
-import info.mackiewicz.bankapp.presentation.dashboard.service.TransactionHistoryService;
-import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.user.model.User;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionHistoryRestControllerTest {
