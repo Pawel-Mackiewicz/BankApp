@@ -79,8 +79,4 @@ public enum TransactionType {
     public boolean isFeeRequired() {
         return this.feePercentage > 0;
     }
-
-    public String toString() {
-        return displayName;
-    }
 }
