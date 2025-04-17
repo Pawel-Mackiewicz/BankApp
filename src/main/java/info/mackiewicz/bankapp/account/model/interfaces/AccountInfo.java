@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 public interface AccountInfo {
 
-    @Schema(description = "The unique ID of the account.", example = "123")
+    @Schema(description = "The unique ID of the account.", example = "23")
     Integer getId();
 
     /**

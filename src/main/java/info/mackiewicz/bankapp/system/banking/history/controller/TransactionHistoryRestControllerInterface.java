@@ -75,12 +75,12 @@ public interface TransactionHistoryRestControllerInterface {
                             @ExampleObject(
                                     name = "Basic Filtering",
                                     summary = "Example of basic filtering",
-                                    value = "{\"accountId\":123, \"page\":0, \"size\":10}"
+                                    value = "{\"accountId\":23, \"page\":0, \"size\":10}"
                             ),
                             @ExampleObject(
                                     name = "Advanced Filtering",
                                     summary = "Filtering with all available parameters",
-                                    value = "{\"accountId\":123, \"amountFrom\":100.00, \"amountTo\":500.00, \"dateFrom\":\"2025-01-01T00:00:00\", \"dateTo\":\"2025-03-30T23:59:59\", \"type\":\"TRANSFER_OWN\", \"sortDirection\":\"DESCENDING\", \"sortBy\":\"date\", \"page\":0, \"size\":10, \"query\":\"Store\"}"
+                                    value = "{\"accountId\":23, \"amountFrom\":100.00, \"amountTo\":500.00, \"dateFrom\":\"2025-01-01T00:00:00\", \"dateTo\":\"2025-03-30T23:59:59\", \"type\":\"TRANSFER_OWN\", \"sortDirection\":\"DESCENDING\", \"sortBy\":\"date\", \"page\":0, \"size\":10, \"query\":\"Store\"}"
                             )
                     }
             ) @Valid TransactionFilterRequest filter);

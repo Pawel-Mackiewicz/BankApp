@@ -32,7 +32,7 @@ public class TransactionFilterRequest {
 
         @Schema(
             description = "Account ID for which to filter transactions",
-            example = "49",
+            example = "23",
             requiredMode = Schema.RequiredMode.REQUIRED
         )
         @NotNull
