@@ -2,8 +2,8 @@ package info.mackiewicz.bankapp.system.banking.operations.transfer;
 
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;
+import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +53,7 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
                 .thenReturn(transaction);
 
         // Act
-        TransferResponse response = transferOperationsService.handleTransfer(
+        TransactionResponse response = transferOperationsService.handleTransfer(
                 request,
                 USER_ID,
                 SOURCE_IBAN,

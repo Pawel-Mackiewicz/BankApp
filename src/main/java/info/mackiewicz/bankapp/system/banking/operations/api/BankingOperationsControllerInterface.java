@@ -4,7 +4,7 @@ import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
+import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -50,7 +50,7 @@ public interface BankingOperationsControllerInterface {
             description = "Transfer completed successfully", 
             content = @Content(
                 mediaType = "application/json", 
-                schema = @Schema(implementation = TransferResponse.class),
+                schema = @Schema(implementation = TransactionResponse.class),
                 examples = {
                     @ExampleObject(
                         name = "Successful transfer",
@@ -171,7 +171,7 @@ public interface BankingOperationsControllerInterface {
             content = @Content
         )
     })
-    ResponseEntity<TransferResponse> ibanTransfer(
+    ResponseEntity<TransactionResponse> ibanTransfer(
             @Parameter(
                 description = "Transfer details including source and recipient IBANs", 
                 required = true
@@ -203,7 +203,7 @@ public interface BankingOperationsControllerInterface {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Transfer completed successfully", 
                     content = @Content(mediaType = "application/json", 
-                    schema = @Schema(implementation = TransferResponse.class),
+                    schema = @Schema(implementation = TransactionResponse.class),
                     examples = {
                         @ExampleObject(
                             name = "Successful email transfer",
@@ -332,7 +332,7 @@ public interface BankingOperationsControllerInterface {
             content = @Content
         )
     })
-    ResponseEntity<TransferResponse> emailTransfer(
+    ResponseEntity<TransactionResponse> emailTransfer(
             @Parameter(description = "Transfer details including source IBAN and recipient email", required = true,
                     examples = {
                         @ExampleObject(

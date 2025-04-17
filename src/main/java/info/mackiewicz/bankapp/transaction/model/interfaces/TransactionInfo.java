@@ -1,11 +1,12 @@
 package info.mackiewicz.bankapp.transaction.model.interfaces;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
+import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * Interface representing the basic information of a transaction.
@@ -16,10 +17,21 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
  */
 public interface TransactionInfo {
 
+    @Schema(description = "Unique transaction identifier", example = "20")
     Integer getId();
+
+    @Schema(description = "Transaction amount", example = "100.00")
     BigDecimal getAmount();
+
+    @Schema(description = "Transaction title", example = "For George")
     String getTitle();
-    String getStatus();
-    String getType();
+
+    @Schema(description = "Transaction status")
+    TransactionStatus getStatus();
+
+    @Schema(description = "Transaction type")
+    TransactionType getType();
+
+    @Schema(description = "Transaction date", example = "2025-05-05T12:00:00")
     LocalDateTime getDate();
 }

@@ -4,8 +4,8 @@ import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.EmailTransferRequest;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
 import info.mackiewicz.bankapp.system.banking.operations.service.transfer.EmailTransferService;
+import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import org.iban4j.Iban;
@@ -51,11 +51,11 @@ class EmailTransferServiceTest extends BaseTransferServiceTest {
                 .thenAnswer(invocation -> {
                     Supplier<Account> accountSupplier = invocation.getArgument(3);
                     Account dest = accountSupplier.get();
-                    return new TransferResponse(sourceAccount, dest, transaction);
+                    return new TransactionResponse(sourceAccount, dest, transaction);
                 });
 
         // Act
-        TransferResponse response = emailTransferService.handleEmailTransfer(request, userDetails);
+        TransactionResponse response = emailTransferService.handleEmailTransfer(request, userDetails);
 
         // Assert
         assertSuccessfulTransfer(response);

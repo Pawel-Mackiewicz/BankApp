@@ -4,8 +4,8 @@ import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
 import info.mackiewicz.bankapp.system.banking.operations.service.transfer.IbanTransferService;
+import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,11 +49,11 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
                 .thenAnswer(invocation -> {
                     Supplier<Account> accountSupplier = invocation.getArgument(3);
                     Account dest = accountSupplier.get();
-                    return new TransferResponse(sourceAccount, dest, transaction);
+                    return new TransactionResponse(sourceAccount, dest, transaction);
                 });
 
         // Act
-        TransferResponse response = ibanTransferService.handleIbanTransfer(request, userDetails);
+        TransactionResponse response = ibanTransferService.handleIbanTransfer(request, userDetails);
 
         // Assert
         assertSuccessfulTransfer(response);
