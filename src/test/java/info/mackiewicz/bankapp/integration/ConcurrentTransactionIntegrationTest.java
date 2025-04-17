@@ -1,32 +1,7 @@
 package info.mackiewicz.bankapp.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.shared.util.Util;
 import info.mackiewicz.bankapp.system.locking.LockingConfig;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -38,6 +13,24 @@ import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @SpringBootTest
@@ -95,8 +88,6 @@ class ConcurrentTransactionIntegrationTest {
         }
 
         transactionService.processAllNewTransactions();
-        
-        Util.sleep(5000);
 
         await()
             .atMost(Duration.ofSeconds(60))
@@ -121,10 +112,8 @@ class ConcurrentTransactionIntegrationTest {
 
         transactionService.processAllNewTransactions();
 
-        Util.sleep(5000);
-
         await()
-            .atMost(Duration.ofSeconds(10))
+            .atMost(Duration.ofSeconds(15))
             .untilAsserted(() -> {
                 List<Transaction> transactions = transactionService.getTransactionsByAccountId(sourceAccount.getId());
                 Account refreshed = accountService.getAccountById(sourceAccount.getId());
@@ -158,11 +147,9 @@ class ConcurrentTransactionIntegrationTest {
         }
         
         transactionService.processAllNewTransactions();
-        
-        Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(10))
+            .atMost(Duration.ofSeconds(15))
             .untilAsserted(() -> {
                 List<Transaction> completedTransactions = transactionService.getTransactionsByAccountId(destinationAccount.getId());
                 Account refreshed = accountService.getAccountById(destinationAccount.getId());
@@ -204,10 +191,8 @@ class ConcurrentTransactionIntegrationTest {
         
         transactionService.processAllNewTransactions();
         
-        Util.sleep(5000);
-
         await()
-            .atMost(Duration.ofSeconds(10))
+            .atMost(Duration.ofSeconds(15))
             .untilAsserted(() -> {
                 verifyTransactionResults(transactions);
                 verifySystemBalance();
@@ -241,8 +226,6 @@ class ConcurrentTransactionIntegrationTest {
         }
         
         transactionService.processAllNewTransactions();
-        
-        Util.sleep(5000);
 
         await()
             .atMost(Duration.ofSeconds(30))
@@ -295,11 +278,9 @@ class ConcurrentTransactionIntegrationTest {
         }
         
         transactionService.processAllNewTransactions();
-        
-        Util.sleep(5000);
 
         await()
-            .atMost(Duration.ofSeconds(10))
+            .atMost(Duration.ofSeconds(15))
             .untilAsserted(() -> {
                 verifyTransactionResults(transactions);
                 
