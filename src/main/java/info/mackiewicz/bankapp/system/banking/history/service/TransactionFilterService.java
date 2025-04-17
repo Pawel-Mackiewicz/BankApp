@@ -26,6 +26,7 @@ public class TransactionFilterService {
      * @param dateFrom     the start date for filtering (inclusive)
      * @param dateTo       the end date for filtering (inclusive)
      * @param type         the type of transaction to filter by (e.g., "TRANSFER_OWN", "TRANSFER_INTERNAL", "DEPOSIT", "WITHDRAWAL", "FEE")
+     * @param status       the status of transaction to filter by (e.g. "DONE", "NEW", "PROCESSING")
      * @param amountFrom   the minimum amount for filtering (inclusive)
      * @param amountTo     the maximum amount for filtering (inclusive)
      * @param searchQuery  a search query to match against transaction titles and account details
