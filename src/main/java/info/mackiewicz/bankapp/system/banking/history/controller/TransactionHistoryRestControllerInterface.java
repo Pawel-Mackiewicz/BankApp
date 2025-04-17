@@ -57,11 +57,6 @@ public interface TransactionHistoryRestControllerInterface {
                 content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
             ),
             @ApiResponse(
-                responseCode = "404", 
-                description = "Account not found", 
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
-            ),
-            @ApiResponse(
                 responseCode = "401", 
                 description = "Unauthorized access - user is not logged in", 
                 content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
@@ -110,13 +105,8 @@ public interface TransactionHistoryRestControllerInterface {
                 content = @Content(mediaType = "application/octet-stream")
             ),
             @ApiResponse(
-                responseCode = "500", 
+                responseCode = "403",
                 description = "Access denied - Account doesn't belong to user", 
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
-            ),
-            @ApiResponse(
-                responseCode = "500", 
-                description = "Account not found", 
                 content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
             ),
             @ApiResponse(
