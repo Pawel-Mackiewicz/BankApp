@@ -2,8 +2,9 @@ package info.mackiewicz.bankapp.system.banking.history.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
-import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterRequest;
+import info.mackiewicz.bankapp.system.banking.history.controller.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.history.export.TransactionExporter;
+import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -48,6 +49,7 @@ class TransactionHistoryServiceTest {
     private Account testAccount;
     private Account destinationAccount;
     private TransactionFilterRequest filter;
+    private List<TransactionResponse> responses;
     private List<Transaction> transactions;
 
     @BeforeEach
@@ -84,6 +86,13 @@ class TransactionHistoryServiceTest {
                 .build()
         );
 
+        responses = transactions.stream()
+                .map(t -> new TransactionResponse(
+                            t.getSourceAccount(),
+                            t.getDestinationAccount(),
+                            t))
+                .toList();
+
         // Initialize exporters list
         List<TransactionExporter> exporters = Collections.singletonList(csvExporter);
         ReflectionTestUtils.setField(transactionHistoryService, "exporters", exporters);
@@ -93,16 +102,16 @@ class TransactionHistoryServiceTest {
     void getTransactionHistory_ReturnsFilteredAndPaginatedTransactions() {
         // Given
         when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt())).thenReturn(transactions);
-        when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any()))
+        when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(transactions);
 
         // When
-        Page<Transaction> result = transactionHistoryService.getTransactionHistory(filter);
+        Page<TransactionResponse> result = transactionHistoryService.getTransactionHistory(filter);
 
         // Then
         assertNotNull(result);
         assertEquals(2, result.getTotalElements());
-        assertEquals(transactions, result.getContent());
+        assertEquals(responses, result.getContent());
     }
 
     @Test
@@ -110,11 +119,11 @@ class TransactionHistoryServiceTest {
         // Given
         when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt()))
                 .thenReturn(Collections.emptyList());
-        when(filterService.filterTransactions(eq(Collections.emptyList()), any(), any(), any(), any(), any(), any()))
+        when(filterService.filterTransactions(eq(Collections.emptyList()), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(Collections.emptyList());
 
         // When
-        Page<Transaction> result = transactionHistoryService.getTransactionHistory(filter);
+        Page<TransactionResponse> result = transactionHistoryService.getTransactionHistory(filter);
 
         // Then
         assertNotNull(result);
@@ -126,7 +135,7 @@ class TransactionHistoryServiceTest {
     void getTransactionHistory_WhenPageBeyondAvailableData_ReturnsEmptyPage() {
         // Given
         when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt())).thenReturn(transactions);
-        when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any()))
+        when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(transactions);
         
         TransactionFilterRequest pageOutOfBoundsFilter = TransactionFilterRequest.builder()
@@ -138,7 +147,7 @@ class TransactionHistoryServiceTest {
                 .build();
 
         // When
-        Page<Transaction> result = transactionHistoryService.getTransactionHistory(pageOutOfBoundsFilter);
+        Page<TransactionResponse> result = transactionHistoryService.getTransactionHistory(pageOutOfBoundsFilter);
 
         // Then
         assertNotNull(result);
@@ -150,7 +159,7 @@ class TransactionHistoryServiceTest {
     void exportTransactions_WhenValidFormat_ReturnsExportedData() {
         // Given
         when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt())).thenReturn(transactions);
-        when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any()))
+        when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(transactions);
         when(csvExporter.getFormat()).thenReturn("csv");
         when(csvExporter.exportTransactions(transactions))
@@ -169,7 +178,7 @@ class TransactionHistoryServiceTest {
     void exportTransactions_WhenInvalidFormat_ThrowsException() {
         // Given
         when(transactionService.getRecentTransactions(eq(testAccount.getId()), anyInt())).thenReturn(transactions);
-        when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any()))
+        when(filterService.filterTransactions(eq(transactions), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(transactions);
         when(csvExporter.getFormat()).thenReturn("csv");
 
