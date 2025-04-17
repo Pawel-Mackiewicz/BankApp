@@ -1,16 +1,16 @@
 package info.mackiewicz.bankapp.account.validation;
 
-import java.util.Map;
-
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
 /**
  * Controller responsible for handling validation-related requests.
@@ -54,9 +54,19 @@ public class ValidationController {
      */
     @GetMapping("/validate-email")
     public ResponseEntity<Map<String, Object>> validateEmail(@RequestParam String email) {
+        EmailAddress emailAddress;
+        //check if
+        try {
+            emailAddress = new EmailAddress(email);
+        } catch (Exception e) {
+            return ResponseEntity.ok(Map.of(
+                "valid", false,
+                "message", "Invalid email address: " + e.getMessage()
+            ));
+        }
         try {
             // Check if an account exists with the provided email
-            boolean hasAccount = accountService.existsByEmail(email);
+            boolean hasAccount = accountService.existsByEmail(emailAddress);
 
             return ResponseEntity.ok(Map.of(
                 "valid", hasAccount,

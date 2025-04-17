@@ -1,13 +1,5 @@
 package info.mackiewicz.bankapp.account.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import org.iban4j.Iban;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
-
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.repository.AccountRepository;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
@@ -16,6 +8,13 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.iban4j.Iban;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -100,7 +99,7 @@ public class AccountService implements AccountServiceInterface {
     }
 
     @Override
-    public boolean existsByEmail(String email) {
+    public boolean existsByEmail(EmailAddress email) {
         return accountQueryService.existsByEmail(email);
     }
 
