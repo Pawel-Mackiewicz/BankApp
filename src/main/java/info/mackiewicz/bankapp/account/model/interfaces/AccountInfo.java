@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 public interface AccountInfo {
 
+    @Schema(description = "The unique ID of the account.", example = "123")
+    Integer getId();
+
     /**
      * Retrieves the formatted IBAN of the account.
      * 

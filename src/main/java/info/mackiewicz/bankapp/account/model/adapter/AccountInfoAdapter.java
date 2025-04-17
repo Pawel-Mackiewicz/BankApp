@@ -1,10 +1,9 @@
 package info.mackiewicz.bankapp.account.model.adapter;
 
-import org.springframework.lang.NonNull;
-
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.interfaces.AccountInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 
 /**
  * Adapter class that wraps an Account object and exposes only the information
@@ -14,6 +13,11 @@ import lombok.RequiredArgsConstructor;
 public class AccountInfoAdapter implements AccountInfo {
     
     private final Account account;
+
+    @Override
+    public Integer getId() {
+        return account.getId();
+    }
     
     @Override
     public String getFormattedIban() {
