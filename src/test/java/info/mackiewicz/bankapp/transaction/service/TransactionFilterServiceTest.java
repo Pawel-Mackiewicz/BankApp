@@ -32,7 +32,7 @@ class TransactionFilterServiceTest {
         List<Transaction> transactions = createTransactions();
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, null, null);
 
         // Assert
         assertEquals(transactions.size(), filteredTransactions.size());
@@ -45,13 +45,13 @@ class TransactionFilterServiceTest {
         LocalDateTime dateFrom = LocalDateTime.of(2024, 1, 15, 12, 0);
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, dateFrom, null, null, null, null, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, dateFrom, null, null, null, null, null, null);
 
         // Assert
         assertEquals(2, filteredTransactions.size());
         assertTrue(filteredTransactions.stream().noneMatch(t -> t.getDate().isBefore(dateFrom)));
     }
-    
+
     @Test
     void filterTransactions_FilterByDateTo_ReturnsTransactionsBeforeDateTo() {
         // Arrange
@@ -59,13 +59,13 @@ class TransactionFilterServiceTest {
         LocalDateTime dateTo = LocalDateTime.of(2024, 1, 15, 12, 0);
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, dateTo, null, null, null, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, dateTo, null, null, null, null, null);
 
         // Assert
         assertEquals(2, filteredTransactions.size());
         assertTrue(filteredTransactions.stream().noneMatch(t -> t.getDate().isAfter(dateTo)));
     }
-    
+
     @Test
     void filterTransactions_FilterByDateFromAndDateTo_ReturnsTransactionsBetweenDates() {
         // Arrange
@@ -74,7 +74,7 @@ class TransactionFilterServiceTest {
         LocalDateTime dateTo = LocalDateTime.of(2024, 1, 20, 23, 59);
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, dateFrom, dateTo, null, null, null, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, dateFrom, dateTo, null, null, null, null, null);
 
         // Assert
         assertEquals(2, filteredTransactions.size());
@@ -88,7 +88,7 @@ class TransactionFilterServiceTest {
         TransactionType type = TransactionType.TRANSFER_INTERNAL;
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, type, null, null, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, type, null, null, null, null);
 
         // Assert
         assertEquals(1, filteredTransactions.size());
@@ -102,13 +102,13 @@ class TransactionFilterServiceTest {
         TransactionType type = TransactionType.DEPOSIT;
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, type, null, null, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, type, null, null, null, null);
 
         // Assert
         assertEquals(1, filteredTransactions.size());
         assertTrue(filteredTransactions.stream().allMatch(t -> t.getType().equals(type)));
     }
-    
+
     @Test
     void filterTransactions_FilterByAmountFrom_ReturnsTransactionsWithAmountGreaterOrEqualTo() {
         // Arrange
@@ -116,7 +116,7 @@ class TransactionFilterServiceTest {
         BigDecimal amountFrom = BigDecimal.valueOf(500);
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, amountFrom, null, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, amountFrom, null, null);
 
         // Assert
         assertEquals(2, filteredTransactions.size());
@@ -130,7 +130,7 @@ class TransactionFilterServiceTest {
         BigDecimal amountTo = BigDecimal.valueOf(1000);
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, amountTo, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, amountTo, null);
 
         // Assert
         assertEquals(3, filteredTransactions.size());
@@ -145,20 +145,20 @@ class TransactionFilterServiceTest {
         BigDecimal amountTo = BigDecimal.valueOf(1500);
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, amountFrom, amountTo, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, amountFrom, amountTo, null);
 
         // Assert
         assertEquals(1, filteredTransactions.size());
         assertTrue(filteredTransactions.stream().allMatch(t -> t.getAmount().compareTo(amountFrom) >= 0 && t.getAmount().compareTo(amountTo) <= 0));
     }
-    
+
     @Test
     void filterTransactions_FilterBySearchQueryNull_ReturnsAllTransactions() {
         // Arrange
         List<Transaction> transactions = createTransactions();
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, null);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, null, null);
 
         // Assert
         assertEquals(transactions.size(), filteredTransactions.size());
@@ -170,12 +170,12 @@ class TransactionFilterServiceTest {
         List<Transaction> transactions = createTransactions();
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, "");
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, null, "");
 
         // Assert
         assertEquals(transactions.size(), filteredTransactions.size());
     }
-    
+
     @Test
     void filterTransactions_FilterBySearchQueryInTitle_ReturnsMatchingTransaction() {
         // Arrange
@@ -183,7 +183,7 @@ class TransactionFilterServiceTest {
         String searchQuery = "transfer";
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, searchQuery);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, null, searchQuery);
 
         // Assert
         assertEquals(1, filteredTransactions.size());
@@ -197,12 +197,12 @@ class TransactionFilterServiceTest {
         String searchQuery = "1";
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, searchQuery);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, null, searchQuery);
 
         // Assert
-        assertTrue(filteredTransactions.stream().anyMatch(t -> 
-            (t.getSourceAccount() != null && t.getSourceAccount().getId().toString().contains(searchQuery)) ||
-            (t.getDestinationAccount() != null && t.getDestinationAccount().getId().toString().contains(searchQuery))
+        assertTrue(filteredTransactions.stream().anyMatch(t ->
+                (t.getSourceAccount() != null && t.getSourceAccount().getId().toString().contains(searchQuery)) ||
+                        (t.getDestinationAccount() != null && t.getDestinationAccount().getId().toString().contains(searchQuery))
         ));
     }
 
@@ -213,12 +213,12 @@ class TransactionFilterServiceTest {
         String searchQuery = "jan";
 
         // Act
-        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, searchQuery);
+        List<Transaction> filteredTransactions = transactionFilterService.filterTransactions(transactions, null, null, null, null, null, null, searchQuery);
 
         // Assert
-        assertTrue(filteredTransactions.stream().anyMatch(t -> 
-            (t.getSourceAccount() != null && t.getSourceAccount().getOwner().getFullName().toLowerCase().contains(searchQuery)) ||
-            (t.getDestinationAccount() != null && t.getDestinationAccount().getOwner().getFullName().toLowerCase().contains(searchQuery))
+        assertTrue(filteredTransactions.stream().anyMatch(t ->
+                (t.getSourceAccount() != null && t.getSourceAccount().getOwner().getFullName().toLowerCase().contains(searchQuery)) ||
+                        (t.getDestinationAccount() != null && t.getDestinationAccount().getOwner().getFullName().toLowerCase().contains(searchQuery))
         ));
     }
 
@@ -230,7 +230,7 @@ class TransactionFilterServiceTest {
         user.setLastname("Kowalski");
         Account account1 = TestAccountBuilder.createTestAccountWithOwner(user);
         TestAccountBuilder.setField(account1, "id", 1);
-        
+
         Account account2 = TestAccountBuilder.createTestAccountWithOwner(user);
         TestAccountBuilder.setField(account2, "id", 2);
 
