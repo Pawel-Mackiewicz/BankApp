@@ -12,9 +12,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class AccountAuthorizationServiceTest {
+public class IdAccountAuthorizationServiceTest {
 
-    private final AccountAuthorizationService accountAuthorizationService = new AccountAuthorizationService();
+    private final IdAccountAuthorizationService idAccountAuthorizationService = new IdAccountAuthorizationService();
 
     @Test
     void shouldValidateAccountOwnershipWhenOwnerHasAccount() {
@@ -28,7 +28,7 @@ public class AccountAuthorizationServiceTest {
         when(mockUser.getAccounts()).thenReturn(accounts);
 
         // When & Then
-        assertDoesNotThrow(() -> accountAuthorizationService.validateAccountOwnership(accountId, mockUser));
+        assertDoesNotThrow(() -> idAccountAuthorizationService.validateAccountOwnership(accountId, mockUser));
         verify(mockUser).getAccounts();
         verify(mockAccount).getId();
     }
@@ -41,7 +41,7 @@ public class AccountAuthorizationServiceTest {
 
         // When & Then
         AccountOwnershipException exception = assertThrows(AccountOwnershipException.class, () ->
-                accountAuthorizationService.validateAccountOwnership(invalidAccountId, mockUser));
+                idAccountAuthorizationService.validateAccountOwnership(invalidAccountId, mockUser));
 
         assertTrue(exception.getMessage().contains("tried to access account"));
     }
@@ -55,7 +55,7 @@ public class AccountAuthorizationServiceTest {
 
         // When & Then
         assertThrows(InvalidUserDataException.class, () ->
-                accountAuthorizationService.validateAccountOwnership(accountId, mockUser));
+                idAccountAuthorizationService.validateAccountOwnership(accountId, mockUser));
 
         verify(mockUser).getAccounts();
     }
@@ -74,7 +74,7 @@ public class AccountAuthorizationServiceTest {
 
         // When & Then
         AccountOwnershipException exception = assertThrows(AccountOwnershipException.class, () ->
-                accountAuthorizationService.validateAccountOwnership(accountId, mockUser));
+                idAccountAuthorizationService.validateAccountOwnership(accountId, mockUser));
 
         assertTrue(exception.getMessage().contains("tried to access account"));
         verify(mockUser).getAccounts();
