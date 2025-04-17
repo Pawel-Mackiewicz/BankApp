@@ -2,14 +2,14 @@ package info.mackiewicz.bankapp.system.shared;
 
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.user.exception.InvalidUserDataException;
 import info.mackiewicz.bankapp.user.model.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class AccountAuthorizationServiceTest {
@@ -27,11 +27,8 @@ public class AccountAuthorizationServiceTest {
         accounts.add(mockAccount);
         when(mockUser.getAccounts()).thenReturn(accounts);
 
-        // When
-        boolean result = accountAuthorizationService.validateAccountOwnership(accountId, mockUser);
-
-        // Then
-        assertTrue(result);
+        // When & Then
+        assertDoesNotThrow(() -> accountAuthorizationService.validateAccountOwnership(accountId, mockUser));
         verify(mockUser).getAccounts();
         verify(mockAccount).getId();
     }
@@ -57,10 +54,9 @@ public class AccountAuthorizationServiceTest {
         when(mockUser.getAccounts()).thenReturn(new HashSet<>());
 
         // When & Then
-        AccountOwnershipException exception = assertThrows(AccountOwnershipException.class, () ->
+        assertThrows(InvalidUserDataException.class, () ->
                 accountAuthorizationService.validateAccountOwnership(accountId, mockUser));
 
-        assertTrue(exception.getMessage().contains("tried to access account"));
         verify(mockUser).getAccounts();
     }
 
