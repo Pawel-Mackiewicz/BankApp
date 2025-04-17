@@ -102,7 +102,7 @@ class ConcurrentTransactionIntegrationTest {
     void testMultipleWithdrawals() {
         log.info("Starting multiple withdrawals test with ID: {}", testRunId);
         int numberOfWithdrawals = 20;
-        Account sourceAccount = testAccounts.get(0);
+        Account sourceAccount = testAccounts.getFirst();
         BigDecimal initialBalance = sourceAccount.getBalance();
         BigDecimal withdrawalAmount = initialBalance.divide(BigDecimal.valueOf(numberOfWithdrawals * 2), 2, RoundingMode.HALF_UP);
         
@@ -135,12 +135,12 @@ class ConcurrentTransactionIntegrationTest {
     void testParallelDeposits() {
         log.info("Starting parallel deposits test with ID: {}", testRunId);
         int numberOfDeposits = 20;
-        Account destinationAccount = testAccounts.get(0);
+        Account destinationAccount = testAccounts.getFirst();
         BigDecimal initialBalance = destinationAccount.getBalance();
         BigDecimal depositAmount = BigDecimal.valueOf(100);
         
         List<Transaction> transactions = new ArrayList<>();
-        
+
         for (int i = 0; i < numberOfDeposits; i++) {
             Transaction deposit = createDeposit(destinationAccount, depositAmount);
             transactions.add(deposit);
@@ -153,7 +153,6 @@ class ConcurrentTransactionIntegrationTest {
             .untilAsserted(() -> {
                 List<Transaction> completedTransactions = transactionService.getTransactionsByAccountId(destinationAccount.getId());
                 Account refreshed = accountService.getAccountById(destinationAccount.getId());
-                
                 BigDecimal expectedBalance = initialBalance.add(
                     depositAmount.multiply(BigDecimal.valueOf(
                         completedTransactions.stream()
