@@ -2,8 +2,9 @@ package info.mackiewicz.bankapp.system.banking.history.controller;
 
 import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.history.service.TransactionHistoryService;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.user.model.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,9 +28,9 @@ public class TransactionHistoryRestController implements TransactionHistoryRestC
     @PreAuthorize("@accountAuthorizationService.validateAccountOwnership(#filter.accountId, authentication.principal)")
     @GetMapping
     @Override
-    public ResponseEntity<Page<Transaction>> getTransactions(
+    public ResponseEntity<Page<TransactionResponse>> getTransactions(
             @AuthenticationPrincipal User user,
-            @ModelAttribute @Validated TransactionFilterRequest filter
+            @ModelAttribute @Valid TransactionFilterRequest filter
     ) {
         log.debug("Fetching transactions for account {} (user: {})", filter.getAccountId(), user.getUsername());
         return ResponseEntity.ok(transactionHistoryService.getTransactionHistory(filter));
@@ -40,7 +41,7 @@ public class TransactionHistoryRestController implements TransactionHistoryRestC
     @Override
     public ResponseEntity<byte[]> exportTransactions(
             @AuthenticationPrincipal User user,
-            @ModelAttribute @Validated TransactionFilterRequest filter,
+            @ModelAttribute @Valid TransactionFilterRequest filter,
             @RequestParam(defaultValue = DEFAULT_EXPORT_FORMAT) String format
     ) {
         log.debug("Exporting transactions for account {} (user: {}) in {} format",
