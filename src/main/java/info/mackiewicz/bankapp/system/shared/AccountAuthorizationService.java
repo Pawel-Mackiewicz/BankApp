@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.system.shared;
 
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
+import info.mackiewicz.bankapp.user.exception.InvalidUserDataException;
 import info.mackiewicz.bankapp.user.model.User;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ public class AccountAuthorizationService {
 
     public boolean validateAccountOwnership(int accountId, @NonNull User owner) {
         if (accountId < 1) handleFaultyAuthorization(accountId, owner);
+        if (owner.getAccounts() == null || owner.getAccounts().isEmpty()) throw new InvalidUserDataException("User accounts list is null");
         boolean isOwner = owner.getAccounts().stream()
                 .anyMatch(account -> account.getId().equals(accountId));
         if (!isOwner) handleFaultyAuthorization(accountId, owner);
