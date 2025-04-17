@@ -1,6 +1,8 @@
 package info.mackiewicz.bankapp.transaction.model.adapter;
 
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.model.interfaces.TransactionInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
@@ -33,13 +35,13 @@ public class TransactionInfoAdapter implements TransactionInfo {
     }
     
     @Override
-    public String getStatus() {
-        return transaction.getStatus().getDisplayName();
+    public TransactionStatus getStatus() {
+        return transaction.getStatus();
     }
     
     @Override
-    public String getType() {
-        return transaction.getType().getDisplayName();
+    public TransactionType getType() {
+        return transaction.getType();
     }
     
     @Override

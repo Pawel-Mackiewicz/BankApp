@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp.account.model.interfaces;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * Interface representing basic account information.
  * This interface is used to retrieve essential details about a bank account.
@@ -12,6 +14,7 @@ public interface AccountInfo {
      * 
      * @return the formatted IBAN as a String.
      */
+    @Schema(description = "The IBAN of the account formatted with spaces.", example = "PL64 4851 1234 0003 5700 0000 0003")
     String getFormattedIban();
     
     /**
@@ -19,5 +22,6 @@ public interface AccountInfo {
      *
      * @return the owner's full name as a String.
      */
+    @Schema(description = "The full name of the account owner.", example = "John Doe")
     String getOwnerFullname();
 }

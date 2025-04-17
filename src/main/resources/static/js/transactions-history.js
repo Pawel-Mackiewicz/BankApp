@@ -147,8 +147,8 @@ const TransactionUI = {
                     </div>
                 </div>
                 <div class="mt-2">
-                    <span class="badge badge-secondary">${transaction.transactionInfo.type}</span>
-                    <span class="badge badge-info">${transaction.transactionInfo.status}</span>
+                    <span class="badge badge-secondary">${transaction.transactionInfo.type.displayName}</span>
+                    <span class="badge badge-info">${transaction.transactionInfo.status.displayName}</span>
                 </div>
             </div>
         `;
@@ -169,10 +169,10 @@ const TransactionUI = {
                         ${amountPrefix}${transaction.transactionInfo.amount.toFixed(2)} PLN
                     </span>
                 </td>
-                <td>${transaction.transactionInfo.type}</td>
+                <td>${transaction.transactionInfo.type.displayName}</td>
                 <td>${sourceOwner} → ${destinationOwner}</td>
                 <td>${transaction.transactionInfo.title || ''}</td>
-                <td>${transaction.transactionInfo.status}</td>
+                <td>${transaction.transactionInfo.status.displayName}</td>
             </tr>
         `;
     },
