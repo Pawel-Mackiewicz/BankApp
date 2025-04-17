@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.system.banking.history.service;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.presentation.exception.TransactionFilterException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.SortDirection;
@@ -35,6 +36,7 @@ public class TransactionFilterService {
             LocalDateTime dateFrom,
             LocalDateTime dateTo,
             TransactionType type,
+            TransactionStatus status,
             BigDecimal amountFrom,
             BigDecimal amountTo,
             String searchQuery) {
@@ -43,6 +45,7 @@ public class TransactionFilterService {
                     .filter(t -> dateFrom == null || !t.getDate().isBefore(dateFrom))
                     .filter(t -> dateTo == null || !t.getDate().isAfter(dateTo))
                     .filter(t -> type == null || t.getType().equals(type))
+                    .filter(t -> status == null || t.getStatus().equals(status))
                     .filter(t -> amountFrom == null || t.getAmount().compareTo(amountFrom) >= 0)
                     .filter(t -> amountTo == null || t.getAmount().compareTo(amountTo) <= 0)
                     .filter(t -> matches(t, searchQuery))

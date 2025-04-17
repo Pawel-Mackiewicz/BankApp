@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.system.banking.history.service;
 
 import info.mackiewicz.bankapp.presentation.exception.TransactionFilterException;
 import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
-import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterRequest;
+import info.mackiewicz.bankapp.system.banking.history.controller.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.history.export.TransactionExporter;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
@@ -10,7 +10,6 @@ import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.SortDirection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,8 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionHistoryService {
     private static final int MAX_RECENT_TRANSACTIONS = 100;
-    private static final String DEFAULT_SORT_FIELD = "date";
-    private static final SortDirection DEFAULT_SORT_DIRECTION = SortDirection.DESCENDING;
 
     private final TransactionService transactionService;
     private final TransactionFilterService filterService;
@@ -42,12 +39,14 @@ public class TransactionHistoryService {
      */
     public Page<TransactionResponse> getTransactionHistory(TransactionFilterRequest filter) {
         List<Transaction> transactions = getFilteredAndSortedTransactions(filter);
+
         List<TransactionResponse> responses = transactions.stream()
                 .map(t -> new TransactionResponse(
                         t.getSourceAccount(),
                         t.getDestinationAccount(),
                         t))
                 .toList();
+
         return createPaginatedResponse(responses, filter.getPage(), filter.getSize());
     }
 
@@ -63,9 +62,8 @@ public class TransactionHistoryService {
      * @throws UnsupportedExporterException      if the export format is not supported
      */
     public ResponseEntity<byte[]> exportTransactions(TransactionFilterRequest filter, String format) {
-        filter.setSortBy(DEFAULT_SORT_FIELD);
-        filter.setSortDirection(DEFAULT_SORT_DIRECTION);
         List<Transaction> transactions = getFilteredAndSortedTransactions(filter);
+
         return findExporter(format).exportTransactions(transactions);
     }
 
@@ -80,14 +78,25 @@ public class TransactionHistoryService {
      */
     private List<Transaction> getFilteredAndSortedTransactions(TransactionFilterRequest filter) {
         List<Transaction> transactions = transactionService.getRecentTransactions(filter.getAccountId(), MAX_RECENT_TRANSACTIONS);
+
         List<Transaction> filteredTransactions = filterService.filterTransactions(
                 transactions, filter.getDateFrom(), filter.getDateTo(),
-                filter.getType(), filter.getAmountFrom(), filter.getAmountTo(),
+                filter.getType(), filter.getStatus(), filter.getAmountFrom(), filter.getAmountTo(),
                 filter.getQuery());
+
         filterService.sortTransactions(filteredTransactions, filter.getSortBy(), filter.getSortDirection());
+
         return filteredTransactions;
     }
 
+    /**
+     * Creates a paginated response from the given list of transactions.
+     *
+     * @param transactions the list of transaction responses to paginate
+     * @param page the page number to retrieve (0-based index)
+     * @param size the number of items per page
+     * @return a Page containing the paginated transaction responses
+     */
     private Page<TransactionResponse> createPaginatedResponse(List<TransactionResponse> transactions, int page, int size) {
         int start = page * size;
         int totalSize = transactions.size();

@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.history.controller;
 
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
-import info.mackiewicz.bankapp.system.banking.history.dto.TransactionFilterRequest;
+import info.mackiewicz.bankapp.system.banking.history.controller.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
