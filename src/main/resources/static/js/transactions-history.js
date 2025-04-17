@@ -44,7 +44,7 @@ const TransactionAPI = {
                 } else if (key === 'dateTo' && value) {
                     params.append(key, value + 'T23:59:59');
                 } else {
-                    params.append(key, value);
+                    params.append(key, value.toString());
                 }
             }
         });
@@ -120,35 +120,35 @@ const TransactionUI = {
     },
 
     shouldShowPositive(transaction) {
-        if (transaction.type.name === 'DEPOSIT') return true;
-        if (transaction.type.name === 'FEE' || transaction.type.name === 'WITHDRAWAL') return false;
-        return transaction.destinationAccount?.id === parseInt(TransactionState.filters.accountId);
+        if (transaction.transactionInfo.type === 'DEPOSIT') return true;
+        if (transaction.transactionInfo.type === 'FEE' || transaction.transactionInfo.type === 'WITHDRAWAL') return false;
+        return transaction.targetAccount?.id === parseInt(TransactionState.filters.accountId);
     },
 
     createTransactionCard(transaction) {
         const isPositive = this.shouldShowPositive(transaction);
         const amountClass = isPositive ? 'amount-positive' : 'amount-negative';
         const amountPrefix = isPositive ? '+' : '-';
-        const sourceOwner = transaction.sourceAccount?.owner?.fullName || '';
-        const destinationOwner = transaction.destinationAccount?.owner?.fullName || '';
-
+        const sourceOwner = transaction.sourceAccount?.ownerFullname || '';
+        const destinationOwner = transaction.targetAccount?.ownerFullname || '';
+    
         return `
             <div class="transaction-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <div class="transaction-date">${new Date(transaction.date).toLocaleDateString()}</div>
-                        <div class="transaction-title">${transaction.title || ''}</div>
+                        <div class="transaction-date">${new Date(transaction.transactionInfo.date).toLocaleDateString()}</div>
+                        <div class="transaction-title">${transaction.transactionInfo.title || ''}</div>
                         <div class="transaction-parties">${sourceOwner} → ${destinationOwner}</div>
                     </div>
                     <div>
                         <span class="transaction-amount ${amountClass}">
-                            ${amountPrefix}${transaction.amount.toFixed(2)} PLN
+                            ${amountPrefix}${transaction.transactionInfo.amount.toFixed(2)} PLN
                         </span>
                     </div>
                 </div>
                 <div class="mt-2">
-                    <span class="badge badge-secondary">${transaction.type.displayName}</span>
-                    <span class="badge badge-info">${transaction.status}</span>
+                    <span class="badge badge-secondary">${transaction.transactionInfo.type}</span>
+                    <span class="badge badge-info">${transaction.transactionInfo.status}</span>
                 </div>
             </div>
         `;
@@ -158,21 +158,21 @@ const TransactionUI = {
         const isPositive = this.shouldShowPositive(transaction);
         const amountClass = isPositive ? 'amount-positive' : 'amount-negative';
         const amountPrefix = isPositive ? '+' : '-';
-        const sourceOwner = transaction.sourceAccount?.owner?.fullName || '';
-        const destinationOwner = transaction.destinationAccount?.owner?.fullName || '';
-
+        const sourceOwner = transaction.sourceAccount?.ownerFullname || '';
+        const destinationOwner = transaction.targetAccount?.ownerFullname || '';
+    
         return `
             <tr>
-                <td>${new Date(transaction.date).toLocaleDateString()}</td>
+                <td>${new Date(transaction.transactionInfo.date).toLocaleDateString()}</td>
                 <td>
                     <span class="transaction-amount ${amountClass}">
-                        ${amountPrefix}${transaction.amount.toFixed(2)} PLN
+                        ${amountPrefix}${transaction.transactionInfo.amount.toFixed(2)} PLN
                     </span>
                 </td>
-                <td>${transaction.type.displayName}</td>
+                <td>${transaction.transactionInfo.type}</td>
                 <td>${sourceOwner} → ${destinationOwner}</td>
-                <td>${transaction.title || ''}</td>
-                <td>${transaction.status.displayName}</td>
+                <td>${transaction.transactionInfo.title || ''}</td>
+                <td>${transaction.transactionInfo.status}</td>
             </tr>
         `;
     },

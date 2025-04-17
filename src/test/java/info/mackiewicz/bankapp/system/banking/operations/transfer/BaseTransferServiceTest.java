@@ -2,10 +2,10 @@ package info.mackiewicz.bankapp.system.banking.operations.transfer;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.AccountSecurityService;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionBuildingService;
+import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
@@ -79,7 +79,7 @@ public abstract class BaseTransferServiceTest {
         when(userDetails.getId()).thenReturn(USER_ID);
     }
 
-    protected void assertSuccessfulTransfer(TransferResponse response) {
+    protected void assertSuccessfulTransfer(TransactionResponse response) {
         assertThat(response).isNotNull();
         assertThat(response.getSourceAccount().getFormattedIban()).isEqualTo(sourceAccount.getFormattedIban());
         assertThat(response.getTargetAccount().getFormattedIban()).isEqualTo(destinationAccount.getFormattedIban());

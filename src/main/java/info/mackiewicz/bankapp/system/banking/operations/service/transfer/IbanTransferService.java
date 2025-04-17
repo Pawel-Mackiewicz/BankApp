@@ -5,8 +5,8 @@ import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.shared.exception.IbanAnalysisException;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;
+import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
@@ -39,7 +39,7 @@ public class IbanTransferService {
      *                                        IBANs
      * 
      */
-    public TransferResponse handleIbanTransfer(IbanTransferRequest transferRequest, UserDetailsWithId user) {
+    public TransactionResponse handleIbanTransfer(IbanTransferRequest transferRequest, UserDetailsWithId user) {
         log.info("Handling transfer from :{} to {}", transferRequest.getSourceIban(), transferRequest.getRecipientIban());
 
         return operationsService.handleTransfer(

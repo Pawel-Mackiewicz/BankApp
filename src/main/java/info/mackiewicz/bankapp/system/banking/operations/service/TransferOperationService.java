@@ -4,9 +4,9 @@ import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.BankingOperationRequest;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransferResponse;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.AccountSecurityService;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionBuildingService;
+import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -44,7 +44,7 @@ public class TransferOperationService {
      * @throws TransactionValidationException if the transaction fails validation
      */
 
-    public TransferResponse handleTransfer(
+    public TransactionResponse handleTransfer(
             BankingOperationRequest request,
             Integer userId,
             Iban sourceIban,
@@ -69,7 +69,7 @@ public class TransferOperationService {
         log.info("Transaction registered with ID: {}", registeredTransaction.getId());
 
         //transaction processing should be called here, not in the transaction service
-        return new TransferResponse(
+        return new TransactionResponse(
                 validatedSourceAccount,
                 destinationAccount,
                 registeredTransaction);

@@ -1,13 +1,12 @@
 package info.mackiewicz.bankapp.transaction.model.adapter;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-import org.springframework.lang.NonNull;
-
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.interfaces.TransactionInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * Adapter class that wraps a Transaction object and exposes only the information
@@ -35,12 +34,12 @@ public class TransactionInfoAdapter implements TransactionInfo {
     
     @Override
     public String getStatus() {
-        return transaction.getStatus().getName();
+        return transaction.getStatus().getDisplayName();
     }
     
     @Override
     public String getType() {
-        return transaction.getType().getName();
+        return transaction.getType().getDisplayName();
     }
     
     @Override

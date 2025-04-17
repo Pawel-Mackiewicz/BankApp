@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.banking.operations.api.dto;
+package info.mackiewicz.bankapp.system.banking.shared.dto;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.adapter.AccountInfoAdapter;
@@ -19,7 +19,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class TransferResponse {
+public class TransactionResponse {
 
     /**
      * The account from which the money was transferred.
@@ -34,7 +34,7 @@ public class TransferResponse {
      */
     private TransactionInfo transactionInfo;
 
-    public TransferResponse(Account sourceAccount, Account targetAccount, Transaction transactionInfo) {
+    public TransactionResponse(Account sourceAccount, Account targetAccount, Transaction transactionInfo) {
         this.sourceAccount = AccountInfoAdapter.fromAccount(sourceAccount);
         this.targetAccount = AccountInfoAdapter.fromAccount(targetAccount);
         this.transactionInfo = TransactionInfoAdapter.fromTransaction(transactionInfo);
