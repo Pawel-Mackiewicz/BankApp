@@ -1,5 +1,6 @@
-package info.mackiewicz.bankapp.system.banking.history.dto;
+package info.mackiewicz.bankapp.system.banking.history.controller.dto;
 
+import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
@@ -77,6 +78,13 @@ public class TransactionFilterRequest {
         )
         @Nullable
         private TransactionType type;
+
+        @Schema(
+            description = "Status of transaction (e.g., NEW, DONE, PENDING, INSUFFICIENT_FUNDS)",
+            example = "DONE"
+        )
+        @Nullable
+        private TransactionStatus status;
 
         @Schema(
             description = "Minimum amount for filtering transactions",
