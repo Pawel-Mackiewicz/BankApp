@@ -28,7 +28,7 @@ public class IbanAnalysisService {
      *         internal transfer (same bank, but different owner), or own transfer
      *         (same owner, same bank)
      */
-    public TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
+    public static TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
         log.debug("""
                 Resolving transfer type for\s
                 source IBAN: {}
@@ -60,7 +60,7 @@ public class IbanAnalysisService {
      * @param destinationIban The IBAN of the second account
      * @return true if both accounts belong to the same owner, false otherwise
      */
-    public boolean isSameOwner(Iban sourceIban, Iban destinationIban) {
+    public static boolean isSameOwner(Iban sourceIban, Iban destinationIban) {
         // first 4 characters are always 0's and should be ignored in the comparison
         log.trace("Comparing account numbers for ownership: {} and {}", IbanMasker.maskIban(sourceIban),
                 IbanMasker.maskIban(destinationIban));
@@ -75,7 +75,7 @@ public class IbanAnalysisService {
      * @param destinationIban The IBAN of the second account
      * @return true if both accounts belong to the same bank, false otherwise
      */
-    public boolean isSameBank(Iban sourceIban, Iban destinationIban) {
+    public static boolean isSameBank(Iban sourceIban, Iban destinationIban) {
         log.trace("Comparing bank codes and country codes: {} and {}", IbanMasker.maskIban(sourceIban), IbanMasker.maskIban(destinationIban));
         return sourceIban.getBankCode().equals(destinationIban.getBankCode())
                 && sourceIban.getCountryCode().equals(destinationIban.getCountryCode());
