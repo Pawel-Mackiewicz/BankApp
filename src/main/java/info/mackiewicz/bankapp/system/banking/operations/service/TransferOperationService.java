@@ -32,7 +32,6 @@ public class TransferOperationService {
      * Handles the transfer of funds between accounts.
      *
      * @param request                    The request containing transfer details
-     * @param userId                     The ID of the user
      * @param sourceIban                 The Iban of the source account
      * @param destinationAccountSupplier A supplier for the destination account
      * @return A response containing details of the transfer
@@ -46,7 +45,6 @@ public class TransferOperationService {
 
     public TransactionResponse handleTransfer(
             BankingOperationRequest request,
-            Integer userId,
             Iban sourceIban,
             Supplier<Account> destinationAccountSupplier) { // ideally this should be an Iban as well, but ideally whole
                                                             // transaction system should work on IBANs not on accounts

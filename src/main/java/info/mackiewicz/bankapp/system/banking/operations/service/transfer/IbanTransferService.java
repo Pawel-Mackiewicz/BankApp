@@ -9,7 +9,6 @@ import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperati
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
-import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,6 @@ public class IbanTransferService {
      * Handles the transfer of funds between accounts using IBANs.
      *
      * @param transferRequest The request containing transfer details
-     * @param user            The user initiating the transfer
      * @return A response containing details of the transfer
      * @throws AccountNotFoundByIbanException if no account is found with the given
      *                                        Iban
@@ -39,12 +37,11 @@ public class IbanTransferService {
      *                                        IBANs
      * 
      */
-    public TransactionResponse handleIbanTransfer(IbanTransferRequest transferRequest, UserDetailsWithId user) {
+    public TransactionResponse handleIbanTransfer(IbanTransferRequest transferRequest) {
         log.info("Handling transfer from :{} to {}", transferRequest.getSourceIban(), transferRequest.getRecipientIban());
 
         return operationsService.handleTransfer(
                 transferRequest,
-                user.getId(),
                 transferRequest.getSourceIban(),
                 () -> accountService.getAccountByIban(transferRequest.getRecipientIban()));
     }

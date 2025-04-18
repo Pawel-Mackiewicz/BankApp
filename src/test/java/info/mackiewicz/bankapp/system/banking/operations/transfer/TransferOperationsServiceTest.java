@@ -54,7 +54,6 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
         // Act
         TransactionResponse response = transferOperationsService.handleTransfer(
                 request,
-                USER_ID,
                 SOURCE_IBAN,
                 () -> destinationAccount);
 
@@ -87,7 +86,6 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
         // Act & Assert
         assertThatThrownBy(() -> transferOperationsService.handleTransfer(
                 request,
-                USER_ID,
                 SOURCE_IBAN,
                 () -> destinationAccount))
                 .isInstanceOf(TransactionBuildingException.class);
@@ -115,7 +113,6 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
         // Act & Assert
         assertThatThrownBy(() -> transferOperationsService.handleTransfer(
                 request,
-                USER_ID,
                 SOURCE_IBAN,
                 () -> destinationAccount))
                 .isInstanceOf(TransactionValidationException.class);

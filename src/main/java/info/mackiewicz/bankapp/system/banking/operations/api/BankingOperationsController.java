@@ -24,13 +24,13 @@ public class BankingOperationsController implements BankingOperationsControllerI
     @PreAuthorize("@ibanAccountAuthorizationService.validateAccountOwnership(#request.sourceIban, authentication.principal)")
     @Override
     public ResponseEntity<TransactionResponse> ibanTransfer(@Valid @RequestBody IbanTransferRequest request, @AuthenticationPrincipal UserDetailsWithId authUser) {
-        TransactionResponse response =  ibanTransferService.handleIbanTransfer(request, authUser);
+        TransactionResponse response = ibanTransferService.handleIbanTransfer(request);
         return ResponseEntity.ok(response);
     }
 
     @Override
     public ResponseEntity<TransactionResponse> emailTransfer(@Valid @RequestBody EmailTransferRequest request, @AuthenticationPrincipal UserDetailsWithId authUser) {
-        TransactionResponse response =  emailTransferService.handleEmailTransfer(request, authUser);
+        TransactionResponse response = emailTransferService.handleEmailTransfer(request);
         return ResponseEntity.ok(response);
     }
 }

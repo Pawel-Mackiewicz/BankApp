@@ -43,17 +43,16 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
                 
         when(operationsService.handleTransfer(
                 eq(request),
-                eq(USER_ID),
                 eq(SOURCE_IBAN),
                 any()))
                 .thenAnswer(invocation -> {
-                    Supplier<Account> accountSupplier = invocation.getArgument(3);
+                    Supplier<Account> accountSupplier = invocation.getArgument(2);
                     Account dest = accountSupplier.get();
                     return new TransactionResponse(sourceAccount, dest, transaction);
                 });
 
         // Act
-        TransactionResponse response = ibanTransferService.handleIbanTransfer(request, userDetails);
+        TransactionResponse response = ibanTransferService.handleIbanTransfer(request);
 
         // Assert
         assertSuccessfulTransfer(response);
@@ -71,16 +70,15 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
                 
         when(operationsService.handleTransfer(
                 eq(request),
-                eq(USER_ID),
                 eq(SOURCE_IBAN),
                 any()))
                 .thenAnswer(invocation -> {
-                    Supplier<Account> accountSupplier = invocation.getArgument(3);
+                    Supplier<Account> accountSupplier = invocation.getArgument(2);
                     return accountSupplier.get(); // This will throw the exception
                 });
 
         // Act & Assert
-        assertThatThrownBy(() -> ibanTransferService.handleIbanTransfer(request, userDetails))
+        assertThatThrownBy(() -> ibanTransferService.handleIbanTransfer(request))
                 .isInstanceOf(AccountNotFoundByIbanException.class);
     }
 
@@ -92,13 +90,12 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
                 
         when(operationsService.handleTransfer(
                 eq(request),
-                eq(USER_ID),
                 eq(SOURCE_IBAN),
                 any()))
                 .thenThrow(new AccountOwnershipException("User is not the owner of the account"));
 
         // Act & Assert
-        assertThatThrownBy(() -> ibanTransferService.handleIbanTransfer(request, userDetails))
+        assertThatThrownBy(() -> ibanTransferService.handleIbanTransfer(request))
                 .isInstanceOf(AccountOwnershipException.class);
     }
 
@@ -110,13 +107,12 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
                 
         when(operationsService.handleTransfer(
                 eq(request),
-                eq(USER_ID),
                 eq(SOURCE_IBAN),
                 any()))
                 .thenThrow(new TransactionValidationException("Transaction validation failed"));
 
         // Act & Assert
-        assertThatThrownBy(() -> ibanTransferService.handleIbanTransfer(request, userDetails))
+        assertThatThrownBy(() -> ibanTransferService.handleIbanTransfer(request))
                 .isInstanceOf(TransactionValidationException.class);
     }
 
