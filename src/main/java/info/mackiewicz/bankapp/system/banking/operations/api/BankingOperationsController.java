@@ -28,6 +28,7 @@ public class BankingOperationsController implements BankingOperationsControllerI
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("@ibanAccountAuthorizationService.validateAccountOwnership(#request.sourceIban, authentication.principal)")
     @Override
     public ResponseEntity<TransactionResponse> emailTransfer(@Valid @RequestBody EmailTransferRequest request, @AuthenticationPrincipal UserDetailsWithId authUser) {
         TransactionResponse response = emailTransferService.handleEmailTransfer(request);

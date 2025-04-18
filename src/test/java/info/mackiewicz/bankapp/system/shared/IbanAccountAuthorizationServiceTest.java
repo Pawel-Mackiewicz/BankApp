@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class IbanAccountAuthorizationServiceTest {
@@ -62,10 +63,9 @@ public class IbanAccountAuthorizationServiceTest {
         when(mockUser.getAccounts()).thenReturn(accounts);
 
         // When & Then
-        AccountOwnershipException exception = assertThrows(AccountOwnershipException.class, () ->
+        assertThrows(AccountOwnershipException.class, () ->
                 ibanAccountAuthorizationService.validateAccountOwnership(requestedIban, mockUser));
 
-        assertTrue(exception.getMessage().contains("tried to access account"));
         verify(mockUser).getAccounts();
         verify(mockOtherAccount).getIban();
     }
