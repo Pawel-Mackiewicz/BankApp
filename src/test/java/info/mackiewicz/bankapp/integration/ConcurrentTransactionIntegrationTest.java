@@ -2,15 +2,15 @@ package info.mackiewicz.bankapp.integration;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.integration.utils.IntegrationTestAccountService;
+import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
+import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;
 import info.mackiewicz.bankapp.system.locking.LockingConfig;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
-import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -20,12 +20,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,9 +35,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(IntegrationTestConfig.class)
 @EnableConfigurationProperties(LockingConfig.class)
 @DisplayName("Concurrent Transactions Integration Tests")
 class ConcurrentTransactionIntegrationTest {
+
+    @Autowired
+    private IntegrationTestUserService testUserService;
+
+    @Autowired
+    private IntegrationTestAccountService testAccountService;
 
     @Autowired
     private AccountService accountService;
@@ -62,7 +69,7 @@ class ConcurrentTransactionIntegrationTest {
 
         // Create test users (we need separate users as there's a 3 account limit per user)
         for (int i = 0; i < 20; i++) {
-            User user = createTestUser(i);
+            User user = testUserService.createTestUser(i);
             testUsers.add(user);
             
             // Create one account per user
@@ -320,38 +327,9 @@ class ConcurrentTransactionIntegrationTest {
         }, "Should throw InsufficientFundsException when trying to create transfer with insufficient funds");
     }
 
-    private User createTestUser(int index) {
-        User user = new User();
-        String uniqueSuffix = testRunId + "-" + index;
-        
-        // Generate unique PESEL (needs to be 11 digits)
-        // Use testRunId's hashCode to ensure uniqueness across test runs
-        int hashCode = Math.abs(testRunId.hashCode() % 1000000);
-        String uniqueSequence = String.format("%05d", (hashCode + index) % 100000);
-        String yearMonth = "9901"; // Fixed birth year and month
-        String day = String.format("%02d", (index % 28) + 1); // Day between 1-28
-        String pesel = yearMonth + day + uniqueSequence;
-
-        user.setPesel(new Pesel(pesel));
-        user.setFirstname("Test");
-        user.setLastname("User");
-        user.setEmail(new EmailAddress("test.user" + uniqueSuffix + "@test.com"));
-        user.setPassword("Password123!");
-        user.setPhoneNumber(new PhoneNumber(paddedNumber(hashCode, index)));
-        user.setDateOfBirth(LocalDate.of(1999, 1, (index % 28) + 1)); // Match PESEL date
-        return userService.createUser(user);
-    }
-
-    private String paddedNumber(int hashCode, int index) {
-        String number = String.valueOf(hashCode + index);
-        return "9".repeat(9 - number.length()) + number;
-    }
-
     private Account createTestAccount(User user) {
-        Account account = accountService.createAccount(user.getId());
         BigDecimal initialBalance = BigDecimal.valueOf(random.nextInt(9000) + 1000);
-        accountService.deposit(account, initialBalance);
-        return account;
+        return testAccountService.createTestAccountWithBalance(user.getId(), initialBalance);
     }
 
     private Transaction createRandomTransfer() {
