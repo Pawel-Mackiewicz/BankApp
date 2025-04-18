@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,12 +36,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Transaction History System Integration Test")
 class TransactionHistoryRestControllerIntegrationTest {
 
-    private static final Integer OTHER_ACCOUNT_ID = 42;
     private static final BigDecimal DEFAULT_BALANCE = new BigDecimal("1000.00");
     private static final BigDecimal DEFAULT_AMOUNT = new BigDecimal("100.00");
     private static final String DEFAULT_TRANSACTION_TITLE = "TEST";
 
-    private static int index = 1;
+    private static final AtomicInteger userCounter = new AtomicInteger(1);
 
     @Autowired
     private IntegrationTestAccountService testAccountService;
@@ -71,7 +71,7 @@ class TransactionHistoryRestControllerIntegrationTest {
     }
 
     private User createTestUserWithAccount() {
-        User testUser = testUserService.createTestUser(index++);
+        User testUser = testUserService.createTestUser(userCounter.getAndIncrement());
         testAccountService.createTestAccountWithBalance(testUser.getId(), DEFAULT_BALANCE);
 
         return userService.getUserById(testUser.getId());
@@ -87,14 +87,14 @@ class TransactionHistoryRestControllerIntegrationTest {
         return transactionService.registerTransaction(transaction);
     }
 
-    private Transaction registerDefaultTransferTransaction(Account testAccount, Account destinationAccount) {
+    private void registerDefaultTransferTransaction(Account testAccount, Account destinationAccount) {
         Transaction transaction = Transaction.buildTransfer()
                 .from(testAccount)
                 .to(destinationAccount)
                 .withAmount(DEFAULT_AMOUNT)
                 .withTitle(DEFAULT_TRANSACTION_TITLE)
                 .build();
-        return transactionService.registerTransaction(transaction);
+        transactionService.registerTransaction(transaction);
     }
 
     @BeforeEach
@@ -184,10 +184,12 @@ class TransactionHistoryRestControllerIntegrationTest {
     void testPreAuthorize_WithInvalidAccountOwnership_ShouldThrowAccessDeniedException() throws Exception {
         // Given
         User testUser = createTestUserWithAccount();
+        User otherUser = createTestUserWithAccount();
+        int otherUserAccountId = getAccountId(otherUser);
 
         // When & Then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
-                        .param("accountId", OTHER_ACCOUNT_ID.toString())
+                        .param("accountId", String.valueOf(otherUserAccountId))
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON))
