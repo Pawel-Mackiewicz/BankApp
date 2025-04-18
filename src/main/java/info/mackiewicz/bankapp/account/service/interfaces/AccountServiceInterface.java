@@ -121,7 +121,7 @@ public interface AccountServiceInterface {
          * @return true if an account exists with the specified email, false otherwise
          * @throws IllegalArgumentException if email is null or has invalid format
          */
-        boolean existsByEmail(@jakarta.validation.constraints.Email(message = "Invalid email format") String email);
+        boolean existsByEmail(EmailAddress email);
 
         /**
          * Deposits funds into an account.

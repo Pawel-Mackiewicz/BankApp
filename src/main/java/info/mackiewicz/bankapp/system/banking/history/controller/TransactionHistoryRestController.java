@@ -25,7 +25,7 @@ public class TransactionHistoryRestController implements TransactionHistoryRestC
 
     private final TransactionHistoryService transactionHistoryService;
 
-    @PreAuthorize("@accountAuthorizationService.validateAccountOwnership(#filter.accountId, authentication.principal)")
+    @PreAuthorize("@idAccountAuthorizationService.validateAccountOwnership(#filter.accountId, authentication.principal)")
     @GetMapping
     @Override
     public ResponseEntity<Page<TransactionResponse>> getTransactions(
@@ -36,7 +36,7 @@ public class TransactionHistoryRestController implements TransactionHistoryRestC
         return ResponseEntity.ok(transactionHistoryService.getTransactionHistory(filter));
     }
 
-    @PreAuthorize("@accountAuthorizationService.validateAccountOwnership(#filter.accountId, authentication.principal)")
+    @PreAuthorize("@idAccountAuthorizationService.validateAccountOwnership(#filter.accountId, authentication.principal)")
     @GetMapping("/export")
     @Override
     public ResponseEntity<byte[]> exportTransactions(

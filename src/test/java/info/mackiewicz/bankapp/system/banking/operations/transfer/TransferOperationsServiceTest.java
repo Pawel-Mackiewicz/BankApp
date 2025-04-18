@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.system.banking.operations.transfer;
 
-import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
@@ -28,8 +27,8 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
         super.setUp();
         transferOperationsService = new TransferOperationService(
             transactionBuilderService,
-            accountSecurityService,
-            transactionService
+                transactionService,
+                accountService
         );
     }
 
@@ -38,8 +37,8 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
     void shouldSuccessfullyHandleTransfer() {
         // Arrange
         IbanTransferRequest request = createTestTransferRequest();
-        
-        when(accountSecurityService.retrieveValidatedAccount(eq(USER_ID), eq(SOURCE_IBAN)))
+
+        when(accountService.getAccountByIban(eq(SOURCE_IBAN)))
                 .thenReturn(sourceAccount);
                 
         when(transactionBuilderService.buildTransferTransaction(
@@ -55,7 +54,6 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
         // Act
         TransactionResponse response = transferOperationsService.handleTransfer(
                 request,
-                USER_ID,
                 SOURCE_IBAN,
                 () -> destinationAccount);
 
@@ -68,31 +66,14 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
         verify(transactionService).registerTransaction(transaction);
     }
 
-    @Test
-    @DisplayName("Should throw exception when account ownership validation fails")
-    void shouldThrowExceptionWhenAccountOwnershipValidationFails() {
-        // Arrange
-        IbanTransferRequest request = createTestTransferRequest();
-        
-        when(accountSecurityService.retrieveValidatedAccount(eq(USER_ID), eq(SOURCE_IBAN)))
-                .thenThrow(new AccountOwnershipException("User is not the owner of the account"));
-
-        // Act & Assert
-        assertThatThrownBy(() -> transferOperationsService.handleTransfer(
-                request,
-                USER_ID,
-                SOURCE_IBAN,
-                () -> destinationAccount))
-                .isInstanceOf(AccountOwnershipException.class);
-    }
 
     @Test
     @DisplayName("Should throw exception when transaction building fails")
     void shouldThrowExceptionWhenTransactionBuildingFails() {
         // Arrange
         IbanTransferRequest request = createTestTransferRequest();
-        
-        when(accountSecurityService.retrieveValidatedAccount(eq(USER_ID), eq(SOURCE_IBAN)))
+
+        when(accountService.getAccountByIban(eq(SOURCE_IBAN)))
                 .thenReturn(sourceAccount);
                 
         when(transactionBuilderService.buildTransferTransaction(
@@ -105,7 +86,6 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
         // Act & Assert
         assertThatThrownBy(() -> transferOperationsService.handleTransfer(
                 request,
-                USER_ID,
                 SOURCE_IBAN,
                 () -> destinationAccount))
                 .isInstanceOf(TransactionBuildingException.class);
@@ -116,8 +96,8 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
     void shouldThrowExceptionWhenTransactionRegistrationFails() {
         // Arrange
         IbanTransferRequest request = createTestTransferRequest();
-        
-        when(accountSecurityService.retrieveValidatedAccount(eq(USER_ID), eq(SOURCE_IBAN)))
+
+        when(accountService.getAccountByIban(eq(SOURCE_IBAN)))
                 .thenReturn(sourceAccount);
                 
         when(transactionBuilderService.buildTransferTransaction(
@@ -133,7 +113,6 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
         // Act & Assert
         assertThatThrownBy(() -> transferOperationsService.handleTransfer(
                 request,
-                USER_ID,
                 SOURCE_IBAN,
                 () -> destinationAccount))
                 .isInstanceOf(TransactionValidationException.class);
