@@ -69,4 +69,18 @@ public class IbanAccountAuthorizationServiceTest {
         verify(mockUser).getAccounts();
         verify(mockOtherAccount).getIban();
     }
+
+    @Test
+    void shouldThrowExceptionWhenOwnerAccountsListIsNull() {
+        // Given
+        Iban iban = TestIbanProvider.getNextIbanObject();
+        User mockUser = mock(User.class);
+        when(mockUser.getAccounts()).thenReturn(null);
+
+        // When & Then
+        assertThrows(InvalidUserDataException.class, () ->
+                ibanAccountAuthorizationService.validateAccountOwnership(iban, mockUser));
+
+        verify(mockUser).getAccounts();
+    }
 }
