@@ -3,8 +3,8 @@ package info.mackiewicz.bankapp.system.banking.operations.service;
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.BankingOperationRequest;
-import info.mackiewicz.bankapp.system.banking.operations.service.helpers.AccountSecurityService;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionBuildingService;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
@@ -25,8 +25,8 @@ import java.util.function.Supplier;
 public class TransferOperationService {
 
     private final TransactionBuildingService transactionBuilderService;
-    private final AccountSecurityService accountSecurityService;
     private final TransactionService transactionService;
+    private final AccountServiceInterface accountService;
 
     /**
      * Handles the transfer of funds between accounts.
@@ -54,14 +54,13 @@ public class TransferOperationService {
         try {
         log.info("Handling transaction: {}", request);
 
-        log.debug("Validating source account");
-        Account validatedSourceAccount = accountSecurityService.retrieveValidatedAccount(userId, sourceIban);
+            Account sourceAccount = accountService.getAccountByIban(sourceIban);
 
         log.debug("Validating destination account");
         Account destinationAccount = destinationAccountSupplier.get();
         
         log.debug("Creating transfer transaction");
-        Transaction transfer = createTransferTransaction(request, validatedSourceAccount, destinationAccount);
+            Transaction transfer = createTransferTransaction(request, sourceAccount, destinationAccount);
 
         log.debug("Registering transfer transaction");
         Transaction registeredTransaction = transactionService.registerTransaction(transfer);
@@ -70,7 +69,7 @@ public class TransferOperationService {
 
         //transaction processing should be called here, not in the transaction service
         return new TransactionResponse(
-                validatedSourceAccount,
+                sourceAccount,
                 destinationAccount,
                 registeredTransaction);
         } finally {
