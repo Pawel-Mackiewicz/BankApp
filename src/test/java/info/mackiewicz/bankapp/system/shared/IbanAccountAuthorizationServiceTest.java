@@ -2,48 +2,49 @@ package info.mackiewicz.bankapp.system.shared;
 
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.user.exception.InvalidUserDataException;
 import info.mackiewicz.bankapp.user.model.User;
+import org.iban4j.Iban;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class IdAccountAuthorizationServiceTest {
+public class IbanAccountAuthorizationServiceTest {
 
-    private final IdAccountAuthorizationService idAccountAuthorizationService = new IdAccountAuthorizationService();
+    private final IbanAccountAuthorizationService ibanAccountAuthorizationService = new IbanAccountAuthorizationService();
 
     @Test
     void shouldValidateAccountOwnershipWhenOwnerHasAccount() {
         // Given
-        int accountId = 1;
+        Iban iban = TestIbanProvider.getNextIbanObject();
         User mockUser = mock(User.class);
         Set<Account> accounts = new HashSet<>();
         Account mockAccount = mock(Account.class);
-        when(mockAccount.getId()).thenReturn(accountId);
+        when(mockAccount.getIban()).thenReturn(iban);
         accounts.add(mockAccount);
         when(mockUser.getAccounts()).thenReturn(accounts);
 
         // When & Then
-        assertDoesNotThrow(() -> idAccountAuthorizationService.validateAccountOwnership(accountId, mockUser));
+        assertDoesNotThrow(() -> ibanAccountAuthorizationService.validateAccountOwnership(iban, mockUser));
         verify(mockUser).getAccounts();
-        verify(mockAccount).getId();
+        verify(mockAccount).getIban();
     }
 
     @Test
     void shouldThrowExceptionWhenOwnerDoesNotHaveAccount() {
         // Given
-        int accountId = 1;
+        Iban iban = TestIbanProvider.getNextIbanObject();
         User mockUser = mock(User.class);
         when(mockUser.getAccounts()).thenReturn(new HashSet<>());
 
         // When & Then
         assertThrows(InvalidUserDataException.class, () ->
-                idAccountAuthorizationService.validateAccountOwnership(accountId, mockUser));
+                ibanAccountAuthorizationService.validateAccountOwnership(iban, mockUser));
 
         verify(mockUser).getAccounts();
     }
@@ -51,20 +52,21 @@ public class IdAccountAuthorizationServiceTest {
     @Test
     void shouldThrowExceptionWhenOwnerHasAccountsButNotTheRequestedOne() {
         // Given
-        int accountId = 1;
-        int otherAccountId = 2;
+        Iban requestedIban = TestIbanProvider.getNextIbanObject();
+        Iban otherIban = TestIbanProvider.getNextIbanObject();
         User mockUser = mock(User.class);
         Set<Account> accounts = new HashSet<>();
         Account mockOtherAccount = mock(Account.class);
-        when(mockOtherAccount.getId()).thenReturn(otherAccountId);
+        when(mockOtherAccount.getIban()).thenReturn(otherIban);
         accounts.add(mockOtherAccount);
         when(mockUser.getAccounts()).thenReturn(accounts);
 
         // When & Then
-        assertThrows(AccountOwnershipException.class, () ->
-                idAccountAuthorizationService.validateAccountOwnership(accountId, mockUser));
+        AccountOwnershipException exception = assertThrows(AccountOwnershipException.class, () ->
+                ibanAccountAuthorizationService.validateAccountOwnership(requestedIban, mockUser));
 
+        assertTrue(exception.getMessage().contains("tried to access account"));
         verify(mockUser).getAccounts();
-        verify(mockOtherAccount).getId();
+        verify(mockOtherAccount).getIban();
     }
 }
