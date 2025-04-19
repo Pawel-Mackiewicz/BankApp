@@ -27,7 +27,7 @@ import java.time.temporal.ChronoUnit;
 @Getter
 @Setter
 @ToString
-public abstract class BankingOperationRequest {
+public abstract class TransactionRequest {
     /**
      * Temporary ID for the transaction, used for tracking purposes.
      * This ID is generated based on the current time in milliseconds.
@@ -61,7 +61,7 @@ public abstract class BankingOperationRequest {
         this.sourceIban = iban;
     }
 
-    public BankingOperationRequest() {
+    public TransactionRequest() {
         tempId = ChronoUnit.MILLIS.between(
             LocalDateTime.now().withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),
             LocalDateTime.now()

@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.system.banking.operations.service;
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.BankingOperationRequest;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransactionRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionBuildingService;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
@@ -42,7 +42,7 @@ public class TransferOperationService {
      */
 
     public TransactionResponse handleTransfer(
-            BankingOperationRequest request,
+            TransactionRequest request,
             Iban sourceIban,
             Supplier<Account> destinationAccountSupplier) { // ideally this should be an Iban as well, but ideally whole
         // transaction system should work on IBANs/IDs not on accounts
@@ -85,7 +85,7 @@ public class TransferOperationService {
      * @throws TransactionBuildingException   if the transaction cannot be built
      * @throws TransactionValidationException if the transaction fails validation
      */
-    private Transaction createTransferTransaction(BankingOperationRequest transferRequest, Account sourceAccount,
+    private Transaction createTransferTransaction(TransactionRequest transferRequest, Account sourceAccount,
                                                   Account destinationAccount) {
         return transactionBuilderService.buildTransferTransaction(
                 transferRequest.getAmount(),
