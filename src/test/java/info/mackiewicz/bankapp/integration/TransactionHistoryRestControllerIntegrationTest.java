@@ -26,6 +26,8 @@ import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,6 +43,9 @@ class TransactionHistoryRestControllerIntegrationTest {
     private static final BigDecimal DEFAULT_AMOUNT = new BigDecimal("100.00");
     private static final String DEFAULT_TRANSACTION_TITLE = "TEST";
 
+    private static final String API_HISTORY_PATH = "/api/banking/history";
+    private static final String API_HISTORY_EXPORT_PATH = API_HISTORY_PATH + "/export";
+    
     private static final AtomicInteger userCounter = new AtomicInteger(1);
 
     @Autowired
@@ -121,7 +126,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         registerDefaultTransferTransaction(testAccount, destinationAccount);
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(getAccountId(testUser)))
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -147,7 +152,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         registerDefaultTransferTransaction(testAccount, destinationAccount);
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(getAccountId(testUser)))
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -172,7 +177,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         registerDefaultTransferTransaction(testAccount, destinationAccount);
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history/export")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_EXPORT_PATH)
                         .param("accountId", String.valueOf(getAccountId(testUser)))
                         .param("format", "csv")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
@@ -189,7 +194,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         int otherUserAccountId = getAccountId(otherUser);
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(otherUserAccountId))
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -213,7 +218,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         registerTransaction(testAccount, destinationAccount, new BigDecimal("250.00"), "Transaction 3");
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .param("amountFrom", "100.00") // Filter range
                         .param("amountTo", "200.00")   // Filter range
@@ -242,7 +247,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         registerTransaction(testAccount, destinationAccount, new BigDecimal("30.00"), "Gas Station");
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .param("query", "Store") // Search for "Store" in title/description
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
@@ -273,7 +278,7 @@ class TransactionHistoryRestControllerIntegrationTest {
 
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .param("sortBy", "date")
                         .param("sortDirection", "DESCENDING")
@@ -303,7 +308,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         Transaction t3 = registerTransaction(testAccount, destinationAccount, new BigDecimal("20.00"), "Twenty"); // Should be second
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .param("sortBy", "amount")
                         .param("sortDirection", "ASCENDING")
@@ -335,7 +340,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         }
 
         // When & Then - Request page 1 (second page, size 10)
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .param("page", "1") // 0-indexed, so this is the second page
                         .param("size", "10")
@@ -363,7 +368,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         Integer accountId = getAccountId(testUser);
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .param("dateFrom", "invalid-date-format") // Invalid date
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
@@ -386,7 +391,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         registerTransaction(testAccount, destinationAccount, new BigDecimal("100.00"), "PDF Export Test");
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history/export")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_EXPORT_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .param("format", "pdf") // Request PDF format
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
@@ -397,9 +402,10 @@ class TransactionHistoryRestControllerIntegrationTest {
                 // Verify content type for PDF
                 .andExpect(result -> {
                     String contentType = result.getResponse().getContentType();
+                    assertNotNull(contentType);
                     // Allow for potential variations like "application/pdf;charset=UTF-8"
-                    assert contentType != null && contentType.startsWith(MediaType.APPLICATION_PDF_VALUE);
-                    assert result.getResponse().getContentAsByteArray().length > 0;
+                    assertTrue(contentType.startsWith(MediaType.APPLICATION_PDF_VALUE));
+                    assertTrue(result.getResponse().getContentAsByteArray().length > 0);
                 });
     }
 
@@ -417,7 +423,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         registerTransaction(testAccount, destinationAccount, new BigDecimal("20.00"), "Trans 2");
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history/export")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_EXPORT_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .param("format", "unsupported-format") // Request an invalid format
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
@@ -438,7 +444,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         Integer accountId = getAccountId(testUser);
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .with(SecurityMockMvcRequestPostProcessors.user(testUser))
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -465,7 +471,7 @@ class TransactionHistoryRestControllerIntegrationTest {
 
 
         // When & Then - Request page 10 (far beyond available data)
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", String.valueOf(accountId))
                         .param("page", "10")
                         .param("size", "10")
@@ -487,7 +493,7 @@ class TransactionHistoryRestControllerIntegrationTest {
         // No user context provided
 
         // When & Then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/banking/history")
+        mockMvc.perform(MockMvcRequestBuilders.get(API_HISTORY_PATH)
                         .param("accountId", "1") // Any account ID
                         .with(SecurityMockMvcRequestPostProcessors.csrf()) // CSRF might still be needed depending on config
                         .contentType(MediaType.APPLICATION_JSON))
