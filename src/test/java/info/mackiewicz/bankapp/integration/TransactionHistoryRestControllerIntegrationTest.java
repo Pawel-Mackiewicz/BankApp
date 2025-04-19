@@ -4,6 +4,7 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestAccountService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;
+import info.mackiewicz.bankapp.shared.util.Util;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
@@ -263,11 +264,12 @@ class TransactionHistoryRestControllerIntegrationTest {
         User destinationUser = createTestUserWithAccount();
         Account destinationAccount = getAccount(destinationUser);
 
-        // Register transactions - assume registration sets date close to 'now'
-        // Order might depend on test execution speed, explicit dates are better if possible
+        // `Sleep` is used to make sure that the timestamps are different
         Transaction t1 = registerTransaction(testAccount, destinationAccount, new BigDecimal("10.00"), "First");
-        Transaction t2 = registerTransaction(testAccount, destinationAccount, new BigDecimal("20.00"), "Second"); // Should be first in result
-        Transaction t3 = registerTransaction(testAccount, destinationAccount, new BigDecimal("30.00"), "Third"); // Should be second in result
+        Util.sleep(100);
+        Transaction t2 = registerTransaction(testAccount, destinationAccount, new BigDecimal("20.00"), "Second");
+        Util.sleep(100);
+        Transaction t3 = registerTransaction(testAccount, destinationAccount, new BigDecimal("30.00"), "Third");
 
 
         // When & Then
