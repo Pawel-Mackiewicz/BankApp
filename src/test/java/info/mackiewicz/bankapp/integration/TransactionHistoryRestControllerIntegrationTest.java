@@ -94,13 +94,7 @@ class TransactionHistoryRestControllerIntegrationTest {
     }
 
     private void registerDefaultTransferTransaction(Account testAccount, Account destinationAccount) {
-        Transaction transaction = Transaction.buildTransfer()
-                .from(testAccount)
-                .to(destinationAccount)
-                .withAmount(DEFAULT_AMOUNT)
-                .withTitle(DEFAULT_TRANSACTION_TITLE)
-                .build();
-        transactionService.registerTransaction(transaction);
+        registerTransaction(testAccount, destinationAccount, DEFAULT_AMOUNT, DEFAULT_TRANSACTION_TITLE);
     }
 
     @BeforeEach
