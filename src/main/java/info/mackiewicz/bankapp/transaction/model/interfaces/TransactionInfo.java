@@ -29,7 +29,7 @@ public interface TransactionInfo {
     @Schema(description = "Transaction status")
     TransactionStatus getStatus();
 
-    @Schema(description = "Transaction type")
+    @Schema(description = "Transaction type", example = "TRANSFER_INTERNAL")
     TransactionType getType();
 
     @Schema(description = "Transaction date", example = "2025-05-05T12:00:00")
