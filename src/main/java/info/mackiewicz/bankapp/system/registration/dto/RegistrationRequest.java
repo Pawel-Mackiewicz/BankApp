@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp.system.registration.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import info.mackiewicz.bankapp.presentation.auth.validation.Password;
 import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
 import info.mackiewicz.bankapp.shared.util.Util;
@@ -59,16 +61,19 @@ public class RegistrationRequest implements PasswordConfirmation {
     @NotBlank(message = "PESEL is required")
     @Pattern(regexp = "\\d{11}", message = "PESEL must be exactly 11 digits")
     @Schema(description = "PESEL must be exactly 11 digits. PESEL must be unique.", example = "12345678901")
+    @JsonProperty("pesel")
     private String pesel;
 
     @NotBlank(message = "Email is required")
     @Pattern(regexp = ValidationConstants.EMAIL_PATTERN, message = "Invalid email format")
     @Schema(description = "Email must be a valid email address", example = "john.smith@example.com")
+    @JsonProperty("email")
     private String email;
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = ValidationConstants.PHONE_NUMBER_PATTERN, message = "Invalid phone number format. Use +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX format")
     @Schema(description = "Phone number must be in the format +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX", example = "+48798754321")
+    @JsonProperty("phoneNumber")
     private String phoneNumber;
 
     @Password
@@ -80,14 +85,17 @@ public class RegistrationRequest implements PasswordConfirmation {
     @Schema(description = "Password confirmation must match the password", example = "StrongP@ss123")
     private String confirmPassword;
 
+    @JsonIgnore
     public Pesel getPesel() {
         return new Pesel(pesel);
     }
 
+    @JsonIgnore
     public EmailAddress getEmail() {
         return new EmailAddress(email);
     }
 
+    @JsonIgnore
     public PhoneNumber getPhoneNumber() {
         return new PhoneNumber(phoneNumber);
     }

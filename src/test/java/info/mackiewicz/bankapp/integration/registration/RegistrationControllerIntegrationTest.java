@@ -1,7 +1,5 @@
 package info.mackiewicz.bankapp.integration.registration;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.registration.dto.DemoRegistrationRequest;
@@ -75,9 +73,6 @@ class RegistrationControllerIntegrationTest {
         // Prepare valid demo registration request
         validDemoRequest = TestRequestFactory.createValidDemoRegistrationRequest();
         validDemoRequest.setEmail(TEST_EMAIL);
-
-        objectMapper.setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE);
-        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
     }
 
     @Test

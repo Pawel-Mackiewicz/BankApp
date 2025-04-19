@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp.system.registration.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import info.mackiewicz.bankapp.presentation.auth.validation.Password;
 import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
@@ -24,6 +26,7 @@ public class DemoRegistrationRequest implements PasswordConfirmation {
     @NotBlank(message = "Email is required")
     @Pattern(regexp = ValidationConstants.EMAIL_PATTERN, message = "Invalid email format")
     @Schema(description = "Email must be a valid email address", example = "john.smith@example.com")
+    @JsonProperty("email")
     private String email;
 
     @Password
@@ -35,6 +38,7 @@ public class DemoRegistrationRequest implements PasswordConfirmation {
     @Schema(description = "Password confirmation must match the password", example = "StrongP@ss123")
     private String confirmPassword;
 
+    @JsonIgnore
     public EmailAddress getEmail() {
         return new EmailAddress(email);
     }
