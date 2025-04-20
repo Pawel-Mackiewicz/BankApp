@@ -5,7 +5,9 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.TransactionRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionBuildingService;
+import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionPreconditionValidator;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
+import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -26,6 +28,7 @@ public class TransferOperationService {
     private final TransactionBuildingService transactionBuilderService;
     private final TransactionService transactionService;
     private final AccountServiceInterface accountService;
+    private final TransactionPreconditionValidator preconditionValidator;
 
     /**
      * Handles the transfer of funds between accounts.
@@ -39,6 +42,7 @@ public class TransferOperationService {
      *                                        Iban
      * @throws TransactionBuildingException   if the transaction cannot be built
      * @throws TransactionValidationException if the transaction fails validation
+     * @throws InsufficientFundsException    if the source account does not have enough funds to perform the transfer
      */
 
     public TransactionResponse handleTransfer(
@@ -52,7 +56,9 @@ public class TransferOperationService {
 
             Account sourceAccount = accountService.getAccountByIban(sourceIban);
 
-            log.debug("Validating destination account");
+            preconditionValidator.checkFunds(sourceAccount, request.getAmount());
+
+            log.debug("Fetching destination account");
             Account destinationAccount = destinationAccountSupplier.get();
 
             log.debug("Creating transfer transaction");
@@ -72,6 +78,7 @@ public class TransferOperationService {
             MDC.clear();
         }
     }
+
 
     /**
      * Creates a transfer transaction using the transfer request and accounts.

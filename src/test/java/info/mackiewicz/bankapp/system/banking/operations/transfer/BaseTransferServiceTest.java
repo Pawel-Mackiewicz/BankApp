@@ -3,8 +3,8 @@ package info.mackiewicz.bankapp.system.banking.operations.transfer;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;
-import info.mackiewicz.bankapp.system.banking.operations.service.helpers.AccountSecurityService;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionBuildingService;
+import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionPreconditionValidator;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
@@ -16,8 +16,6 @@ import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -32,14 +30,13 @@ import static org.mockito.Mockito.when;
 @MockitoSettings(strictness = Strictness.LENIENT)
 public abstract class BaseTransferServiceTest {
 
+    protected TransactionPreconditionValidator preconditionValidator = new TransactionPreconditionValidator();
+
     @Mock
     protected AccountServiceInterface accountService;
 
     @Mock
     protected TransactionBuildingService transactionBuilderService;
-
-    @Mock
-    protected AccountSecurityService accountSecurityService;
 
     @Mock
     protected TransactionService transactionService;
@@ -49,9 +46,6 @@ public abstract class BaseTransferServiceTest {
 
     @Mock
     protected UserDetailsWithId userDetails;
-
-    @Captor
-    protected ArgumentCaptor<Transaction> transactionCaptor;
 
     protected Account sourceAccount;
     protected Account destinationAccount;
@@ -73,7 +67,6 @@ public abstract class BaseTransferServiceTest {
                 .to(destinationAccount)
                 .withAmount(TRANSFER_AMOUNT)
                 .withTitle(TRANSFER_TITLE)
-                .asInternalTransfer()
                 .build();
 
         when(userDetails.getId()).thenReturn(USER_ID);

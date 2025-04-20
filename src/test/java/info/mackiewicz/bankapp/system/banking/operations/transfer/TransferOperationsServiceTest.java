@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.system.banking.operations.transfer;
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
+import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,7 +31,8 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
         transferOperationsService = new TransferOperationService(
             transactionBuilderService,
                 transactionService,
-                accountService
+                accountService,
+                preconditionValidator
         );
     }
 
@@ -99,7 +103,7 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
 
         when(accountService.getAccountByIban(eq(SOURCE_IBAN)))
                 .thenReturn(sourceAccount);
-                
+
         when(transactionBuilderService.buildTransferTransaction(
                 eq(TRANSFER_AMOUNT),
                 eq(TRANSFER_TITLE),
@@ -116,6 +120,24 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
                 SOURCE_IBAN,
                 () -> destinationAccount))
                 .isInstanceOf(TransactionValidationException.class);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenSourceAccountDoesntHaveSufficientFunds() {
+        // Arrange
+        IbanTransferRequest request = createTestTransferRequest();
+        //set amount to be greater than source account balance
+        BigDecimal transferAmount = TRANSFER_AMOUNT.add(BigDecimal.ONE);
+        request.setAmount(transferAmount);
+
+        when(accountService.getAccountByIban(eq(SOURCE_IBAN)))
+                .thenReturn(sourceAccount);
+
+        assertThatThrownBy(() -> transferOperationsService.handleTransfer(
+                request,
+                SOURCE_IBAN,
+                () -> destinationAccount))
+                .isInstanceOf(InsufficientFundsException.class);
     }
 
     private IbanTransferRequest createTestTransferRequest() {
