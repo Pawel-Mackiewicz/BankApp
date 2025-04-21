@@ -1,7 +1,7 @@
-package info.mackiewicz.bankapp.system.banking.operations.api;
+package info.mackiewicz.bankapp.system.banking.operations.controller;
 
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.EmailTransferRequest;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.controller.dto.EmailTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.controller.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.transfer.EmailTransferService;
 import info.mackiewicz.bankapp.system.banking.operations.service.transfer.IbanTransferService;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;

@@ -1,9 +1,9 @@
-package info.mackiewicz.bankapp.system.banking.operations.api;
+package info.mackiewicz.bankapp.system.banking.operations.controller;
 
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.EmailTransferRequest;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.controller.dto.EmailTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.controller.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import io.swagger.v3.oas.annotations.Operation;
