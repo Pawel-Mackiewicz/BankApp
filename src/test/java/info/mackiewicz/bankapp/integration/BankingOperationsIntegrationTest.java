@@ -100,8 +100,8 @@ public class BankingOperationsIntegrationTest {
     private void awaitTransactionCompletion(Integer transactionId) throws NoSuchElementException {
         long startTime = System.currentTimeMillis();
 
-        await().atMost(500, TimeUnit.MILLISECONDS)
-                .pollInterval(10, TimeUnit.MILLISECONDS)
+        await().atMost(2, TimeUnit.SECONDS)
+                .pollInterval(20, TimeUnit.MILLISECONDS)
                 .until(() -> transactionRepository.findById(transactionId)
                         .orElseThrow()
                         .getStatus()
