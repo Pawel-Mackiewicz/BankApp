@@ -1,38 +1,22 @@
 package info.mackiewicz.bankapp.system.recovery.password.controller;
 
-import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetRequestDTO;
-import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetService;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetDTO;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequestDTO;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/password")
-@Validated
-public class PasswordResetController {
+public interface PasswordResetController {
 
-    private final PasswordResetService passwordResetService;
+    @RequestMapping("/reset-request")
+    //delete dto, just take email as parameter (but check if validation works that way)
+    public ResponseEntity<Void> requestReset(@Valid @RequestBody PasswordResetRequestDTO request);
 
-        @PostMapping("/reset-request")
-    public ResponseEntity<Void> requestReset(
-        @Valid @RequestBody PasswordResetRequestDTO request
-    ) {
-        passwordResetService.requestReset(request.getEmail());
-        return ResponseEntity.ok().build();
-    }
-    
-    @PostMapping("/reset-complete")
-    public ResponseEntity<Void> completeReset(
-        @Valid @RequestBody PasswordResetDTO request
-    ) {
-        passwordResetService.completeReset(request);
-        return ResponseEntity.ok().build();
-    }
+    @RequestMapping("/reset-complete")
+    ResponseEntity<Void> completeReset(@Valid PasswordResetDTO request);
+
 }

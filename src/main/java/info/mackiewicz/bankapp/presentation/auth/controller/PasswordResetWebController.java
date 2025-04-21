@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.presentation.auth.controller;
 
-import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetRequestDTO;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetDTO;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequestDTO;
 import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

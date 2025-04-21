@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.presentation.auth.dto;
+package info.mackiewicz.bankapp.system.recovery.password.controller.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

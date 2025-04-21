@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.integration;
 
-import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetDTO;
 import info.mackiewicz.bankapp.system.recovery.password.exception.ExpiredTokenException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.UsedTokenException;
 import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetService;
