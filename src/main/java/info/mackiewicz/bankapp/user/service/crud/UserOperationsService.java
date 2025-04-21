@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.user.service.crud;
 
-import info.mackiewicz.bankapp.security.service.PasswordService;
+import info.mackiewicz.bankapp.shared.service.PasswordService;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;

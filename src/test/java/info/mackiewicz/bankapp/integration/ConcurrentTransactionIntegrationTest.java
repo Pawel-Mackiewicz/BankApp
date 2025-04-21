@@ -5,7 +5,7 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestAccountService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;
-import info.mackiewicz.bankapp.system.locking.LockingConfig;
+import info.mackiewicz.bankapp.system.notification.email.locking.LockingConfig;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;

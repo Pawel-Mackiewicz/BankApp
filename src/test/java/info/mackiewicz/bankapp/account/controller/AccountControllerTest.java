@@ -5,7 +5,7 @@ import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.system.locking.LockingConfig;
+import info.mackiewicz.bankapp.system.notification.email.locking.LockingConfig;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.testutils.config.TestConfig;
 import info.mackiewicz.bankapp.user.model.User;

@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.system.banking.history.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.presentation.exception.UnsupportedExporterException;
 import info.mackiewicz.bankapp.system.banking.history.controller.dto.TransactionFilterRequest;
+import info.mackiewicz.bankapp.system.banking.history.exception.UnsupportedExporterException;
 import info.mackiewicz.bankapp.system.banking.history.export.TransactionExporter;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
