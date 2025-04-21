@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.shared.service;
 
 import info.mackiewicz.bankapp.account.util.IbanGenerator;
-import info.mackiewicz.bankapp.system.banking.operations.service.helpers.IbanAnalysisService;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
@@ -9,14 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static info.mackiewicz.bankapp.system.banking.operations.service.helpers.IbanAnalysisService.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the IbanAnalysisService class.
  */
 class IbanAnalysisServiceTest {
-
-    private IbanAnalysisService ibanAnalysisService;
 
     // Sample IBANs for testing
     private Iban sameOwnerIban1;
@@ -26,7 +24,6 @@ class IbanAnalysisServiceTest {
 
     @BeforeEach
     void setUp() {
-        ibanAnalysisService = new IbanAnalysisService();
 
         // Prepare test data using IbanGenerator
         // Same owner, same bank - they have the same userId (123)
@@ -50,7 +47,7 @@ class IbanAnalysisServiceTest {
     @DisplayName("resolveTransferType should return TRANSFER_OWN when owner is the same")
     void resolveTransferType_SameOwner_ShouldReturnTransferOwn() {
         // when
-        TransactionType result = ibanAnalysisService.resolveTransferType(sameOwnerIban1, sameOwnerIban2);
+        TransactionType result = resolveTransferType(sameOwnerIban1, sameOwnerIban2);
 
         // then
         assertEquals(TransactionType.TRANSFER_OWN, result);
@@ -60,7 +57,7 @@ class IbanAnalysisServiceTest {
     @DisplayName("resolveTransferType should return TRANSFER_INTERNAL when different owner in same bank")
     void resolveTransferType_DifferentOwnerSameBank_ShouldReturnTransferInternal() {
         // when
-        TransactionType result = ibanAnalysisService.resolveTransferType(sameOwnerIban1, differentOwnerSameBankIban);
+        TransactionType result = resolveTransferType(sameOwnerIban1, differentOwnerSameBankIban);
 
         // then
         assertEquals(TransactionType.TRANSFER_INTERNAL, result);
@@ -70,7 +67,7 @@ class IbanAnalysisServiceTest {
     @DisplayName("resolveTransferType should return TRANSFER_EXTERNAL when different bank")
     void resolveTransferType_DifferentBank_ShouldReturnTransferExternal() {
         // when
-        TransactionType result = ibanAnalysisService.resolveTransferType(sameOwnerIban1, differentBankIban);
+        TransactionType result = resolveTransferType(sameOwnerIban1, differentBankIban);
 
         // then
         assertEquals(TransactionType.TRANSFER_EXTERNAL, result);
@@ -80,7 +77,7 @@ class IbanAnalysisServiceTest {
     @DisplayName("isSameOwner should return true when owner is the same")
     void isSameOwner_SameOwner_ShouldReturnTrue() {
         // when
-        boolean result = ibanAnalysisService.isSameOwner(sameOwnerIban1, sameOwnerIban2);
+        boolean result = isSameOwner(sameOwnerIban1, sameOwnerIban2);
 
         // then
         assertTrue(result);
@@ -90,7 +87,7 @@ class IbanAnalysisServiceTest {
     @DisplayName("isSameOwner should return false when owner is different")
     void isSameOwner_DifferentOwner_ShouldReturnFalse() {
         // when
-        boolean result = ibanAnalysisService.isSameOwner(sameOwnerIban1, differentOwnerSameBankIban);
+        boolean result = isSameOwner(sameOwnerIban1, differentOwnerSameBankIban);
 
         // then
         assertFalse(result);
@@ -100,7 +97,7 @@ class IbanAnalysisServiceTest {
     @DisplayName("isSameBank should return true when bank is the same")
     void isSameBank_SameBank_ShouldReturnTrue() {
         // when
-        boolean result = ibanAnalysisService.isSameBank(sameOwnerIban1, differentOwnerSameBankIban);
+        boolean result = isSameBank(sameOwnerIban1, differentOwnerSameBankIban);
 
         // then
         assertTrue(result);
@@ -110,7 +107,7 @@ class IbanAnalysisServiceTest {
     @DisplayName("isSameBank should return false when bank is different")
     void isSameBank_DifferentBank_ShouldReturnFalse() {
         // when
-        boolean result = ibanAnalysisService.isSameBank(sameOwnerIban1, differentBankIban);
+        boolean result = isSameBank(sameOwnerIban1, differentBankIban);
 
         // then
         assertFalse(result);
