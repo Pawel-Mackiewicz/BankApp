@@ -1,10 +1,9 @@
-package info.mackiewicz.bankapp.system.locking;
-
-import org.springframework.stereotype.Component;
+package info.mackiewicz.bankapp.system.notification.email.locking;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * Component responsible for managing account locks during operations to prevent

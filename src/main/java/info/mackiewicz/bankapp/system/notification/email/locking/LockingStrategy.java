@@ -1,8 +1,8 @@
-package info.mackiewicz.bankapp.system.locking;
-
-import java.util.concurrent.atomic.AtomicInteger;
+package info.mackiewicz.bankapp.system.notification.email.locking;
 
 import info.mackiewicz.bankapp.account.exception.AccountLockException;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public interface LockingStrategy {
 

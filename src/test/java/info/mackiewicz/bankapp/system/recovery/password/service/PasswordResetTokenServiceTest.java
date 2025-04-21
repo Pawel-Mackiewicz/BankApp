@@ -1,10 +1,9 @@
-package info.mackiewicz.bankapp.system.security.recovery.password.service;
+package info.mackiewicz.bankapp.system.recovery.password.service;
 
 import info.mackiewicz.bankapp.system.recovery.password.exception.ExpiredTokenException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.UsedTokenException;
-import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetTokenService;
 import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
 import info.mackiewicz.bankapp.system.token.repository.PasswordResetTokenRepository;
 import info.mackiewicz.bankapp.system.token.service.TokenOperationsService;

@@ -1,11 +1,8 @@
-package info.mackiewicz.bankapp.presentation.service;
+package info.mackiewicz.bankapp.presentation.dashboard.service;
 
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
-import info.mackiewicz.bankapp.presentation.dashboard.service.PasswordValidationService;
-import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
-import info.mackiewicz.bankapp.presentation.dashboard.service.UsernameValidationService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
