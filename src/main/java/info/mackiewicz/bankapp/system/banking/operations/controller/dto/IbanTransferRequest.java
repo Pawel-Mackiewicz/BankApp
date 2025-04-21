@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.banking.operations.api.dto;
+package info.mackiewicz.bankapp.system.banking.operations.controller.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

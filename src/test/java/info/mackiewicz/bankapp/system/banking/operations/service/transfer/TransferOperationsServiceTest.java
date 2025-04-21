@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.banking.operations.service.transfer;
 
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.controller.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;

@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.system.banking.operations.service.transfer;
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.system.banking.operations.controller.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import org.iban4j.Iban;
