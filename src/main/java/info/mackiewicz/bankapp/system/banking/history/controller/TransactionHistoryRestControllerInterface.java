@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Interface defining REST API endpoints for transaction history management.
@@ -111,13 +112,15 @@ public interface TransactionHistoryRestControllerInterface {
             ),
             @ApiResponse(
                     responseCode = "500",
-                    description = "Unsupported export format",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
+                    description = "Bad Request - Export format not supported."
             ),
             @ApiResponse(
                     responseCode = "500",
-                    description = "Access denied - Account doesn't belong to user",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
+                    description = "Unsupported export format"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Access denied - Account doesn't belong to user"
             )
     })
     @GetMapping("/export")
@@ -148,5 +151,5 @@ public interface TransactionHistoryRestControllerInterface {
                             @ExampleObject(value = "csv"),
                             @ExampleObject(value = "pdf")
                     }
-            ) String format);
+            ) @RequestParam(name = "format", defaultValue = "csv") String format);
 }
