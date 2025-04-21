@@ -1,9 +1,10 @@
 package info.mackiewicz.bankapp.security.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import info.mackiewicz.bankapp.presentation.dashboard.exception.InvalidPasswordException;
+import info.mackiewicz.bankapp.presentation.dashboard.exception.PasswordSameException;
+import info.mackiewicz.bankapp.presentation.dashboard.exception.PasswordsMismatchException;
+import info.mackiewicz.bankapp.presentation.dashboard.service.PasswordValidationService;
+import info.mackiewicz.bankapp.system.security.password.PasswordService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import info.mackiewicz.bankapp.security.exception.InvalidPasswordException;
-import info.mackiewicz.bankapp.security.exception.PasswordSameException;
-import info.mackiewicz.bankapp.security.exception.PasswordsMismatchException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PasswordValidationServiceTest {

@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.shared.config;
 
-import info.mackiewicz.bankapp.security.service.CustomUserDetailsService;
 import info.mackiewicz.bankapp.user.service.AdminUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

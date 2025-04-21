@@ -1,5 +1,11 @@
 package info.mackiewicz.bankapp.presentation.auth.controller;
 
+import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
+import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetRequestDTO;
+import info.mackiewicz.bankapp.system.security.recovery.password.service.PasswordResetTokenService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,13 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetRequestDTO;
-import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller

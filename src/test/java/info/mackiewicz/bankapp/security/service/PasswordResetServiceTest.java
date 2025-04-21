@@ -1,12 +1,14 @@
 package info.mackiewicz.bankapp.security.service;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.security.exception.PasswordChangeException;
-import info.mackiewicz.bankapp.security.exception.TokenCreationException;
-import info.mackiewicz.bankapp.security.exception.UnexpectedTokenValidationException;
-import info.mackiewicz.bankapp.security.model.PasswordResetToken;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.notification.email.exception.EmailSendingException;
+import info.mackiewicz.bankapp.system.security.exception.PasswordChangeException;
+import info.mackiewicz.bankapp.system.security.exception.TokenCreationException;
+import info.mackiewicz.bankapp.system.security.exception.UnexpectedTokenValidationException;
+import info.mackiewicz.bankapp.system.security.recovery.password.service.PasswordResetService;
+import info.mackiewicz.bankapp.system.security.recovery.password.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.system.security.token.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.service.UserService;

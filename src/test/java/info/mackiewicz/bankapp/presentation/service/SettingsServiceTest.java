@@ -1,10 +1,15 @@
 package info.mackiewicz.bankapp.presentation.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
+import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
+import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
+import info.mackiewicz.bankapp.presentation.dashboard.service.PasswordValidationService;
+import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
+import info.mackiewicz.bankapp.presentation.dashboard.service.UsernameValidationService;
+import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
+import info.mackiewicz.bankapp.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,16 +18,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
-import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
-import info.mackiewicz.bankapp.security.service.PasswordValidationService;
-import info.mackiewicz.bankapp.security.service.UsernameValidationService;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
-import info.mackiewicz.bankapp.user.service.UserService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @DisplayName("SettingsService Tests")
 class SettingsServiceTest {

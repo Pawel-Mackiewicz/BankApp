@@ -1,10 +1,10 @@
 package info.mackiewicz.bankapp.security.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import info.mackiewicz.bankapp.presentation.dashboard.exception.ForbiddenUsernameException;
+import info.mackiewicz.bankapp.presentation.dashboard.exception.UsernameAlreadyTakenException;
+import info.mackiewicz.bankapp.presentation.dashboard.exception.UsernameSameException;
+import info.mackiewicz.bankapp.presentation.dashboard.service.UsernameValidationService;
+import info.mackiewicz.bankapp.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,10 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import info.mackiewicz.bankapp.security.exception.ForbiddenUsernameException;
-import info.mackiewicz.bankapp.security.exception.UsernameAlreadyTakenException;
-import info.mackiewicz.bankapp.security.exception.UsernameSameException;
-import info.mackiewicz.bankapp.user.service.UserService;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UsernameValidationServiceTest {

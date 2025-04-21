@@ -1,16 +1,15 @@
 package info.mackiewicz.bankapp.shared.config;
 
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-
-import info.mackiewicz.bankapp.security.service.PasswordService;
+import info.mackiewicz.bankapp.system.security.password.PasswordService;
 import info.mackiewicz.bankapp.user.model.AdminUser;
 import info.mackiewicz.bankapp.user.repository.AdminUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 
 /**

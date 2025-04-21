@@ -1,20 +1,13 @@
 package info.mackiewicz.bankapp.security.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-
+import info.mackiewicz.bankapp.system.security.exception.ExpiredTokenException;
+import info.mackiewicz.bankapp.system.security.exception.TokenNotFoundException;
+import info.mackiewicz.bankapp.system.security.exception.TooManyPasswordResetAttemptsException;
+import info.mackiewicz.bankapp.system.security.exception.UsedTokenException;
+import info.mackiewicz.bankapp.system.security.recovery.password.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.system.security.token.model.PasswordResetToken;
+import info.mackiewicz.bankapp.system.security.token.repository.PasswordResetTokenRepository;
+import info.mackiewicz.bankapp.system.security.token.service.TokenOperationsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,12 +15,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
-import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
-import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.security.exception.UsedTokenException;
-import info.mackiewicz.bankapp.security.model.PasswordResetToken;
-import info.mackiewicz.bankapp.security.repository.PasswordResetTokenRepository;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PasswordResetTokenServiceTest {
