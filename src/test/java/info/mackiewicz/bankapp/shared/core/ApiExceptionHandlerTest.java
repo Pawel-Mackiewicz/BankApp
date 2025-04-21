@@ -1,13 +1,19 @@
 package info.mackiewicz.bankapp.shared.core;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
+import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
+import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
+import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
+import info.mackiewicz.bankapp.shared.web.dto.ValidationError;
+import info.mackiewicz.bankapp.shared.web.error.mapping.ApiExceptionToErrorMapper;
+import info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor;
+import info.mackiewicz.bankapp.shared.web.util.RequestUriHandler;
+import info.mackiewicz.bankapp.system.recovery.password.exception.ExpiredTokenException;
+import info.mackiewicz.bankapp.system.recovery.password.exception.TokenNotFoundException;
+import info.mackiewicz.bankapp.system.recovery.password.exception.TooManyPasswordResetAttemptsException;
+import info.mackiewicz.bankapp.system.recovery.password.exception.UsedTokenException;
+import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,24 +24,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
-import info.mackiewicz.bankapp.security.exception.ExpiredTokenException;
-import info.mackiewicz.bankapp.security.exception.TokenNotFoundException;
-import info.mackiewicz.bankapp.security.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.security.exception.UsedTokenException;
-import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
-import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
-import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
-import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
-import info.mackiewicz.bankapp.shared.web.dto.ValidationError;
-import info.mackiewicz.bankapp.shared.web.error.mapping.ApiExceptionToErrorMapper;
-import info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor;
-import info.mackiewicz.bankapp.shared.web.util.RequestUriHandler;
-import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
-import jakarta.validation.ConstraintViolationException;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ApiExceptionHandlerTest {
@@ -62,9 +60,6 @@ class ApiExceptionHandlerTest {
 
     @Mock
     private ConstraintViolationException constraintViolationException;
-
-    @Mock
-    private BindingResult bindingResult;
 
     private static final String TEST_PATH = "/api/security/password-reset";
     private static final String TEST_ERROR_MESSAGE = "Test error message";

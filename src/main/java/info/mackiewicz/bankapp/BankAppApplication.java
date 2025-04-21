@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp;
 
-import info.mackiewicz.bankapp.system.locking.LockingConfig;
+import info.mackiewicz.bankapp.system.notification.email.locking.LockingConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

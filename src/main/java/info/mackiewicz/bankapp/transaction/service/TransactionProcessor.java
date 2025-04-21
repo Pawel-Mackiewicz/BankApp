@@ -1,14 +1,11 @@
 package info.mackiewicz.bankapp.transaction.service;
 
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
 import info.mackiewicz.bankapp.account.exception.AccountLockException;
 import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.exception.AccountValidationException;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingService;
-import info.mackiewicz.bankapp.system.locking.AccountLockManager;
+import info.mackiewicz.bankapp.system.notification.email.locking.AccountLockManager;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBaseException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
@@ -19,6 +16,8 @@ import info.mackiewicz.bankapp.transaction.service.error.TransactionErrorHandler
 import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutor;
 import info.mackiewicz.bankapp.transaction.service.execution.TransactionExecutorRegistry;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 /**
  * Service responsible for processing financial transactions with proper

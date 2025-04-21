@@ -1,14 +1,13 @@
 package info.mackiewicz.bankapp.shared.util;
 
-import java.util.concurrent.TimeUnit;
-
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
-import info.mackiewicz.bankapp.security.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetTokenService;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service responsible for scheduling and executing periodic tasks in the application.
@@ -16,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @see org.springframework.scheduling.annotation.Scheduled
  * @see info.mackiewicz.bankapp.transaction.service.TransactionService
- * @see info.mackiewicz.bankapp.security.service.PasswordResetTokenService
+ * @see PasswordResetTokenService
  */
 @Slf4j
 @RequiredArgsConstructor
