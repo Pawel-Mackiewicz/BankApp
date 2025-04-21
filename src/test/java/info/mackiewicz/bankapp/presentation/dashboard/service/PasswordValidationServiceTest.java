@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.presentation.dashboard.service;
 import info.mackiewicz.bankapp.presentation.dashboard.exception.InvalidPasswordException;
 import info.mackiewicz.bankapp.presentation.dashboard.exception.PasswordSameException;
 import info.mackiewicz.bankapp.presentation.dashboard.exception.PasswordsMismatchException;
-import info.mackiewicz.bankapp.system.security.password.PasswordService;
+import info.mackiewicz.bankapp.shared.service.PasswordService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

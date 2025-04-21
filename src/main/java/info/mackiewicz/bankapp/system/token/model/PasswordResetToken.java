@@ -1,6 +1,6 @@
-package info.mackiewicz.bankapp.system.security.token.model;
+package info.mackiewicz.bankapp.system.token.model;
 
-import info.mackiewicz.bankapp.system.security.exception.TokenException;
+import info.mackiewicz.bankapp.system.recovery.password.exception.TokenException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

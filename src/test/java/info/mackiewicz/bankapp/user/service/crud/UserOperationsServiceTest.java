@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.user.service.crud;
 
-import info.mackiewicz.bankapp.system.security.password.PasswordService;
+import info.mackiewicz.bankapp.shared.service.PasswordService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.repository.UserRepository;

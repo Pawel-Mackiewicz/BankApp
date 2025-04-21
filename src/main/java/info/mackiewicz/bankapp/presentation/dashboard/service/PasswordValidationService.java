@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.presentation.dashboard.service;
 import info.mackiewicz.bankapp.presentation.dashboard.exception.InvalidPasswordException;
 import info.mackiewicz.bankapp.presentation.dashboard.exception.PasswordSameException;
 import info.mackiewicz.bankapp.presentation.dashboard.exception.PasswordsMismatchException;
-import info.mackiewicz.bankapp.system.security.password.PasswordService;
+import info.mackiewicz.bankapp.shared.service.PasswordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

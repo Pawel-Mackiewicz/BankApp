@@ -1,10 +1,10 @@
-package info.mackiewicz.bankapp.system.security.recovery.password.service;
+package info.mackiewicz.bankapp.system.recovery.password.service;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.notification.email.exception.EmailSendingException;
-import info.mackiewicz.bankapp.system.security.exception.*;
-import info.mackiewicz.bankapp.system.security.token.model.PasswordResetToken;
+import info.mackiewicz.bankapp.system.recovery.password.exception.*;
+import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.user.model.User;

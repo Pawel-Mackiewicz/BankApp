@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.shared.config;
 
 
-import info.mackiewicz.bankapp.system.security.password.PasswordService;
+import info.mackiewicz.bankapp.shared.service.PasswordService;
 import info.mackiewicz.bankapp.user.model.AdminUser;
 import info.mackiewicz.bankapp.user.repository.AdminUserRepository;
 import lombok.RequiredArgsConstructor;

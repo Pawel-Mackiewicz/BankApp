@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.security.password;
+package info.mackiewicz.bankapp.shared.service;
 
 import info.mackiewicz.bankapp.user.model.User;
 import lombok.RequiredArgsConstructor;

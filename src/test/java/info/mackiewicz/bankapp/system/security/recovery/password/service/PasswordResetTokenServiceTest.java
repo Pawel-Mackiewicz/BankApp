@@ -1,12 +1,13 @@
 package info.mackiewicz.bankapp.system.security.recovery.password.service;
 
-import info.mackiewicz.bankapp.system.security.exception.ExpiredTokenException;
-import info.mackiewicz.bankapp.system.security.exception.TokenNotFoundException;
-import info.mackiewicz.bankapp.system.security.exception.TooManyPasswordResetAttemptsException;
-import info.mackiewicz.bankapp.system.security.exception.UsedTokenException;
-import info.mackiewicz.bankapp.system.security.token.model.PasswordResetToken;
-import info.mackiewicz.bankapp.system.security.token.repository.PasswordResetTokenRepository;
-import info.mackiewicz.bankapp.system.security.token.service.TokenOperationsService;
+import info.mackiewicz.bankapp.system.recovery.password.exception.ExpiredTokenException;
+import info.mackiewicz.bankapp.system.recovery.password.exception.TokenNotFoundException;
+import info.mackiewicz.bankapp.system.recovery.password.exception.TooManyPasswordResetAttemptsException;
+import info.mackiewicz.bankapp.system.recovery.password.exception.UsedTokenException;
+import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
+import info.mackiewicz.bankapp.system.token.repository.PasswordResetTokenRepository;
+import info.mackiewicz.bankapp.system.token.service.TokenOperationsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

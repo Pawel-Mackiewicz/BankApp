@@ -1,6 +1,6 @@
-package info.mackiewicz.bankapp.system.security.token.repository;
+package info.mackiewicz.bankapp.system.token.repository;
 
-import info.mackiewicz.bankapp.system.security.token.model.PasswordResetToken;
+import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

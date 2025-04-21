@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.security.exception;
+package info.mackiewicz.bankapp.system.recovery.password.exception;
 
 import info.mackiewicz.bankapp.shared.core.BankAppBaseException;
 import info.mackiewicz.bankapp.shared.core.error.ErrorCode;

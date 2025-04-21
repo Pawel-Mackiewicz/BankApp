@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.shared.util;
 
-import info.mackiewicz.bankapp.system.security.recovery.password.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetTokenService;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

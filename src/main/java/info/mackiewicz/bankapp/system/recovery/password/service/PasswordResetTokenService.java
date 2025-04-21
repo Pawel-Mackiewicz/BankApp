@@ -1,9 +1,9 @@
-package info.mackiewicz.bankapp.system.security.recovery.password.service;
+package info.mackiewicz.bankapp.system.recovery.password.service;
 
-import info.mackiewicz.bankapp.system.security.exception.*;
-import info.mackiewicz.bankapp.system.security.token.model.PasswordResetToken;
-import info.mackiewicz.bankapp.system.security.token.repository.PasswordResetTokenRepository;
-import info.mackiewicz.bankapp.system.security.token.service.TokenOperationsService;
+import info.mackiewicz.bankapp.system.recovery.password.exception.*;
+import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
+import info.mackiewicz.bankapp.system.token.repository.PasswordResetTokenRepository;
+import info.mackiewicz.bankapp.system.token.service.TokenOperationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

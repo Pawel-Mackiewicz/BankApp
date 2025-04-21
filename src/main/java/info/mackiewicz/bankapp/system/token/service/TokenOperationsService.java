@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.security.token.service;
+package info.mackiewicz.bankapp.system.token.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
