@@ -11,7 +11,7 @@
     </parent>
     <groupId>info.mackiewicz</groupId>
     <artifactId>BankApp</artifactId>
-    <version>0.4.8</version>
+    <version>0.4.8-SNAPSHOT</version>
     <name>bankapp</name>
     <description>BankApp</description>
     <url />
@@ -25,7 +25,7 @@
         <connection>scm:git:https://github.com/Pawel-Mackiewicz/BankApp.git</connection>
         <developerConnection>scm:git:git@github.com:Pawel-Mackiewicz/BankApp.git</developerConnection>
         <url>https://github.com/Pawel-Mackiewicz/BankApp</url>
-        <tag>BankApp-0.4.8</tag>
+        <tag>BankApp-0.4.8-SNAPSHOT</tag>
     </scm>
     <properties>
         <mysql.connector.version>8.4.0</mysql.connector.version>
