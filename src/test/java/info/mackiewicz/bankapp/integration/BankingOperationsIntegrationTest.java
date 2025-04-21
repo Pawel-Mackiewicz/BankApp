@@ -124,7 +124,9 @@ public class BankingOperationsIntegrationTest {
     private void validateExpectedBalance(String accountType, BigDecimal actual, BigDecimal expected) {
         String message = String.format("After transfer: %s account: Expected balance: %s but was: %s",
                 accountType, expected, actual);
-        assertEquals(expected, actual, message);
+        // not using assertEquals because BigDecimal.equals() differ same numbers with different scale
+//        assertEquals(expected, actual, message);
+        assertEquals(0, actual.compareTo(expected), message);
     }
 
     private void checkBalancesNotChanged() {

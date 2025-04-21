@@ -123,6 +123,7 @@ class TransferOperationsServiceTest extends BaseTransferServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw exception when source account doesn't have sufficient funds")
     void shouldThrowExceptionWhenSourceAccountDoesntHaveSufficientFunds() {
         // Arrange
         IbanTransferRequest request = createTestTransferRequest();
