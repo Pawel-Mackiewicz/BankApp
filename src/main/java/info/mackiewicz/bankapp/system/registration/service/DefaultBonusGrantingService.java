@@ -66,7 +66,6 @@ public class DefaultBonusGrantingService implements BonusGrantingService {
         return Transaction.buildTransfer()
                 .from(bank)
                 .to(recipient)
-                .asInternalTransfer()
                 .withAmount(amount)
                 .withTitle(DEFAULT_TITLE)
                 .build();

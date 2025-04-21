@@ -6,7 +6,6 @@ import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingExceptio
 import info.mackiewicz.bankapp.transaction.exception.TransactionDestinationAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionSourceAccountNotSpecifiedException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.iban4j.Iban;
 
@@ -14,36 +13,6 @@ import org.iban4j.Iban;
 public class TransferBuilder extends AbstractTransactionBuilder<TransferBuilder> {
     private Account sourceAccount;
     private Account destinationAccount;
-
-    @Deprecated
-    public TransferBuilder withTransactionType(String type) {
-        this.type = TransactionType.valueOf(type);
-        return this;
-    }
-
-    @Deprecated
-    public TransferBuilder withTransactionType(TransactionType type) {
-        this.type = type;
-        return this;
-    }
-
-    @Deprecated
-    public TransferBuilder asOwnTransfer() {
-        this.type = TransactionType.TRANSFER_OWN;
-        return this;
-    }
-
-    @Deprecated
-    public TransferBuilder asInternalTransfer() {
-        this.type = TransactionType.TRANSFER_INTERNAL;
-        return this;
-    }
-
-    @Deprecated
-    public TransferBuilder asExternalTransfer() {
-        this.type = TransactionType.TRANSFER_EXTERNAL;
-        return this;
-    }
 
     public TransferBuilder from(Account account) {
         this.sourceAccount = account;

@@ -317,7 +317,6 @@ class ConcurrentTransactionIntegrationTest {
         // Attempt transfer from zero balance account - should fail immediately
         assertThrows(InsufficientFundsException.class, () -> {
             Transaction transfer = Transaction.buildTransfer()
-                    .asInternalTransfer()
                     .from(zeroBalanceAccount)
                     .to(testAccounts.get(1))
                     .withAmount(BigDecimal.TEN)
@@ -348,7 +347,6 @@ class ConcurrentTransactionIntegrationTest {
 
     private Transaction createTransfer(Account source, Account destination, BigDecimal amount) {
         Transaction transaction = Transaction.buildTransfer()
-                .asInternalTransfer()
                 .from(source)
                 .to(destination)
                 .withAmount(amount)

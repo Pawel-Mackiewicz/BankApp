@@ -1,17 +1,14 @@
 package info.mackiewicz.bankapp.transaction.service.assembler.strategies;
 
-import org.springframework.stereotype.Component;
-
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.assembler.TransactionAssemblyStrategy;
-import info.mackiewicz.bankapp.transaction.service.assembler.WebTransactionTypeResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * Strategy for assembling internal transfer transactions.
@@ -22,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStrategy implements TransactionAssemblyStrategy<InternalTransferRequest> {
 
     private final AccountService accountService;
-    private final WebTransactionTypeResolver transactionTypeResolver;
 
     @Override
     public Transaction assembleTransaction(InternalTransferRequest request) {
@@ -30,9 +26,8 @@ public class InternalTransferAssemblyStrategy extends BaseTransactionAssemblyStr
         
         Account sourceAccount = getSourceAccount(request);
         Account destinationAccount = getDestinationAccount(request);
-        TransactionType resolvedType = transactionTypeResolver.resolveTransactionType(request);
-        
-        return super.assembleTransaction(request, sourceAccount, destinationAccount, resolvedType);
+
+        return super.assembleTransaction(request, sourceAccount, destinationAccount);
     }
     
     @Override

@@ -45,9 +45,7 @@ class TransactionHistoryServiceTest {
     @InjectMocks
     private TransactionHistoryService transactionHistoryService;
 
-    private User testUser;
     private Account testAccount;
-    private Account destinationAccount;
     private TransactionFilterRequest filter;
     private List<TransactionResponse> responses;
     private List<Transaction> transactions;
@@ -55,10 +53,10 @@ class TransactionHistoryServiceTest {
     @BeforeEach
     void setUp() {
         // Create test user and accounts
-        testUser = TestUserBuilder.createTestUser();
+        User testUser = TestUserBuilder.createTestUser();
 
         testAccount = TestAccountBuilder.createTestAccount(1, BigDecimal.valueOf(1000), testUser);
-        destinationAccount = TestAccountBuilder.createTestAccount(2, BigDecimal.valueOf(2000), TestUserBuilder.createRandomTestUser());
+        Account destinationAccount = TestAccountBuilder.createTestAccount(2, BigDecimal.valueOf(2000), TestUserBuilder.createRandomTestUser());
 
         filter = TransactionFilterRequest.builder()
                 .accountId(testAccount.getId())
@@ -71,14 +69,12 @@ class TransactionHistoryServiceTest {
         // Create test transactions
         transactions = Arrays.asList(
             Transaction.buildTransfer()
-                .asInternalTransfer()
                 .from(testAccount)
                 .to(destinationAccount)
                 .withAmount(BigDecimal.valueOf(100))
                 .withTitle("Test transaction 1")
                 .build(),
             Transaction.buildTransfer()
-                .asInternalTransfer()
                 .from(destinationAccount)
                 .to(testAccount)
                 .withAmount(BigDecimal.valueOf(200))

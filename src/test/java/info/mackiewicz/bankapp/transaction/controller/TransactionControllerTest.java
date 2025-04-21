@@ -1,20 +1,15 @@
 package info.mackiewicz.bankapp.transaction.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
+import info.mackiewicz.bankapp.testutils.TestUserBuilder;
+import info.mackiewicz.bankapp.testutils.config.TestConfig;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.dto.CreateTransactionRequest;
+import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,18 +22,15 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Collections;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
-import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.testutils.config.TestConfig;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
-import info.mackiewicz.bankapp.transaction.model.dto.CreateTransactionRequest;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.user.model.User;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TransactionController.class)
 @WithMockUser
@@ -61,12 +53,11 @@ public class TransactionControllerTest {
     private Account sourceAccount;
     private Account destinationAccount;
     private CreateTransactionRequest createRequest;
-    private User testUser;
-    
+
     @BeforeEach
     void setUp() {
         // Prepare test user
-        testUser = TestUserBuilder.createTestUser();
+        User testUser = TestUserBuilder.createTestUser();
         
         // Prepare test accounts
         sourceAccount = TestAccountBuilder.createTestAccount(1, new BigDecimal("1000.00"), testUser);
@@ -78,7 +69,6 @@ public class TransactionControllerTest {
                 .to(destinationAccount)
                 .withAmount(new BigDecimal("100.00"))
                 .withTitle("Test transaction")
-                .withTransactionType(TransactionType.TRANSFER_INTERNAL)
                 .build();
         
         // Set additional transaction fields using reflection
@@ -159,7 +149,7 @@ public class TransactionControllerTest {
     @DisplayName("Should return all transactions")
     void shouldGetAllTransactions() throws Exception {
         // given
-        when(transactionService.getAllTransactions()).thenReturn(Arrays.asList(mockTransaction));
+        when(transactionService.getAllTransactions()).thenReturn(Collections.singletonList(mockTransaction));
         
         // when & then
         mockMvc.perform(get("/api/transactions"))
@@ -176,7 +166,7 @@ public class TransactionControllerTest {
     void shouldGetTransactionsByAccountId() throws Exception {
         // given
         when(accountService.getAccountById(1)).thenReturn(sourceAccount);
-        when(transactionService.getTransactionsByAccountId(1)).thenReturn(Arrays.asList(mockTransaction));
+        when(transactionService.getTransactionsByAccountId(1)).thenReturn(Collections.singletonList(mockTransaction));
         
         // when & then
         mockMvc.perform(get("/api/transactions/account/1"))

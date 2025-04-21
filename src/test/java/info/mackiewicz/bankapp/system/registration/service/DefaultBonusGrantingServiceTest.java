@@ -59,7 +59,6 @@ class DefaultBonusGrantingServiceTest {
         Transaction createdTransaction = Transaction.buildTransfer()
                 .from(bankAccount)
                 .to(recipientAccount)
-                .asInternalTransfer()
                 .withAmount(amount)
                 .withTitle(DefaultBonusGrantingService.DEFAULT_TITLE)
                 .build();
@@ -67,7 +66,6 @@ class DefaultBonusGrantingServiceTest {
         Transaction registeredTransaction = Transaction.buildTransfer()
                 .from(bankAccount)
                 .to(recipientAccount)
-                .asInternalTransfer()
                 .withAmount(amount)
                 .withTitle(DefaultBonusGrantingService.DEFAULT_TITLE)
                 .build();
@@ -92,7 +90,6 @@ class DefaultBonusGrantingServiceTest {
     void grantWelcomeBonus_WhenRecipientAccountNotFound_ThenThrowsException() {
         // Arrange
         Iban recipientIban = TestIbanProvider.getNextIbanObject();
-        BigDecimal amount = DEFAULT_BONUS_AMOUNT;
 
         Account bankAccount = TestAccountBuilder.createBankAccount();
 
@@ -102,7 +99,7 @@ class DefaultBonusGrantingServiceTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () ->
-                defaultBonusGrantingService.grantWelcomeBonus(recipientIban, amount));
+                defaultBonusGrantingService.grantWelcomeBonus(recipientIban, DEFAULT_BONUS_AMOUNT));
 
         verify(bankAccountProvider).getBankAccount();
         verify(accountService).getAccountByIban(eq(recipientIban));
@@ -122,7 +119,6 @@ class DefaultBonusGrantingServiceTest {
         Transaction createdTransaction = Transaction.buildTransfer()
                 .from(bankAccount)
                 .to(recipientAccount)
-                .asInternalTransfer()
                 .withAmount(amount)
                 .withTitle(DefaultBonusGrantingService.DEFAULT_TITLE)
                 .build();

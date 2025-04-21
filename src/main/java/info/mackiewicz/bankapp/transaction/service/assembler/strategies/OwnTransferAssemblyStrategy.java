@@ -1,16 +1,14 @@
 package info.mackiewicz.bankapp.transaction.service.assembler.strategies;
 
-import org.springframework.stereotype.Component;
-
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.assembler.TransactionAssemblyStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * Strategy for assembling own transfer transactions (between user's own accounts).
@@ -28,9 +26,8 @@ public class OwnTransferAssemblyStrategy extends BaseTransactionAssemblyStrategy
         
         Account sourceAccount = getSourceAccount(request);
         Account destinationAccount = getDestinationAccount(request);
-        TransactionType resolvedType = TransactionType.TRANSFER_OWN;
-        
-        return super.assembleTransaction((WebTransferRequest) request, sourceAccount, destinationAccount, resolvedType);
+
+        return super.assembleTransaction((WebTransferRequest) request, sourceAccount, destinationAccount);
     }
 
     @Override

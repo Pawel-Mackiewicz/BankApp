@@ -3,9 +3,7 @@ package info.mackiewicz.bankapp.system.banking.operations.service.helpers;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.RequiredArgsConstructor;
-import org.iban4j.Iban;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,8 +15,6 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class TransactionBuildingService {
-    
-    private final IbanAnalysisService ibanAnalysisService;
 
     /**
      * Builds a transfer transaction between two accounts.
@@ -33,18 +29,11 @@ public class TransactionBuildingService {
     public Transaction buildTransferTransaction(BigDecimal amount, String title, Account sourceAccount,
             Account destinationAccount) {
 
-        TransactionType type = resolveTransferType(sourceAccount.getIban(), destinationAccount.getIban());
-
         return Transaction.buildTransfer()
                 .from(sourceAccount)
                 .to(destinationAccount)
-                .withTransactionType(type)
                 .withAmount(amount)
                 .withTitle(title)
                 .build();
-    }
-
-        private TransactionType resolveTransferType(Iban sourceIban, Iban destinationIban) {
-        return ibanAnalysisService.resolveTransferType(sourceIban, destinationIban);
     }
 }

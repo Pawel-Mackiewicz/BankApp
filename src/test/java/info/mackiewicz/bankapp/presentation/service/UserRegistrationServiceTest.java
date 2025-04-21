@@ -7,7 +7,6 @@ import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.model.builder.TransferBuilder;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.UserMapper;
@@ -92,9 +91,6 @@ class UserRegistrationServiceTest {
         when(accountService.getAccountById(-1)).thenReturn(bankAccount);
         when(transferBuilder.from(any(Account.class))).thenReturn(transferBuilder);
         when(transferBuilder.to(any(Account.class))).thenReturn(transferBuilder);
-        when(transferBuilder.asInternalTransfer())
-.thenReturn(transferBuilder);
-        when(transferBuilder.withTransactionType(TransactionType.TRANSFER_INTERNAL)).thenReturn(transferBuilder);
         when(transferBuilder.withAmount(any(BigDecimal.class))).thenReturn(transferBuilder);
         when(transferBuilder.withTitle(anyString())).thenReturn(transferBuilder);
         when(transferBuilder.build()).thenReturn(transaction);
