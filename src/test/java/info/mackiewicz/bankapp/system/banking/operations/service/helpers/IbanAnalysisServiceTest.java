@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.service;
+package info.mackiewicz.bankapp.system.banking.operations.service.helpers;
 
 import info.mackiewicz.bankapp.account.util.IbanGenerator;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;

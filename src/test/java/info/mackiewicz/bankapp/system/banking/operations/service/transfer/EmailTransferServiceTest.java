@@ -1,12 +1,12 @@
-package info.mackiewicz.bankapp.system.banking.operations.transfer;
+package info.mackiewicz.bankapp.system.banking.operations.service.transfer;
 
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
-import info.mackiewicz.bankapp.system.banking.operations.service.transfer.IbanTransferService;
+import info.mackiewicz.bankapp.system.banking.operations.api.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
+import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,22 +23,23 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class IbanTransferServiceTest extends BaseTransferServiceTest {
+class EmailTransferServiceTest extends BaseTransferServiceTest {
 
-    private IbanTransferService ibanTransferService;
+    private EmailTransferService emailTransferService;
 
     @BeforeEach
-    void setUpIbanService() {
-        ibanTransferService = new IbanTransferService(accountService, operationsService);
+    void setUpEmailService() {
+        emailTransferService = new EmailTransferService(accountService, operationsService);
     }
 
     @Test
-    @DisplayName("Should successfully handle IBAN transfer")
-    void shouldSuccessfullyHandleIbanTransfer() {
+    @DisplayName("Should successfully handle email transfer")
+    void shouldSuccessfullyHandleEmailTransfer() {
         // Arrange
-        IbanTransferRequest request = createIbanTransferRequest(SOURCE_IBAN, DEST_IBAN);
+        EmailAddress destEmail = new EmailAddress("recipient@example.com");
+        EmailTransferRequest request = createEmailTransferRequest(SOURCE_IBAN, destEmail);
         
-        when(accountService.getAccountByIban(eq(DEST_IBAN)))
+        when(accountService.getAccountByOwnersEmail(eq(destEmail)))
                 .thenReturn(destinationAccount);
                 
         when(operationsService.handleTransfer(
@@ -52,20 +53,21 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
                 });
 
         // Act
-        TransactionResponse response = ibanTransferService.handleIbanTransfer(request);
+        TransactionResponse response = emailTransferService.handleEmailTransfer(request);
 
         // Assert
         assertSuccessfulTransfer(response);
-        verify(accountService).getAccountByIban(eq(DEST_IBAN));
+        verify(accountService).getAccountByOwnersEmail(eq(destEmail));
     }
 
     @Test
-    @DisplayName("Should throw exception when destination IBAN not found")
-    void shouldThrowExceptionWhenDestinationIbanNotFound() {
+    @DisplayName("Should throw exception when destination email not found")
+    void shouldThrowExceptionWhenDestinationEmailNotFound() {
         // Arrange
-        IbanTransferRequest request = createIbanTransferRequest(SOURCE_IBAN, DEST_IBAN);
+        EmailAddress destEmail = new EmailAddress("nonexistent@example.com");
+        EmailTransferRequest request = createEmailTransferRequest(SOURCE_IBAN, destEmail);
         
-        when(accountService.getAccountByIban(eq(DEST_IBAN)))
+        when(accountService.getAccountByOwnersEmail(eq(destEmail)))
                 .thenThrow(new AccountNotFoundByIbanException("Account not found"));
                 
         when(operationsService.handleTransfer(
@@ -78,7 +80,7 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
                 });
 
         // Act & Assert
-        assertThatThrownBy(() -> ibanTransferService.handleIbanTransfer(request))
+        assertThatThrownBy(() -> emailTransferService.handleEmailTransfer(request))
                 .isInstanceOf(AccountNotFoundByIbanException.class);
     }
 
@@ -86,8 +88,9 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
     @DisplayName("Should throw exception when user is not owner of source account")
     void shouldThrowExceptionWhenUserIsNotOwnerOfSourceAccount() {
         // Arrange
-        IbanTransferRequest request = createIbanTransferRequest(SOURCE_IBAN, DEST_IBAN);
-                
+        EmailAddress destEmail = new EmailAddress("recipient@example.com");
+        EmailTransferRequest request = createEmailTransferRequest(SOURCE_IBAN, destEmail);
+            
         when(operationsService.handleTransfer(
                 eq(request),
                 eq(SOURCE_IBAN),
@@ -95,7 +98,7 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
                 .thenThrow(new AccountOwnershipException("User is not the owner of the account"));
 
         // Act & Assert
-        assertThatThrownBy(() -> ibanTransferService.handleIbanTransfer(request))
+        assertThatThrownBy(() -> emailTransferService.handleEmailTransfer(request))
                 .isInstanceOf(AccountOwnershipException.class);
     }
 
@@ -103,7 +106,8 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
     @DisplayName("Should throw exception when transaction validation fails")
     void shouldThrowExceptionWhenTransactionValidationFails() {
         // Arrange
-        IbanTransferRequest request = createIbanTransferRequest(SOURCE_IBAN, DEST_IBAN);
+        EmailAddress destEmail = new EmailAddress("recipient@example.com");
+        EmailTransferRequest request = createEmailTransferRequest(SOURCE_IBAN, destEmail);
                 
         when(operationsService.handleTransfer(
                 eq(request),
@@ -112,14 +116,14 @@ class IbanTransferServiceTest extends BaseTransferServiceTest {
                 .thenThrow(new TransactionValidationException("Transaction validation failed"));
 
         // Act & Assert
-        assertThatThrownBy(() -> ibanTransferService.handleIbanTransfer(request))
+        assertThatThrownBy(() -> emailTransferService.handleEmailTransfer(request))
                 .isInstanceOf(TransactionValidationException.class);
     }
 
-    private IbanTransferRequest createIbanTransferRequest(Iban sourceIban, Iban destIban) {
-        IbanTransferRequest request = new IbanTransferRequest();
+    private EmailTransferRequest createEmailTransferRequest(Iban sourceIban, EmailAddress destEmail) {
+        EmailTransferRequest request = new EmailTransferRequest();
         request.setSourceIban(sourceIban);
-        request.setRecipientIban(destIban);
+        request.setDestinationEmail(destEmail);
         request.setAmount(TRANSFER_AMOUNT);
         request.setTitle(TRANSFER_TITLE);
         return request;

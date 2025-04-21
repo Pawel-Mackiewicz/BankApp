@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.config;
+package info.mackiewicz.bankapp.shared.service;
 
 import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;

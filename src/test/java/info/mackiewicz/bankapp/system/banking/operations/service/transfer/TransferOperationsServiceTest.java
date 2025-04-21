@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.banking.operations.transfer;
+package info.mackiewicz.bankapp.system.banking.operations.service.transfer;
 
 import info.mackiewicz.bankapp.system.banking.operations.api.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;

@@ -1,6 +1,5 @@
-package info.mackiewicz.bankapp.security.service;
+package info.mackiewicz.bankapp.system.security.password;
 
-import info.mackiewicz.bankapp.system.security.password.PasswordService;
 import info.mackiewicz.bankapp.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,5 @@
-package info.mackiewicz.bankapp.security.service;
+package info.mackiewicz.bankapp.system.security.token.service;
 
-import info.mackiewicz.bankapp.system.security.token.service.TokenOperationsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

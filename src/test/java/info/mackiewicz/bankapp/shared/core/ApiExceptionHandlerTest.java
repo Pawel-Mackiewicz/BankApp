@@ -24,7 +24,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
@@ -61,9 +60,6 @@ class ApiExceptionHandlerTest {
 
     @Mock
     private ConstraintViolationException constraintViolationException;
-
-    @Mock
-    private BindingResult bindingResult;
 
     private static final String TEST_PATH = "/api/security/password-reset";
     private static final String TEST_ERROR_MESSAGE = "Test error message";

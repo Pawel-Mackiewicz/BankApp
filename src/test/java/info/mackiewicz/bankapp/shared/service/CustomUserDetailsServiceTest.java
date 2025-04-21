@@ -1,6 +1,5 @@
-package info.mackiewicz.bankapp.security.service;
+package info.mackiewicz.bankapp.shared.service;
 
-import info.mackiewicz.bankapp.shared.config.CustomUserDetailsService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
