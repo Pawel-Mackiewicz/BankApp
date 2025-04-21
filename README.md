@@ -90,29 +90,22 @@ BankApp/
 │   │       ├── static/                           # Static resources (CSS, JS, images)
 │   │       │   ├── css/                          # CSS styles
 │   │       │   ├── js/                           # JavaScript scripts
-│   │       │   │   └── modules/                  # JS modules
 │   │       │   └── favicon.ico                   # Page icon
 │   │       │
 │   │       ├── templates/                        # Thymeleaf templates
-│   │       │   ├── dashboard.html                # Main dashboard 
-│   │       │   ├── login.html                    # Login page
-│   │       │   ├── registration.html             # Registration page
-│   │       │   ├── settings.html                 # User settings
-│   │       │   ├── transactions-history.html     # Transaction history
-│   │       │   └── password-reset.html           # Password reset
-│   │       │
 │   │       ├── application.properties            # Main application configuration
 │   │       └── logback.xml                       # Logging configuration
 │   │
-│   └── test/                                     # Application tests
-│       ├── java/                                 # Test code
+│   └── test/
+│       ├── java/
 │       │   └── info/
 │       │       └── mackiewicz/
-│       │           └── bankapp/                  # Unit and integration tests
+│       │           └── bankapp/                  # Unit tests
+│       │               ├── integration/          # Integration tests
+│       │               └── testutils/            # Test utils 
 │       │
 │       └── resources/                            # Test resources
-│           ├── application-test.properties       # Test configuration
-│           └── test-plans/                       # Test plans
+│           └── application-test.properties       # Test configuration
 │
 ├── logs/                                         # Application logs directory
 │
