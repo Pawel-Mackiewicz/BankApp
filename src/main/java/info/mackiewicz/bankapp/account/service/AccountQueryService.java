@@ -1,12 +1,5 @@
 package info.mackiewicz.bankapp.account.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
-import org.iban4j.Iban;
-import org.springframework.stereotype.Service;
-
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
 import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
@@ -16,6 +9,12 @@ import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.iban4j.Iban;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Service responsible for querying and retrieving account information.
@@ -93,9 +92,4 @@ class AccountQueryService {
         log.debug("Checking if account exists by email: {}", email);
         return accountRepository.existsByOwner_email(email);
     }
-
-    boolean existsByEmail(String email) {
-        return existsByEmail(new EmailAddress(email));
-    }
-
 }

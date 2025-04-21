@@ -7,16 +7,18 @@ history of financial operations on their bank accounts in a secure and efficient
 
 The transaction history system is built according to a multi-layered architecture pattern:
 
-1. **Controller Layer** (`TransactionHistoryController`, `TransactionHistoryRestController`)
+1. **Controller Layer** (`TransactionHistoryRestController`)
     - Handles HTTP requests related to transaction history
     - Implements REST API endpoints for retrieving and exporting data
-    - Passes requests to appropriate services and returns responses to clients
+   - Manages authorization via Spring Security annotations
+   - Exposes REST API interface through `TransactionHistoryRestControllerInterface`
 
 2. **Service Layer** (`TransactionHistoryService`)
     - Provides a unified interface for operations related to transaction history
     - Verifies user permissions to access transaction data
     - Delegates filtering and sorting tasks to specialized services
     - Coordinates data export in various formats
+   - Manages pagination of results with a limit of 100 recent transactions
 
 3. **Filtering and Sorting Layer** (`TransactionFilterService`)
     - Implements business logic for filtering transactions based on multiple criteria
@@ -25,12 +27,8 @@ The transaction history system is built according to a multi-layered architectur
 
 4. **Data Export Layer** (`TransactionExporter`, various implementations)
     - Implements strategies for data export in different formats
+   - Currently supports CSV (default) and PDF formats
     - Uses the strategy pattern for flexible handling of various export formats
-
-5. **Presentation Layer** (JavaScript components)
-    - Provides an interactive user interface
-    - Implements dynamic data loading and pagination
-    - Handles filters and sorting options on the client side
 
 ## System Features
 
@@ -48,6 +46,7 @@ The system allows filtering transactions based on the following criteria:
 
 - Date range (`dateFrom`, `dateTo`)
 - Transaction type (`type` - DEPOSIT, WITHDRAWAL, TRANSFER_OWN, etc.)
+- Transaction status (`status` - NEW, COMPLETED, FAILED, etc.)
 - Amount range (`amountFrom`, `amountTo`)
 - Text search (`query`) - searches transaction titles and account data
 
@@ -87,33 +86,39 @@ Export process:
 The system implements several security mechanisms:
 
 - **Account Ownership Verification**:
-    - The `verifyAccountOwnership` method ensures that users have access only to their own transactions
-    - Attempt to access someone else's account data results in an `AccountOwnershipException`
+    - Spring Security's `@PreAuthorize` annotation ensures that users have access only to their own transactions
+    - Authentication uses `@AuthenticationPrincipal` to access the current user
+    - Custom `IdAccountAuthorizationService` validates account ownership
 
 - **Error Handling**:
-    - Centralization of exception handling through `TransactionFilterException`
+    - Centralization of exception handling through hierarchy of exceptions
+    - Base exception class `TransactionBaseException` with error codes
+    - Specific exceptions like `InsufficientFundsException` with user-friendly messages
     - Safe communication of error information to the user
     - Detailed diagnostic logging for developers
 
 - **API Security**:
     - All endpoints require user authentication
+  - REST endpoints are protected with proper authorization checks
 
 ## Detailed Implementation
 
 - **Design Patterns**:
-    - Strategy (`TransactionExporter`)
+    - Strategy (`TransactionExporter` with implementations like `CsvTransactionExporter`, `PdfTransactionExporter`)
+    - Builder (`AbstractTransactionBuilder` for transaction creation)
     - Facade (`TransactionHistoryService`)
-    - DTO (`TransactionFilterDTO`)
+    - DTO (`TransactionFilterRequest`, `TransactionResponse`)
     - Decorator (wrapping HTTP responses for export)
 
 - **Pagination**:
     - Implementation through Spring Data's `PageImpl` class
     - Dynamic loading of subsequent pages in the user interface
+  - Custom pagination in `TransactionHistoryService.createPaginatedResponse`
     - Infinite scrolling using JavaScript
 
 - **Extensibility**:
     - Adding new export formats requires only implementing the `TransactionExporter` interface
-    - Dynamic identification and use of exporters through a collection managed by Spring
+  - Dynamic identification and use of exporters through dependency injection
 
 - **Frontend**:
     - Modular JavaScript architecture divided into:

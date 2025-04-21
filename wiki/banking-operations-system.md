@@ -23,18 +23,17 @@ The banking operations system follows a multi-layered architecture pattern:
         - `IbanTransferService` - Handles transfers using IBAN numbers
         - `EmailTransferService` - Handles transfers using email addresses
 
-3. **Security Layer** (`AccountSecurityService`)
-    - Validates account ownership
-    - Prevents unauthorized access to accounts
-    - Ensures secure transaction processing
+    - **Precondition Validation** (`TransactionPreconditionValidator`)
+        - Validates sufficient funds before processing transactions
+        - Throws appropriate exceptions for business rule violations
+        - Ensures transactions only proceed when prerequisites are met
 
-4. **Transaction Building Layer** (`TransactionBuilderService`)
+3. **Transaction Building Layer** (`TransactionBuildingService`)
     - Coordinates transaction creation process
     - Uses TransactionBuilder to construct transaction objects
-    - Determines and assigns appropriate transaction types
     - Manages the transfer of required information to the builder
 
-5. **Analysis Layer** (`IbanAnalysisService`)
+4. **Analysis Layer** (`IbanAnalysisService`)
     - Analyzes IBAN numbers to determine transfer types
     - Identifies own/internal/external transfers
 
@@ -62,16 +61,20 @@ The system processes transfers through several steps:
     - Ensures positive transfer amounts
 
 2. **Account Verification**
-    - Verifies source account ownership
+    - Verifies source account ownership through Spring Security
     - Validates destination account existence
     - Checks account access permissions
 
-3. **Transaction Creation**
+3. **Precondition Checks**
+    - Validates sufficient funds in source account
+    - Ensures transaction can be completed before processing
+
+4. **Transaction Creation**
     - Builds transaction with appropriate type
     - Assigns unique transaction identifiers
     - Records transaction details
 
-4. **Transfer Type Resolution**
+5. **Transfer Type Resolution**
     - Analyzes IBAN numbers to determine:
         - External transfers (different banks)
         - Internal transfers (same bank, different owner)
@@ -82,7 +85,8 @@ The system processes transfers through several steps:
 The system implements multiple security layers:
 
 - **Account Ownership Verification**:
-    - Strict validation of account ownership
+    - Spring Security-based authorization via `@PreAuthorize` annotations
+    - Delegated security checks to service beans (`@ibanAccountAuthorizationService`)
     - Prevention of unauthorized access
     - Secure handling of account information
 
@@ -92,6 +96,11 @@ The system implements multiple security layers:
     - Amount validation
     - Required field checks
 
+- **Precondition Validation**:
+    - Sufficient funds validation
+    - Business rule enforcement
+    - Clear error messaging
+
 - **Error Handling**:
     - Comprehensive exception handling
     - Detailed error messages
@@ -99,8 +108,8 @@ The system implements multiple security layers:
 
 - **Transaction Security**:
     - Unique transaction IDs
-    - Transaction tracking
-    - Secure processing
+    - Temporary IDs for request tracking
+    - Transaction logging with MDC context
 
 ## Detailed Implementation
 
@@ -129,12 +138,12 @@ The system implements multiple security layers:
 ### Key Components
 
 1. **Request Objects**
-    - `BankingOperationRequest` - Base class for operations
+    - `TransactionRequest` - Base class for operations
     - `IbanTransferRequest` - IBAN-based transfers
     - `EmailTransferRequest` - Email-based transfers
 
 2. **Response Objects**
-    - `TransferResponse` - Transfer result details
+    - `TransactionResponse` - Transfer result details
     - Account information
     - Transaction details
 
@@ -142,6 +151,7 @@ The system implements multiple security layers:
     - Bean validation annotations
     - Custom validators
     - Business rule validation
+    - Precondition checks
 
 ### Error Handling
 

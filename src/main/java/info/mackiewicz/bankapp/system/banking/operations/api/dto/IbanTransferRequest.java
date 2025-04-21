@@ -30,8 +30,4 @@ public class IbanTransferRequest extends TransactionRequest {
     public void setRecipientIban(Iban iban) {
         this.recipientIban = iban.toString();
     }
-
-    public void setRecipientIban(String iban) {
-        this.recipientIban = iban;
-    }
 }
