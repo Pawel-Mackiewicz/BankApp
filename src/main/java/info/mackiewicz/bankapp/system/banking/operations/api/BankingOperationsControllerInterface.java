@@ -39,9 +39,11 @@ public interface BankingOperationsControllerInterface {
      * @return response with transaction result
      */
     @Operation(
-        summary = "Transfer funds using IBAN", 
-        description = "Transfers funds from source account to destination account using IBAN identifiers. \n\n" +
-                     "Before making transfer, you should **validate recipient's IBAN using GET /api/validate-iban** endpoint."
+        summary = "Transfer funds using IBAN",
+            description = """
+                    Transfers funds from source account to destination account using IBAN identifiers.\s
+                    
+                    Before making transfer, you should **validate recipient's IBAN using GET /api/validate-iban** endpoint."""
     )
     @PostMapping("/transfer/iban")
     @ApiResponses(value = {
@@ -49,35 +51,8 @@ public interface BankingOperationsControllerInterface {
             responseCode = "200", 
             description = "Transfer completed successfully", 
             content = @Content(
-                mediaType = "application/json", 
-                schema = @Schema(implementation = TransactionResponse.class),
-                examples = {
-                    @ExampleObject(
-                        name = "Successful transfer",
-                        summary = "Example of a successful transfer response",
-                        value = """
-                                {
-                                  "sourceAccount": {
-                                    "fullNameOfOwner": "John Smith",
-                                    "iban": "PL12345678901234567890123456"
-                                  },
-                                
-                                  "targetAccount": {
-                                    "fullNameOfOwner": "Alice Johnson",
-                                    "iban": "PL09876543210987654321098765"
-                                  },
-                                
-                                  "transactionInfo": {
-                                    "id": 123,
-                                    "amount": 100.50,
-                                    "type": "TRANSFER_INTERNAL",
-                                    "title": "Services",
-                                    "date": "2023-04-01T12:34:56Z",
-                                    "status": "DONE"
-                                  }
-                                }"""
-                    )
-                }
+                mediaType = "application/json",
+                    schema = @Schema(implementation = TransactionResponse.class)
             )
         ),
         @ApiResponse(
@@ -202,33 +177,10 @@ public interface BankingOperationsControllerInterface {
     @PostMapping("/transfer/email")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Transfer completed successfully", 
-                    content = @Content(mediaType = "application/json", 
-                    schema = @Schema(implementation = TransactionResponse.class),
-                    examples = {
-                        @ExampleObject(
-                            name = "Successful email transfer",
-                            summary = "Example of a successful transfer using email",
-                            value = """
-                                    {
-                                      "sourceAccount": {
-                                        "formattedIban": "PL91 4851 1234 0000 5700 0000 0002",
-                                        "ownerFullname": "Marian Ziolkowski"
-                                      },
-                                      "targetAccount": {
-                                        "formattedIban": "PL92 4851 1234 0000 2300 0000 0001",
-                                        "ownerFullname": "Pablo Picasso"
-                                      },
-                                      "transactionInfo": {
-                                        "id": 81,
-                                        "type": "TRANSFER_INTERNAL",
-                                        "date": "2025-04-04T16:15:34.6386211",
-                                        "title": "string",
-                                        "amount": 0.01,
-                                        "status": "NEW"
-                                      }
-                                    }"""
-                        )
-                    })),
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TransactionResponse.class)
+                    )
+        ),
         @ApiResponse(
             responseCode = "400", 
             description = "Invalid input, insufficient funds or validation error", 

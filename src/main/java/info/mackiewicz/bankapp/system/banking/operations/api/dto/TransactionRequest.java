@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.operations.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import info.mackiewicz.bankapp.account.validation.ValidIban;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,7 +29,7 @@ import java.time.temporal.ChronoUnit;
 @Getter
 @Setter
 @ToString
-public abstract class BankingOperationRequest {
+public abstract class TransactionRequest {
     /**
      * Temporary ID for the transaction, used for tracking purposes.
      * This ID is generated based on the current time in milliseconds.
@@ -38,6 +40,7 @@ public abstract class BankingOperationRequest {
     @Schema(description = "IBAN of the source account", example = "PL11485112340000123400000077")
     @NotBlank(message = "Source IBAN cannot be blank")
     @ValidIban
+    @JsonProperty("sourceIban")
     private String sourceIban;
 
     @Schema(description = "Amount to be transferred", minimum = "0.01")
@@ -49,10 +52,12 @@ public abstract class BankingOperationRequest {
     @NotBlank(message = "Title cannot be blank")
     private String title;
 
+    @JsonIgnore
     public Iban getSourceIban() {
         return Iban.valueOf(sourceIban);
     }
 
+    @JsonIgnore
     public void setSourceIban(Iban iban) {
         this.sourceIban = iban.toString();
     }
@@ -61,7 +66,7 @@ public abstract class BankingOperationRequest {
         this.sourceIban = iban;
     }
 
-    public BankingOperationRequest() {
+    public TransactionRequest() {
         tempId = ChronoUnit.MILLIS.between(
             LocalDateTime.now().withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),
             LocalDateTime.now()

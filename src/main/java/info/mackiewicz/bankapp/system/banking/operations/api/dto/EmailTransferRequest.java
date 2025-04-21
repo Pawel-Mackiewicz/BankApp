@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.operations.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,13 +14,15 @@ import lombok.ToString;
 @Schema(description = "Request object for transferring money to an email address")
 @ToString(callSuper = true)
 @Setter
-public class EmailTransferRequest extends BankingOperationRequest {
+public class EmailTransferRequest extends TransactionRequest {
 
     @Schema(description = "The destination email address for the transfer", requiredMode = RequiredMode.REQUIRED, example = "example@user.com")
     @Pattern(regexp = ValidationConstants.EMAIL_PATTERN, message = "Invalid email format")
     @NotBlank
+    @JsonProperty("destinationEmail")
     private String destinationEmail;
 
+    @JsonIgnore
     public EmailAddress getDestinationEmail() {
         return new EmailAddress(destinationEmail);
     }
