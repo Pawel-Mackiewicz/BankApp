@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.error.handling.dto.interfaces;
+package info.mackiewicz.bankapp.shared.annotations;
 
 /**
  * Interface for DTOs that require password confirmation.
