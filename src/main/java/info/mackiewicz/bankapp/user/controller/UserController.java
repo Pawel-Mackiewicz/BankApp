@@ -1,19 +1,6 @@
 package info.mackiewicz.bankapp.user.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.shared.web.response.RestResponse;
 import info.mackiewicz.bankapp.shared.web.response.RestResponseFactory;
@@ -24,6 +11,11 @@ import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;
 import info.mackiewicz.bankapp.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing user operations.
@@ -42,8 +34,8 @@ public class UserController implements UserControllerInterface {
     @Override
     @PostMapping
     public ResponseEntity<RestResponse<UserResponseDto>> createUser(
-            @Valid @RequestBody UserRegistrationDto registrationDto) {
-        User created = registrationService.registerUser(registrationDto);
+            @Valid @RequestBody UserRegistrationRequest registrationRequest) {
+        User created = registrationService.registerUser(registrationRequest);
         return restResponseBuilder.created(userMapper.toResponseDto(created));
     }
 

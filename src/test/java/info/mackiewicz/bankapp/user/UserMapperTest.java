@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.user;
 
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
@@ -25,7 +25,7 @@ class UserMapperTest {
     @Test
     void toUser_shouldMapPhoneNumberCorrectly() {
         // given
-        UserRegistrationDto dto = new UserRegistrationDto();
+        UserRegistrationRequest dto = new UserRegistrationRequest();
         dto.setPhoneNumber(TEST_PHONE);
         dto.setFirstname("Jan");
         dto.setLastname("Kowalski");

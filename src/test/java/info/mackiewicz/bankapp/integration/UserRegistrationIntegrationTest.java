@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.integration;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
@@ -84,7 +84,7 @@ public class UserRegistrationIntegrationTest {
 
     @Test
     void shouldSuccessfullyRegisterNewUser() throws Exception {
-        UserRegistrationDto dto = TestUserRegistrationDtoBuilder.createValid();
+        UserRegistrationRequest dto = TestUserRegistrationDtoBuilder.createValid();
         
         mockMvc.perform(post("/register")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -119,7 +119,7 @@ public class UserRegistrationIntegrationTest {
 
     @Test
     void shouldRejectRegistrationWithDuplicateEmail() throws Exception {
-        UserRegistrationDto dto = TestUserRegistrationDtoBuilder.createValid();
+        UserRegistrationRequest dto = TestUserRegistrationDtoBuilder.createValid();
         
         mockMvc.perform(post("/register")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -153,7 +153,7 @@ public class UserRegistrationIntegrationTest {
 
     @Test
     void shouldRejectRegistrationWithInvalidFirstname() throws Exception {
-        UserRegistrationDto dto = TestUserRegistrationDtoBuilder.createWithInvalidFirstName();
+        UserRegistrationRequest dto = TestUserRegistrationDtoBuilder.createWithInvalidFirstName();
         
         mockMvc.perform(post("/register")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -174,7 +174,7 @@ public class UserRegistrationIntegrationTest {
 
     @Test
     void shouldRejectRegistrationWithInvalidPesel() throws Exception {
-        UserRegistrationDto dto = TestUserRegistrationDtoBuilder.createWithInvalidPesel();
+        UserRegistrationRequest dto = TestUserRegistrationDtoBuilder.createWithInvalidPesel();
         
         mockMvc.perform(post("/register")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -195,7 +195,7 @@ public class UserRegistrationIntegrationTest {
     
     @Test
     void shouldRejectRegistrationForMinor() throws Exception {
-        UserRegistrationDto dto = TestUserRegistrationDtoBuilder.createWithInvalidAge();
+        UserRegistrationRequest dto = TestUserRegistrationDtoBuilder.createWithInvalidAge();
         
         mockMvc.perform(post("/register")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)

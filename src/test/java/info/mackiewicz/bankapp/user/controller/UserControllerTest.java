@@ -1,34 +1,8 @@
 package info.mackiewicz.bankapp.user.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDate;
-import java.util.Arrays;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.testutils.config.TestConfig;
 import info.mackiewicz.bankapp.user.UserMapper;
@@ -42,6 +16,27 @@ import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
 import info.mackiewicz.bankapp.user.validation.RequestValidator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
 @WithMockUser
@@ -99,7 +94,7 @@ class UserControllerTest {
 @DisplayName("Should return bad request when validation fails")
 void shouldReturnBadRequestWhenValidationFails() throws Exception {
     // Arrange
-    UserRegistrationDto registrationDto = new UserRegistrationDto();
+        UserRegistrationRequest registrationDto = new UserRegistrationRequest();
     registrationDto.setFirstname("John");
     // Other fields missing intentionally
 
@@ -126,7 +121,7 @@ void shouldReturnBadRequestWhenValidationFails() throws Exception {
 @DisplayName("Should return bad request when registration service throws exception")
 void shouldReturnBadRequestWhenRegistrationServiceThrowsException() throws Exception {
         // Arrange
-        UserRegistrationDto registrationDto = new UserRegistrationDto();
+        UserRegistrationRequest registrationDto = new UserRegistrationRequest();
         registrationDto.setFirstname("John");
         registrationDto.setLastname("Doe");
         registrationDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
@@ -161,7 +156,7 @@ void shouldReturnBadRequestWhenRegistrationServiceThrowsException() throws Excep
 @DisplayName("Should fail when passwords don't match")
 void shouldFailWhenPasswordsDontMatch() throws Exception {
     // Arrange
-    UserRegistrationDto registrationDto = new UserRegistrationDto();
+        UserRegistrationRequest registrationDto = new UserRegistrationRequest();
     registrationDto.setFirstname("John");
     registrationDto.setLastname("Doe");
     registrationDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
@@ -189,7 +184,7 @@ void shouldFailWhenPasswordsDontMatch() throws Exception {
 @DisplayName("Should fix the duplicated assertion in user creation test")
 void fixedCreateUserTest() throws Exception {
         // Arrange
-        UserRegistrationDto registrationDto = new UserRegistrationDto();
+        UserRegistrationRequest registrationDto = new UserRegistrationRequest();
         registrationDto.setFirstname("John");
         registrationDto.setLastname("Doe");
         registrationDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
