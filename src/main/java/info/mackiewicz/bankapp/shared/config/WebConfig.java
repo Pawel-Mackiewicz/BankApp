@@ -4,6 +4,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -44,6 +45,13 @@ public class WebConfig implements WebMvcConfigurer {
         return builder
             .rootUri("http://localhost:8080")
             .build();
+    }
+
+    @Bean
+    public RestClient restClient(RestClient.Builder builder) {
+        return builder
+                .baseUrl("http://localhost:8080")
+                .build();
     }
 
     @Override
