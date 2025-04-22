@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @PasswordMatches
-public class PasswordResetDTO implements PasswordConfirmation {
+public class PasswordResetRequest implements PasswordConfirmation {
 
     @NotBlank(message = "Token is required")
     private String token;

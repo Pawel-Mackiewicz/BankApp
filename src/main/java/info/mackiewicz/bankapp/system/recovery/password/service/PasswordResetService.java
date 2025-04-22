@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.system.recovery.password.service;
 
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.notification.email.exception.EmailSendingException;
-import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetDTO;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequest;
 import info.mackiewicz.bankapp.system.recovery.password.exception.*;
 import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
 import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
@@ -97,7 +97,7 @@ public class PasswordResetService {
      * @throws EmailSendingException              if email sending fails
      */
     @Transactional
-    public void completeReset(PasswordResetDTO request) {
+    public void completeReset(PasswordResetRequest request) {
         String tokenId = request.getToken().substring(0, Math.min(8, request.getToken().length()));
         log.info("Starting password reset completion process for token ID: {}", tokenId);
 

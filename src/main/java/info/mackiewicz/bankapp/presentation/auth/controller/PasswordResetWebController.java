@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.auth.controller;
 
-import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetDTO;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequest;
 import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequestDTO;
 import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetTokenService;
 import jakarta.validation.Valid;
@@ -84,9 +84,9 @@ public class PasswordResetWebController {
         }
         log.debug("Displaying new password form for token");
         if (!model.containsAttribute("passwordResetDTO")) {
-            PasswordResetDTO passwordResetDTO = new PasswordResetDTO();
-            passwordResetDTO.setToken(token);
-            model.addAttribute("passwordResetDTO", passwordResetDTO);
+            PasswordResetRequest passwordResetRequest = new PasswordResetRequest();
+            passwordResetRequest.setToken(token);
+            model.addAttribute("passwordResetDTO", passwordResetRequest);
         }
         model.addAttribute("token", token);
         return "password-reset-complete";
@@ -95,7 +95,7 @@ public class PasswordResetWebController {
     @PostMapping("/password-reset/token/{token}")
     public String handlePasswordReset(
             @PathVariable String token,
-            @Valid @ModelAttribute("passwordResetDTO") PasswordResetDTO passwordResetDTO,
+            @Valid @ModelAttribute("passwordResetDTO") PasswordResetRequest passwordResetRequest,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes) {
@@ -112,7 +112,7 @@ public class PasswordResetWebController {
             restClient.post()
                     .uri("/api/password/reset-complete")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(passwordResetDTO)
+                    .body(passwordResetRequest)
                     .retrieve()
                     .toBodilessEntity();
             redirectAttributes.addFlashAttribute("success", "Your password has been successfully reset. You can now log in with your new password.");
