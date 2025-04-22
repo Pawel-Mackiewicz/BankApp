@@ -40,6 +40,15 @@ public class WebConfig implements WebMvcConfigurer {
         return viewResolver;
     }
 
+    /**
+     * Creates a RestTemplate instance configured with a root URI.
+     *
+     * @param builder the RestTemplateBuilder used to configure and create the RestTemplate instance
+     *
+     * @return a configured RestTemplate instance with a predefined root URI
+     * @deprecated since version 0.4.8, use {@link RestClient} instead for enhanced functionality.
+     */
+    @Deprecated(since = "0.4.8")
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
