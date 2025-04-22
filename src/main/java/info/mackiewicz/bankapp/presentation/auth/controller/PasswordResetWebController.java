@@ -42,7 +42,7 @@ public class PasswordResetWebController {
             Model model) {
 
         log.debug("Processing password reset request for email: {}", requestDTO.getEmail());
-        
+
         if (bindingResult.hasErrors()) {
             log.debug("Validation errors in reset request: {}", bindingResult.getAllErrors());
             return "password-reset";
@@ -50,10 +50,7 @@ public class PasswordResetWebController {
 
         try {
             restClient.post()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/api/password/reset-request")
-                            .queryParam("email", requestDTO.getEmail())
-                            .build())
+                    .uri("/api/password/reset-request/{email}", requestDTO.getEmail())
                     .retrieve()
                     .toBodilessEntity();
             model.addAttribute("success", true);
@@ -62,7 +59,7 @@ public class PasswordResetWebController {
         } catch (RestClientResponseException e) {
             log.error("Error processing reset request: Status {}, Body {}", e.getStatusCode(), e.getResponseBodyAsString(), e);
             String errorMessage = "An error occurred while processing your request.";
-            
+
             if (e.getStatusCode().value() == 429) {
                 errorMessage = "Too many password reset attempts detected. Please check your email inbox.";
             }
@@ -77,7 +74,7 @@ public class PasswordResetWebController {
 
     @GetMapping("/password-reset/token/{token}")
     public String showNewPasswordForm(@PathVariable String token, Model model) {
-        
+
         if (!passwordResetTokenService.isTokenPresent(token)) {
             log.debug("Invalid token: {}", token);
             return "redirect:/login";

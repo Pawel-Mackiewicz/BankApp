@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,8 +69,8 @@ public interface PasswordResetController {
                     description = "Internal Error"
             )
     })
-    @PostMapping("/reset-request")
-    public ResponseEntity<Void> requestReset(@ValidEmail String email);
+    @PostMapping("/reset-request/{email}")
+    public ResponseEntity<Void> requestReset(@PathVariable @ValidEmail String email);
 
     @Operation(
             summary = "Complete the password reset process",

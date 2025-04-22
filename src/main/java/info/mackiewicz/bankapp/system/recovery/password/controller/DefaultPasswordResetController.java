@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,8 +17,8 @@ public class DefaultPasswordResetController implements PasswordResetController {
 
     private final PasswordResetService passwordResetService;
 
-    @PostMapping("/reset-request")
-    public ResponseEntity<Void> requestReset(@ValidEmail String email) {
+    @PostMapping("/reset-request/{email}")
+    public ResponseEntity<Void> requestReset(@PathVariable @ValidEmail String email) {
         passwordResetService.requestReset(email);
         return ResponseEntity.ok().build();
     }
