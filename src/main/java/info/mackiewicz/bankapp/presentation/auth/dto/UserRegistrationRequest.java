@@ -39,7 +39,6 @@ public class UserRegistrationRequest implements PasswordConfirmation {
     @Pattern(regexp = "\\d{11}", message = "PESEL must be exactly 11 digits")
     private String pesel;
 
-    @NotBlank(message = "Email is required")
     @ValidEmail(message = "Please provide a valid email address")
     private String email;
 
