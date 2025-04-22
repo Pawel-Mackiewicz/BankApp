@@ -8,6 +8,19 @@ import jakarta.validation.constraints.Pattern;
 
 import java.lang.annotation.*;
 
+/**
+ * Annotation for validating email fields.
+ * <p>
+ * This annotation is used to enforce specific email address validation rules, including:<br>
+ * - The field must not be blank.<br>
+ * - The email must match the specified pattern defined in {@link ValidationConstants#EMAIL_PATTERN}.
+ * <p>
+ * Can be applied to fields or parameters for validation purposes during runtime.
+ * <p>
+ * Validation errors will display the default message or a custom one provided in the annotation.
+ * <p>
+ * For example, it ensures emails like "example@domain.com" are valid.
+ */
 @NotBlank(message = "Email is required")
 @Pattern(regexp = ValidationConstants.EMAIL_PATTERN, message = "Invalid email format")
 @Documented

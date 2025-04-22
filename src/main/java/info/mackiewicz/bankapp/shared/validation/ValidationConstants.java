@@ -34,28 +34,30 @@ import lombok.experimental.UtilityClass;
 public final class ValidationConstants {
 
     /**
-     * Regular expression pattern for validating email addresses.
-     * This pattern allows:
-     * - Alphanumeric characters (a-z, A-Z, 0-9)
-     * - Special characters: _!#$%&'*+/=?`{|}~^.-
-     * - @ symbol separating local and domain parts
+     * Regular expression pattern for validating email addresses.<br>
+     * This pattern allows:<br>
+     * - Alphanumeric characters (a-z, A-Z, 0-9)<br>
+     * - Special characters: _!#$%&'*+/=?`{|}~^.-<br>
+     * - @ symbol separating local and domain parts<br>
      * - Domain with at least one dot and minimum 2 characters TLD
-     * 
+     * <p>
      * Examples of valid emails:
-     * - user@domain.com
-     * - user.name@domain.co.uk
-     * - user+label@domain.org
+     * <ul>
+     * <li>user@domain.com</li>
+     * <li>user.name@domain.co.uk</li>
+     * <li>user+label@domain.org</li>
+     * </ul>
      */
     public static final String EMAIL_PATTERN = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
     /**
-     * Regular expression pattern for name validation.
+     * Regular expression pattern for name validation.<br>
      * Ensures name contains only letters (including Polish characters).
      */
     public static final String NAME_PATTERN = "^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$";
 
     /**
-     * Regular expression pattern for phone number validation.
+     * Regular expression pattern for phone number validation.<br>
      * Ensures phone number is in one of the following formats:
      * <ul>
      * <li>+48XXXXXXXXX</li>
