@@ -27,9 +27,7 @@ public class DefaultPasswordResetController implements PasswordResetController {
     }
 
     @PostMapping("/reset-complete")
-    public ResponseEntity<Void> completeReset(
-            @Valid @RequestBody PasswordResetRequest request
-    ) {
+    public ResponseEntity<Void> completeReset(@Valid @RequestBody PasswordResetRequest request) {
         passwordResetService.completeReset(request);
         return ResponseEntity.ok().build();
     }
