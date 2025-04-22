@@ -105,8 +105,6 @@ public interface PasswordResetController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
             )
     })
-
     @PostMapping("/reset-complete")
     ResponseEntity<Void> completeReset(@Valid @RequestBody PasswordResetRequest request);
-
 }
