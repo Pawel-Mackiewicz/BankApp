@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.user.controller;
 
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
-import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
-import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
+import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
+import info.mackiewicz.bankapp.system.error.handling.dto.ValidationApiError;
 import info.mackiewicz.bankapp.shared.web.response.RestResponse;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
 import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;

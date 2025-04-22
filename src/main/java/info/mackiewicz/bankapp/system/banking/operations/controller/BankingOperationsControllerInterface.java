@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.operations.controller;
 
-import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
-import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
+import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
+import info.mackiewicz.bankapp.system.error.handling.dto.ValidationApiError;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;

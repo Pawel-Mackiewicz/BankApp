@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.banking.history.exception;
 
-import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 
 public class UnsupportedExporterException extends TransactionHistoryBaseException {
     

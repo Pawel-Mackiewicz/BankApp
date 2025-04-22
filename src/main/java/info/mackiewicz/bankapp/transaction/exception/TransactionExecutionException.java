@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.transaction.exception;
 
-import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 
 /**
  * Exception thrown when transaction execution fails
