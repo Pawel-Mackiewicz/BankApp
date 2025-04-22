@@ -1,10 +1,9 @@
-package info.mackiewicz.bankapp.system.error.handling.logger;
-
-import org.springframework.stereotype.Service;
+package info.mackiewicz.bankapp.shared.util;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 /**
  * Service responsible for logging transaction-related operations in a consistent format.
