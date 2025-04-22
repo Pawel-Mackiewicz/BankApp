@@ -6,7 +6,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingInterceptor;
+import info.mackiewicz.bankapp.system.error.handling.logger.LoggingInterceptor;
 
 /**
  * Web MVC configuration for registering interceptors and other web-related components.

@@ -1,6 +1,6 @@
-package info.mackiewicz.bankapp.shared.web.error.mapping;
+package info.mackiewicz.bankapp.system.error.handling.mapping;
 
-import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 
 /**
  * Defines a contract for mapping exceptions to specific error codes in the application.
@@ -14,7 +14,7 @@ public interface ExceptionToErrorMapper {
      * 
      * @param ex the exception to be mapped
      * @return the corresponding ErrorCode for the given exception
-     * @see info.mackiewicz.bankapp.shared.core.error.ErrorCode
+     * @see ErrorCode
      */
     ErrorCode map(Exception ex);
 }

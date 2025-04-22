@@ -1,5 +1,7 @@
-package info.mackiewicz.bankapp.shared.core.error;
+package info.mackiewicz.bankapp.system.error.handling.core.error;
 
+import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
+import info.mackiewicz.bankapp.system.error.handling.core.BankAppBaseException;
 import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
@@ -16,8 +18,8 @@ import lombok.Getter;
  * error responses throughout the API.</p>
  *
  * @see HttpStatus
- * @see info.mackiewicz.bankapp.shared.core.BankAppBaseException
- * @see info.mackiewicz.bankapp.shared.core.ApiExceptionHandler
+ * @see BankAppBaseException
+ * @see ApiExceptionHandler
  */
 @Getter
 public enum ErrorCode {

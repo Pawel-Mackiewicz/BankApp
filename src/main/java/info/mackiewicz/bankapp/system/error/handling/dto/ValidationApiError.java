@@ -1,9 +1,10 @@
-package info.mackiewicz.bankapp.shared.web.dto;
+package info.mackiewicz.bankapp.system.error.handling.dto;
 
 import java.util.List;
 
-import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
-import info.mackiewicz.bankapp.shared.web.dto.interfaces.ValidationErrorResponse;
+import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
+import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.dto.interfaces.ValidationErrorResponse;
 import lombok.Getter;
 
 /**
@@ -24,8 +25,8 @@ import lombok.Getter;
  * @see BaseApiError
  * @see ValidationError
  * @see ValidationErrorResponse
- * @see info.mackiewicz.bankapp.shared.core.ApiExceptionHandler#handleMethodArgumentNotValidException
- * @see info.mackiewicz.bankapp.shared.core.ApiExceptionHandler#handleConstraintViolationException
+ * @see ApiExceptionHandler#handleMethodArgumentNotValidException
+ * @see ApiExceptionHandler#handleConstraintViolationException
  */
 @Getter
 public class ValidationApiError extends BaseApiError implements ValidationErrorResponse {

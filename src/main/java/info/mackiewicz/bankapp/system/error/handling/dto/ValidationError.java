@@ -1,5 +1,6 @@
-package info.mackiewicz.bankapp.shared.web.dto;
+package info.mackiewicz.bankapp.system.error.handling.dto;
 
+import info.mackiewicz.bankapp.system.error.handling.service.ValidationErrorProcessor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Value;
 
@@ -18,7 +19,7 @@ import lombok.Value;
  * Lombok's {@code @Value} annotation.</p>
  *
  * @see ValidationApiError
- * @see info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor
+ * @see ValidationErrorProcessor
  */
 @Value
 public class ValidationError {

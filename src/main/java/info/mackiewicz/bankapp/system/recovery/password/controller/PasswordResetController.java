@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.recovery.password.controller;
 
-import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
-import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
+import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
+import info.mackiewicz.bankapp.system.error.handling.dto.ValidationApiError;
 import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordChangeForm;
 import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequest;
 import io.swagger.v3.oas.annotations.Operation;

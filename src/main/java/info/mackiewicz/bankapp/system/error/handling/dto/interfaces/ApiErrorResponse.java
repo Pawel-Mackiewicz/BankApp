@@ -1,14 +1,16 @@
-package info.mackiewicz.bankapp.shared.web.dto.interfaces;
+package info.mackiewicz.bankapp.system.error.handling.dto.interfaces;
 
 import java.time.LocalDateTime;
+
+import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import org.springframework.http.HttpStatus;
 
 /**
  * Defines the contract for API error responses in the application.
  * This interface provides a standardized structure for error reporting across the API.
  *
- * @see info.mackiewicz.bankapp.shared.web.dto.BaseApiError
- * @see info.mackiewicz.bankapp.shared.web.dto.interfaces.ValidationErrorResponse
+ * @see BaseApiError
+ * @see ValidationErrorResponse
  */
 public interface ApiErrorResponse {
     /**

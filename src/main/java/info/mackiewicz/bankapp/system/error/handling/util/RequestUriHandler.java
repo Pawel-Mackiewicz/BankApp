@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.web.util;
+package info.mackiewicz.bankapp.system.error.handling.util;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;

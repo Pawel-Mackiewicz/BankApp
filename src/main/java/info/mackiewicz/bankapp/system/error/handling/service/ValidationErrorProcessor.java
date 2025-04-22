@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.web.error.validation;
+package info.mackiewicz.bankapp.system.error.handling.service;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -8,7 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import info.mackiewicz.bankapp.shared.web.dto.ValidationError;
+import info.mackiewicz.bankapp.system.error.handling.dto.ValidationError;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
@@ -19,7 +19,7 @@ import jakarta.validation.ConstraintViolationException;
  * constraint
  * violations.
  * 
- * @see info.mackiewicz.bankapp.shared.web.dto.ValidationError
+ * @see ValidationError
  */
 @Component
 public class ValidationErrorProcessor {
@@ -32,7 +32,7 @@ public class ValidationErrorProcessor {
      * @return list of ValidationError objects containing field names, error
      *         messages, and rejected values
      * @see org.springframework.web.bind.MethodArgumentNotValidException
-     * @see info.mackiewicz.bankapp.shared.web.dto.ValidationError
+     * @see ValidationError
      */
     public List<ValidationError> extractValidationErrors(MethodArgumentNotValidException ex) {
         var bindingResult = ex.getBindingResult();
@@ -59,7 +59,7 @@ public class ValidationErrorProcessor {
      * @return list of ValidationError objects containing property paths, error
      *         messages, and invalid values
      * @see jakarta.validation.ConstraintViolationException
-     * @see info.mackiewicz.bankapp.shared.web.dto.ValidationError
+     * @see ValidationError
      */
     public List<ValidationError> extractValidationErrors(ConstraintViolationException ex) {
         return ex.getConstraintViolations()
@@ -75,7 +75,7 @@ public class ValidationErrorProcessor {
      * @return ValidationError containing the property path, message, and invalid
      *         value
      * @see jakarta.validation.ConstraintViolation
-     * @see info.mackiewicz.bankapp.shared.web.dto.ValidationError
+     * @see ValidationError
      */
     private ValidationError convert(ConstraintViolation<?> violation) {
         return new ValidationError(
@@ -93,7 +93,7 @@ public class ValidationErrorProcessor {
      * @return ValidationError containing the field name, error message, and
      *         rejected value
      * @see org.springframework.validation.FieldError
-     * @see info.mackiewicz.bankapp.shared.web.dto.ValidationError
+     * @see ValidationError
      */
     @SuppressWarnings("null")
     private ValidationError convert(FieldError fieldError) {

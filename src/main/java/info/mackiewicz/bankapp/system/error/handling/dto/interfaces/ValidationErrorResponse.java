@@ -1,9 +1,9 @@
-package info.mackiewicz.bankapp.shared.web.dto.interfaces;
+package info.mackiewicz.bankapp.system.error.handling.dto.interfaces;
 
 import java.util.List;
 
-import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
-import info.mackiewicz.bankapp.shared.web.dto.ValidationError;
+import info.mackiewicz.bankapp.system.error.handling.dto.ValidationApiError;
+import info.mackiewicz.bankapp.system.error.handling.dto.ValidationError;
 
 /**
  * Extends the basic error response interface to include validation-specific error details.

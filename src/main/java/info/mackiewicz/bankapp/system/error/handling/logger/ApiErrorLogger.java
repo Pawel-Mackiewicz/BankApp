@@ -1,6 +1,7 @@
-package info.mackiewicz.bankapp.shared.infrastructure.logging;
+package info.mackiewicz.bankapp.system.error.handling.logger;
 
-import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
+import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ import java.io.StringWriter;
  * <p>Thread-safe: This class is thread-safe as it uses SLF4J's thread-safe logging methods.</p>
  *
  * @see ErrorCode
- * @see info.mackiewicz.bankapp.shared.core.ApiExceptionHandler
+ * @see ApiExceptionHandler
  */
 @Slf4j
 @Component

@@ -1,6 +1,6 @@
-package info.mackiewicz.bankapp.shared.core;
+package info.mackiewicz.bankapp.system.error.handling.core;
 
-import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 
 /**
  * Base exception class for the BankApp application's exception hierarchy.

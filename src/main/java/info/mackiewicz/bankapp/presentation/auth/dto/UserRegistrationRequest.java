@@ -4,7 +4,7 @@ import info.mackiewicz.bankapp.shared.annotations.Password;
 import info.mackiewicz.bankapp.shared.annotations.PasswordMatches;
 import info.mackiewicz.bankapp.shared.annotations.ValidEmail;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
-import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
+import info.mackiewicz.bankapp.system.error.handling.dto.interfaces.PasswordConfirmation;
 import info.mackiewicz.bankapp.user.validation.AgeRange;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

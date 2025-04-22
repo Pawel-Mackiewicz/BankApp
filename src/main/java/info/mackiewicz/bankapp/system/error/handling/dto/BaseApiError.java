@@ -1,8 +1,9 @@
-package info.mackiewicz.bankapp.shared.web.dto;
+package info.mackiewicz.bankapp.system.error.handling.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import info.mackiewicz.bankapp.shared.core.error.ErrorCode;
-import info.mackiewicz.bankapp.shared.web.dto.interfaces.ApiErrorResponse;
+import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
+import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.dto.interfaces.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ import java.time.LocalDateTime;
  *
  * @see ApiErrorResponse
  * @see ErrorCode
- * @see info.mackiewicz.bankapp.shared.core.ApiExceptionHandler
+ * @see ApiExceptionHandler
  */
 @Getter
 public class BaseApiError implements ApiErrorResponse {

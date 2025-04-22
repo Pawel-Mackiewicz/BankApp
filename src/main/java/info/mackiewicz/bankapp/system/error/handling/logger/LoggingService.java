@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.shared.infrastructure.logging;
+package info.mackiewicz.bankapp.system.error.handling.logger;
 
 import org.springframework.stereotype.Service;
 

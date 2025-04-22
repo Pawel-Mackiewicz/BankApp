@@ -4,7 +4,7 @@ import info.mackiewicz.bankapp.account.exception.AccountLockException;
 import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingService;
+import info.mackiewicz.bankapp.system.error.handling.logger.LoggingService;
 import info.mackiewicz.bankapp.system.notification.email.locking.AccountLockManager;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionExecutionException;
