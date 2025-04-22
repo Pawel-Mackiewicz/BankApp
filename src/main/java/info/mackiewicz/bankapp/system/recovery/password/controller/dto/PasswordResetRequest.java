@@ -21,9 +21,8 @@ public class PasswordResetRequest implements PasswordConfirmation {
     private String token;
 
     @Schema(
-            description = "Password must be at least 8 characters long, contain at least one digit, " +
-                    "one lowercase letter, one uppercase letter, and one special character from the set: @$!%*?&",
-            minLength = 8,
+            description = ValidationConstants.PASSWORD_DESCRIPTION,
+            minLength = ValidationConstants.PASSWORD_MIN_LENGTH,
             pattern = ValidationConstants.PASSWORD_PATTERN,
             example = "StrongP@ss123"
     )

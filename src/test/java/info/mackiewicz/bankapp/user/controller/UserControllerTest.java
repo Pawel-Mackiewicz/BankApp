@@ -94,15 +94,15 @@ class UserControllerTest {
 @DisplayName("Should return bad request when validation fails")
 void shouldReturnBadRequestWhenValidationFails() throws Exception {
     // Arrange
-        UserRegistrationRequest registrationDto = new UserRegistrationRequest();
-    registrationDto.setFirstname("John");
+        UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
+        registrationRequest.setFirstname("John");
     // Other fields missing intentionally
 
     // Act & Assert
     mockMvc.perform(post("/api/users")
                     .with(SecurityMockMvcRequestPostProcessors.csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(registrationDto)))
+                    .content(objectMapper.writeValueAsString(registrationRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                     .andExpect(jsonPath("$.title").value("VALIDATION_ERROR"))
@@ -110,7 +110,7 @@ void shouldReturnBadRequestWhenValidationFails() throws Exception {
                     .andExpect(jsonPath("$.errors").exists())
                     .andExpect(jsonPath("$.errors[?(@.field == 'lastname')].message").exists())
                     .andExpect(jsonPath("$.errors[?(@.field == 'pesel')].message").value("PESEL is required"))
-                    .andExpect(jsonPath("$.errors[?(@.field == 'email')].message").value("Email is required"))
+            .andExpect(jsonPath("$.errors[?(@.field == 'email')].message").value("Please provide a valid email address"))
                     .andExpect(jsonPath("$.errors[?(@.field == 'password')].message").value("Password is required"))
                     .andExpect(jsonPath("$.errors[?(@.field == 'confirmPassword')].message").value("Password confirmation is required"))
                     .andExpect(jsonPath("$.errors[?(@.field == 'phoneNumber')].message").value("Phone number is required"))
@@ -121,15 +121,15 @@ void shouldReturnBadRequestWhenValidationFails() throws Exception {
 @DisplayName("Should return bad request when registration service throws exception")
 void shouldReturnBadRequestWhenRegistrationServiceThrowsException() throws Exception {
         // Arrange
-        UserRegistrationRequest registrationDto = new UserRegistrationRequest();
-        registrationDto.setFirstname("John");
-        registrationDto.setLastname("Doe");
-        registrationDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
-        registrationDto.setPesel("12345678901");
-        registrationDto.setEmail("test@test.com");
-        registrationDto.setPhoneNumber("+48123456789");
-        registrationDto.setPassword("Password123!");
-        registrationDto.setConfirmPassword("Password123!");
+        UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
+        registrationRequest.setFirstname("John");
+        registrationRequest.setLastname("Doe");
+        registrationRequest.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        registrationRequest.setPesel("12345678901");
+        registrationRequest.setEmail("test@test.com");
+        registrationRequest.setPhoneNumber("+48123456789");
+        registrationRequest.setPassword("Password123!");
+        registrationRequest.setConfirmPassword("Password123!");
         
         given(requestValidator.getValidationErrorMessage(any())).willReturn(null);
         
@@ -143,7 +143,7 @@ void shouldReturnBadRequestWhenRegistrationServiceThrowsException() throws Excep
         mockMvc.perform(post("/api/users")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registrationDto)))
+                        .content(objectMapper.writeValueAsString(registrationRequest)))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                         .andExpect(jsonPath("$.title").value("VALIDATION_ERROR"))
@@ -156,21 +156,21 @@ void shouldReturnBadRequestWhenRegistrationServiceThrowsException() throws Excep
 @DisplayName("Should fail when passwords don't match")
 void shouldFailWhenPasswordsDontMatch() throws Exception {
     // Arrange
-        UserRegistrationRequest registrationDto = new UserRegistrationRequest();
-    registrationDto.setFirstname("John");
-    registrationDto.setLastname("Doe");
-    registrationDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
-    registrationDto.setPesel("12345678901");
-    registrationDto.setEmail("test@test.com");
-    registrationDto.setPhoneNumber("+48123456789");
-    registrationDto.setPassword("StrongP@ss123");
-    registrationDto.setConfirmPassword("DifferentP@ss123");
+        UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
+        registrationRequest.setFirstname("John");
+        registrationRequest.setLastname("Doe");
+        registrationRequest.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        registrationRequest.setPesel("12345678901");
+        registrationRequest.setEmail("test@test.com");
+        registrationRequest.setPhoneNumber("+48123456789");
+        registrationRequest.setPassword("StrongP@ss123");
+        registrationRequest.setConfirmPassword("DifferentP@ss123");
     
     // Act & Assert
     mockMvc.perform(post("/api/users")
                     .with(SecurityMockMvcRequestPostProcessors.csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(registrationDto)))
+                    .content(objectMapper.writeValueAsString(registrationRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                     .andExpect(jsonPath("$.title").value("VALIDATION_ERROR"))
@@ -184,15 +184,15 @@ void shouldFailWhenPasswordsDontMatch() throws Exception {
 @DisplayName("Should fix the duplicated assertion in user creation test")
 void fixedCreateUserTest() throws Exception {
         // Arrange
-        UserRegistrationRequest registrationDto = new UserRegistrationRequest();
-        registrationDto.setFirstname("John");
-        registrationDto.setLastname("Doe");
-        registrationDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
-        registrationDto.setPesel("12345678901");
-        registrationDto.setEmail("test@test.com");
-        registrationDto.setPhoneNumber("+48123456789");
-        registrationDto.setPassword("Password123!");
-        registrationDto.setConfirmPassword("Password123!");
+        UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
+        registrationRequest.setFirstname("John");
+        registrationRequest.setLastname("Doe");
+        registrationRequest.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        registrationRequest.setPesel("12345678901");
+        registrationRequest.setEmail("test@test.com");
+        registrationRequest.setPhoneNumber("+48123456789");
+        registrationRequest.setPassword("Password123!");
+        registrationRequest.setConfirmPassword("Password123!");
         
         given(requestValidator.getValidationErrorMessage(any())).willReturn(null);
         given(registrationService.registerUser(any())).willReturn(sampleUser);
@@ -202,7 +202,7 @@ void fixedCreateUserTest() throws Exception {
         mockMvc.perform(post("/api/users")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registrationDto)))
+                        .content(objectMapper.writeValueAsString(registrationRequest)))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.status").value("CREATED"))
                         .andExpect(jsonPath("$.data.id").value(1))
