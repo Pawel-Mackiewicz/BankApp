@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Pattern;
 
 import java.lang.annotation.*;
 
-@NotBlank(message = "Email must not be null or blank")
+@NotBlank(message = "Email is required")
 @Pattern(regexp = ValidationConstants.EMAIL_PATTERN, message = "Invalid email format")
 @Documented
 @Constraint(validatedBy = {})
