@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * PasswordResetController defines the endpoints for managing password reset functionality.
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
  * - Completing the password reset by submitting a token and new password.
  */
 @Tag(name = "Password Reset")
-@RestController
 @RequestMapping("/api/password")
 public interface PasswordResetController {
 
