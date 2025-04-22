@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.presentation.auth.controller;
 
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordChangeForm;
 import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequest;
-import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequestDTO;
 import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +30,14 @@ public class PasswordResetWebController {
     public String showPasswordResetForm(Model model) {
         log.debug("Displaying password reset form");
         if (!model.containsAttribute("passwordResetRequestDTO")) {
-            model.addAttribute("passwordResetRequestDTO", new PasswordResetRequestDTO());
+            model.addAttribute("passwordResetRequestDTO", new PasswordResetRequest());
         }
         return "password-reset";
     }
 
     @PostMapping("/password-reset")
     public String handlePasswordResetRequest(
-            @Valid @ModelAttribute("passwordResetRequestDTO") PasswordResetRequestDTO requestDTO,
+            @Valid @ModelAttribute("passwordResetRequestDTO") PasswordResetRequest requestDTO,
             BindingResult bindingResult,
             Model model) {
 
@@ -50,7 +50,9 @@ public class PasswordResetWebController {
 
         try {
             restClient.post()
-                    .uri("/api/password/reset-request/{email}", requestDTO.getEmail())
+                    .uri("/api/password/reset-request")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(requestDTO)
                     .retrieve()
                     .toBodilessEntity();
             model.addAttribute("success", true);
@@ -81,9 +83,9 @@ public class PasswordResetWebController {
         }
         log.debug("Displaying new password form for token");
         if (!model.containsAttribute("passwordResetDTO")) {
-            PasswordResetRequest passwordResetRequest = new PasswordResetRequest();
-            passwordResetRequest.setToken(token);
-            model.addAttribute("passwordResetDTO", passwordResetRequest);
+            PasswordChangeForm passwordChangeForm = new PasswordChangeForm();
+            passwordChangeForm.setToken(token);
+            model.addAttribute("passwordResetDTO", passwordChangeForm);
         }
         model.addAttribute("token", token);
         return "password-reset-complete";
@@ -92,7 +94,7 @@ public class PasswordResetWebController {
     @PostMapping("/password-reset/token/{token}")
     public String handlePasswordReset(
             @PathVariable String token,
-            @Valid @ModelAttribute("passwordResetDTO") PasswordResetRequest passwordResetRequest,
+            @Valid @ModelAttribute("passwordResetDTO") PasswordChangeForm passwordChangeForm,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes) {
@@ -109,7 +111,7 @@ public class PasswordResetWebController {
             restClient.post()
                     .uri("/api/password/reset-complete")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(passwordResetRequest)
+                    .body(passwordChangeForm)
                     .retrieve()
                     .toBodilessEntity();
             redirectAttributes.addFlashAttribute("success", "Your password has been successfully reset. You can now log in with your new password.");

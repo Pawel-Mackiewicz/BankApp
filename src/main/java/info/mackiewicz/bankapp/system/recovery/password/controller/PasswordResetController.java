@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.system.recovery.password.controller;
 
-import info.mackiewicz.bankapp.shared.annotations.ValidEmail;
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordChangeForm;
 import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,8 +68,8 @@ public interface PasswordResetController {
                     description = "Internal Error"
             )
     })
-    @PostMapping("/reset-request/{email}")
-    public ResponseEntity<Void> requestReset(@PathVariable @ValidEmail String email);
+    @PostMapping("/reset-request")
+    public ResponseEntity<Void> requestReset(@Valid @RequestBody PasswordResetRequest request);
 
     @Operation(
             summary = "Complete the password reset process",
@@ -105,5 +104,5 @@ public interface PasswordResetController {
             )
     })
     @PostMapping("/reset-complete")
-    ResponseEntity<Void> completeReset(@Valid @RequestBody PasswordResetRequest request);
+    ResponseEntity<Void> completeReset(@Valid @RequestBody PasswordChangeForm request);
 }

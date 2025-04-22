@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.system.recovery.password.service;
 
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.notification.email.exception.EmailSendingException;
-import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequest;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordChangeForm;
 import info.mackiewicz.bankapp.system.recovery.password.exception.PasswordChangeException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.TokenCreationException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.UnexpectedTokenValidationException;
@@ -174,8 +174,8 @@ class PasswordResetServiceTest {
         inOrder.verifyNoMoreInteractions();
     }
 
-    private PasswordResetRequest createResetDTO(String token, String password, String confirmPassword) {
-        PasswordResetRequest dto = new PasswordResetRequest();
+    private PasswordChangeForm createResetDTO(String token, String password, String confirmPassword) {
+        PasswordChangeForm dto = new PasswordChangeForm();
         dto.setToken(token);
         dto.setPassword(password);
         dto.setConfirmPassword(confirmPassword);
