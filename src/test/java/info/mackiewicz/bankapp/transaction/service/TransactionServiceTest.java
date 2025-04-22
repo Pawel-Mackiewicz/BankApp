@@ -1,19 +1,19 @@
 package info.mackiewicz.bankapp.transaction.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for TransactionService facade.
