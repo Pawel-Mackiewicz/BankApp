@@ -1,18 +1,17 @@
 package info.mackiewicz.bankapp.user;
 
-import org.springframework.stereotype.Component;
-
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.dto.UpdateUserRequest;
 import info.mackiewicz.bankapp.user.model.dto.UserResponseDto;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    
-    public User toUser(UserRegistrationDto dto) {
+
+    public User toUser(UserRegistrationRequest dto) {
         User user = User.builder()
                 .withFirstname(capitalize(dto.getFirstname()))
                 .withLastname(capitalize(dto.getLastname()))

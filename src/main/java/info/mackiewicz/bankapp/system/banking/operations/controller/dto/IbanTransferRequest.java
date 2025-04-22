@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.system.banking.operations.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import info.mackiewicz.bankapp.account.validation.ValidIban;
+import info.mackiewicz.bankapp.shared.annotations.ValidIban;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Setter;

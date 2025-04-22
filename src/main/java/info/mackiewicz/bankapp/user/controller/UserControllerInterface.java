@@ -1,10 +1,6 @@
 package info.mackiewicz.bankapp.user.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
 import info.mackiewicz.bankapp.shared.web.dto.ValidationApiError;
 import info.mackiewicz.bankapp.shared.web.response.RestResponse;
@@ -15,14 +11,17 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface UserControllerInterface {
 
     @Operation(summary = "Create a new user", description = "Creates a new user in the system. The user will be registered with the provided details.")
-    @RequestBody(required = true, description = "User registration details", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserRegistrationDto.class), examples = {
+    @RequestBody(required = true, description = "User registration details", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserRegistrationRequest.class), examples = {
             @ExampleObject(name = "Standard registration", value = "{\n" +
                     "  \"email\": \"user@example.com\",\n" +
                     "  \"password\": \"secureP@ssword123\",\n" +
@@ -42,7 +41,7 @@ public interface UserControllerInterface {
             @ApiResponse(responseCode = "409", description = "User already exists", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class)))
     })
     ResponseEntity<RestResponse<UserResponseDto>> createUser(
-            UserRegistrationDto registrationDto);
+            UserRegistrationRequest registrationDto);
 
     @Operation(summary = "Get user by ID", description = "Retrieves a user by their unique ID. Returns user details if found, otherwise returns 404. "
             +

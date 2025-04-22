@@ -1,34 +1,8 @@
 package info.mackiewicz.bankapp.user.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDate;
-import java.util.Arrays;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.testutils.config.TestConfig;
 import info.mackiewicz.bankapp.user.UserMapper;
@@ -42,6 +16,27 @@ import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.user.service.UserService;
 import info.mackiewicz.bankapp.user.validation.RequestValidator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
 @WithMockUser
@@ -99,15 +94,15 @@ class UserControllerTest {
 @DisplayName("Should return bad request when validation fails")
 void shouldReturnBadRequestWhenValidationFails() throws Exception {
     // Arrange
-    UserRegistrationDto registrationDto = new UserRegistrationDto();
-    registrationDto.setFirstname("John");
+        UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
+        registrationRequest.setFirstname("John");
     // Other fields missing intentionally
 
     // Act & Assert
     mockMvc.perform(post("/api/users")
                     .with(SecurityMockMvcRequestPostProcessors.csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(registrationDto)))
+                    .content(objectMapper.writeValueAsString(registrationRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                     .andExpect(jsonPath("$.title").value("VALIDATION_ERROR"))
@@ -115,7 +110,7 @@ void shouldReturnBadRequestWhenValidationFails() throws Exception {
                     .andExpect(jsonPath("$.errors").exists())
                     .andExpect(jsonPath("$.errors[?(@.field == 'lastname')].message").exists())
                     .andExpect(jsonPath("$.errors[?(@.field == 'pesel')].message").value("PESEL is required"))
-                    .andExpect(jsonPath("$.errors[?(@.field == 'email')].message").value("Email is required"))
+            .andExpect(jsonPath("$.errors[?(@.field == 'email')].message").value("Please provide a valid email address"))
                     .andExpect(jsonPath("$.errors[?(@.field == 'password')].message").value("Password is required"))
                     .andExpect(jsonPath("$.errors[?(@.field == 'confirmPassword')].message").value("Password confirmation is required"))
                     .andExpect(jsonPath("$.errors[?(@.field == 'phoneNumber')].message").value("Phone number is required"))
@@ -126,15 +121,15 @@ void shouldReturnBadRequestWhenValidationFails() throws Exception {
 @DisplayName("Should return bad request when registration service throws exception")
 void shouldReturnBadRequestWhenRegistrationServiceThrowsException() throws Exception {
         // Arrange
-        UserRegistrationDto registrationDto = new UserRegistrationDto();
-        registrationDto.setFirstname("John");
-        registrationDto.setLastname("Doe");
-        registrationDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
-        registrationDto.setPesel("12345678901");
-        registrationDto.setEmail("test@test.com");
-        registrationDto.setPhoneNumber("+48123456789");
-        registrationDto.setPassword("Password123!");
-        registrationDto.setConfirmPassword("Password123!");
+        UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
+        registrationRequest.setFirstname("John");
+        registrationRequest.setLastname("Doe");
+        registrationRequest.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        registrationRequest.setPesel("12345678901");
+        registrationRequest.setEmail("test@test.com");
+        registrationRequest.setPhoneNumber("+48123456789");
+        registrationRequest.setPassword("Password123!");
+        registrationRequest.setConfirmPassword("Password123!");
         
         given(requestValidator.getValidationErrorMessage(any())).willReturn(null);
         
@@ -148,7 +143,7 @@ void shouldReturnBadRequestWhenRegistrationServiceThrowsException() throws Excep
         mockMvc.perform(post("/api/users")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registrationDto)))
+                        .content(objectMapper.writeValueAsString(registrationRequest)))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                         .andExpect(jsonPath("$.title").value("VALIDATION_ERROR"))
@@ -161,21 +156,21 @@ void shouldReturnBadRequestWhenRegistrationServiceThrowsException() throws Excep
 @DisplayName("Should fail when passwords don't match")
 void shouldFailWhenPasswordsDontMatch() throws Exception {
     // Arrange
-    UserRegistrationDto registrationDto = new UserRegistrationDto();
-    registrationDto.setFirstname("John");
-    registrationDto.setLastname("Doe");
-    registrationDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
-    registrationDto.setPesel("12345678901");
-    registrationDto.setEmail("test@test.com");
-    registrationDto.setPhoneNumber("+48123456789");
-    registrationDto.setPassword("StrongP@ss123");
-    registrationDto.setConfirmPassword("DifferentP@ss123");
+        UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
+        registrationRequest.setFirstname("John");
+        registrationRequest.setLastname("Doe");
+        registrationRequest.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        registrationRequest.setPesel("12345678901");
+        registrationRequest.setEmail("test@test.com");
+        registrationRequest.setPhoneNumber("+48123456789");
+        registrationRequest.setPassword("StrongP@ss123");
+        registrationRequest.setConfirmPassword("DifferentP@ss123");
     
     // Act & Assert
     mockMvc.perform(post("/api/users")
                     .with(SecurityMockMvcRequestPostProcessors.csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(registrationDto)))
+                    .content(objectMapper.writeValueAsString(registrationRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                     .andExpect(jsonPath("$.title").value("VALIDATION_ERROR"))
@@ -189,15 +184,15 @@ void shouldFailWhenPasswordsDontMatch() throws Exception {
 @DisplayName("Should fix the duplicated assertion in user creation test")
 void fixedCreateUserTest() throws Exception {
         // Arrange
-        UserRegistrationDto registrationDto = new UserRegistrationDto();
-        registrationDto.setFirstname("John");
-        registrationDto.setLastname("Doe");
-        registrationDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
-        registrationDto.setPesel("12345678901");
-        registrationDto.setEmail("test@test.com");
-        registrationDto.setPhoneNumber("+48123456789");
-        registrationDto.setPassword("Password123!");
-        registrationDto.setConfirmPassword("Password123!");
+        UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
+        registrationRequest.setFirstname("John");
+        registrationRequest.setLastname("Doe");
+        registrationRequest.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        registrationRequest.setPesel("12345678901");
+        registrationRequest.setEmail("test@test.com");
+        registrationRequest.setPhoneNumber("+48123456789");
+        registrationRequest.setPassword("Password123!");
+        registrationRequest.setConfirmPassword("Password123!");
         
         given(requestValidator.getValidationErrorMessage(any())).willReturn(null);
         given(registrationService.registerUser(any())).willReturn(sampleUser);
@@ -207,7 +202,7 @@ void fixedCreateUserTest() throws Exception {
         mockMvc.perform(post("/api/users")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registrationDto)))
+                        .content(objectMapper.writeValueAsString(registrationRequest)))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.status").value("CREATED"))
                         .andExpect(jsonPath("$.data.id").value(1))

@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
-import info.mackiewicz.bankapp.account.validation.ValidIban;
+import info.mackiewicz.bankapp.shared.annotations.ValidIban;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

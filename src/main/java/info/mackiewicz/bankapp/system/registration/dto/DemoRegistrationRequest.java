@@ -2,8 +2,8 @@ package info.mackiewicz.bankapp.system.registration.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import info.mackiewicz.bankapp.presentation.auth.validation.Password;
-import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
+import info.mackiewicz.bankapp.shared.annotations.Password;
+import info.mackiewicz.bankapp.shared.annotations.PasswordMatches;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
