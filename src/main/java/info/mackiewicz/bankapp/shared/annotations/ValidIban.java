@@ -1,13 +1,9 @@
-package info.mackiewicz.bankapp.account.validation;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package info.mackiewicz.bankapp.shared.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+
+import java.lang.annotation.*;
 
 /**
  * Annotation used to validate that a field represents a valid IBAN (International Bank Account Number).

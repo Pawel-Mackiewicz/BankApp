@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.recovery.password.controller;
 
+import info.mackiewicz.bankapp.shared.annotations.ValidEmail;
 import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetDTO;
-import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordResetRequestDTO;
 import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class DefaultPasswordResetController implements PasswordResetController {
     private final PasswordResetService passwordResetService;
 
     @PostMapping("/reset-request")
-    public ResponseEntity<Void> requestReset(@Valid @RequestBody PasswordResetRequestDTO request) {
-        passwordResetService.requestReset(request.getEmail());
+    public ResponseEntity<Void> requestReset(@ValidEmail String email) {
+        passwordResetService.requestReset(email);
         return ResponseEntity.ok().build();
     }
 

@@ -1,16 +1,11 @@
 package info.mackiewicz.bankapp.presentation.auth.dto;
 
-import java.time.LocalDate;
+import info.mackiewicz.bankapp.shared.annotations.Password;
+import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.*;
 
-import info.mackiewicz.bankapp.presentation.auth.validation.Password;
- import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
- import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 
 /**
  * DTO for user registration requests.

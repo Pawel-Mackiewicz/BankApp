@@ -1,9 +1,8 @@
-package info.mackiewicz.bankapp.account.validation;
-
-import org.iban4j.IbanUtil;
+package info.mackiewicz.bankapp.shared.annotations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.iban4j.IbanUtil;
 
 /**
  * Validator for IBAN (International Bank Account Number) validation.

@@ -1,11 +1,7 @@
 package info.mackiewicz.bankapp.presentation.auth.dto;
 
-import java.time.LocalDate;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import info.mackiewicz.bankapp.presentation.auth.validation.Password;
-import info.mackiewicz.bankapp.presentation.auth.validation.PasswordMatches;
+import info.mackiewicz.bankapp.shared.annotations.Password;
+import info.mackiewicz.bankapp.shared.annotations.PasswordMatches;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
 import info.mackiewicz.bankapp.user.validation.AgeRange;
@@ -15,6 +11,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Data
 @PasswordMatches
