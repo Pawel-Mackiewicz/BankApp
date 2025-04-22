@@ -252,9 +252,9 @@ BankApp implements a secure and robust token system primarily used for password 
 
 For detailed technical documentation, see the [Token System](../../wiki/Token-System) page in the wiki.
 
-#### Exception Handling System
+#### Error Handling System
 
-BankApp implements a comprehensive exception handling system that ensures consistent error management, logging, and standardized API responses across the entire application.
+BankApp implements a comprehensive error handling system that ensures consistent error management, logging, and standardized API responses across the entire application.
 
 - **Multi-layered Architecture**: Global exception handler, logging system, and validation processors
 - **Standardized Responses**: Unified error response format with consistent HTTP status mapping
@@ -262,7 +262,8 @@ BankApp implements a comprehensive exception handling system that ensures consis
 - **Centralized Logging**: Differentiated logging levels with configurable stack trace handling
 - **Error Classification**: Structured error codes system with proper categorization
 
-For detailed technical documentation, see the [Exception Handling System](../../wiki/Exception-Handling-System) page in the wiki.
+For detailed technical documentation, see the [Error Handling System](../../wiki/Error-Handling-System) page in the
+wiki.
 
 #### API Documentation System
 

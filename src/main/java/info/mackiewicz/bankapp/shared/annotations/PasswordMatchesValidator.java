@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.shared.annotations;
 
-import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

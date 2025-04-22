@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
-import info.mackiewicz.bankapp.shared.web.dto.BaseApiError;
+import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import io.swagger.v3.oas.annotations.Operation;

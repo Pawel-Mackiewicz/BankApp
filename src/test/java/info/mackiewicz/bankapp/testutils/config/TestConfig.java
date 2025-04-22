@@ -2,12 +2,12 @@ package info.mackiewicz.bankapp.testutils.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
-import info.mackiewicz.bankapp.shared.infrastructure.logging.ApiErrorLogger;
-import info.mackiewicz.bankapp.shared.infrastructure.logging.LoggingInterceptor;
-import info.mackiewicz.bankapp.shared.web.error.mapping.ApiExceptionToErrorMapper;
-import info.mackiewicz.bankapp.shared.web.error.validation.ValidationErrorProcessor;
+import info.mackiewicz.bankapp.shared.util.LoggingInterceptor;
 import info.mackiewicz.bankapp.shared.web.response.RestResponseFactory;
-import info.mackiewicz.bankapp.shared.web.util.RequestUriHandler;
+import info.mackiewicz.bankapp.system.error.handling.logger.ApiErrorLogger;
+import info.mackiewicz.bankapp.system.error.handling.mapping.ApiExceptionToErrorMapper;
+import info.mackiewicz.bankapp.system.error.handling.service.ValidationErrorProcessor;
+import info.mackiewicz.bankapp.system.error.handling.util.RequestUriHandler;
 import info.mackiewicz.bankapp.system.notification.email.EmailSender;
 import info.mackiewicz.bankapp.system.notification.email.template.EmailTemplateProvider;
 import org.mockito.Mockito;
