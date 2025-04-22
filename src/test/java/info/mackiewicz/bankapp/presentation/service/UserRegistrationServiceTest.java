@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.presentation.service;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -61,7 +61,7 @@ class UserRegistrationServiceTest {
     void testRegisterUser() {
         // given
         logger.info("testRegisterUser: Starting test");
-        UserRegistrationDto registrationDto = new UserRegistrationDto();
+        UserRegistrationRequest registrationDto = new UserRegistrationRequest();
         registrationDto.setFirstname("John");
         registrationDto.setLastname("Doe");
         registrationDto.setEmail("john.doe@example.com");

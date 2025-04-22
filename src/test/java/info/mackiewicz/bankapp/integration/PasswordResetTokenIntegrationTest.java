@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.integration;
 
-import info.mackiewicz.bankapp.presentation.auth.dto.PasswordResetDTO;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
+import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordChangeForm;
 import info.mackiewicz.bankapp.system.recovery.password.exception.ExpiredTokenException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.UsedTokenException;
 import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetService;
@@ -112,7 +112,7 @@ public class PasswordResetTokenIntegrationTest {
         
         String oldPasswordHash = testUser.getPassword();
 
-        PasswordResetDTO resetDTO = new PasswordResetDTO();
+        PasswordChangeForm resetDTO = new PasswordChangeForm();
         resetDTO.setToken(TEST_PLAIN_TOKEN); // Użyj oryginalnego tokena, nie hasha
         resetDTO.setPassword(NEW_PASSWORD);
         resetDTO.setConfirmPassword(NEW_PASSWORD);
@@ -148,7 +148,7 @@ public class PasswordResetTokenIntegrationTest {
         entityManager.flush();
         entityManager.clear();
 
-        PasswordResetDTO resetDTO = new PasswordResetDTO();
+        PasswordChangeForm resetDTO = new PasswordChangeForm();
         resetDTO.setToken(TEST_PLAIN_TOKEN);
         resetDTO.setPassword(NEW_PASSWORD);
         resetDTO.setConfirmPassword(NEW_PASSWORD);
@@ -172,7 +172,7 @@ public class PasswordResetTokenIntegrationTest {
         entityManager.flush();
         entityManager.clear();
 
-        PasswordResetDTO resetDTO = new PasswordResetDTO();
+        PasswordChangeForm resetDTO = new PasswordChangeForm();
         resetDTO.setToken(TEST_PLAIN_TOKEN);
         resetDTO.setPassword(NEW_PASSWORD);
         resetDTO.setConfirmPassword(NEW_PASSWORD);
@@ -183,7 +183,7 @@ public class PasswordResetTokenIntegrationTest {
         entityManager.clear();
 
         // Try to use same token again with different password
-        PasswordResetDTO secondResetDTO = new PasswordResetDTO();
+        PasswordChangeForm secondResetDTO = new PasswordChangeForm();
         secondResetDTO.setToken(TEST_PLAIN_TOKEN);
         secondResetDTO.setPassword("anotherPassword789!");
         secondResetDTO.setConfirmPassword("anotherPassword789!");

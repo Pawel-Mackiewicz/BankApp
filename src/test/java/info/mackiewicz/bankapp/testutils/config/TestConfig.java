@@ -16,6 +16,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @TestConfiguration
@@ -85,4 +86,11 @@ public class TestConfig {
     public RestTemplateBuilder restTemplateBuilder() {
         return new RestTemplateBuilder();
     }
+
+    @Bean
+    @Primary
+    public RestClient.Builder restClientBuilder() {
+        return RestClient.builder();
+    }
+
 }

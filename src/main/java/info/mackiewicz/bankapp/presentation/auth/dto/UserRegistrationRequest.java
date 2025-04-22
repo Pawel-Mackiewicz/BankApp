@@ -1,46 +1,53 @@
 package info.mackiewicz.bankapp.presentation.auth.dto;
 
-import java.time.LocalDate;
-
-import info.mackiewicz.bankapp.presentation.auth.validation.Password;
- import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
- import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
+import info.mackiewicz.bankapp.shared.annotations.Password;
+import info.mackiewicz.bankapp.shared.annotations.PasswordMatches;
+import info.mackiewicz.bankapp.shared.annotations.ValidEmail;
+import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
+import info.mackiewicz.bankapp.shared.web.dto.interfaces.PasswordConfirmation;
+import info.mackiewicz.bankapp.user.validation.AgeRange;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * DTO for user registration requests.
- * Contains all necessary fields for creating a new user.
- */
-public record UserRegistrationRequest(
-    @NotBlank
-    @Size(min = 2, max = 50)
-    String firstname,
+import java.time.LocalDate;
 
-    @NotBlank
-    @Size(min = 2, max = 50)
-    String lastname,
+@Getter
+@Setter
+@PasswordMatches
+public class UserRegistrationRequest implements PasswordConfirmation {
 
-    @NotBlank
-    @Size(min = 11, max = 11)
-    String pesel,
+    @NotBlank(message = "Firstname is required")
+    @Pattern(regexp = ValidationConstants.NAME_PATTERN, message = "Firstname can only contain letters")
+    private String firstname;
 
-    @NotBlank
-    @Email
-    String email,
+    @NotBlank(message = "Lastname is required")
+    @Pattern(regexp = ValidationConstants.NAME_PATTERN, message = "Lastname can only contain letters")
+    private String lastname;
+
+    @NotNull(message = "Date of Birth is required")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @AgeRange
+    @Schema(description = "Date of birth in the format yyyy-MM-dd." +
+            " User must be at least 18 years old." +
+            " User cannot be older than 120 years old")
+    private LocalDate dateOfBirth;
+
+    @NotBlank(message = "PESEL is required")
+    @Pattern(regexp = "\\d{11}", message = "PESEL must be exactly 11 digits")
+    private String pesel;
+
+    @ValidEmail(message = "Please provide a valid email address")
+    private String email;
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = ValidationConstants.PHONE_NUMBER_PATTERN, 
             message = "Invalid phone number format. Use +48XXXXXXXXX, 0XXXXXXXXX or XXXXXXXXX format")
-    String phoneNumber,
-
-    @NotNull
-    @Past
-    LocalDate dateOfBirth,
+    private String phoneNumber;
 
     @Schema(
     description = "Password must be at least 8 characters long, contain at least one digit, " +
@@ -50,5 +57,10 @@ public record UserRegistrationRequest(
     example = "StrongP@ss123"
                   )
     @Password
-    String password
-) {}
+    private String password;
+
+    @NotBlank(message = "Password confirmation is required")
+    @Schema(description = "Password confirmation must match the password",
+            example = "StrongP@ss123")
+    private String confirmPassword;
+}

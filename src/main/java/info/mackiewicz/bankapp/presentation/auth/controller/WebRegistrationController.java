@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.auth.controller;
 
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
 import info.mackiewicz.bankapp.user.exception.UserValidationException;
@@ -28,34 +28,34 @@ public class WebRegistrationController {
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         if (!model.containsAttribute("userRegistrationDto")) {
-            model.addAttribute("userRegistrationDto", new UserRegistrationDto());
+            model.addAttribute("userRegistrationDto", new UserRegistrationRequest());
         }
         return "registration";
     }
 
     @PostMapping("/register")
     public String registerUser(
-            @Valid @ModelAttribute("userRegistrationDto") UserRegistrationDto userRegistrationDto,
+            @Valid @ModelAttribute("userRegistrationDto") UserRegistrationRequest userRegistrationRequest,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes) {
         
         if (bindingResult.hasErrors()) {
             logger.error("Validation errors: {}", bindingResult.getAllErrors());
-            model.addAttribute("userRegistrationDto", userRegistrationDto);
+            model.addAttribute("userRegistrationDto", userRegistrationRequest);
             model.addAttribute("status", HttpStatus.BAD_REQUEST);
             return "registration";
         }
         
         try {
-            User createdUser = registrationService.registerUser(userRegistrationDto);
+            User createdUser = registrationService.registerUser(userRegistrationRequest);
             redirectAttributes.addFlashAttribute("success", "Registration successful! You can now log in. ");
             redirectAttributes.addFlashAttribute("username", String.format("Your username is: %s",createdUser.getUsername()));
             return "redirect:/login";
         } catch (IllegalArgumentException | UserValidationException | DuplicatedUserException e) {
             logger.error("Registration error: {}", e.getMessage());
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("userRegistrationDto", userRegistrationDto);
+            model.addAttribute("userRegistrationDto", userRegistrationRequest);
             model.addAttribute("status", HttpStatus.BAD_REQUEST);
             return "registration";
         }

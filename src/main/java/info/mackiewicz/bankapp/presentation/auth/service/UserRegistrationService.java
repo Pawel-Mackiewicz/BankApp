@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.presentation.auth.service;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
-import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationDto;
+import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
@@ -27,7 +27,7 @@ public class UserRegistrationService {
     private final EmailService emailService;
 
 
-    public User registerUser(UserRegistrationDto registrationDto) {
+    public User registerUser(UserRegistrationRequest registrationDto) {
         log.info("Starting user registration process for email: {}", registrationDto.getEmail());
         
         User user = userMapper.toUser(registrationDto);
