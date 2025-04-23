@@ -27,7 +27,7 @@ spring:
       idle-timeout: 300000
   # JPA / Hibernate settings
   jpa:
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: validate
     show-sql: false
     open-in-view: false
     properties:
