@@ -1,17 +1,14 @@
 package info.mackiewicz.bankapp.account.service;
 
-import info.mackiewicz.bankapp.account.exception.AccountLimitException;
-import info.mackiewicz.bankapp.account.exception.AccountOwnerExpiredException;
-import info.mackiewicz.bankapp.account.exception.AccountOwnerLockedException;
-import info.mackiewicz.bankapp.account.exception.AccountOwnerNullException;
-import info.mackiewicz.bankapp.account.exception.AccountValidationException;
+import info.mackiewicz.bankapp.account.exception.*;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.user.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-
-import org.springframework.stereotype.Service;
 
 /**
  * Service responsible for account-related validations
@@ -20,7 +17,24 @@ import org.springframework.stereotype.Service;
 @Service
 class AccountValidationService {
 
-    private static final int MAX_ACCOUNTS = 3;
+    private static final int MAX_ACCOUNTS_DEFAULT = 3;
+
+    private final int maxAccountsPerUser;
+
+    @Autowired
+    public AccountValidationService(@Value("${bankapp.restrictions.MaxAccountsPerUser}") Integer maxAccountsPerUser) {
+        if (maxAccountsPerUser == null || maxAccountsPerUser < 1) {
+            log.warn("Invalid maxAccountsPerUser value: {}. Using default: {}", maxAccountsPerUser, MAX_ACCOUNTS_DEFAULT);
+            this.maxAccountsPerUser = MAX_ACCOUNTS_DEFAULT;
+        } else {
+            this.maxAccountsPerUser = maxAccountsPerUser;
+        }
+    }
+
+    public AccountValidationService() {
+        maxAccountsPerUser = MAX_ACCOUNTS_DEFAULT;
+    }
+
     /**
      * Validates if user can own a new account
      * 
@@ -33,9 +47,9 @@ class AccountValidationService {
             throw new AccountOwnerNullException("Owner cannot be null");
         }
         log.debug("Validating account owner: {}", owner.getId());
-        if (owner.getAccounts().size() >= MAX_ACCOUNTS) {
+        if (owner.getAccounts().size() >= maxAccountsPerUser) {
             log.warn("Validation fail. Account limit exceeded for owner: {}", owner.getId());
-            throw new AccountLimitException("Account limit exceeded. User can't have more than " + MAX_ACCOUNTS + " accounts");
+            throw new AccountLimitException("Account limit exceeded. User can't have more than " + maxAccountsPerUser + " accounts");
         }
         if (owner.isLocked()) {
             log.warn("Validation fail. User {} is locked", owner.getId());
