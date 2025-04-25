@@ -1,6 +1,6 @@
 // Form handlers module
-import { Validator, UIHelper } from './validation.js';
-import { DOMHelper } from './dom-helper.js';
+import {UIHelper, Validator} from './validation.js';
+import {DOMHelper} from './dom-helper.js';
 
 export class FormManager {
     constructor() {
@@ -192,7 +192,7 @@ export class FormManager {
     }
 }
 
-// Create account form handling
+// Klasa pozostaje bez zmian do momentu metody handleSubmit
 export class CreateAccountForm {
     constructor() {
         this.form = document.querySelector('form[action="/dashboard/new-account"]');
@@ -216,18 +216,50 @@ export class CreateAccountForm {
         fetch(this.form.action, {
             method: 'POST'
         })
-        .then(response => {
-            if (response.ok) {
-                window.location.reload();
-            } else {
-                throw new Error('Failed to create account');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            this.button.disabled = false;
-            this.button.innerHTML = 'Create New Account';
-            DOMHelper.showAlert('Failed to create account. Please try again.', 'danger', this.form);
-        });
+            .then(async response => {
+                // Pobierz odpowiedź HTML
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                if (response.ok) {
+                    // Aktualizuj sekcję kont
+                    const newAccounts = doc.querySelector('.account-summary');
+                    if (newAccounts) {
+                        DOMHelper.updateAccountSummary(newAccounts.innerHTML);
+                    }
+
+                    // Aktualizuj listę transakcji (jeśli potrzebne)
+                    const newTransactions = doc.querySelector('.recent-transactions');
+                    if (newTransactions) {
+                        DOMHelper.updateRecentTransactions(newTransactions.innerHTML);
+                    }
+
+                    // Wyświetl komunikat sukcesu z odpowiedzi
+                    const successMessage = doc.querySelector('.alert.alert-success');
+                    if (successMessage) {
+                        const accountForm = document.querySelector('.account-summary');
+                        DOMHelper.showAlert(successMessage.textContent, 'success', accountForm);
+                    }
+                } else {
+                    // Obsłuż błędy
+                    const errorMessage = doc.querySelector('.alert.alert-danger');
+                    if (errorMessage) {
+                        const accountForm = document.querySelector('.account-summary');
+                        DOMHelper.showAlert(errorMessage.textContent, 'danger', accountForm);
+                    } else {
+                        throw new Error('Failed to create account');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const accountForm = document.querySelector('.account-summary');
+                DOMHelper.showAlert('Failed to create account. Please try again.', 'danger', accountForm);
+            })
+            .finally(() => {
+                this.button.disabled = false;
+                this.button.innerHTML = 'Create New Account';
+            });
     }
 }
