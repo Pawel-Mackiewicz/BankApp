@@ -58,9 +58,16 @@ build/
 ### VS Code ###
 .vscode/
 
+### Docker ###
+docker-compose.yml
+/deploy.sh
+/bankapp.tar
+/bankapp-latest.tar
+update-dockerfile-version.sh
+.env-docker
+
 ### Environment Variables ###
 .env
-.env-docker
 .credentials
 hs_err_pid7228.log
 IdeaProjects.lnk
@@ -68,8 +75,3 @@ key
 key.pub
 release.properties
 pom.xml.releaseBackup
-update-dockerfile-version.sh
-
-src/main/resources/bak.application.properties
-docker-compose.yml
-/bankapp.tar
