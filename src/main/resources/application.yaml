@@ -2,6 +2,13 @@
 server:
   address: 0.0.0.0
   port: ${PORT:8080}
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        secure: true
+        http-only: true
+        same-site: strict #if there will be problems with password reset or registration then change it to `lex`
 
 # Application variables
 spring:
@@ -15,7 +22,7 @@ spring:
       password: ${SPRING_SECURITY_USER_PASSWORD}
   # Database configuration
   datasource:
-    url: ${DB_URL}
+    url: jdbc:mysql://${DB_URL:localhost}:${DB_PORT:3006}/${DB_SCHEMA:bankapp}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
