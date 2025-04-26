@@ -43,10 +43,6 @@ class BaseTransferCommandTest {
         public TransactionType getTransactionType() {
             return type;
         }
-        
-        public void setTransactionType(TransactionType type) {
-            this.type = type;
-        }
     }
 
     @BeforeEach
