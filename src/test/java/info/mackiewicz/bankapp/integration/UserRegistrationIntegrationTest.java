@@ -4,6 +4,7 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserRegistrationDtoBuilder;
@@ -52,6 +53,9 @@ public class UserRegistrationIntegrationTest {
 
     @MockitoBean
     private TransactionService transactionService;
+
+    @MockitoBean
+    private TransactionProcessingService transactionProcessingService;
 
     @BeforeAll
     static void beforeAll() {
@@ -114,7 +118,7 @@ public class UserRegistrationIntegrationTest {
         ));
 
         // Verify transaction processing was called with the correct ID
-        verify(transactionService).processTransactionById(100);
+        verify(transactionProcessingService).processTransactionById(100);
     }
 
     @Test

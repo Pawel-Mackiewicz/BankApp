@@ -1,19 +1,19 @@
 package info.mackiewicz.bankapp.shared.util;
 
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class SchedulerServiceTest {
 
     @Mock
-    private TransactionService transactionService;
+    private TransactionProcessingService transactionProcessingService;
 
     @InjectMocks
     private SchedulerService schedulerService;
@@ -29,6 +29,6 @@ class SchedulerServiceTest {
         schedulerService.scheduleProcessAllNewTransactions();
 
         // Assert
-        verify(transactionService, times(1)).processAllNewTransactions();
+        verify(transactionProcessingService, times(1)).processAllNewTransactions();
     }
 }

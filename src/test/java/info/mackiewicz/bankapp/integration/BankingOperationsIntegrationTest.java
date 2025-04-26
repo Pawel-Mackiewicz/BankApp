@@ -9,9 +9,9 @@ import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
@@ -82,7 +82,7 @@ public class BankingOperationsIntegrationTest {
     private TransactionRepository transactionRepository;
 
     @Autowired
-    private TransactionService transactionService;
+    private TransactionProcessingService transactionProcessingService;
 
     private Account sourceAccount;
     private Account destinationAccount;
@@ -194,7 +194,7 @@ public class BankingOperationsIntegrationTest {
         //recover transaction id from response
         Integer transactionId = JsonPath.read(responseBody, "$.transactionInfo.id");
         //process transaction by recovered id
-        transactionService.processTransactionById(transactionId);
+        transactionProcessingService.processTransactionById(transactionId);
         awaitTransactionCompletion(transactionId);
 
         checkBalancesChangedCorrectly();
@@ -230,7 +230,7 @@ public class BankingOperationsIntegrationTest {
         //recover transaction id from response
         Integer transactionId = JsonPath.read(responseBody, "$.transactionInfo.id");
         //process transaction by recovered id
-        transactionService.processTransactionById(transactionId);
+        transactionProcessingService.processTransactionById(transactionId);
         awaitTransactionCompletion(transactionId);
 
         checkBalancesChangedCorrectly();

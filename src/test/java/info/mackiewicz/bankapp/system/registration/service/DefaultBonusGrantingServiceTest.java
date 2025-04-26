@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.system.registration.service;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.util.BankAccountProvider;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
@@ -43,6 +44,9 @@ class DefaultBonusGrantingServiceTest {
     @Mock
     private TransactionService transactionService;
 
+    @Mock
+    TransactionProcessingService transactionProcessingService;
+
     @InjectMocks
     private DefaultBonusGrantingService defaultBonusGrantingService;
 
@@ -82,7 +86,7 @@ class DefaultBonusGrantingServiceTest {
         verify(bankAccountProvider).getBankAccount();
         verify(accountService).getAccountByIban(eq(recipientIban));
         verify(transactionService).registerTransaction(eq(createdTransaction));
-        verify(transactionService).processTransactionById(eq(REGISTERED_TRANSACTION_ID));
+        verify(transactionProcessingService).processTransactionById(eq(REGISTERED_TRANSACTION_ID));
     }
 
     @Test
@@ -104,6 +108,7 @@ class DefaultBonusGrantingServiceTest {
         verify(bankAccountProvider).getBankAccount();
         verify(accountService).getAccountByIban(eq(recipientIban));
         verifyNoInteractions(transactionService);
+        verifyNoInteractions(transactionProcessingService);
     }
 
     @Test
@@ -136,5 +141,6 @@ class DefaultBonusGrantingServiceTest {
         verify(accountService).getAccountByIban(eq(recipientIban));
         verify(transactionService).registerTransaction(eq(createdTransaction));
         verifyNoMoreInteractions(transactionService);
+        verifyNoInteractions(transactionProcessingService);
     }
 }

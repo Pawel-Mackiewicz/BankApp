@@ -1,9 +1,5 @@
 package info.mackiewicz.bankapp.transaction.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import info.mackiewicz.bankapp.system.error.handling.dto.ValidationApiError;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
@@ -15,6 +11,9 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface TransactionControllerInterface {
 
@@ -65,21 +64,4 @@ public interface TransactionControllerInterface {
             @ApiResponse(responseCode = "404", description = "Account not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class)))
     })
     ResponseEntity<List<Transaction>> getTransactionsByAccountId(int accountId);
-
-    @Operation(summary = "Process transaction by ID", description = "Processes a pending transaction by its unique ID. This will transfer funds between accounts according to the transaction details.")
-    @Parameter(required = true, description = "Transaction's unique identifier", name = "id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Transaction processed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Transaction.class))),
-            @ApiResponse(responseCode = "404", description = "Transaction not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))),
-            @ApiResponse(responseCode = "400", description = "Transaction already processed or invalid state", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))),
-            @ApiResponse(responseCode = "400", description = "Insufficient funds", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class)))
-    })
-    ResponseEntity<?> processTransactionById(int id);
-
-    @Operation(summary = "Process all new transactions", description = "Processes all transactions that are in NEW status. This endpoint can be used to batch process multiple pending transactions.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "All new transactions processed successfully"),
-            @ApiResponse(responseCode = "207", description = "Some transactions processed successfully, others failed", content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)))
-    })
-    ResponseEntity<String> processAllNewTransactions();
 }

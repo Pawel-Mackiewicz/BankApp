@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.transaction.service;
 
-import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
@@ -29,9 +28,6 @@ class TransactionCommandServiceTest {
     private TransactionRepository repository;
 
     @Mock
-    private TransactionProcessingService processingService;
-
-    @Mock
     private TransactionValidator validator;
 
     @Mock
@@ -58,7 +54,6 @@ class TransactionCommandServiceTest {
         // then
         verify(validator).validate(transaction);
         verify(repository).save(transaction);
-        verify(processingService, never()).processTransaction(any());
         assertEquals(transaction, result);
     }
 
@@ -75,7 +70,6 @@ class TransactionCommandServiceTest {
         // then
         verify(validator).validate(transaction);
         verify(repository).save(transaction);
-        verify(processingService).processTransaction(transaction);
         assertEquals(transaction, result);
     }
 
@@ -88,7 +82,6 @@ class TransactionCommandServiceTest {
         // when/then
         assertThrows(IllegalArgumentException.class, () -> commandService.registerTransaction(transaction));
         verify(repository, never()).save(any());
-        verify(processingService, never()).processTransaction(any());
     }
 
     @Test
