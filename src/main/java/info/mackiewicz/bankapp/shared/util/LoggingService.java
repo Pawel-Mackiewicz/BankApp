@@ -1,7 +1,8 @@
 package info.mackiewicz.bankapp.shared.util;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
  *
  * @see Account
  * @see Transaction
- * @see info.mackiewicz.bankapp.transaction.model.TransactionType
+ * @see TransactionType
  */
 @Slf4j
 @Service

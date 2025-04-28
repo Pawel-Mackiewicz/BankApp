@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.system.banking.operations.service.helpers;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
-import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.exception.TransactionBuildingException;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

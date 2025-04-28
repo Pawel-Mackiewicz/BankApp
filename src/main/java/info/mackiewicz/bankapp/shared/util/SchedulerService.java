@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.shared.util;
 
+import info.mackiewicz.bankapp.core.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetTokenService;
 import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * This service manages scheduled tasks such as transaction processing and cleanup operations.
  * 
  * @see org.springframework.scheduling.annotation.Scheduled
- * @see info.mackiewicz.bankapp.transaction.service.TransactionService
+ * @see TransactionService
  * @see PasswordResetTokenService
  */
 @Slf4j

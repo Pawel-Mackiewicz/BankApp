@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
 import lombok.Data;
 
 import java.math.BigDecimal;

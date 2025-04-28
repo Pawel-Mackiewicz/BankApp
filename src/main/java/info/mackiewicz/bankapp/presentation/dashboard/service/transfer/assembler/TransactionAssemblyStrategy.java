@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.dashboard.service.transfer.assembler;
 
-import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
 
 /**
  * Strategy interface for assembling different types of transactions.
