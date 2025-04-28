@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.presentation.service;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
-import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.core.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.core.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;

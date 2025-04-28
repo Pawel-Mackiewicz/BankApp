@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.banking.operations.service.helpers;
 
-import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.integration;
 
-import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestAccountService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;

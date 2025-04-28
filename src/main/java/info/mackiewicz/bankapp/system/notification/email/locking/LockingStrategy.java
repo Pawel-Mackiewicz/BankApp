@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.notification.email.locking;
 
-import info.mackiewicz.bankapp.account.exception.AccountLockException;
+import info.mackiewicz.bankapp.core.account.exception.AccountLockException;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

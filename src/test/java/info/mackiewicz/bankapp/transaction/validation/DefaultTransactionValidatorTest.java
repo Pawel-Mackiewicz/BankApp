@@ -1,23 +1,19 @@
 package info.mackiewicz.bankapp.transaction.validation;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.math.BigDecimal;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.core.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.transaction.exception.TransactionAccountConflictException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.user.model.User;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultTransactionValidatorTest {
 

@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.notification.email.locking;
 
-import info.mackiewicz.bankapp.account.exception.AccountLockException;
+import info.mackiewicz.bankapp.core.account.exception.AccountLockException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
