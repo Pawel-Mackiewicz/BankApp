@@ -205,7 +205,7 @@ public class BankingOperationsIntegrationTest {
         checkBalancesPostTransfer(
                 sourceAccount,
                 DEFAULT_BALANCE,
-                sameOwnerDestinationAccount,
+                destinationAccount,
                 DEFAULT_BALANCE
         );
     }
@@ -302,7 +302,7 @@ public class BankingOperationsIntegrationTest {
         checkBalancesPostTransfer(
                 sourceAccount,
                 DEFAULT_BALANCE,
-                sameOwnerDestinationAccount,
+                destinationAccount,
                 DEFAULT_BALANCE
         );
     }
