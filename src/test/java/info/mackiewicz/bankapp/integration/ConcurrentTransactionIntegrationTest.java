@@ -6,6 +6,7 @@ import info.mackiewicz.bankapp.integration.utils.IntegrationTestAccountService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;
 import info.mackiewicz.bankapp.system.notification.email.locking.LockingConfig;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
@@ -53,6 +54,9 @@ class ConcurrentTransactionIntegrationTest {
     private TransactionService transactionService;
 
     @Autowired
+    private TransactionProcessingService transactionProcessingService;
+
+    @Autowired
     private UserService userService;
 
     private List<Account> testAccounts;
@@ -94,7 +98,7 @@ class ConcurrentTransactionIntegrationTest {
             transactions.add(transaction);
         }
 
-        transactionService.processAllNewTransactions();
+        transactionProcessingService.processAllNewTransactions();
 
         await()
                 .atMost(Duration.ofSeconds(60))
@@ -117,7 +121,7 @@ class ConcurrentTransactionIntegrationTest {
             createWithdrawal(sourceAccount, withdrawalAmount);
         }
 
-        transactionService.processAllNewTransactions();
+        transactionProcessingService.processAllNewTransactions();
 
         await()
                 .atMost(Duration.ofSeconds(15))
@@ -153,7 +157,7 @@ class ConcurrentTransactionIntegrationTest {
             transactions.add(deposit);
         }
 
-        transactionService.processAllNewTransactions();
+        transactionProcessingService.processAllNewTransactions();
 
         await()
                 .atMost(Duration.ofSeconds(15))
@@ -195,7 +199,7 @@ class ConcurrentTransactionIntegrationTest {
             transactions.add(t2);
         }
 
-        transactionService.processAllNewTransactions();
+        transactionProcessingService.processAllNewTransactions();
 
         await()
                 .atMost(Duration.ofSeconds(15))
@@ -231,7 +235,7 @@ class ConcurrentTransactionIntegrationTest {
             transactions.add(t2);
         }
 
-        transactionService.processAllNewTransactions();
+        transactionProcessingService.processAllNewTransactions();
 
         await()
                 .atMost(Duration.ofSeconds(30))
@@ -283,7 +287,7 @@ class ConcurrentTransactionIntegrationTest {
             transactions.add(t3);
         }
 
-        transactionService.processAllNewTransactions();
+        transactionProcessingService.processAllNewTransactions();
 
         await()
                 .atMost(Duration.ofSeconds(15))

@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.system.registration.service;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.util.BankAccountProvider;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.NonNull;
@@ -27,8 +28,9 @@ import java.math.BigDecimal;
  * services for all operations.
  *
  * @see BonusGrantingService
- * @see info.mackiewicz.bankapp.account.service.AccountService
- * @see info.mackiewicz.bankapp.transaction.service.TransactionService
+ * @see AccountService
+ * @see TransactionService
+ * @see TransactionProcessingService
  */
 @Slf4j
 @Service
@@ -40,6 +42,7 @@ public class DefaultBonusGrantingService implements BonusGrantingService {
     private final BankAccountProvider bankAccountProvider;
     private final AccountService accountService;
     private final TransactionService transactionService;
+    private final TransactionProcessingService transactionProcessingService;
 
 
     //TODO: Write down all exceptions that can be thrown.
@@ -50,7 +53,7 @@ public class DefaultBonusGrantingService implements BonusGrantingService {
         log.trace("Built welcome bonus transaction");
         Transaction registeredTransaction = transactionService.registerTransaction(transaction);
         log.trace("Registered welcome bonus transaction");
-        transactionService.processTransactionById(registeredTransaction.getId());
+        transactionProcessingService.processTransactionById(registeredTransaction.getId());
         log.trace("Processed welcome bonus transaction");
 
     }

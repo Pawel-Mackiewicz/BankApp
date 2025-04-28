@@ -1,16 +1,15 @@
 package info.mackiewicz.bankapp.transaction.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Facade service for transaction operations.
@@ -25,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 public class TransactionService {
     private final TransactionQueryService queryService;
     private final TransactionCommandService commandService;
-    private final TransactionProcessingService processingService;
 
     /**
      * Validate and register a new transaction in the system.
@@ -99,24 +97,5 @@ public class TransactionService {
      */
     public List<Transaction> getRecentTransactions(int accountId, int count) {
         return queryService.getRecentTransactions(accountId, count);
-    }
-
-    /**
-     * Processes a single transaction by its ID.
-     *
-     * @param transactionId the ID of the transaction to process
-     * @throws TransactionNotFoundException if no transaction is found with the given ID
-     * @throws IllegalArgumentException if the transaction fails validation
-     */
-    public void processTransactionById(int transactionId) {
-        processingService.processTransactionById(transactionId);
-    }
-
-    /**
-     * Processes all transactions with NEW status.
-     * Failed transactions will be logged but won't stop the processing of remaining transactions.
-     */
-    public void processAllNewTransactions() {
-        processingService.processAllNewTransactions();
     }
 }

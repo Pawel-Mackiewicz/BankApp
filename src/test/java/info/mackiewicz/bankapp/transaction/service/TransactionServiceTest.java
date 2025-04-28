@@ -1,19 +1,18 @@
 package info.mackiewicz.bankapp.transaction.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for TransactionService facade.
@@ -27,9 +26,6 @@ class TransactionServiceTest {
 
     @Mock
     private TransactionCommandService commandService;
-
-    @Mock
-    private TransactionProcessingService processingService;
 
     @InjectMocks
     private TransactionService transactionService;
@@ -137,26 +133,5 @@ class TransactionServiceTest {
         // then
         verify(queryService).getRecentTransactions(accountId, count);
         assertEquals(transactions, result);
-    }
-
-    @Test
-    void processTransactionById_ShouldDelegateToProcessingService() {
-        // given
-        int transactionId = 1;
-
-        // when
-        transactionService.processTransactionById(transactionId);
-
-        // then
-        verify(processingService).processTransactionById(transactionId);
-    }
-
-    @Test
-    void processAllNewTransactions_ShouldDelegateToProcessingService() {
-        // when
-        transactionService.processAllNewTransactions();
-
-        // then
-        verify(processingService).processAllNewTransactions();
     }
 }

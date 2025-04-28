@@ -167,7 +167,7 @@ public class Account implements AccountInfo {
         if (o == null || getClass() != o.getClass())
             return false;
         Account account = (Account) o;
-        return iban.equals(account.iban);
+        return iban.equals(account.iban) && balance.equals(account.balance);
     }
 
     /**
@@ -178,7 +178,7 @@ public class Account implements AccountInfo {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(iban);
+        return Objects.hash(iban, balance);
     }
 
 }

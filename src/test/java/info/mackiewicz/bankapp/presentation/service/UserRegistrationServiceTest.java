@@ -6,6 +6,7 @@ import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.builder.TransferBuilder;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
@@ -48,6 +49,9 @@ class UserRegistrationServiceTest {
 
     @Mock
     private TransferBuilder transferBuilder;
+
+    @Mock
+    private TransactionProcessingService transactionProcessingService;
 
     @InjectMocks
     private UserRegistrationService registrationService;
@@ -104,6 +108,7 @@ class UserRegistrationServiceTest {
         verify(accountService).createAccount(user.getId());
         verify(transactionService).registerTransaction(any(Transaction.class));
         verify(emailService).sendWelcomeEmail(anyString(), anyString(), anyString());
+        verify(transactionProcessingService).processTransactionById(anyInt());
 
         logger.info("testRegisterUser: Test passed");
     }

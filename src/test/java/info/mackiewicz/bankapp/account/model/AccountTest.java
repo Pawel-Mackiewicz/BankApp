@@ -82,10 +82,11 @@ class AccountTest {
     }
 
     @Test
-    void equals_WithSameIban_ShouldReturnTrue() {
+    void equals_WithSameIbanAndBalance_ShouldReturnTrue() {
         // given
         Account sameIbanAccount = TestAccountBuilder.createTestAccountWithOwner(owner);
         TestAccountBuilder.setField(sameIbanAccount, "iban", account1.getIban());
+        TestAccountBuilder.setField(sameIbanAccount, "balance", account1.getBalance());
 
         // when & then
         assertEquals(account1, sameIbanAccount);
@@ -110,11 +111,12 @@ class AccountTest {
     }
 
     @Test
-    void hashCode_WithSameIban_ShouldBeEqual() {
+    void hashCode_WithSameIbanAndBalance_ShouldBeEqual() {
         // given
         Account sameIbanAccount = TestAccountBuilder.createTestAccountWithOwner(owner);
         TestAccountBuilder.setField(sameIbanAccount, "iban", account1.getIban());
         TestAccountBuilder.setField(sameIbanAccount, "id", account1.getId());
+        TestAccountBuilder.setField(sameIbanAccount, "balance", account1.getBalance());
 
         // when & then
         assertEquals(account1.hashCode(), sameIbanAccount.hashCode());

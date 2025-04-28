@@ -4,6 +4,7 @@ import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.UserMapper;
@@ -24,6 +25,7 @@ public class UserRegistrationService {
     private final UserMapper userMapper;
     private final AccountService accountService;
     private final TransactionService transactionService;
+    private final TransactionProcessingService transactionProcessingService;
     private final EmailService emailService;
 
 
@@ -54,7 +56,7 @@ public class UserRegistrationService {
         log.debug("Registered welcome bonus transaction");
 
         // Process the transaction to update account balances immediately
-        transactionService.processTransactionById(registeredTransaction.getId());
+        transactionProcessingService.processTransactionById(registeredTransaction.getId());
         log.debug("Processed welcome bonus transaction for user with ID: {}", createdUser.getId());
 
         emailService.sendWelcomeEmail(createdUser.getEmail().toString(), createdUser.getFullName(), createdUser.getUsername());

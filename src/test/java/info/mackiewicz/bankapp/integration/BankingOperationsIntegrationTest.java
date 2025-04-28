@@ -9,9 +9,10 @@ import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.IbanTransferRequest;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.user.model.User;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.user.repository.UserRepository;
@@ -31,6 +32,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
@@ -81,10 +83,8 @@ public class BankingOperationsIntegrationTest {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    @Autowired
-    private TransactionService transactionService;
-
     private Account sourceAccount;
+    private Account sameOwnerDestinationAccount;
     private Account destinationAccount;
     private User testUser;
     private User recipientUser;
@@ -111,11 +111,9 @@ public class BankingOperationsIntegrationTest {
         log.info("Time to process transaction: " + (endTime - startTime) + "ms");
     }
 
-    private void checkBalancesChangedCorrectly() {
+    private void checkBalancesPostTransfer(Account sourceAccount, BigDecimal expectedSourceBalance, Account destinationAccount, BigDecimal expectedDestinationBalance) {
         BigDecimal sourceBalanceAfterTransfer = getUpdatedAccountBalance(sourceAccount);
-        BigDecimal expectedSourceBalance = DEFAULT_BALANCE.subtract(DEFAULT_TRANSFER_VALUE);
         BigDecimal destinationBalanceAfterTransfer = getUpdatedAccountBalance(destinationAccount);
-        BigDecimal expectedDestinationBalance = DEFAULT_BALANCE.add(DEFAULT_TRANSFER_VALUE);
 
         validateExpectedBalance("source", sourceBalanceAfterTransfer, expectedSourceBalance);
         validateExpectedBalance("destination", destinationBalanceAfterTransfer, expectedDestinationBalance);
@@ -156,6 +154,7 @@ public class BankingOperationsIntegrationTest {
 
         // Creating test accounts
         sourceAccount = testAccountService.createTestAccountWithBalance(testUser.getId(), DEFAULT_BALANCE);
+        sameOwnerDestinationAccount = testAccountService.createTestAccountWithBalance(testUser.getId(), DEFAULT_BALANCE);
         destinationAccount = testAccountService.createTestAccountWithBalance(recipientUser.getId(), DEFAULT_BALANCE);
 
         //making sure that we get user with an account
@@ -193,11 +192,71 @@ public class BankingOperationsIntegrationTest {
 
         //recover transaction id from response
         Integer transactionId = JsonPath.read(responseBody, "$.transactionInfo.id");
-        //process transaction by recovered id
-        transactionService.processTransactionById(transactionId);
+        Transaction savedTransaction = transactionRepository.findById(transactionId).orElseThrow();
+
+        assertEquals(TransactionStatus.NEW, savedTransaction.getStatus());
+        assertEquals(TransactionType.TRANSFER_INTERNAL, savedTransaction.getType());
+        assertEquals(sourceAccount, savedTransaction.getSourceAccount());
+        assertEquals(destinationAccount, savedTransaction.getDestinationAccount());
+        assertEquals(DEFAULT_TRANSFER_VALUE.setScale(2, RoundingMode.HALF_UP), savedTransaction.getAmount().setScale(2, RoundingMode.HALF_UP));
+        assertEquals(DEFAULT_TRANSFER_TITLE, savedTransaction.getTitle());
+
+        //accounts balance doesn't change, because it's not same owner of account
+        checkBalancesPostTransfer(
+                sourceAccount,
+                DEFAULT_BALANCE,
+                destinationAccount,
+                DEFAULT_BALANCE
+        );
+    }
+
+    @Test
+    @DisplayName("Should immediately transfer funds in OWN_TRANSFER using IBAN")
+    void iban_OWN_TRANSFER_shouldImmediatelyTransferFunds() throws Exception {
+        // Preparing IBAN transfer request
+        IbanTransferRequest request = new IbanTransferRequest();
+        request.setSourceIban(sourceAccount.getIban());
+        request.setRecipientIban(sameOwnerDestinationAccount.getIban());
+        request.setAmount(DEFAULT_TRANSFER_VALUE);
+        request.setTitle(DEFAULT_TRANSFER_TITLE);
+
+        // Executing the test and saving the response as a String
+        String responseBody = mockMvc.perform(post(BANKING_TRANSFER_IBAN_ENDPOINT)
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUser))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.sourceAccount.formattedIban", is(sourceAccount.getFormattedIban())))
+                .andExpect(jsonPath("$.targetAccount.formattedIban", is(sameOwnerDestinationAccount.getFormattedIban())))
+                .andExpect(jsonPath("$.transactionInfo.amount").value(DEFAULT_TRANSFER_VALUE.doubleValue()))
+                .andExpect(jsonPath("$.transactionInfo.title").value(DEFAULT_TRANSFER_TITLE))
+                .andExpect(jsonPath("$.transactionInfo.id").isNumber())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        //recover transaction id from response
+        Integer transactionId = JsonPath.read(responseBody, "$.transactionInfo.id");
         awaitTransactionCompletion(transactionId);
 
-        checkBalancesChangedCorrectly();
+        Transaction savedTransaction = transactionRepository.findById(transactionId).orElseThrow();
+
+        assertEquals(TransactionStatus.DONE, savedTransaction.getStatus());
+        assertEquals(TransactionType.TRANSFER_OWN, savedTransaction.getType());
+        assertEquals(sourceAccount.getId(), savedTransaction.getSourceAccount().getId());
+        assertEquals(sameOwnerDestinationAccount.getId(), savedTransaction.getDestinationAccount().getId());
+        assertEquals(DEFAULT_TRANSFER_VALUE.setScale(2, RoundingMode.HALF_UP), savedTransaction.getAmount().setScale(2, RoundingMode.HALF_UP));
+        assertEquals(DEFAULT_TRANSFER_TITLE, savedTransaction.getTitle());
+
+        //accounts balance has changed, because it's same owner of account
+        checkBalancesPostTransfer(
+                sourceAccount,
+                DEFAULT_BALANCE.subtract(DEFAULT_TRANSFER_VALUE),
+                sameOwnerDestinationAccount,
+                DEFAULT_BALANCE.add(DEFAULT_TRANSFER_VALUE)
+        );
     }
 
     @Test
@@ -229,11 +288,23 @@ public class BankingOperationsIntegrationTest {
 
         //recover transaction id from response
         Integer transactionId = JsonPath.read(responseBody, "$.transactionInfo.id");
-        //process transaction by recovered id
-        transactionService.processTransactionById(transactionId);
-        awaitTransactionCompletion(transactionId);
+        Transaction savedTransaction = transactionRepository.findById(transactionId).orElseThrow();
 
-        checkBalancesChangedCorrectly();
+        assertEquals(TransactionStatus.NEW, savedTransaction.getStatus());
+        assertEquals(TransactionType.TRANSFER_INTERNAL, savedTransaction.getType());
+        assertEquals(sourceAccount, savedTransaction.getSourceAccount());
+        assertEquals(destinationAccount, savedTransaction.getDestinationAccount());
+        assertEquals(DEFAULT_TRANSFER_VALUE.setScale(2, RoundingMode.HALF_UP), savedTransaction.getAmount().setScale(2, RoundingMode.HALF_UP));
+        assertEquals(DEFAULT_TRANSFER_TITLE, savedTransaction.getTitle());
+
+
+        //accounts balance don't change, because it's not same owner of account
+        checkBalancesPostTransfer(
+                sourceAccount,
+                DEFAULT_BALANCE,
+                destinationAccount,
+                DEFAULT_BALANCE
+        );
     }
 
     @Test

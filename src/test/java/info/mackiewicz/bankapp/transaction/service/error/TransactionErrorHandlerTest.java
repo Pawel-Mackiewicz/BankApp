@@ -1,7 +1,14 @@
 package info.mackiewicz.bankapp.transaction.service.error;
 
-import static org.mockito.Mockito.verify;
-
+import info.mackiewicz.bankapp.account.exception.AccountLockException;
+import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
+import info.mackiewicz.bankapp.system.transaction.processing.error.TransactionErrorHandler;
+import info.mackiewicz.bankapp.system.transaction.processing.error.TransactionErrorNotifier;
+import info.mackiewicz.bankapp.system.transaction.processing.helpers.TransactionStatusManager;
+import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,13 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import info.mackiewicz.bankapp.account.exception.AccountLockException;
-import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
-import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.service.TransactionStatusManager;
-import lombok.extern.slf4j.Slf4j;
+import static org.mockito.Mockito.verify;
 
 /**
  * Unit tests for TransactionErrorHandler.

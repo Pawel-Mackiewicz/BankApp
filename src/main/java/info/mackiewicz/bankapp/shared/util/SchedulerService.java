@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.shared.util;
 
 import info.mackiewicz.bankapp.system.recovery.password.service.PasswordResetTokenService;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class SchedulerService {
 
-    private final TransactionService transactionService;
+    private final TransactionProcessingService transactionProcessingService;
     private final PasswordResetTokenService passwordResetTokenService;
 
     private final static int HOW_OFTEN_TO_PROCESS_NEW_TRANSACTIONS = 10; // in minutes
@@ -34,12 +34,12 @@ public class SchedulerService {
      * This method is thread-safe and runs automatically based on the configured schedule.
      * 
      * @throws RuntimeException if transaction processing fails
-     * @see TransactionService#processAllNewTransactions()
+     * @see TransactionProcessingService#processAllNewTransactions()
      */
     @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = HOW_OFTEN_TO_PROCESS_NEW_TRANSACTIONS)
     public void scheduleProcessAllNewTransactions() {
         log.debug("Scheduler: Processing all new transactions");
-        transactionService.processAllNewTransactions();
+        transactionProcessingService.processAllNewTransactions();
         log.debug("Scheduler: All new transactions processed");
     }
 

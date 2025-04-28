@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.transaction.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.testutils.config.TestConfig;
@@ -45,6 +46,9 @@ public class TransactionControllerTest {
     
     @MockitoBean
     private TransactionService transactionService;
+
+    @MockitoBean
+    private TransactionProcessingService transactionProcessingService;
     
     @MockitoBean
     private AccountService accountService;
@@ -194,37 +198,5 @@ public class TransactionControllerTest {
         
         verify(accountService).getAccountById(1);
         verify(transactionService).getTransactionsByAccountId(1);
-    }
-    
-    @Test
-    @DisplayName("Should process transaction by ID")
-    void shouldProcessTransactionById() throws Exception {
-        // given
-        doNothing().when(transactionService).processTransactionById(1);
-        when(transactionService.getTransactionById(1)).thenReturn(mockTransaction);
-        
-        // when & then
-        mockMvc.perform(post("/api/transactions/1/process")
-                .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.amount").value(100.00));
-        
-        verify(transactionService).processTransactionById(1);
-        verify(transactionService).getTransactionById(1);
-    }
-    
-    @Test
-    @DisplayName("Should process all new transactions")
-    void shouldProcessAllNewTransactions() throws Exception {
-        // given
-        doNothing().when(transactionService).processAllNewTransactions();
-        
-        // when & then
-        mockMvc.perform(post("/api/transactions/process-all")
-                .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().isOk());
-        
-        verify(transactionService).processAllNewTransactions();
     }
 }
