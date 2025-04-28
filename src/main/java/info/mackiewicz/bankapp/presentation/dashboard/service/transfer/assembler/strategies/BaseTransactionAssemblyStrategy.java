@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.transaction.service.assembler.strategies;
+package info.mackiewicz.bankapp.presentation.dashboard.service.transfer.assembler.strategies;
 
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;

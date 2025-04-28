@@ -1,8 +1,4 @@
-package info.mackiewicz.bankapp.transaction.service.assembler;
-
-import java.util.Map;
-
-import org.springframework.stereotype.Component;
+package info.mackiewicz.bankapp.presentation.dashboard.service.transfer.assembler;
 
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
@@ -10,6 +6,9 @@ import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * Assembles Transaction objects from different types of transfer requests.
