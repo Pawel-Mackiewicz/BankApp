@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.core.account.model;
 
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.user.model.User;
 import org.iban4j.Iban;
 
 import java.lang.reflect.Field;

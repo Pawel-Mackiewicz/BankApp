@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.core.account.validation;
 
 import info.mackiewicz.bankapp.core.account.service.AccountService;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

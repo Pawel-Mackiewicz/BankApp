@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.shared.config;
 
+import info.mackiewicz.bankapp.core.user.service.AdminUserService;
 import info.mackiewicz.bankapp.shared.service.CustomUserDetailsService;
-import info.mackiewicz.bankapp.user.service.AdminUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;

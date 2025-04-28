@@ -2,11 +2,11 @@ package info.mackiewicz.bankapp.core.account.service;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
-import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
-import info.mackiewicz.bankapp.user.service.UserService;
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.core.user.model.vo.PhoneNumber;
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

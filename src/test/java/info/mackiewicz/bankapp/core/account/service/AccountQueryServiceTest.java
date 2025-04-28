@@ -6,11 +6,11 @@ import info.mackiewicz.bankapp.core.account.exception.OwnerAccountsNotFoundExcep
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.core.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -2,9 +2,9 @@ package info.mackiewicz.bankapp.core.account.service;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.repository.AccountRepository;
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import info.mackiewicz.bankapp.shared.util.RetryUtil;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

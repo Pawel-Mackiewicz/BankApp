@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.shared.service;
 
-import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

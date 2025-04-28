@@ -1,11 +1,11 @@
 package info.mackiewicz.bankapp.system.banking.operations.controller;
 
+import info.mackiewicz.bankapp.core.user.model.interfaces.UserDetailsWithId;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.transfer.EmailTransferService;
 import info.mackiewicz.bankapp.system.banking.operations.service.transfer.IbanTransferService;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
-import info.mackiewicz.bankapp.user.model.interfaces.UserDetailsWithId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

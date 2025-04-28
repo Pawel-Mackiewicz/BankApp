@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.core.account.service;
 
 import info.mackiewicz.bankapp.core.account.exception.*;
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
-import info.mackiewicz.bankapp.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

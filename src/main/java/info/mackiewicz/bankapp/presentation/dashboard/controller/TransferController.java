@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.presentation.dashboard.controller;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.service.AccountService;
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
@@ -9,7 +10,6 @@ import info.mackiewicz.bankapp.presentation.dashboard.service.transfer.assembler
 import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,12 +1,12 @@
 package info.mackiewicz.bankapp.testutils;
 
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.core.user.model.vo.PhoneNumber;
+
 import java.time.LocalDate;
 import java.util.Random;
-
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
-import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 
 public class TestUserBuilder {
 

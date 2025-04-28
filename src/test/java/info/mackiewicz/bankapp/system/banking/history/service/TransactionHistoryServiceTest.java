@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.history.service;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.system.banking.history.controller.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.history.exception.UnsupportedExporterException;
 import info.mackiewicz.bankapp.system.banking.history.export.TransactionExporter;
@@ -9,7 +10,6 @@ import info.mackiewicz.bankapp.testutils.TestAccountBuilder;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.user.model.User;
 import org.hibernate.query.SortDirection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

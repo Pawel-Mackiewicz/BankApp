@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.system.banking.history.controller;
 
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.system.banking.history.controller.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.history.service.TransactionHistoryService;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
-import info.mackiewicz.bankapp.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

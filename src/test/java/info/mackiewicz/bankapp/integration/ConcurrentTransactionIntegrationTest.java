@@ -2,6 +2,8 @@ package info.mackiewicz.bankapp.integration;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.service.AccountService;
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestAccountService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;
@@ -11,8 +13,6 @@ import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

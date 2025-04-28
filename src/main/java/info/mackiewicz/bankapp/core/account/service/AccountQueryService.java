@@ -5,8 +5,8 @@ import info.mackiewicz.bankapp.core.account.exception.AccountNotFoundByIdExcepti
 import info.mackiewicz.bankapp.core.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.repository.AccountRepository;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.iban4j.Iban;

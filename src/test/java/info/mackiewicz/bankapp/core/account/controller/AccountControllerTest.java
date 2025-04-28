@@ -5,10 +5,10 @@ import info.mackiewicz.bankapp.core.account.exception.OwnerAccountsNotFoundExcep
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.model.TestAccountBuilder;
 import info.mackiewicz.bankapp.core.account.service.AccountService;
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.system.notification.email.locking.LockingConfig;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.testutils.config.TestConfig;
-import info.mackiewicz.bankapp.user.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
