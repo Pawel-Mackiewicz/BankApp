@@ -178,7 +178,7 @@ public class Account implements AccountInfo {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(iban);
+        return Objects.hash(iban, balance);
     }
 
 }
