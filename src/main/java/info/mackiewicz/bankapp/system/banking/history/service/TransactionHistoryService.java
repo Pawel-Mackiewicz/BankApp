@@ -1,13 +1,13 @@
 package info.mackiewicz.bankapp.system.banking.history.service;
 
+import info.mackiewicz.bankapp.core.transaction.exception.NoTransactionsForAccountException;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.system.banking.history.controller.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.history.exception.TransactionFilterException;
 import info.mackiewicz.bankapp.system.banking.history.exception.UnsupportedExporterException;
 import info.mackiewicz.bankapp.system.banking.history.export.TransactionExporter;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
-import info.mackiewicz.bankapp.transaction.exception.NoTransactionsForAccountException;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

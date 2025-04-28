@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.system.transaction.processing.helpers;
 
-import info.mackiewicz.bankapp.transaction.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionCannotBeProcessedException;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.core.transaction.exception.TransactionAlreadyProcessedException;
+import info.mackiewicz.bankapp.core.transaction.exception.TransactionCannotBeProcessedException;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

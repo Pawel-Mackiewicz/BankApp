@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.transaction.processing.core.execution;
 
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

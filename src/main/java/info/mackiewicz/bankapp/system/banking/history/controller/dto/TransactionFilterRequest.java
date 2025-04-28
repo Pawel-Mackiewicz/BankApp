@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.history.controller.dto;
 
-import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;

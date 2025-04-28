@@ -1,14 +1,14 @@
 package info.mackiewicz.bankapp.system.transaction.processing;
 
+import info.mackiewicz.bankapp.core.transaction.exception.TransactionAlreadyProcessedException;
+import info.mackiewicz.bankapp.core.transaction.exception.TransactionValidationException;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.core.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.core.transaction.validation.TransactionValidator;
 import info.mackiewicz.bankapp.system.transaction.processing.core.TransactionProcessor;
 import info.mackiewicz.bankapp.system.transaction.processing.error.TransactionErrorHandler;
 import info.mackiewicz.bankapp.system.transaction.processing.helpers.TransactionStatusChecker;
-import info.mackiewicz.bankapp.transaction.exception.TransactionAlreadyProcessedException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

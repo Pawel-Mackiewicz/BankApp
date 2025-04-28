@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.banking.history.export;
 
-import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

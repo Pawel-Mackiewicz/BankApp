@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 
 public interface WebTransferRequest {
 

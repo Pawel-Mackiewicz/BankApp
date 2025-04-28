@@ -2,9 +2,9 @@ package info.mackiewicz.bankapp.system.banking.history.service;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.core.user.model.User;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import org.hibernate.query.SortDirection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

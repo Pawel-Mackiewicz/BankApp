@@ -1,10 +1,10 @@
 package info.mackiewicz.bankapp.system.banking.history.service;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionStatus;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.system.banking.history.exception.TransactionFilterException;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionStatus;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.SortDirection;
 import org.springframework.stereotype.Service;
