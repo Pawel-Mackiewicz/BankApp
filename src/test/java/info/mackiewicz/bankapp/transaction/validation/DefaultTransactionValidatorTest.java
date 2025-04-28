@@ -2,12 +2,12 @@ package info.mackiewicz.bankapp.transaction.validation;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
 import info.mackiewicz.bankapp.transaction.exception.TransactionAccountConflictException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
-import info.mackiewicz.bankapp.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

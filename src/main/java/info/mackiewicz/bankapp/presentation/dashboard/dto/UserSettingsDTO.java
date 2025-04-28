@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
-import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
+import info.mackiewicz.bankapp.core.user.model.interfaces.PersonalInfo;
 import lombok.Value;
 
 @Value

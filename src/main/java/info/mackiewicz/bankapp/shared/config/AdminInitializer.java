@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.shared.config;
 
 
+import info.mackiewicz.bankapp.core.user.model.AdminUser;
+import info.mackiewicz.bankapp.core.user.repository.AdminUserRepository;
 import info.mackiewicz.bankapp.shared.service.PasswordService;
-import info.mackiewicz.bankapp.user.model.AdminUser;
-import info.mackiewicz.bankapp.user.repository.AdminUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

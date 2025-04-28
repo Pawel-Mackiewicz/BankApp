@@ -2,8 +2,8 @@ package info.mackiewicz.bankapp.system.banking.operations.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;

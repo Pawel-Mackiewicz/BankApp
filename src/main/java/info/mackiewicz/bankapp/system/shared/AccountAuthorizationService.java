@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.shared;
 
-import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.User;
 import lombok.NonNull;
 
 public interface AccountAuthorizationService<T> {

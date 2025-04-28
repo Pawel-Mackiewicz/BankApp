@@ -1,10 +1,10 @@
 package info.mackiewicz.bankapp.presentation.auth.controller;
 
+import info.mackiewicz.bankapp.core.user.exception.DuplicatedUserException;
+import info.mackiewicz.bankapp.core.user.exception.UserValidationException;
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.service.UserRegistrationService;
-import info.mackiewicz.bankapp.user.exception.DuplicatedUserException;
-import info.mackiewicz.bankapp.user.exception.UserValidationException;
-import info.mackiewicz.bankapp.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

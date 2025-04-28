@@ -1,17 +1,16 @@
 package info.mackiewicz.bankapp.transaction.validation;
 
-import java.math.BigDecimal;
-
-import org.springframework.stereotype.Component;
-
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionAccountConflictException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.model.TransactionTypeCategory;
-import info.mackiewicz.bankapp.user.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
 
 @Slf4j
 @Component

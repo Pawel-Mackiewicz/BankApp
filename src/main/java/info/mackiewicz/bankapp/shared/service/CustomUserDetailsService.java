@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.shared.service;
 
-import info.mackiewicz.bankapp.user.service.UserService;
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,5 +1,6 @@
 package info.mackiewicz.bankapp.system.error.handling.core;
 
+import info.mackiewicz.bankapp.core.user.exception.UserNotFoundException;
 import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import info.mackiewicz.bankapp.system.error.handling.dto.ValidationApiError;
@@ -12,7 +13,6 @@ import info.mackiewicz.bankapp.system.recovery.password.exception.ExpiredTokenEx
 import info.mackiewicz.bankapp.system.recovery.password.exception.TokenNotFoundException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.TooManyPasswordResetAttemptsException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.UsedTokenException;
-import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

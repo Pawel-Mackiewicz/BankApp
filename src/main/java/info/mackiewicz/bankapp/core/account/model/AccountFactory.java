@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.core.account.model;
 
 import info.mackiewicz.bankapp.core.account.util.IbanGenerator;
-import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.iban4j.Iban;
 

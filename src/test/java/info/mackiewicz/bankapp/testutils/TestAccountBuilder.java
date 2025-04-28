@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.testutils;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
-import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.User;
 import org.iban4j.Iban;
 
 import java.lang.reflect.Field;
