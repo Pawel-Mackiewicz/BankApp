@@ -167,7 +167,7 @@ public class Account implements AccountInfo {
         if (o == null || getClass() != o.getClass())
             return false;
         Account account = (Account) o;
-        return iban.equals(account.iban);
+        return iban.equals(account.iban) && balance.equals(account.balance);
     }
 
     /**

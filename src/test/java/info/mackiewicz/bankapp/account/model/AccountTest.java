@@ -82,10 +82,11 @@ class AccountTest {
     }
 
     @Test
-    void equals_WithSameIban_ShouldReturnTrue() {
+    void equals_WithSameIbanAndBalance_ShouldReturnTrue() {
         // given
         Account sameIbanAccount = TestAccountBuilder.createTestAccountWithOwner(owner);
         TestAccountBuilder.setField(sameIbanAccount, "iban", account1.getIban());
+        TestAccountBuilder.setField(sameIbanAccount, "balance", account1.getBalance());
 
         // when & then
         assertEquals(account1, sameIbanAccount);
