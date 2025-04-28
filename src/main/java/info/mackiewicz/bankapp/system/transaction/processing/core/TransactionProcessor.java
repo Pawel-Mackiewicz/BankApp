@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.system.transaction.processing.core;
 
-import info.mackiewicz.bankapp.account.exception.AccountLockException;
-import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
-import info.mackiewicz.bankapp.account.exception.AccountValidationException;
-import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.core.account.exception.AccountLockException;
+import info.mackiewicz.bankapp.core.account.exception.AccountUnlockException;
+import info.mackiewicz.bankapp.core.account.exception.AccountValidationException;
+import info.mackiewicz.bankapp.core.account.service.AccountService;
 import info.mackiewicz.bankapp.shared.util.LoggingService;
 import info.mackiewicz.bankapp.system.notification.email.locking.AccountLockManager;
 import info.mackiewicz.bankapp.system.transaction.processing.core.execution.TransactionExecutor;

@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.banking.history.service;
 
-import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.system.banking.history.exception.TransactionFilterException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionStatus;

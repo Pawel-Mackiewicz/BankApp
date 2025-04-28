@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.testutils;
 
-import info.mackiewicz.bankapp.account.util.IbanGenerator;
+import info.mackiewicz.bankapp.core.account.util.IbanGenerator;
 import org.iban4j.Iban;
 
 /**

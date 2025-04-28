@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.notification.email.locking;
 
-import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.core.account.model.Account;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

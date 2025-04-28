@@ -1,12 +1,12 @@
 package info.mackiewicz.bankapp.presentation.dashboard.dto;
 
+import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.transaction.model.Transaction;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import lombok.Data;
 
 @Data
 public class DashboardDTO {

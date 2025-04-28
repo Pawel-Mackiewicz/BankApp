@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.shared.util;
 
-import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

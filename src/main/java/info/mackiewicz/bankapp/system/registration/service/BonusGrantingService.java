@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.registration.service;
 
-import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.core.account.service.AccountService;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.NonNull;
 import org.iban4j.Iban;

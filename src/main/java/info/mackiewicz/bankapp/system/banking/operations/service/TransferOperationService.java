@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.system.banking.operations.service;
 
-import info.mackiewicz.bankapp.account.exception.AccountNotFoundByIbanException;
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
+import info.mackiewicz.bankapp.core.account.exception.AccountNotFoundByIbanException;
+import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.core.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.TransactionRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionBuildingService;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionPreconditionValidator;

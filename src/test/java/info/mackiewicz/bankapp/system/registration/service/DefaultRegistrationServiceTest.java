@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.registration.service;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.core.account.service.AccountService;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationMapper;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;

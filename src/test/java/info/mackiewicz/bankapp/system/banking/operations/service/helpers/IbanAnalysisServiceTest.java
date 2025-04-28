@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.banking.operations.service.helpers;
 
-import info.mackiewicz.bankapp.account.util.IbanGenerator;
+import info.mackiewicz.bankapp.core.account.util.IbanGenerator;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;

@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.shared;
 
-import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
-import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.core.account.exception.AccountOwnershipException;
+import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import info.mackiewicz.bankapp.user.exception.InvalidUserDataException;
 import info.mackiewicz.bankapp.user.model.User;

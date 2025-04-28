@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.operations.service.transfer;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
+import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.core.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.testutils.TestAccountBuilder;

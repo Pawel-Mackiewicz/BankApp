@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.system.banking.operations.service.transfer;
 
-import info.mackiewicz.bankapp.account.exception.AccountOwnershipException;
-import info.mackiewicz.bankapp.account.exception.OwnerAccountsNotFoundException;
-import info.mackiewicz.bankapp.account.service.interfaces.AccountServiceInterface;
+import info.mackiewicz.bankapp.core.account.exception.AccountOwnershipException;
+import info.mackiewicz.bankapp.core.account.exception.OwnerAccountsNotFoundException;
+import info.mackiewicz.bankapp.core.account.service.interfaces.AccountServiceInterface;
 import info.mackiewicz.bankapp.shared.exception.IbanAnalysisException;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.service.TransferOperationService;

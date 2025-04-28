@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import info.mackiewicz.bankapp.account.model.Account;
+import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.user.model.interfaces.AccountOwner;
 import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
