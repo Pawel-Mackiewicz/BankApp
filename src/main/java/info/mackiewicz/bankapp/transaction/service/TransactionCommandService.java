@@ -1,16 +1,14 @@
 package info.mackiewicz.bankapp.transaction.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.repository.TransactionRepository;
 import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service responsible for transaction creation and deletion operations.
@@ -21,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 class TransactionCommandService {
     private final TransactionRepository repository;
-    private final TransactionProcessingService processingService;
     private final TransactionValidator validator;
     private final TransactionQueryService queryService;
 
@@ -43,13 +40,7 @@ class TransactionCommandService {
         // Save to repository
         Transaction savedTransaction = repository.save(transaction);
         log.debug("Transaction saved with ID: {}", savedTransaction.getId());
-        
-        // Process immediately if it's an own transfer
-        if (TransactionType.TRANSFER_OWN.equals(savedTransaction.getType())) {
-            log.info("Processing own transfer transaction: {}", savedTransaction.getId());
-            processingService.processTransaction(savedTransaction);
-        }
-        
+
         return savedTransaction;
     }
 

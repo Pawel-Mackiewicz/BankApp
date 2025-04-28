@@ -1,17 +1,11 @@
 package info.mackiewicz.bankapp.presentation.dashboard.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import info.mackiewicz.bankapp.account.model.Account;
 import info.mackiewicz.bankapp.account.service.AccountService;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.OwnTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.transaction.service.assembler.TransactionAssembler;
@@ -19,6 +13,12 @@ import info.mackiewicz.bankapp.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Slf4j
@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TransferController {
 
     private final TransactionService transactionService;
+    private final TransactionProcessingService transactionProcessingService;
     private final TransactionAssembler transactionAssembler;
     private final AccountService accountService;
 
@@ -50,8 +51,11 @@ public class TransferController {
 
             log.debug("Creating transaction in service");
             transactionService.registerTransaction(transaction);
-            
-            log.info("Successfully created own transfer transaction with ID: {}", transaction.getId());
+
+            log.debug("Processing transaction...");
+            transactionProcessingService.processTransactionById(transaction.getId());
+
+            log.info("Successfully created, registered and performed own transfer transaction with ID: {}", transaction.getId());
             redirectAttributes.addFlashAttribute("transferSuccessMessage",
                     "Transfer between own accounts created successfully");
         } catch (Exception e) {

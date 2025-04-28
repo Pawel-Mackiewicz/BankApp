@@ -72,18 +72,4 @@ public class TransactionController implements TransactionControllerInterface {
         List<Transaction> transactions = transactionService.getTransactionsByAccountId(accountId);
         return ResponseEntity.ok(transactions);
     }
-
-    @Override
-    @PostMapping("/{id}/process")
-    public ResponseEntity<?> processTransactionById(@PathVariable int id) {
-        transactionService.processTransactionById(id);
-        return ResponseEntity.ok(transactionService.getTransactionById(id));
-    }
-
-    @Override
-    @PostMapping("/process-all")
-    public ResponseEntity<String> processAllNewTransactions() {
-        transactionService.processAllNewTransactions();
-        return ResponseEntity.ok().build();
-    }
 }

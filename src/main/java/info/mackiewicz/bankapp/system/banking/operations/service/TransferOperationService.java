@@ -7,10 +7,12 @@ import info.mackiewicz.bankapp.system.banking.operations.controller.dto.Transact
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionBuildingService;
 import info.mackiewicz.bankapp.system.banking.operations.service.helpers.TransactionPreconditionValidator;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
+import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionBuildingException;
 import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ public class TransferOperationService {
 
     private final TransactionBuildingService transactionBuilderService;
     private final TransactionService transactionService;
+    private final TransactionProcessingService transactionProcessingService;
     private final AccountServiceInterface accountService;
     private final TransactionPreconditionValidator preconditionValidator;
 
@@ -67,9 +70,12 @@ public class TransferOperationService {
             log.debug("Registering transfer transaction");
             Transaction registeredTransaction = transactionService.registerTransaction(transfer);
 
-            log.info("Transaction registered with ID: {}", registeredTransaction.getId());
+            if (registeredTransaction.getType().equals(TransactionType.TRANSFER_OWN)) {
+                log.debug("Processing `OWN_TRANSFER` transactions");
+                transactionProcessingService.processTransactionById(registeredTransaction.getId());
+            }
 
-            //transaction processing should be called here, not in the transaction service
+            log.info("Transaction registered with ID: {}", registeredTransaction.getId());
             return new TransactionResponse(
                     sourceAccount,
                     destinationAccount,
