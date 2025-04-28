@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.user.model.interfaces;
 
-import java.util.Set;
+import info.mackiewicz.bankapp.core.account.model.Account;
 
-import info.mackiewicz.bankapp.account.model.Account;
+import java.util.Set;
 
 public interface AccountOwner {
     Set<Account> getAccounts();

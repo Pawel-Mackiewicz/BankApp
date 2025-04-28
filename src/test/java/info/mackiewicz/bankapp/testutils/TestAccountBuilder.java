@@ -1,12 +1,12 @@
 package info.mackiewicz.bankapp.testutils;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.lang.reflect.Field;
+import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.user.model.User;
 import org.iban4j.Iban;
 
-import info.mackiewicz.bankapp.account.model.Account;
-import info.mackiewicz.bankapp.user.model.User;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class TestAccountBuilder {
     

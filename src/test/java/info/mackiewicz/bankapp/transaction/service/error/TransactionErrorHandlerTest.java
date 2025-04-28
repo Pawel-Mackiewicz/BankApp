@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.transaction.service.error;
 
-import info.mackiewicz.bankapp.account.exception.AccountLockException;
-import info.mackiewicz.bankapp.account.exception.AccountUnlockException;
+import info.mackiewicz.bankapp.core.account.exception.AccountLockException;
+import info.mackiewicz.bankapp.core.account.exception.AccountUnlockException;
 import info.mackiewicz.bankapp.system.transaction.processing.error.TransactionErrorHandler;
 import info.mackiewicz.bankapp.system.transaction.processing.error.TransactionErrorNotifier;
 import info.mackiewicz.bankapp.system.transaction.processing.helpers.TransactionStatusManager;

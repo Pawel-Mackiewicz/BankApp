@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.transaction.processing.core.execution;
 
-import info.mackiewicz.bankapp.account.service.AccountService;
+import info.mackiewicz.bankapp.core.account.service.AccountService;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 
