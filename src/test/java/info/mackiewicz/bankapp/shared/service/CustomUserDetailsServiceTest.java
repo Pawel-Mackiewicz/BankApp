@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.shared.service;
 
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.service.UserService;
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

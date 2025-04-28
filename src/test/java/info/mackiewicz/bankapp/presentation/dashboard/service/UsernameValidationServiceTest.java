@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.presentation.dashboard.service;
 
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import info.mackiewicz.bankapp.presentation.dashboard.exception.ForbiddenUsernameException;
 import info.mackiewicz.bankapp.presentation.dashboard.exception.UsernameAlreadyTakenException;
 import info.mackiewicz.bankapp.presentation.dashboard.exception.UsernameSameException;
-import info.mackiewicz.bankapp.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -1,13 +1,11 @@
 package info.mackiewicz.bankapp.presentation.dashboard.controller;
 
-import org.springframework.http.ResponseEntity;
-
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.interfaces.PersonalInfo;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Interface defining REST API endpoints for user settings management.

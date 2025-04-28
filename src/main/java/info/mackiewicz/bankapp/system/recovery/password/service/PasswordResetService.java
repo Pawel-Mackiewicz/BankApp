@@ -1,15 +1,15 @@
 package info.mackiewicz.bankapp.system.recovery.password.service;
 
+import info.mackiewicz.bankapp.core.user.exception.InvalidEmailFormatException;
+import info.mackiewicz.bankapp.core.user.exception.UserNotFoundException;
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.notification.email.exception.EmailSendingException;
 import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordChangeForm;
 import info.mackiewicz.bankapp.system.recovery.password.exception.*;
 import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
-import info.mackiewicz.bankapp.user.exception.InvalidEmailFormatException;
-import info.mackiewicz.bankapp.user.exception.UserNotFoundException;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

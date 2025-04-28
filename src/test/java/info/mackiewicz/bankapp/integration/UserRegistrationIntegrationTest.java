@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.integration;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.service.AccountService;
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
@@ -11,7 +12,6 @@ import info.mackiewicz.bankapp.testutils.TestUserRegistrationDtoBuilder;
 import info.mackiewicz.bankapp.transaction.model.Transaction;
 import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.user.model.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

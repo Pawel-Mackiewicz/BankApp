@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.presentation.dashboard.controller;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.service.AccountService;
-import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

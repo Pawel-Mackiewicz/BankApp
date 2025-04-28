@@ -4,7 +4,7 @@ import info.mackiewicz.bankapp.core.account.exception.AccountNotFoundByIbanExcep
 import info.mackiewicz.bankapp.core.account.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.core.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.core.account.model.Account;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
 import org.iban4j.Iban;
 
 import java.math.BigDecimal;

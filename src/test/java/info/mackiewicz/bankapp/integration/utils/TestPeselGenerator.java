@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.integration.utils;
 
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
 
 /**
  * Utility class for generating valid test PESEL numbers.

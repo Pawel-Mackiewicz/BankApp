@@ -1,24 +1,19 @@
 package info.mackiewicz.bankapp.presentation.dashboard.controller;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
-
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.interfaces.PersonalInfo;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.UserSettingsDTO;
 import info.mackiewicz.bankapp.presentation.dashboard.service.SettingsService;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.interfaces.PersonalInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @RestController

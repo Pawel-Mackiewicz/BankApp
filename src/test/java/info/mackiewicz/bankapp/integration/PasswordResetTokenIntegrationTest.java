@@ -1,5 +1,7 @@
 package info.mackiewicz.bankapp.integration;
 
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.repository.UserRepository;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordChangeForm;
 import info.mackiewicz.bankapp.system.recovery.password.exception.ExpiredTokenException;
@@ -10,8 +12,6 @@ import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
 import info.mackiewicz.bankapp.system.token.repository.PasswordResetTokenRepository;
 import info.mackiewicz.bankapp.system.token.service.TokenOperationsService;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

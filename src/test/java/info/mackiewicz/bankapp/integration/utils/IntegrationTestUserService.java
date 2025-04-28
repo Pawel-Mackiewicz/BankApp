@@ -1,10 +1,10 @@
 package info.mackiewicz.bankapp.integration.utils;
 
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
-import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
-import info.mackiewicz.bankapp.user.service.UserService;
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.core.user.model.vo.PhoneNumber;
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 

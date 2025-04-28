@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.core.account.model.dto;
 
 import info.mackiewicz.bankapp.core.account.model.interfaces.OwnershipInfo;
-import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

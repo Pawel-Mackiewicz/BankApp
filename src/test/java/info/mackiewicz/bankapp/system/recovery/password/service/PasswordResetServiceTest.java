@@ -1,5 +1,8 @@
 package info.mackiewicz.bankapp.system.recovery.password.service;
 
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.notification.email.exception.EmailSendingException;
 import info.mackiewicz.bankapp.system.recovery.password.controller.dto.PasswordChangeForm;
@@ -7,9 +10,6 @@ import info.mackiewicz.bankapp.system.recovery.password.exception.PasswordChange
 import info.mackiewicz.bankapp.system.recovery.password.exception.TokenCreationException;
 import info.mackiewicz.bankapp.system.recovery.password.exception.UnexpectedTokenValidationException;
 import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -7,7 +7,7 @@ import info.mackiewicz.bankapp.core.account.model.interfaces.AccountInfo;
 import info.mackiewicz.bankapp.core.account.service.AccountService;
 import info.mackiewicz.bankapp.core.account.service.AccountServiceAccessManager;
 import info.mackiewicz.bankapp.core.account.util.IbanConverter;
-import info.mackiewicz.bankapp.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.OnDelete;

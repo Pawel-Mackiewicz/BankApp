@@ -2,10 +2,10 @@ package info.mackiewicz.bankapp.system.shared;
 
 import info.mackiewicz.bankapp.core.account.exception.AccountOwnershipException;
 import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.core.user.exception.InvalidUserDataException;
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.service.UserService;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
-import info.mackiewicz.bankapp.user.exception.InvalidUserDataException;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.service.UserService;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

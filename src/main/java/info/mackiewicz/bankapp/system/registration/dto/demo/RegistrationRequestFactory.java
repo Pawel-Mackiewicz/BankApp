@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.registration.dto.demo;
 
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 

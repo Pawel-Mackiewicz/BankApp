@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.core.account.model;
 
 import info.mackiewicz.bankapp.core.account.model.dto.AccountOwnerDTO;
+import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
-import info.mackiewicz.bankapp.user.model.User;
 import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

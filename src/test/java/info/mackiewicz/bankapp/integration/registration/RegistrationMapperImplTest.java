@@ -1,13 +1,13 @@
 package info.mackiewicz.bankapp.integration.registration;
 
+import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.model.vo.PhoneNumber;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationMapperImpl;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import info.mackiewicz.bankapp.testutils.TestRequestFactory;
 import info.mackiewicz.bankapp.testutils.TestUserBuilder;
-import info.mackiewicz.bankapp.user.model.User;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.PhoneNumber;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

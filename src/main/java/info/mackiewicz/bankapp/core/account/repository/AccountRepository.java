@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.core.account.repository;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
-import info.mackiewicz.bankapp.user.model.vo.EmailAddress;
-import info.mackiewicz.bankapp.user.model.vo.Pesel;
+import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
 import org.iban4j.Iban;
 import org.springframework.data.jpa.repository.JpaRepository;
 
