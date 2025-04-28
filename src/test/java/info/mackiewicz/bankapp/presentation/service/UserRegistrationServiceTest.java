@@ -108,6 +108,7 @@ class UserRegistrationServiceTest {
         verify(accountService).createAccount(user.getId());
         verify(transactionService).registerTransaction(any(Transaction.class));
         verify(emailService).sendWelcomeEmail(anyString(), anyString(), anyString());
+        verify(transactionProcessingService).processTransactionById(anyInt());
 
         logger.info("testRegisterUser: Test passed");
     }
