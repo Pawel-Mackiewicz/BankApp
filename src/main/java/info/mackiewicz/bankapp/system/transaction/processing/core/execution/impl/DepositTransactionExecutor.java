@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.system.transaction.processing.core.execution.impl;
 
 import info.mackiewicz.bankapp.core.account.service.AccountService;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.system.transaction.processing.core.execution.TransactionExecutor;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
 import org.springframework.stereotype.Service;
 
 /**

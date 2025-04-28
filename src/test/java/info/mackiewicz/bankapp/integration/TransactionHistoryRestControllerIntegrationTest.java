@@ -1,14 +1,14 @@
 package info.mackiewicz.bankapp.integration;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.core.user.service.UserService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestAccountService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;
 import info.mackiewicz.bankapp.shared.util.Util;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

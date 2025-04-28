@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.transaction.processing.core.execution;
 
-import info.mackiewicz.bankapp.transaction.model.TransactionType;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

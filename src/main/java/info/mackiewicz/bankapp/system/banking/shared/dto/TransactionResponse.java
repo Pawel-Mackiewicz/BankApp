@@ -3,9 +3,9 @@ package info.mackiewicz.bankapp.system.banking.shared.dto;
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.model.adapter.AccountInfoAdapter;
 import info.mackiewicz.bankapp.core.account.model.interfaces.AccountInfo;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.model.adapter.TransactionInfoAdapter;
-import info.mackiewicz.bankapp.transaction.model.interfaces.TransactionInfo;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.adapter.TransactionInfoAdapter;
+import info.mackiewicz.bankapp.core.transaction.model.interfaces.TransactionInfo;
 import lombok.Getter;
 import lombok.Setter;
 

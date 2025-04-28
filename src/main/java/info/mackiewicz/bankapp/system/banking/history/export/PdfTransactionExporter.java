@@ -11,7 +11,7 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import info.mackiewicz.bankapp.core.account.model.Account;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

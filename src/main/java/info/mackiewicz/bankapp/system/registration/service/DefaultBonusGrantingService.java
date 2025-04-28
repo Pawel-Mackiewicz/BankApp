@@ -2,10 +2,10 @@ package info.mackiewicz.bankapp.system.registration.service;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.service.AccountService;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.shared.util.BankAccountProvider;
 import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

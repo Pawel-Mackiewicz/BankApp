@@ -1,15 +1,15 @@
 package info.mackiewicz.bankapp.system.transaction.processing;
 
+import info.mackiewicz.bankapp.core.transaction.exception.InsufficientFundsException;
+import info.mackiewicz.bankapp.core.transaction.exception.TransactionAccountConflictException;
+import info.mackiewicz.bankapp.core.transaction.exception.TransactionNotFoundException;
+import info.mackiewicz.bankapp.core.transaction.exception.TransactionValidationException;
+import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.service.TransactionService;
+import info.mackiewicz.bankapp.core.transaction.validation.TransactionValidator;
 import info.mackiewicz.bankapp.system.transaction.processing.core.TransactionProcessor;
 import info.mackiewicz.bankapp.system.transaction.processing.error.TransactionErrorHandler;
 import info.mackiewicz.bankapp.system.transaction.processing.helpers.TransactionStatusChecker;
-import info.mackiewicz.bankapp.transaction.exception.InsufficientFundsException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionAccountConflictException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionNotFoundException;
-import info.mackiewicz.bankapp.transaction.exception.TransactionValidationException;
-import info.mackiewicz.bankapp.transaction.model.Transaction;
-import info.mackiewicz.bankapp.transaction.service.TransactionService;
-import info.mackiewicz.bankapp.transaction.validation.TransactionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
