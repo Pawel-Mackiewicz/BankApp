@@ -28,8 +28,9 @@ import java.math.BigDecimal;
  * services for all operations.
  *
  * @see BonusGrantingService
- * @see info.mackiewicz.bankapp.account.service.AccountService
- * @see info.mackiewicz.bankapp.transaction.service.TransactionService
+ * @see AccountService
+ * @see TransactionService
+ * @see TransactionProcessingService
  */
 @Slf4j
 @Service

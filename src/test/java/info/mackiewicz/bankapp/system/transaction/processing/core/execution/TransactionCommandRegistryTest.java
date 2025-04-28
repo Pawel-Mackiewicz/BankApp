@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +34,7 @@ class TransactionCommandRegistryTest {
         when(withdrawalCommand.getTransactionType()).thenReturn(TransactionType.WITHDRAWAL);
 
         // Create a registry with our mock commands
-        List<TransactionExecutor> commands = Arrays.asList(depositCommand, withdrawalCommand);
+        List<TransactionExecutor> commands = List.of(depositCommand, withdrawalCommand);
         registry = new TransactionExecutorRegistry(commands);
     }
 
@@ -68,7 +67,7 @@ class TransactionCommandRegistryTest {
         when(anotherDepositCommand.getTransactionType()).thenReturn(TransactionType.DEPOSIT);
         
         // Create a registry with duplicate commands for the same type
-        List<TransactionExecutor> commands = Arrays.asList(
+        List<TransactionExecutor> commands = List.of(
             depositCommand, withdrawalCommand, anotherDepositCommand
         );
         

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
- * Tests for the WithdrawalTransactionCommand class.
+ * Tests for the WithdrawalTransactionExecutor class.
  */
 @ExtendWith(MockitoExtension.class)
 class WithdrawalTransactionExecutorTest {
