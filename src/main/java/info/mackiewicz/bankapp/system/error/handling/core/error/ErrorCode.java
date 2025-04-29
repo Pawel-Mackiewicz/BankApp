@@ -62,7 +62,8 @@ public enum ErrorCode {
     ACCOUNT_OWNER_NULL(HttpStatus.BAD_REQUEST, "Account owner is null."),
     ACCOUNT_OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "Account owner not found."), 
     ACCOUNT_LIMIT_EXCEEDED(HttpStatus.FORBIDDEN, "Account limit exceeded. If you need more accounts, please contact support."),
-    
+    ACCOUNT_DELETION_FORBIDDEN(HttpStatus.FORBIDDEN, "Account deletion is only possible when the balance is zero. Please transfer all funds before deleting the account."),
+
     // Transaction Errors
     TRANSACTION_NOT_FOUND(HttpStatus.NOT_FOUND, "Transaction not found."),
     TRANSACTION_VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "Transaction validation failed. Please check your transaction details."),

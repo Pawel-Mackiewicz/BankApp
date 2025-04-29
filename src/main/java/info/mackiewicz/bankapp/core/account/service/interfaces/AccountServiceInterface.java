@@ -5,6 +5,7 @@ import info.mackiewicz.bankapp.core.account.exception.AccountNotFoundByIdExcepti
 import info.mackiewicz.bankapp.core.account.exception.OwnerAccountsNotFoundException;
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
+import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
 import org.iban4j.Iban;
 
 import java.math.BigDecimal;
@@ -43,7 +44,21 @@ public interface AccountServiceInterface {
      * @return A list of {@link Account}s belonging to the owner with the specified PESEL
      * @throws IllegalArgumentException if pesel is null or invalid
      */
+    @Deprecated
     List<Account> getAccountsByOwnersPesel(String pesel);
+
+
+    /**
+     * Retrieves all accounts associated with an owner's PESEL number.
+     * PESEL is a unique national identification number in Poland.
+     *
+     * @param pesel The PESEL number to search for
+     *
+     * @return A list of {@link Account}s belonging to the owner with the specified PESEL
+     * @throws IllegalArgumentException if pesel is null or invalid
+     * @see Pesel
+     */
+    List<Account> getAccountsByOwnersPesel(Pesel pesel);
 
     /**
      * Retrieves accounts based on the owner's username.

@@ -6,6 +6,7 @@ import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.core.user.model.vo.PhoneNumber;
+import org.iban4j.Iban;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -108,14 +109,14 @@ class AccountServiceTest {
     void getAccountsByOwnersPESEL_ShouldDelegateToQueryService() {
         // Arrange
         List<Account> accounts = Arrays.asList(testAccount);
-        when(accountQueryService.getAccountsByOwnersPesel(TEST_PESEL.getValue())).thenReturn(accounts);
+        when(accountQueryService.getAccountsByOwnersPesel(TEST_PESEL)).thenReturn(accounts);
 
         // Act
         List<Account> result = accountService.getAccountsByOwnersPesel(TEST_PESEL.getValue());
 
         // Assert
         assertThat(result).isEqualTo(accounts);
-        verify(accountQueryService).getAccountsByOwnersPesel(TEST_PESEL.getValue());
+        verify(accountQueryService).getAccountsByOwnersPesel(TEST_PESEL);
     }
 
     @Test
@@ -135,20 +136,20 @@ class AccountServiceTest {
     @Test
     void getAccountByOwnersEmail_ShouldDelegateToQueryService() {
         // Arrange
-        when(accountQueryService.findAccountByOwnersEmail(TEST_EMAIL.getValue())).thenReturn(testAccount);
+        when(accountQueryService.getAccountByOwnersEmail(TEST_EMAIL)).thenReturn(testAccount);
 
         // Act
         Account result = accountService.getAccountByOwnersEmail(TEST_EMAIL.getValue());
 
         // Assert
         assertThat(result).isEqualTo(testAccount);
-        verify(accountQueryService).findAccountByOwnersEmail(TEST_EMAIL.getValue());
+        verify(accountQueryService).getAccountByOwnersEmail(TEST_EMAIL);
     }
 
     @Test
     void getAccountByIban_ShouldDelegateToQueryService() {
         // Arrange
-        String iban = testAccount.getIban().toString();
+        Iban iban = testAccount.getIban();
         when(accountQueryService.getAccountByIban(iban)).thenReturn(testAccount);
 
         // Act
