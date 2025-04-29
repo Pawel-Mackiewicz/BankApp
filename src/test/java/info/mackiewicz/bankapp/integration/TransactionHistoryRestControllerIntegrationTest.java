@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,8 +44,6 @@ class TransactionHistoryRestControllerIntegrationTest {
 
     private static final String API_HISTORY_PATH = "/api/banking/history";
     private static final String API_HISTORY_EXPORT_PATH = API_HISTORY_PATH + "/export";
-    
-    private static final AtomicInteger userCounter = new AtomicInteger(1);
 
     @Autowired
     private IntegrationTestAccountService testAccountService;
@@ -77,7 +74,7 @@ class TransactionHistoryRestControllerIntegrationTest {
     }
 
     private User createTestUserWithAccount() {
-        User testUser = testUserService.createTestUser(userCounter.getAndIncrement());
+        User testUser = testUserService.createRandomTestUser();
         testAccountService.createTestAccountWithBalance(testUser.getId(), DEFAULT_BALANCE);
 
         return userService.getUserById(testUser.getId());
