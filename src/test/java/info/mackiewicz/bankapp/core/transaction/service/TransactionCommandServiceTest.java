@@ -1,7 +1,9 @@
 package info.mackiewicz.bankapp.core.transaction.service;
 
+import info.mackiewicz.bankapp.core.transaction.exception.TransactionDeletionForbiddenException;
 import info.mackiewicz.bankapp.core.transaction.exception.TransactionNotFoundException;
 import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.core.transaction.repository.TransactionRepository;
 import info.mackiewicz.bankapp.core.transaction.validation.TransactionValidator;
@@ -85,7 +87,7 @@ class TransactionCommandServiceTest {
     }
 
     @Test
-    void deleteTransactionById_WhenTransactionExists_ShouldDelete() {
+    void deleteTransactionById_WhenTransactionExistsAndStatusNull_ShouldDelete() {
         // given
         int transactionId = 1;
         Transaction transaction = new Transaction();
@@ -100,6 +102,70 @@ class TransactionCommandServiceTest {
     }
 
     @Test
+    void deleteTransactionById_WhenTransactionExistsAndStatusNEW_ShouldDelete() {
+        // given
+        int transactionId = 1;
+        Transaction transaction = new Transaction();
+        transaction.setStatus(TransactionStatus.NEW);
+        when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
+
+        // when
+        commandService.deleteTransactionById(transactionId);
+
+        // then
+        verify(queryService).getTransactionById(transactionId);
+        verify(repository).delete(transaction);
+    }
+
+    @Test
+    void deleteTransactionById_WhenTransactionExistsAndStatusDONE_ShouldThrowException() {
+        // given
+        int transactionId = 1;
+        Transaction transaction = new Transaction();
+        transaction.setStatus(TransactionStatus.DONE);
+        when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
+
+        // when/then
+        assertThrows(TransactionDeletionForbiddenException.class,
+                () -> commandService.deleteTransactionById(transactionId));
+
+        verify(queryService).getTransactionById(transactionId);
+        verifyNoInteractions(repository);
+    }
+
+    @Test
+    void deleteTransactionById_WhenTransactionExistsAndStatusERROR_ShouldThrowException() {
+        // given
+        int transactionId = 1;
+        Transaction transaction = new Transaction();
+        transaction.setStatus(TransactionStatus.EXECUTION_ERROR);
+        when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
+
+        // when/then
+        assertThrows(TransactionDeletionForbiddenException.class,
+                () -> commandService.deleteTransactionById(transactionId));
+
+        verify(queryService).getTransactionById(transactionId);
+        verifyNoInteractions(repository);
+    }
+
+    @Test
+    void deleteTransactionById_WhenTransactionExistsAndStatusPENDING_ShouldThrowException() {
+        // given
+        int transactionId = 1;
+        Transaction transaction = new Transaction();
+        transaction.setStatus(TransactionStatus.PENDING);
+        when(queryService.getTransactionById(transactionId)).thenReturn(transaction);
+
+        // when/then
+        assertThrows(TransactionDeletionForbiddenException.class,
+                () -> commandService.deleteTransactionById(transactionId));
+
+        verify(queryService).getTransactionById(transactionId);
+        verifyNoInteractions(repository);
+    }
+
+    @Test
     void deleteTransactionById_WhenTransactionDoesNotExist_ShouldPropagateException() {
         // given
         int transactionId = 1;
@@ -109,6 +175,7 @@ class TransactionCommandServiceTest {
         // when/then
         assertThrows(TransactionNotFoundException.class, 
             () -> commandService.deleteTransactionById(transactionId));
-        verify(repository, never()).delete(any());
+
+        verifyNoInteractions(repository);
     }
 }

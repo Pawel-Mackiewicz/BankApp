@@ -2,9 +2,8 @@ package info.mackiewicz.bankapp.system.error.handling.core.error;
 
 import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
 import info.mackiewicz.bankapp.system.error.handling.core.BankAppBaseException;
-import org.springframework.http.HttpStatus;
-
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 /**
  * Defines all possible error codes in the BankApp application along with their corresponding
@@ -79,6 +78,7 @@ public enum ErrorCode {
     NO_TRANSACTIONS_FOR_ACCOUNT(HttpStatus.NOT_FOUND, "No transactions found for this account."),
     TRANSACTION_ACCOUNT_CONFLICT(HttpStatus.BAD_REQUEST, "Source and destination accounts cannot be the same."),
     INVALID_IBAN(HttpStatus.BAD_REQUEST, "Invalid IBAN. Please check your input and try again."),
+    TRANSACTION_NOT_DELETABLE(HttpStatus.FORBIDDEN, "You cannot delete transaction that is already processed or in process."),
     // Other errors
     UNSUPPORTED_EXPORTER(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Unsupported export format. Please choose a different one.");
 
