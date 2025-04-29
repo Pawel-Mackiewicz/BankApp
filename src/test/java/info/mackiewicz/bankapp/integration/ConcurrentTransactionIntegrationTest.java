@@ -73,7 +73,7 @@ class ConcurrentTransactionIntegrationTest {
 
         // Create test users (we need separate users as there's a 3 account limit per user)
         for (int i = 0; i < 20; i++) {
-            User user = testUserService.createTestUser(i);
+            User user = testUserService.createRandomTestUser();
             testUsers.add(user);
 
             // Create one account per user

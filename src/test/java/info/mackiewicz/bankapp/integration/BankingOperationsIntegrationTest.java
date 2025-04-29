@@ -36,7 +36,6 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.is;
@@ -88,8 +87,6 @@ public class BankingOperationsIntegrationTest {
     private Account destinationAccount;
     private User testUser;
     private User recipientUser;
-
-    private static final AtomicInteger userCounter = new AtomicInteger(1);
 
     @NotNull
     private BigDecimal getUpdatedAccountBalance(Account account) {
@@ -148,9 +145,9 @@ public class BankingOperationsIntegrationTest {
         userRepository.deleteAll();
 
         // Creating test users
-        testUser = testUserService.createTestUser(userCounter.getAndIncrement());
+        testUser = testUserService.createRandomTestUser();
 
-        recipientUser = testUserService.createTestUser(userCounter.getAndIncrement());
+        recipientUser = testUserService.createRandomTestUser();
 
         // Creating test accounts
         sourceAccount = testAccountService.createTestAccountWithBalance(testUser.getId(), DEFAULT_BALANCE);

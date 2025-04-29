@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.TestComponent;
 
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Utility service for creating test users in integration tests.
@@ -36,6 +37,7 @@ public class IntegrationTestUserService {
     private UserService userService;
 
     private final String testRunId = UUID.randomUUID().toString().substring(0, TEST_RUN_ID_LENGTH);
+    private static final AtomicInteger userCounter = new AtomicInteger(1);
 
     /**
      * Creates a test user with unique identifiers based on the index.
@@ -44,7 +46,9 @@ public class IntegrationTestUserService {
      *
      * @return The created User entity persisted in the database
      */
-    public User createTestUser(int index) {
+    public User createRandomTestUser() {
+        int index = userCounter.getAndIncrement();
+
         User user = new User();
         String uniqueSuffix = testRunId + "-" + index;
         int hashCode = Math.abs(testRunId.hashCode() % HASH_CODE_MODULO);
