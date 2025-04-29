@@ -60,9 +60,7 @@ build/
 
 ### Docker ###
 docker-compose.yml
-/deploy.sh
-/bankapp.tar
-/bankapp-latest.tar
+/deploy_old.sh
 update-dockerfile-version.sh
 .env-docker
 
@@ -75,3 +73,4 @@ key
 key.pub
 release.properties
 pom.xml.releaseBackup
+/AWS-default.pem
