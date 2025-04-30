@@ -56,11 +56,6 @@ public interface TransactionHistoryRestControllerInterface {
                     responseCode = "403",
                     description = "Access denied - Account doesn't belong to user",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized access - user is not logged in",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
             )
     })
     @GetMapping
@@ -104,11 +99,6 @@ public interface TransactionHistoryRestControllerInterface {
                     responseCode = "200",
                     description = "Transactions exported successfully",
                     content = @Content(mediaType = "application/octet-stream")
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized access - user is not logged in",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
             ),
             @ApiResponse(
                     responseCode = "500",
