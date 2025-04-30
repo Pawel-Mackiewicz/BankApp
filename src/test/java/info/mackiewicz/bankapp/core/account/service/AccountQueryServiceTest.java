@@ -36,8 +36,8 @@ class AccountQueryServiceTest {
     private static final String TEST_FIRSTNAME = "Jan";
     private static final String TEST_LASTNAME = "Kowalski";
     private static final String TEST_USERNAME = "jkowalski";
-    private static final String TEST_PESEL = "12345678901";
-    private static final String NONEXISTENT_PESEL = "99999999999";
+    private static final Pesel TEST_PESEL = new Pesel("12345678901");
+    private static final Pesel NONEXISTENT_PESEL = new Pesel("99999999999");
     private static final String TEST_EMAIL = "jan.kowalski@example.com";
     private static final int DEFAULT_IBAN_INDEX = 0;
     private static final int ALTERNATIVE_IBAN_INDEX = 1;
@@ -115,7 +115,7 @@ class AccountQueryServiceTest {
         // given
         Account testAccount = getTestAccount();
         List<Account> accounts = Collections.singletonList(testAccount);
-        when(accountRepository.findAccountsByOwner_pesel(new Pesel(TEST_PESEL)))
+        when(accountRepository.findAccountsByOwner_pesel(TEST_PESEL))
             .thenReturn(Optional.of(accounts));
 
         // when
@@ -124,19 +124,19 @@ class AccountQueryServiceTest {
         // then
         assertEquals(EXPECTED_SINGLE_RESULT_SIZE, result.size());
         assertEquals(testAccount, result.getFirst());
-        verify(accountRepository).findAccountsByOwner_pesel(new Pesel(TEST_PESEL));
+        verify(accountRepository).findAccountsByOwner_pesel(TEST_PESEL);
     }
 
     @Test
     void getAccountsByOwnersPESEL_WhenNoAccountsExist_ShouldThrowException() {
         // given
-        when(accountRepository.findAccountsByOwner_pesel(new Pesel(NONEXISTENT_PESEL)))
+        when(accountRepository.findAccountsByOwner_pesel(NONEXISTENT_PESEL))
             .thenReturn(Optional.empty());
 
         // when & then
         assertThrows(OwnerAccountsNotFoundException.class,
             () -> accountQueryService.getAccountsByOwnersPesel(NONEXISTENT_PESEL));
-        verify(accountRepository).findAccountsByOwner_pesel(new Pesel(NONEXISTENT_PESEL));
+        verify(accountRepository).findAccountsByOwner_pesel(NONEXISTENT_PESEL);
     }
 
     @Test
@@ -181,7 +181,7 @@ class AccountQueryServiceTest {
         when(accountRepository.findByIban(testIban)).thenReturn(Optional.of(testAccount));
 
         // when
-        Account result = accountQueryService.getAccountByIban(testIban.toString());
+        Account result = accountQueryService.getAccountByIban(testIban);
 
         // then
         assertNotNull(result);
@@ -197,7 +197,7 @@ class AccountQueryServiceTest {
 
         // when & then
         assertThrows(AccountNotFoundByIbanException.class,
-            () -> accountQueryService.getAccountByIban(testIban.toString()));
+                () -> accountQueryService.getAccountByIban(testIban));
         verify(accountRepository).findByIban(testIban);
     }
 

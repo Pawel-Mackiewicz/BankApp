@@ -13,8 +13,6 @@ import org.iban4j.Iban;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Service responsible for querying and retrieving account information.
@@ -35,35 +33,10 @@ class AccountQueryService {
                 .orElseThrow(() -> new AccountNotFoundByIdException("Account with ID " + id + " not found."));
     }
 
-    List<Account> getAllAccounts() {
-        return accountRepository.findAll();
-    }
-
-    List<Account> getAccountsByOwnerCriteria(String value, Function<String, Optional<List<Account>>> finder,
-            String criteriaName) {
-        return finder.apply(value)
-                .orElseThrow(() -> new OwnerAccountsNotFoundException(
-                        String.format("User with %s %s does not have any account.", criteriaName, value)));
-    }
-
-    List<Account> getAccountsByOwnersPesel(Pesel pesel) {
-        return accountRepository.findAccountsByOwner_pesel(pesel)
-                .orElseThrow(() -> new OwnerAccountsNotFoundException(
-                        String.format("User with PESEL %s does not have any account.", pesel)));
-    }
-
-    List<Account> getAccountsByOwnersPesel(String pesel) {
-        return getAccountsByOwnersPesel(new Pesel(pesel));
-    }
-
-    List<Account> getAccountsByOwnersUsername(String username) {
-        return getAccountsByOwnerCriteria(username, accountRepository::findAccountsByOwner_username, "username");
-    }
-
-    List<Account> getAccountsByOwnersId(Integer id) {
-        return getAccountsByOwnerCriteria(id.toString(),
-                value -> accountRepository.findAccountsByOwner_id(Integer.parseInt(value)),
-                "ID");
+    Account getAccountByIban(Iban iban) {
+        log.debug("Finding account by IBAN: {}", iban.toFormattedString());
+        return accountRepository.findByIban(iban)
+                .orElseThrow(() -> new AccountNotFoundByIbanException("Account with IBAN " + iban.toFormattedString() + " not found."));
     }
 
     Account getAccountByOwnersEmail(EmailAddress recipientEmail) {
@@ -73,19 +46,26 @@ class AccountQueryService {
                         String.format("User with email %s does not have any account.", recipientEmail)));
     }
 
-    @Deprecated
-    Account findAccountByOwnersEmail(String email) {
-        return getAccountByOwnersEmail(new EmailAddress(email));
+    List<Account> getAccountsByOwnersId(Integer id) {
+        return accountRepository.findAccountsByOwner_id(id)
+                .orElseThrow(() -> new OwnerAccountsNotFoundException(
+                        String.format("User with ID: %s does not have any account.", id)));
     }
 
-    Account getAccountByIban(String iban) {
-        return getAccountByIban(Iban.valueOf(iban));
+    List<Account> getAccountsByOwnersPesel(Pesel pesel) {
+        return accountRepository.findAccountsByOwner_pesel(pesel)
+                .orElseThrow(() -> new OwnerAccountsNotFoundException(
+                        String.format("User with PESEL %s does not have any account.", pesel)));
     }
 
-    Account getAccountByIban(Iban iban) {
-        log.debug("Finding account by IBAN: {}", iban.toFormattedString());
-        return accountRepository.findByIban(iban)
-        .orElseThrow(() -> new AccountNotFoundByIbanException("Account with IBAN " + iban.toFormattedString() + " not found."));
+    List<Account> getAccountsByOwnersUsername(String username) {
+        return accountRepository.findAccountsByOwner_username(username)
+                .orElseThrow(() -> new OwnerAccountsNotFoundException(
+                        String.format("User with username: %s does not have any account.", username)));
+    }
+
+    List<Account> getAllAccounts() {
+        return accountRepository.findAll();
     }
 
     boolean existsByEmail(EmailAddress email) {
