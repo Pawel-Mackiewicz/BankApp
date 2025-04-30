@@ -1,82 +1,82 @@
 package info.mackiewicz.bankapp.core.account.validation;
 
 import info.mackiewicz.bankapp.core.account.service.AccountService;
+import info.mackiewicz.bankapp.core.account.validation.dto.ValidationResponse;
+import info.mackiewicz.bankapp.core.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 /**
  * Controller responsible for handling validation-related requests.
  * Provides endpoints for validating IBANs and checking email existence in the system.
  */
+@Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/account/validate")
 @RequiredArgsConstructor
-public class ValidationController {
+public class ValidationController implements ValidationControllerInterface {
 
     private final AccountService accountService;
 
-    /**
-     * Validates the format of an IBAN (International Bank Account Number).
-     *
-     * @param iban The IBAN to validate
-     * @return ResponseEntity containing validation result and a message
-     */
-    @GetMapping("/validate-iban")
-    public ResponseEntity<Map<String, Object>> validateIban(@RequestParam String iban) {
+    @GetMapping("/iban")
+    @Override
+    public ResponseEntity<ValidationResponse> validateIban(@RequestParam String iban) {
+        if (iban == null || iban.isBlank()) {
+            return ResponseEntity.badRequest().body(
+                    ValidationResponse.invalid("Iban must not be empty")
+            );
+        }
+        
         try {
             boolean isValid = IbanValidationUtil.isValid(iban);
-            return ResponseEntity.ok(Map.of(
-                "valid", isValid,
-                "message", isValid ? "Valid IBAN format" : "Invalid IBAN format"
-            ));
+            String message = isValid ? "Valid IBAN format" : "Invalid IBAN format";
+            return isValid ?
+                    ResponseEntity.ok().body(ValidationResponse.valid(message)) :
+                    ResponseEntity.badRequest().body(ValidationResponse.invalid(message));
         } catch (Exception e) {
-            return ResponseEntity.ok(Map.of(
-                "valid", false,
-                "message", "Error during validation: " + e.getMessage()
-            ));
+            log.error("Error during IBAN validation", e);
+            return ResponseEntity.status(500).body(
+                    ValidationResponse.invalid("Error during validation")
+            );
         }
     }
 
-    /**
-     * Validates if an email is associated with any existing account in the system.
-     * Checks both the email field and username field (which might contain an email).
-     *
-     * @param email The email address to validate
-     * @return ResponseEntity containing validation result and a message
-     */
-    @GetMapping("/validate-email")
-    public ResponseEntity<Map<String, Object>> validateEmail(@RequestParam String email) {
+    @GetMapping("/email")
+    @Override
+    public ResponseEntity<ValidationResponse> validateEmail(@RequestParam String email) {
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest().body(
+                    ValidationResponse.invalid("Email must not be empty")
+            );
+        }
+        
         EmailAddress emailAddress;
-        //check if
         try {
             emailAddress = new EmailAddress(email);
-        } catch (Exception e) {
-            return ResponseEntity.ok(Map.of(
-                "valid", false,
-                "message", "Invalid email address: " + e.getMessage()
-            ));
+        } catch (InvalidEmailFormatException e) {
+            return ResponseEntity.badRequest().body(
+                    ValidationResponse.invalid("Invalid email address format")
+            );
         }
-        try {
-            // Check if an account exists with the provided email
-            boolean hasAccount = accountService.existsByEmail(emailAddress);
 
-            return ResponseEntity.ok(Map.of(
-                "valid", hasAccount,
-                "message", hasAccount ? "Account found" : "No account found for this email"
-            ));
+        try {
+            boolean found = accountService.existsByEmail(emailAddress);
+            String message = found ? "Account found" : "No account found for this email";
+            return found ?
+                    ResponseEntity.ok().body(ValidationResponse.found(message)) :
+                    ResponseEntity.status(404).body(ValidationResponse.notFound(message));
         } catch (Exception e) {
-            return ResponseEntity.ok(Map.of(
-                "valid", false,
-                "message", "Error during validation: " + e.getMessage()
-            ));
+            log.error("Error during email validation", e);
+            return ResponseEntity.status(500).body(
+                    ValidationResponse.invalid("Internal error during validation")
+            );
         }
     }
 }

@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.core.account.validation;
+package info.mackiewicz.bankapp.shared.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

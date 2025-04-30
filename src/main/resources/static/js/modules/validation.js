@@ -33,10 +33,10 @@ class EmailValidator {
         }
 
         try {
-            const response = await fetch(`/api/validate-email?email=${email}`);
+            const response = await fetch(`/api/account/validate/email?email=${email}`);
             const data = await response.json();
 
-            if (data.valid) {
+            if (data.valid && (data.found == null || data.found)) {
                 UIHelper.setValid(input);
                 return true;
             } else {
@@ -67,7 +67,7 @@ class IbanValidator {
         }
 
         try {
-            const response = await fetch(`/api/validate-iban?iban=${iban}`);
+            const response = await fetch(`/api/account/validate/iban?iban=${iban}`);
             const data = await response.json();
 
             if (data.valid) {
