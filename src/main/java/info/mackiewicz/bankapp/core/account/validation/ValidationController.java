@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/account/validate")
 @RequiredArgsConstructor
-public class ValidationController {
+public class ValidationController implements ValidationControllerInterface {
 
     private final AccountService accountService;
 
     @GetMapping("/iban")
+    @Override
     public ResponseEntity<ValidationResponse> validateIban(@RequestParam String iban) {
         if (iban == null || iban.isBlank()) {
             return ResponseEntity.badRequest().body(
@@ -45,6 +46,7 @@ public class ValidationController {
     }
 
     @GetMapping("/email")
+    @Override
     public ResponseEntity<ValidationResponse> validateEmail(@RequestParam String email) {
         if (email == null || email.isBlank()) {
             return ResponseEntity.badRequest().body(
