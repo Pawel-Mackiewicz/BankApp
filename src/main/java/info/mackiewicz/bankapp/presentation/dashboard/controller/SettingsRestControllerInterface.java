@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Interface defining REST API endpoints for user settings management.
@@ -35,6 +36,7 @@ import org.springframework.http.ResponseEntity;
  * the @AuthenticationPrincipal annotation in the controller implementation.
  */
 @SecurityRequirement(name = "cookieAuth")
+@RequestMapping("/api/settings")
 public interface SettingsRestControllerInterface {
 
         @Operation(summary = "Get user settings", description = " Retrieves the current settings for the authenticated user. The user information is automatically "
@@ -42,7 +44,6 @@ public interface SettingsRestControllerInterface {
                         "extracted from the current session. You must be logged in to access this endpoint.")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Settings retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserSettingsDTO.class))),
-                        @ApiResponse(responseCode = "401", description = "Unauthorized access - user is not logged in", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class)))
         })
         ResponseEntity<UserSettingsDTO> getUserSettings(
                         @Parameter(hidden = true, description = "Current authenticated user (automatically injected by Spring Security)") PersonalInfo user);
@@ -112,7 +113,6 @@ public interface SettingsRestControllerInterface {
                                                         }
                                                         """)
                         })),
-                        @ApiResponse(responseCode = "401", description = "Unauthorized access - user is not logged in")
         })
         ResponseEntity<?> changePassword(
                         @Parameter(hidden = true, description = "Current authenticated user (automatically injected by Spring Security)") User user,
@@ -158,7 +158,6 @@ public interface SettingsRestControllerInterface {
                                                           }
                                                           """)
                         })),
-                        @ApiResponse(responseCode = "401", description = "Unauthorized access - user is not logged in")
         })
         ResponseEntity<Void> changeUsername(
                         @Parameter(hidden = true, description = "Current authenticated user (automatically injected by Spring Security)") User user,
