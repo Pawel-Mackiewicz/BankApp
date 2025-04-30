@@ -2,12 +2,13 @@ package info.mackiewicz.bankapp.core.user.model.dto;
 
 import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.presentation.auth.dto.UserRegistrationRequest;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
 
-    public User toUser(UserRegistrationRequest dto) {
+    public User toUser(@NonNull UserRegistrationRequest dto) {
         User user = User.builder()
                 .withFirstname(capitalize(dto.getFirstname()))
                 .withLastname(capitalize(dto.getLastname()))
@@ -20,7 +21,7 @@ public class UserMapper {
         return user;
     }
 
-    private String capitalize(String str) {
+    private String capitalize(@NonNull String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 }
