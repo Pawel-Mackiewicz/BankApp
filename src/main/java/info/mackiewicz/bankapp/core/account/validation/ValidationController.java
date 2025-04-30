@@ -6,6 +6,7 @@ import info.mackiewicz.bankapp.core.user.exception.InvalidEmailFormatException;
 import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.shared.util.IbanValidationUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller responsible for handling validation-related requests.
  * Provides endpoints for validating IBANs and checking email existence in the system.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/account/validate")
 @RequiredArgsConstructor
@@ -39,6 +41,7 @@ public class ValidationController implements ValidationControllerInterface {
                     ResponseEntity.ok().body(ValidationResponse.valid(message)) :
                     ResponseEntity.badRequest().body(ValidationResponse.invalid(message));
         } catch (Exception e) {
+            log.error("Error during IBAN validation", e);
             return ResponseEntity.status(500).body(
                     ValidationResponse.invalid("Error during validation")
             );
@@ -70,7 +73,7 @@ public class ValidationController implements ValidationControllerInterface {
                     ResponseEntity.ok().body(ValidationResponse.found(message)) :
                     ResponseEntity.status(404).body(ValidationResponse.notFound(message));
         } catch (Exception e) {
-            // log.error("Error during validation", e);
+            log.error("Error during email validation", e);
             return ResponseEntity.status(500).body(
                     ValidationResponse.invalid("Internal error during validation")
             );
