@@ -4,6 +4,7 @@ import info.mackiewicz.bankapp.core.account.exception.UnsupportedValidationTypeE
 import info.mackiewicz.bankapp.presentation.dashboard.dto.ExternalTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
+import info.mackiewicz.bankapp.shared.annotations.DifferentAccountsValidator;
 import info.mackiewicz.bankapp.testutils.TestIbanProvider;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.core.account.validation;
+package info.mackiewicz.bankapp.shared.annotations;
 
 import info.mackiewicz.bankapp.core.account.exception.UnsupportedValidationTypeException;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;

@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Interface defining REST API endpoints for user settings management.
@@ -35,6 +36,7 @@ import org.springframework.http.ResponseEntity;
  * the @AuthenticationPrincipal annotation in the controller implementation.
  */
 @SecurityRequirement(name = "cookieAuth")
+@RequestMapping("/api/settings")
 public interface SettingsRestControllerInterface {
 
         @Operation(summary = "Get user settings", description = " Retrieves the current settings for the authenticated user. The user information is automatically "
