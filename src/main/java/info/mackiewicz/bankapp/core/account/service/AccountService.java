@@ -131,12 +131,10 @@ public class AccountService implements AccountServiceInterface {
     @Override
     @Transactional
     public void deleteAccountById(int id) {
-        //TODO: SOFT DELETE, OR SOMETHING LIKE THAT.
-        // YOU SHOULDN'T COULD DELETE ACCOUNTS
-        // THAT HAS ANY BALANCE
+        //TODO: SOFT DELETE
         log.debug("Deleting account with ID: {}", id);
         Account account = getAccountById(id);
-        if (account.getBalance() == null | account.getBalance().compareTo(BigDecimal.ZERO) == 0) {
+        if (account.getBalance() == null || account.getBalance().compareTo(BigDecimal.ZERO) == 0) {
             accountRepository.delete(account);
         } else {
             throw new AccountDeletionException("Account with ID " + id + " has non-zero balance and cannot be deleted.");
