@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Import(IntegrationTestConfig.class)
 @AutoConfigureTestDatabase
 @Transactional
-class ApiDashboardServiceIntegration {
+class ApiDashboardServiceIntegrationTest {
 
     public static final BigDecimal DEFAULT_INITIAL_BALANCE = new BigDecimal("1000.00");
 
@@ -328,22 +328,22 @@ class ApiDashboardServiceIntegration {
         assertThat(workingBalanceBefore).isEqualByComparingTo(DEFAULT_INITIAL_BALANCE.subtract(pendingTransaction.getAmount()));
         assertThat(workingBalanceAfter).isEqualByComparingTo(DEFAULT_INITIAL_BALANCE);
     }
-//
-//    @Test
-//    @DisplayName("Should handle account with negative balance")
-//    void shouldHandleNegativeBalance() {
-//        // given
-//        BigDecimal initialBalance = new BigDecimal("-500.00");
-//        updateAccountBalance(testAccount, initialBalance);
-//
-//        createAndSaveTransaction(testAccount, null, new BigDecimal("200.00"), TransactionStatus.PENDING);
-//
-//        BigDecimal expectedWorkingBalance = new BigDecimal("-700.00");
-//
-//        // when
-//        BigDecimal workingBalance = apiDashboardService.getWorkingBalance(testAccount.getId());
-//
-//        // then
-//        assertThat(workingBalance).isEqualByComparingTo(expectedWorkingBalance);
-//    }
+
+    @Test
+    @DisplayName("Should handle account with negative balance")
+    void shouldHandleNegativeBalance() {
+        // given
+        BigDecimal initialBalance = new BigDecimal("-500.00");
+        updateAccountBalance(testAccount, initialBalance);
+
+        createAndSaveTransaction(testAccount, otherTestAccount, new BigDecimal("200.00"), TransactionStatus.PENDING);
+
+        BigDecimal expectedWorkingBalance = new BigDecimal("-700.00");
+
+        // when
+        BigDecimal workingBalance = apiDashboardService.getWorkingBalance(testAccount.getId());
+
+        // then
+        assertThat(workingBalance).isEqualByComparingTo(expectedWorkingBalance);
+    }
 }
