@@ -2,8 +2,7 @@ package info.mackiewicz.bankapp.shared.config;
 
 import info.mackiewicz.bankapp.core.user.service.AdminUserService;
 import info.mackiewicz.bankapp.shared.service.CustomUserDetailsService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -23,10 +22,9 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@Slf4j
 public class SecurityConfig {
-
-    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
-
+    
     private final CustomUserDetailsService userDetailsService;
     private final AdminUserService adminUserService;
 
@@ -34,7 +32,7 @@ public class SecurityConfig {
             AdminUserService adminUserService) {
         this.userDetailsService = userDetailsService;
         this.adminUserService = adminUserService;
-        logger.info("Initializing SecurityConfig...");
+        log.info("Initializing SecurityConfig...");
     }
 
     @Bean
