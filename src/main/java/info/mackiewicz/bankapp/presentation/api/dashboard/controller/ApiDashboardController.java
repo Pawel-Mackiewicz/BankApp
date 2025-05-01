@@ -1,6 +1,8 @@
-package info.mackiewicz.bankapp.core.account.controllers;
+package info.mackiewicz.bankapp.presentation.api.dashboard.controller;
 
 import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.presentation.api.dashboard.controller.dto.WorkingBalanceResponse;
+import info.mackiewicz.bankapp.presentation.api.dashboard.service.ApiDashboardService;
 import info.mackiewicz.bankapp.system.shared.IdAccountAuthorizationService;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

@@ -1,6 +1,7 @@
-package info.mackiewicz.bankapp.core.account.controllers;
+package info.mackiewicz.bankapp.presentation.api.dashboard.controller;
 
 import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.presentation.api.dashboard.controller.dto.WorkingBalanceResponse;
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

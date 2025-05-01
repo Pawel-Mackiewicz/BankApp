@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.core.account.controllers;
+package info.mackiewicz.bankapp.presentation.api.dashboard.controller.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.core.account.controllers;
+package info.mackiewicz.bankapp.presentation.api.dashboard.service;
 
 import info.mackiewicz.bankapp.core.account.exception.AccountNotFoundByIdException;
 import info.mackiewicz.bankapp.core.account.repository.AccountRepository;
