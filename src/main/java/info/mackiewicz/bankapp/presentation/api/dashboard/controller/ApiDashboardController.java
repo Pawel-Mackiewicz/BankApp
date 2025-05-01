@@ -7,6 +7,7 @@ import info.mackiewicz.bankapp.system.shared.IdAccountAuthorizationService;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -30,13 +31,19 @@ public class ApiDashboardController implements ApiDashboardControllerInterface {
     @Override
     public ResponseEntity<WorkingBalanceResponse> getWorkingBalance(
             @Min(1) @NotNull @PathVariable Integer accountId,
-            @AuthenticationPrincipal User owner
+            @NotNull @AuthenticationPrincipal User owner
     ) {
-        // validating if owner has access to requested account information
-        authorizationService.validateAccountOwnership(accountId, owner);
+        MDC.put("AccountID", accountId.toString());
+        MDC.put("UserID", owner.getId().toString());
+        try {
+            // validating if owner has access to requested account information
+            authorizationService.validateAccountOwnership(accountId, owner);
 
-        BigDecimal workingBalance = dashboardService.getWorkingBalance(accountId);
-        WorkingBalanceResponse response = new WorkingBalanceResponse(workingBalance, accountId);
-        return ResponseEntity.ok().body(response);
+            BigDecimal workingBalance = dashboardService.getWorkingBalance(accountId);
+            WorkingBalanceResponse response = new WorkingBalanceResponse(workingBalance, accountId);
+            return ResponseEntity.ok().body(response);
+        } finally {
+            MDC.clear();
+        }
     }
 }

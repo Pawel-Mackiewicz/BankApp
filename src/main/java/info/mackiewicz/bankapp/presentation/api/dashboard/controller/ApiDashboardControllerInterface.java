@@ -84,5 +84,5 @@ public interface ApiDashboardControllerInterface {
                     required = true,
                     example = "12345"
             )
-            @Min(1) @NotNull @PathVariable Integer accountId, @AuthenticationPrincipal User owner);
+            @Min(1) @NotNull @PathVariable Integer accountId, @NotNull @AuthenticationPrincipal User owner);
 }
