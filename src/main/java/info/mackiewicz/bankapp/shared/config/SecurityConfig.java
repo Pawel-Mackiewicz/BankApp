@@ -76,7 +76,7 @@ public class SecurityConfig {
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/api/**")
-                .userDetailsService(adminUserService)
+                .userDetailsService(userDetailsService)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
