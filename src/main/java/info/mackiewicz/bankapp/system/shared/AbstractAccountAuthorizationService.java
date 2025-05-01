@@ -47,6 +47,7 @@ public abstract class AbstractAccountAuthorizationService<T> implements AccountA
             }
         }
         updated = false;
+        log.info("Account ownership validated. Account: {}, Owner: {}", accountIdentifier, owner.getUsername());
     }
 
     protected abstract boolean isOwner(T accountIdentifier, Set<Account> accounts);

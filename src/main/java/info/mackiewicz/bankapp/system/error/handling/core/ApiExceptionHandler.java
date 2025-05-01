@@ -1,23 +1,23 @@
 package info.mackiewicz.bankapp.system.error.handling.core;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-
 import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
-import info.mackiewicz.bankapp.system.error.handling.logger.ApiErrorLogger;
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import info.mackiewicz.bankapp.system.error.handling.dto.ValidationApiError;
 import info.mackiewicz.bankapp.system.error.handling.dto.ValidationError;
+import info.mackiewicz.bankapp.system.error.handling.logger.ApiErrorLogger;
 import info.mackiewicz.bankapp.system.error.handling.mapping.ApiExceptionToErrorMapper;
 import info.mackiewicz.bankapp.system.error.handling.service.ValidationErrorProcessor;
 import info.mackiewicz.bankapp.system.error.handling.util.RequestUriHandler;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.List;
 
 /**
  * Global exception handler for the BankApp application that processes and transforms
@@ -82,6 +82,13 @@ public class ApiExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
             WebRequest request) {
+        List<ValidationError> errors = validationErrorProcessor.extractValidationErrors(ex);
+        return createValidationErrorResponse(errors, ex, request);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ValidationApiError> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex,
+                                                                                        WebRequest request) {
         List<ValidationError> errors = validationErrorProcessor.extractValidationErrors(ex);
         return createValidationErrorResponse(errors, ex, request);
     }
