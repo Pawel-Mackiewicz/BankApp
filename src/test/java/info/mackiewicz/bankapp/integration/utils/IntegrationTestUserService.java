@@ -13,8 +13,11 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Utility service for creating test users in integration tests.
+ * Utility service for creating test users in integration tests.<br>
  * Generates consistent test data with unique identifiers for each test run.
+ *<p>
+ * To use this class in tests always add `@Import(IntegrationTestConfig.class)`
+ * @see IntegrationTestConfig
  */
 @TestComponent
 public class IntegrationTestUserService {
