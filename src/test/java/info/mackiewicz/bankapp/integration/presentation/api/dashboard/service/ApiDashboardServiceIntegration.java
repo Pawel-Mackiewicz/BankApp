@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ApiDashboardServiceIntegration {
 
     public static final BigDecimal DEFAULT_INITIAL_BALANCE = new BigDecimal("1000.00");
-    
+
     @Autowired
     private ApiDashboardService apiDashboardService;
 

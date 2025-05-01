@@ -19,5 +19,5 @@ import java.time.LocalDateTime;
 public class WorkingBalanceResponse {
     final BigDecimal workingBalance;
     final int accountId;
-    LocalDateTime timestamp = LocalDateTime.now();
+    final LocalDateTime timestamp = LocalDateTime.now();
 }
