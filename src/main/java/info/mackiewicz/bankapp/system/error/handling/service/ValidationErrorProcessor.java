@@ -80,10 +80,20 @@ public class ValidationErrorProcessor {
      */
     public List<ValidationError> extractValidationErrors(MethodArgumentTypeMismatchException ex) {
         String causeMsg = ex.getCause().getMessage();
+        if (causeMsg == null) {
+            return List.of(new ValidationError(
+                    ex.getName(),
+                    ex.getMessage(),
+                    ""
+            ));
+        }
         int startIndex = causeMsg.indexOf("\"") + 1;
         int endIndex = causeMsg.lastIndexOf("\"");
-        String rejectedValue = causeMsg.substring(startIndex, endIndex);
 
+        String rejectedValue = "";
+        if (startIndex > 0 && endIndex > startIndex) {
+            rejectedValue = causeMsg.substring(startIndex, endIndex);
+        }
         return List.of(new ValidationError(
                 ex.getName(),
                 ex.getMessage(),
