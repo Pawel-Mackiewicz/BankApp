@@ -24,7 +24,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @EnableMethodSecurity
 @Slf4j
 public class SecurityConfig {
-    
+
     private final CustomUserDetailsService userDetailsService;
     private final AdminUserService adminUserService;
 
