@@ -1,16 +1,16 @@
 package info.mackiewicz.bankapp.system.error.handling.service;
 
-import java.util.List;
-import java.util.stream.Stream;
-
+import info.mackiewicz.bankapp.system.error.handling.dto.ValidationError;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import info.mackiewicz.bankapp.system.error.handling.dto.ValidationError;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Processes validation errors from different sources and converts them into a
@@ -66,6 +66,38 @@ public class ValidationErrorProcessor {
                 .stream()
                 .map(this::convert)
                 .toList();
+    }
+
+    /**
+     * Extracts a validation error from a MethodArgumentTypeMismatchException.
+     * Creates a ValidationError object containing the invalid parameter name,
+     * error message, and an empty rejected value, and returns it as a single-item list.
+     *
+     * @param ex the MethodArgumentTypeMismatchException to process
+     *
+     * @return a list containing one ValidationError with details about
+     * the type mismatch error
+     */
+    public List<ValidationError> extractValidationErrors(MethodArgumentTypeMismatchException ex) {
+        String causeMsg = ex.getCause().getMessage();
+        if (causeMsg == null) {
+            return List.of(new ValidationError(
+                    ex.getName(),
+                    ex.getMessage(),
+                    ""
+            ));
+        }
+        int startIndex = causeMsg.indexOf("\"") + 1;
+        int endIndex = causeMsg.lastIndexOf("\"");
+
+        String rejectedValue = "";
+        if (startIndex > 0 && endIndex > startIndex) {
+            rejectedValue = causeMsg.substring(startIndex, endIndex);
+        }
+        return List.of(new ValidationError(
+                ex.getName(),
+                ex.getMessage(),
+                rejectedValue));
     }
 
     /**
