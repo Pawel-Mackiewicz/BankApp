@@ -216,13 +216,13 @@ The application is configured to check for an admin api user on startup. If you'
 
 ### Key Features
 
-#### Transaction System
+#### Transaction Processing System
 
 BankApp's Transaction System provides a robust foundation for secure financial operations between bank accounts. The system handles deposits, withdrawals, and various types of transfers with strong focus on data consistency and error handling.
 
 - **Multi-layered Architecture**: Clean separation of controller, service, and execution layers
 - **Security-First Design**: Robust account locking mechanism to prevent race conditions
-- **Asynchronous Processing**: Non-blocking transaction execution for improved throughput
+- **Asynchronous Processing**: Asynchronous transaction execution for improved throughput
 - **Comprehensive Error Handling**: Centralized error management with appropriate recovery strategies
 - **Automatic Batch Processing**: Scheduled tasks for processing new transactions every 10 minutes
 
@@ -266,7 +266,7 @@ For detailed technical documentation, see the [Registration System](../../wiki/R
 
 #### Password Reset System
 
-The BankApp implements a secure password reset system with the following features:
+BankApp implements a secure password reset system with the following features:
 
 - **Three-tier architecture**: Web controller, REST API, and service layer
 - **Token-based security**: Time-limited tokens for password reset operations
