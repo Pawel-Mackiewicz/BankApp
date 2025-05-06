@@ -28,7 +28,8 @@ public class AgeRangeValidator implements ConstraintValidator<AgeRange, LocalDat
      * Calculates the period between the birth date and current date to determine age.
      *
      * @param dateOfBirth the date of birth to validate, may be null
-     * @param context constraint validation context
+     * @param context     constraint validation context
+     *
      * @return true if the person is 18 or older, false if underage or date is null
      * @see Period#between(LocalDate, LocalDate)
      */
@@ -37,7 +38,7 @@ public class AgeRangeValidator implements ConstraintValidator<AgeRange, LocalDat
         if (dateOfBirth == null) {
             return false;
         }
-        return Period.between(dateOfBirth, LocalDate.now()).getYears() >= 18 &&
-               Period.between(dateOfBirth, LocalDate.now()).getYears() <= 120;
+        int age = Period.between(dateOfBirth, LocalDate.now()).getYears();
+        return age >= 18 && age <= 120;
     }
 }
