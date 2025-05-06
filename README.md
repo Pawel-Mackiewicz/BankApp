@@ -405,7 +405,7 @@ The actual scope depends on how many people get involved and how fast we progres
 
 Just drop me a message:  
 - **On GitHub**  
-- Or email: **bankapp@mackiewicz.info**
+- Or email: [bankapp@mackiewicz.info](mailto:bankapp@mackiewicz.info)
 
 Say a few words about yourself, what you do, what you’d like to work on in the project, or what you want to learn. We’ll figure the rest out together!
 
