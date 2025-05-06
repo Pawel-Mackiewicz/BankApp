@@ -12,11 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AgeRangeValidatorTest {
 
-    private AgeRangeValidatior validator;
+    private AgeRangeValidator validator;
 
     @BeforeEach
     void setUp() {
-        validator = new AgeRangeValidatior();
+        validator = new AgeRangeValidator();
         validator.initialize(null); // No configuration needed
     }
 

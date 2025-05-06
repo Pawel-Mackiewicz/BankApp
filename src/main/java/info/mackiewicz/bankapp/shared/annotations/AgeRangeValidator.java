@@ -11,7 +11,7 @@ import java.time.Period;
  * Verifies that a person's age is at least 18 years based on their date of birth.
  * This validator is thread-safe as it maintains no state between validations.
  */
-public class AgeRangeValidatior implements ConstraintValidator<AgeRange, LocalDate> {
+public class AgeRangeValidator implements ConstraintValidator<AgeRange, LocalDate> {
 
     /**
      * Initializes the validator.
