@@ -1,4 +1,4 @@
-```
+```bash
 # BankApp Project Structure
 
 BankApp/
@@ -62,8 +62,6 @@ BankApp/
 │   │   │               │   │       ├── service/  # Error handling services
 │   │   │               │   │       └── util/     # Error handling utilities
 │   │   │               │   │
-│   │   │               │   ├── locking/          # Concurrency control mechanisms
-│   │   │               │   │
 │   │   │               │   ├── notification/     # Notification subsystem
 │   │   │               │   │   └── email/        # Email notification service
 │   │   │               │   │       ├── exception/    # Email-specific exceptions
@@ -93,7 +91,8 @@ BankApp/
 │   │   │               │       └── processing/   # Transaction execution engine
 │   │   │               │           ├── core/     # Core processing components
 │   │   │               │           ├── error/    # Error handling for transactions
-│   │   │               │           └── helpers/  # Helper classes for processing
+│   │   │               │           ├── helpers/  # Helper classes for processing
+│   │   │               │           └── locking/  # Concurrency control mechanisms
 │   │   │               │
 │   │   │               └── BankAppApplication.java  # Main Spring Boot application class
 │   │   │
