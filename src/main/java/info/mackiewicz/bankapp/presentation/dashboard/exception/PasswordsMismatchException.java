@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.dashboard.exception;
 
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 
 public class PasswordsMismatchException extends CredentialsBaseException {
 

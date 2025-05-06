@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.system.error.handling.dto;
 import java.util.List;
 
 import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 import info.mackiewicz.bankapp.system.error.handling.dto.interfaces.ValidationErrorResponse;
 import lombok.Getter;
 

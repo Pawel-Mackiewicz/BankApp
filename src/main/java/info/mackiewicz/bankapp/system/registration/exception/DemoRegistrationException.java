@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.registration.exception;
 
 import info.mackiewicz.bankapp.shared.exception.BankAppBaseException;
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 
 public class DemoRegistrationException extends BankAppBaseException {
 

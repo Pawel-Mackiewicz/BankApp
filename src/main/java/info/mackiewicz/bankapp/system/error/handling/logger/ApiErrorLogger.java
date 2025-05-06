@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.error.handling.logger;
 
 import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

@@ -3,7 +3,7 @@ package info.mackiewicz.bankapp.system.error.handling.mapping;
 import org.springframework.stereotype.Component;
 
 import info.mackiewicz.bankapp.shared.exception.BankAppBaseException;
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 
 /**
  * Implements exception to error code mapping strategy for API exceptions.
