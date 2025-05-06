@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.error.handling.core.error;
 
 import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
-import info.mackiewicz.bankapp.system.error.handling.core.BankAppBaseException;
+import info.mackiewicz.bankapp.shared.exception.BankAppBaseException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

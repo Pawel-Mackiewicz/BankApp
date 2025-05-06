@@ -27,7 +27,6 @@ BankApp/
 │   │   │       └── mackiewicz/
 │   │   │           └── bankapp/                  # Main application package
 │   │   │               ├── account/              # Account management module
-│   │   │               │   ├── controller/       # REST controllers for accounts
 │   │   │               │   ├── exception/        # Account-related exceptions
 │   │   │               │   ├── model/            # Account data models
 │   │   │               │   ├── repository/       # Account repositories 

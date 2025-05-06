@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.recovery.password.exception;
 
-import info.mackiewicz.bankapp.system.error.handling.core.BankAppBaseException;
+import info.mackiewicz.bankapp.shared.exception.BankAppBaseException;
 import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 
 public abstract class PasswordResetBaseException extends BankAppBaseException {

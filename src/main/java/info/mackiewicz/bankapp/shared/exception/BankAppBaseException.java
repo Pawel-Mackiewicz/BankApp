@@ -1,5 +1,6 @@
-package info.mackiewicz.bankapp.system.error.handling.core;
+package info.mackiewicz.bankapp.shared.exception;
 
+import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
 import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 
 /**

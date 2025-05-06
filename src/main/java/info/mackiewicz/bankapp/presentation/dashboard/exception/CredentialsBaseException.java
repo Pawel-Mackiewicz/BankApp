@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.dashboard.exception;
 
-import info.mackiewicz.bankapp.system.error.handling.core.BankAppBaseException;
+import info.mackiewicz.bankapp.shared.exception.BankAppBaseException;
 import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 
 public abstract class CredentialsBaseException extends BankAppBaseException {
