@@ -1,6 +1,5 @@
-package info.mackiewicz.bankapp.core.user.validation;
+package info.mackiewicz.bankapp.shared.annotations;
 
-import info.mackiewicz.bankapp.shared.annotations.AgeRangeValidatior;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
