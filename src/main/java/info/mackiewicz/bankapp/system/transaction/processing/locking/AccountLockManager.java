@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.locking;
+package info.mackiewicz.bankapp.system.transaction.processing.locking;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import lombok.RequiredArgsConstructor;
