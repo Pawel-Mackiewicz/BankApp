@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.integration.registration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
-import info.mackiewicz.bankapp.system.registration.dto.DemoRegistrationRequest;
+import info.mackiewicz.bankapp.system.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import info.mackiewicz.bankapp.system.registration.service.BonusGrantingService;

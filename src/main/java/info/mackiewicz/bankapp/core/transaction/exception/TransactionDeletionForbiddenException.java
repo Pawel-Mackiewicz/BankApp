@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.core.transaction.exception;
 
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 
 /**
  * Exception thrown when an attempt is made to delete a transaction that is not allowed to be deleted.

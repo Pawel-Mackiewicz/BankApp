@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import info.mackiewicz.bankapp.core.user.model.vo.EmailAddress;
 import info.mackiewicz.bankapp.core.user.model.vo.Pesel;
 import info.mackiewicz.bankapp.core.user.model.vo.PhoneNumber;
-import info.mackiewicz.bankapp.core.user.validation.AgeRange;
+import info.mackiewicz.bankapp.shared.annotations.AgeRange;
 import info.mackiewicz.bankapp.shared.annotations.Password;
 import info.mackiewicz.bankapp.shared.annotations.PasswordConfirmation;
 import info.mackiewicz.bankapp.shared.annotations.PasswordMatches;

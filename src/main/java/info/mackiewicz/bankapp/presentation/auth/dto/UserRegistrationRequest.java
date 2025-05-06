@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.presentation.auth.dto;
 
-import info.mackiewicz.bankapp.core.user.validation.AgeRange;
+import info.mackiewicz.bankapp.shared.annotations.AgeRange;
 import info.mackiewicz.bankapp.shared.annotations.Password;
 import info.mackiewicz.bankapp.shared.annotations.PasswordConfirmation;
 import info.mackiewicz.bankapp.shared.annotations.PasswordMatches;

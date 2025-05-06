@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.system.error.handling.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import info.mackiewicz.bankapp.system.error.handling.core.ApiExceptionHandler;
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 import info.mackiewicz.bankapp.system.error.handling.dto.interfaces.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

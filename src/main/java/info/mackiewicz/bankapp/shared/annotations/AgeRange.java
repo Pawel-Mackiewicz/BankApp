@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.core.user.validation;
+package info.mackiewicz.bankapp.shared.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 /**
  * Validates that a user's age is at least 18 years old.
  * This annotation can be applied to date fields representing birth dates.
- * The validation is performed by {@link AgeRangeValidatior}.
+ * The validation is performed by {@link AgeRangeValidator}.
  *
  * <p>Example usage:
  * <pre>
@@ -21,9 +21,9 @@ import java.lang.annotation.Target;
  * }
  * </pre>
  *
- * @see AgeRangeValidatior
+ * @see AgeRangeValidator
  */
-@Constraint(validatedBy = AgeRangeValidatior.class)
+@Constraint(validatedBy = AgeRangeValidator.class)
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AgeRange {
