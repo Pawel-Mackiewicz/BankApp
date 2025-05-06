@@ -1,33 +1,41 @@
 # BankApp
 
 ## About
-Hi everyone!
 
-I'm working on BankApp – a Java-based banking application for portfolio. The project started with few multitasking experiments and practices, but has grown significantly and evolved into a modular, layered project.
-Backend side is mostly complete, now i need to secure endpoints and implement caching, but there is a lot to do on frontend side!
-So, if you are interested in joining or contributing, I'd love to collaborate!
+**BankApp** is a modern, modular, multi-layered banking application built with Java and inspired by Domain-Driven Design principles. Initially started as a multitasking and learning experiment, the project has evolved into a comprehensive showcase of best practices in back-end architecture and clean code.
 
-## About the Project
+**Current State:**
+- The back-end is largely complete (outstanding tasks: securing endpoints, implementing caching).
+- The front-end is functional but slated for a major upgrade (moving from Thymeleaf to a modern JavaScript framework).
+- Collaboration and contributions are highly welcome!
 
-- **Name**: BankApp
-- **Purpose**: A portfolio-ready, modular banking application
-- **Tech Stack**:
-  - **Backend**: Java, Spring, Hibernate, MySQL, Maven, JUnit, Redis
-  - **Frontend**: HTML, CSS, JavaScript, Thymeleaf (which I want to replace with a modern frontend)
-  - **Additional Tools**: Git, Docker, AWS EC2, AWS RDS, DockerHub, Linux
-- **Online**: [bankapp.mackiewicz.info](http://bankapp.mackiewicz.info)
-- **Repo**: https://github.com/Pawel-Mackiewicz/BankApp.git
+---
 
-### Project Structure
+## Project Details
 
-The project uses a **modular, layered architecture** inspired by Domain-Driven Design (DDD):
+- **Name:** BankApp
+- **Purpose:** To demonstrate advanced software architecture, modular design, and portfolio-ready coding skills in a real-world banking application context.
+- **Tech Stack:**
+    - **Back-end:** Java, Spring, Hibernate, MySQL, Redis, JUnit, Maven
+    - **Front-end:** HTML, CSS, JavaScript, Thymeleaf (planned: React/Vue/Angular upgrade)
+    - **Dev Tools / Infrastructure:** Git, Docker, AWS EC2/RDS, DockerHub, Linux
+- **Live Demo:** [bankapp.mackiewicz.info](http://bankapp.mackiewicz.info)
+- **Repository:** [github.com/Pawel-Mackiewicz/BankApp](https://github.com/Pawel-Mackiewicz/BankApp.git)
 
-- **core/**: Contains business domain modules (e.g., account, transaction, user), each organized with their own models, services, repositories, exceptions, and validation logic, ensuring clear separation of business logic.
-- **system/**: Aggregates cross-cutting and system-wide functionalities, such as error handling, user registration and password recovery, email notification, transaction processing and token management. These modules support the core business logic and provide shared infrastructure.
-- **presentation/**: Handles the application's UI controllers (Thymeleaf for now).
-- **shared/**: Stores common components, such as annotations, config, utility classes, shared services, and validation mechanisms, used across core and system modules.
+---
 
-This structure improves maintainability, testing, and scalability. It also prepares the codebase for possible future migration to microservices, as many technical and business concerns are already well-separated.
+## Architecture Overview
+
+BankApp is structured using a **modular, layered architecture** inspired by Domain-Driven Design (DDD):
+
+- **core/** — Business domain modules (e.g., accounts, transactions, users), each with dedicated models, services, repositories, exceptions, and validation logic.
+- **system/** — Cross-cutting and system-wide functionalities such as error handling, registration and password recovery, email notification, transaction processing, and token management.
+- **presentation/** — Application UI controllers (currently Thymeleaf-based).
+- **shared/** — Common components, such as annotations, configuration, utilities, shared services, and validation mechanisms, used across core and system modules.
+
+This structure improves maintainability, testability, and scalability. It also prepares the codebase for potential future migration to microservices by ensuring strong separation of concerns.
+
+---
 
 ```bash
 # BankApp Project Structure
@@ -332,9 +340,16 @@ The API documentation is available at the following URLs when the application is
 
 For detailed technical documentation, see the [API Documentation System](../../wiki/API-Documentation-System) page in the wiki.
 
-## What Needs to Be Done?
+## Join the Project & Contribute
 
-### Frontend
+**Got ideas or want to help out? You're more than welcome here!**  
+Whether you code, test, design, or just want to try working on a real project with a team—feel free to join in. Just open an issue, send a pull request, or drop a message!
+
+Not sure where to start or what you could do? **Check below**—there’s a bunch of areas where you can jump in and make a difference!
+
+### What Needs to Be Done?
+
+#### Frontend
 
 - **New UI/UX** – the project needs a fresh look and improved optimization (web + mobile).
 - **Modern frontend tech** – currently it's Thymeleaf, but I'd love to switch to something new (React, Angular, Svelte—whatever you like!).
@@ -343,14 +358,14 @@ For detailed technical documentation, see the [API Documentation System](../../w
 
 The actual scope depends on how many people get involved and how fast we progress. Every helping hand and fresh perspective is more than welcome!
 
-### Backend
+#### Backend
 
 - **Optimizations** – the backend works, but there’s always room for improvements (performance, code cleanliness, tests).
 - **Caching & rate limiting** – I want to implement effective caching and request limiting on the most important endpoints.
 - **New features** – open for discussion, if you have ideas!
 - **Security** – any advice and support in hardening the application are super valuable.
 
-### Beyond coding
+#### Beyond coding
 
 - **Testing, pentesting** – if you love to hunt bugs or want to practice securing applications, there’s plenty to do.
 - **Marketing/promotion** – want to practice promoting an IT project in your portfolio? Jump in!
@@ -358,7 +373,7 @@ The actual scope depends on how many people get involved and how fast we progres
 
 ---
 
-## Who am I looking for?
+### Who am I looking for?
 
 - **UI/UX Designers** – if you enjoy crafting modern, user-friendly interfaces, I’m looking for you!
 - **Frontend Developers** – if you’re comfortable with React, Angular, Svelte, or any modern framework, and you’re up to working with APIs, hop on board!
@@ -370,15 +385,14 @@ The actual scope depends on how many people get involved and how fast we progres
 
 ---
 
-## Who is already on board?
+### Who is already on board?
 
 - **Project Manager** – keeps our work organized, helps divide tasks, and makes sure everything is running smoothly.
 - **Me (Pawel)** – junior Java developer, backend enthusiast, project initiator, always full of ideas and motivation.
-- **A few people for frontend and testing** – already supporting, contributing, and asking questions.
-
+- **A few people for frontend and testing** – already involved and getting ready to kick off the project with us!
 ---
 
-## What do I offer?
+### What do I offer?
 
 - 100% remote work—when and as much as you want.
 - Experience working on a real app (not just tutorials).
@@ -387,7 +401,7 @@ The actual scope depends on how many people get involved and how fast we progres
 
 ---
 
-## Want to join?
+### Want to join?
 
 Just drop me a message:  
 - **On GitHub**  
