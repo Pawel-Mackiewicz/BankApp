@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.core.user.validation;
+package info.mackiewicz.bankapp.shared.annotations;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,11 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AgeRangeValidatorTest {
 
-    private AgeRangeValidatior validator;
+    private AgeRangeValidator validator;
 
     @BeforeEach
     void setUp() {
-        validator = new AgeRangeValidatior();
+        validator = new AgeRangeValidator();
         validator.initialize(null); // No configuration needed
     }
 

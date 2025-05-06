@@ -11,7 +11,7 @@ import info.mackiewicz.bankapp.core.user.service.UserService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestAccountService;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestConfig;
 import info.mackiewicz.bankapp.integration.utils.IntegrationTestUserService;
-import info.mackiewicz.bankapp.system.notification.email.locking.LockingConfig;
+import info.mackiewicz.bankapp.system.transaction.processing.locking.LockingConfig;
 import info.mackiewicz.bankapp.system.transaction.processing.TransactionProcessingService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;

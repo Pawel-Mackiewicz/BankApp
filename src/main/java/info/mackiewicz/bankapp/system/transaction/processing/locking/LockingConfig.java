@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.notification.email.locking;
+package info.mackiewicz.bankapp.system.transaction.processing.locking;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

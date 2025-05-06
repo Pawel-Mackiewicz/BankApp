@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.error.handling.mapping;
 
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 
 /**
  * Defines a contract for mapping exceptions to specific error codes in the application.

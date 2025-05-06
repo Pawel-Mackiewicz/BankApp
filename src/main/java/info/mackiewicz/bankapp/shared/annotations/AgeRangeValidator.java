@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.core.user.validation;
+package info.mackiewicz.bankapp.shared.annotations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -11,7 +11,7 @@ import java.time.Period;
  * Verifies that a person's age is at least 18 years based on their date of birth.
  * This validator is thread-safe as it maintains no state between validations.
  */
-public class AgeRangeValidatior implements ConstraintValidator<AgeRange, LocalDate> {
+public class AgeRangeValidator implements ConstraintValidator<AgeRange, LocalDate> {
 
     /**
      * Initializes the validator.
@@ -28,7 +28,8 @@ public class AgeRangeValidatior implements ConstraintValidator<AgeRange, LocalDa
      * Calculates the period between the birth date and current date to determine age.
      *
      * @param dateOfBirth the date of birth to validate, may be null
-     * @param context constraint validation context
+     * @param context     constraint validation context
+     *
      * @return true if the person is 18 or older, false if underage or date is null
      * @see Period#between(LocalDate, LocalDate)
      */
@@ -37,7 +38,7 @@ public class AgeRangeValidatior implements ConstraintValidator<AgeRange, LocalDa
         if (dateOfBirth == null) {
             return false;
         }
-        return Period.between(dateOfBirth, LocalDate.now()).getYears() >= 18 &&
-               Period.between(dateOfBirth, LocalDate.now()).getYears() <= 120;
+        int age = Period.between(dateOfBirth, LocalDate.now()).getYears();
+        return age >= 18 && age <= 120;
     }
 }

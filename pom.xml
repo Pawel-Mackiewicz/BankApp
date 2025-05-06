@@ -11,7 +11,7 @@
     </parent>
     <groupId>info.mackiewicz</groupId>
     <artifactId>BankApp</artifactId>
-    <version>0.4.8</version>
+    <version>0.4.9-SNAPSHOT</version>
     <name>bankapp</name>
     <description>BankApp</description>
     <url />
@@ -19,13 +19,21 @@
         <license />
     </licenses>
     <developers>
-        <developer />
+                <developer>
+                    <id>Pawel-Mackiewicz</id>
+                    <name>Pawel Mackiewicz</name>
+                    <email>pawel@mackiewicz.info</email>
+                    <roles>
+                        <role>Project Owner</role>
+                        <role>Backend Dev</role>
+                    </roles>
+                </developer>
     </developers>
     <scm>
         <connection>scm:git:https://github.com/Pawel-Mackiewicz/BankApp.git</connection>
         <developerConnection>scm:git:git@github.com:Pawel-Mackiewicz/BankApp.git</developerConnection>
         <url>https://github.com/Pawel-Mackiewicz/BankApp</url>
-        <tag>BankApp-0.4.8</tag>
+        <tag>BankApp-0.4.9-SNAPSHOT</tag>
     </scm>
     <properties>
         <mysql.connector.version>8.4.0</mysql.connector.version>

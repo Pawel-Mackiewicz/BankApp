@@ -8,10 +8,10 @@ import java.lang.annotation.*;
 /**
  * Annotation used to validate that a field represents a valid IBAN (International Bank Account Number).
  * This annotation can be applied to fields or methods to enforce IBAN format validation.
- * The validation itself is performed by the {@link IbanValidator} class.
+ * The validation itself is performed by the {@link ValidIbanValidator} class.
  */
 @Documented
-@Constraint(validatedBy = IbanValidator.class)
+@Constraint(validatedBy = ValidIbanValidator.class)
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidIban {

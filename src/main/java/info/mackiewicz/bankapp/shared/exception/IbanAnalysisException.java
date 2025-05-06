@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.shared.exception;
 
-import info.mackiewicz.bankapp.system.error.handling.core.BankAppBaseException;
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 
 public class IbanAnalysisException extends BankAppBaseException {
 

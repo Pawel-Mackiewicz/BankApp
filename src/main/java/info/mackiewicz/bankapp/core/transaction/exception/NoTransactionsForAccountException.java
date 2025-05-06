@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.core.transaction.exception;
 
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 
 /**
  * Exception thrown when no transactions are found for a given account.

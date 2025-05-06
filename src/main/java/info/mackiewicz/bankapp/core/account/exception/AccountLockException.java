@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.core.account.exception;
 
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
+import info.mackiewicz.bankapp.system.error.handling.core.ErrorCode;
 
 public class AccountLockException extends AccountBaseException {
     private final Integer accountId;

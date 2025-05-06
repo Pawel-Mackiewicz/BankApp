@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.system.error.handling.core;
 
 import info.mackiewicz.bankapp.core.user.exception.UserNotFoundException;
-import info.mackiewicz.bankapp.system.error.handling.core.error.ErrorCode;
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import info.mackiewicz.bankapp.system.error.handling.dto.ValidationApiError;
 import info.mackiewicz.bankapp.system.error.handling.dto.ValidationError;
