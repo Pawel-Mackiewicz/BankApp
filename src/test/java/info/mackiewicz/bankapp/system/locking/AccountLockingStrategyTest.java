@@ -1,9 +1,6 @@
 package info.mackiewicz.bankapp.system.locking;
 
 import info.mackiewicz.bankapp.core.account.exception.AccountLockException;
-import info.mackiewicz.bankapp.system.notification.email.locking.AccountLockingStrategy;
-import info.mackiewicz.bankapp.system.notification.email.locking.LockingConfig;
-import info.mackiewicz.bankapp.system.notification.email.locking.LockingUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

@@ -11,7 +11,7 @@ import info.mackiewicz.bankapp.core.transaction.exception.TransactionValidationE
 import info.mackiewicz.bankapp.core.transaction.model.Transaction;
 import info.mackiewicz.bankapp.core.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.shared.util.LoggingService;
-import info.mackiewicz.bankapp.system.notification.email.locking.AccountLockManager;
+import info.mackiewicz.bankapp.system.locking.AccountLockManager;
 import info.mackiewicz.bankapp.system.transaction.processing.core.execution.TransactionExecutor;
 import info.mackiewicz.bankapp.system.transaction.processing.core.execution.TransactionExecutorRegistry;
 import info.mackiewicz.bankapp.system.transaction.processing.error.TransactionErrorHandler;
