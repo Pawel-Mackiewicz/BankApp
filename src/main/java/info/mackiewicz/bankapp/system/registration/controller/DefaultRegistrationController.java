@@ -1,6 +1,6 @@
 package info.mackiewicz.bankapp.system.registration.controller;
 
-import info.mackiewicz.bankapp.system.registration.dto.DemoRegistrationRequest;
+import info.mackiewicz.bankapp.system.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import info.mackiewicz.bankapp.system.registration.service.DemoRegistrationService;

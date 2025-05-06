@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.system.registration.service;
 
 import info.mackiewicz.bankapp.core.user.exception.DuplicatedEmailException;
-import info.mackiewicz.bankapp.system.registration.dto.DemoRegistrationRequest;
+import info.mackiewicz.bankapp.system.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import info.mackiewicz.bankapp.system.registration.dto.demo.RegistrationRequestFactory;

@@ -1,4 +1,4 @@
-package info.mackiewicz.bankapp.system.registration.dto;
+package info.mackiewicz.bankapp.system.registration.dto.demo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

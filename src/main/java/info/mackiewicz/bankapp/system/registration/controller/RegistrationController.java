@@ -2,7 +2,7 @@ package info.mackiewicz.bankapp.system.registration.controller;
 
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import info.mackiewicz.bankapp.system.error.handling.dto.ValidationApiError;
-import info.mackiewicz.bankapp.system.registration.dto.DemoRegistrationRequest;
+import info.mackiewicz.bankapp.system.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
 import io.swagger.v3.oas.annotations.Operation;
