@@ -16,7 +16,7 @@ import org.iban4j.IbanUtil;
  * @see ConstraintValidator
  * @see IbanUtil
  */
-public class IbanValidator implements ConstraintValidator<ValidIban, String> {
+public class ValidIbanValidator implements ConstraintValidator<ValidIban, String> {
 
     @Override
     public void initialize(ValidIban constraintAnnotation) {
