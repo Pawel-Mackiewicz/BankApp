@@ -3,116 +3,165 @@
 ## About
 Hi everyone!
 
-I'm working on BankApp – a Java-based banking application for my portfolio. The project has grown significantly, so I'm looking for people who would like to join and help me complete it.
+I'm working on BankApp – a Java-based banking application for portfolio. The project started with few multitasking experiments and practices, but has grown significantly and evolved into a modular, layered project.
+Backend side is mostly complete, now i need to secure endpoints and implement caching, but there is a lot to do on frontend side!
+So, if you are interested in joining or contributing, I'd love to collaborate!
 
 ## About the Project
 
 - **Name**: BankApp
-- **Purpose**: A banking application for my portfolio
+- **Purpose**: A portfolio-ready, modular banking application
 - **Tech Stack**:
-  - **Backend**: Java, Spring, Hibernate, MySQL, Maven, JUnit, Mockito
+  - **Backend**: Java, Spring, Hibernate, MySQL, Maven, JUnit, Redis
   - **Frontend**: HTML, CSS, JavaScript, Thymeleaf (which I want to replace with a modern frontend)
-  - **Additional Tools**: Git, Docker, AWS
+  - **Additional Tools**: Git, Docker, AWS EC2, AWS RDS, DockerHub, Linux
 - **Online**: [bankapp.mackiewicz.info](http://bankapp.mackiewicz.info)
 - **Repo**: https://github.com/Pawel-Mackiewicz/BankApp.git
 
 ### Project Structure
 
+The project uses a **modular, layered architecture** inspired by Domain-Driven Design (DDD):
+
+- **core/**: Contains business domain modules (e.g., account, transaction, user), each organized with their own models, services, repositories, exceptions, and validation logic, ensuring clear separation of business logic.
+- **system/**: Aggregates cross-cutting and system-wide functionalities, such as error handling, user registration and password recovery, email notification, transaction processing and token management. These modules support the core business logic and provide shared infrastructure.
+- **presentation/**: Handles the application's UI controllers (Thymeleaf for now).
+- **shared/**: Stores common components, such as annotations, config, utility classes, shared services, and validation mechanisms, used across core and system modules.
+
+This structure improves maintainability, testing, and scalability. It also prepares the codebase for possible future migration to microservices, as many technical and business concerns are already well-separated.
+
 ```bash
+# BankApp Project Structure
+
 BankApp/
-├── src/
-│   ├── main/
-│   │   ├── java/
+├── src/                                          # Source code directory
+│   ├── main/                                     # Main application code
+│   │   ├── java/                                 # Java source files
 │   │   │   └── info/
 │   │   │       └── mackiewicz/
-│   │   │           └── bankapp/                  # Main application package
-│   │   │               ├── account/              # Account management module
-│   │   │               │   ├── exception/        # Account-related exceptions
-│   │   │               │   ├── model/            # Account data models
-│   │   │               │   ├── repository/       # Account repositories 
-│   │   │               │   ├── service/          # Account business services
-│   │   │               │   ├── util/             # Helper utilities
-│   │   │               │   └── validation/       # Account data validation
-│   │   │               │
-│   │   │               ├── notification/         # Notification module
-│   │   │               │   └── email/            # Email message handling
-│   │   │               │
-│   │   │               ├── presentation/         # Presentation layer
-│   │   │               │   ├── auth/             # Authentication
-│   │   │               │   │   ├── controller/   # Auth controllers
-│   │   │               │   │   ├── dto/          # Data transfer objects
-│   │   │               │   │   ├── service/      # Auth services
-│   │   │               │   │   └── validation/   # Auth data validation
+│   │   │           └── bankapp/                  
+│   │   │               ├── core/                 # Core business domain modules
+│   │   │               │   ├── account/          # Account domain module
+│   │   │               │   │   ├── exception/    # Account-specific exceptions
+│   │   │               │   │   ├── model/        # Account entity models and DTOs
+│   │   │               │   │   ├── repository/   # JPA repositories for accounts
+│   │   │               │   │   ├── service/      # Account business services
+│   │   │               │   │   ├── util/         # Account utility classes
+│   │   │               │   │   └── validation/   # Account validation logic
+│   │   │               │   │ 
+│   │   │               │   ├── transaction/      # Transaction domain module
+│   │   │               │   │   ├── exception/    # Transaction-specific exceptions
+│   │   │               │   │   ├── model/        # Transaction entity models
+│   │   │               │   │   ├── repository/   # JPA repositories for transactions
+│   │   │               │   │   ├── service/      # Transaction business services
+│   │   │               │   │   └── validation/   # Transaction validation logic
+│   │   │               │   │ 
+│   │   │               │   └── user/             # User domain module
+│   │   │               │       ├── exception/    # User-specific exceptions
+│   │   │               │       ├── model/        # User entity models and DTOs
+│   │   │               │       ├── repository/   # JPA repositories for users
+│   │   │               │       └── service/      # User business services
+│   │   │               │   
+│   │   │               ├── presentation/         # Presentation layer (UI controllers for Thymleaf engine)
+│   │   │               │   
+│   │   │               ├── shared/               # Shared components used across modules
+│   │   │               │   ├── annotations/      # Custom annotations
+│   │   │               │   ├── config/           # Common configuration classes
+│   │   │               │   ├── exception/        # Common exception types
+│   │   │               │   ├── service/          # Shared services
+│   │   │               │   ├── util/             # Utility classes
+│   │   │               │   └── validation/       # Common validation mechanisms
+│   │   │               │   
+│   │   │               ├── system/               # System-wide functionalities
+│   │   │               │   ├── banking/          # Banking system operations
+│   │   │               │   │   ├── history/      # Transaction history functionality
+│   │   │               │   │   │   ├── controller/   # History REST controllers
+│   │   │               │   │   │   ├── exception/    # History-specific exceptions
+│   │   │               │   │   │   └── service/      # History services
+│   │   │               │   │   │ 
+│   │   │               │   │   ├── operations/   # Banking operations (transfers, etc.)
+│   │   │               │   │   │   ├── controller/   # Operations REST controllers
+│   │   │               │   │   │   └── service/      # Operations services
+│   │   │               │   │   │ 
+│   │   │               │   │   └── shared/       # Shared code for banking subsystems
 │   │   │               │   │
-│   │   │               │   ├── dashboard/        # Dashboard interface
-│   │   │               │   │   ├── controller/   # Dashboard controllers
-│   │   │               │   │   ├── dto/          # Data transfer objects
-│   │   │               │   │   └── service/      # Dashboard services
+│   │   │               │   ├── error/            # Application error handling
+│   │   │               │   │   └── handling/     # Global error handling functionality
+│   │   │               │   │       ├── core/     # Core error handling mechanisms
+│   │   │               │   │       ├── dto/      # Error response DTOs
+│   │   │               │   │       ├── logger/   # Error logging components
+│   │   │               │   │       ├── mapping/  # Exception to response mapping
+│   │   │               │   │       ├── service/  # Error handling services
+│   │   │               │   │       └── util/     # Error handling utilities
 │   │   │               │   │
-│   │   │               │   └── exception/        # Presentation exception handling
+│   │   │               │   ├── locking/          # Concurrency control mechanisms
+│   │   │               │   │
+│   │   │               │   ├── notification/     # Notification subsystem
+│   │   │               │   │   └── email/        # Email notification service
+│   │   │               │   │       ├── exception/    # Email-specific exceptions
+│   │   │               │   │       └── template/     # Email templates
+│   │   │               │   │
+│   │   │               │   ├── recovery/         # Account recovery features
+│   │   │               │   │   └── password/     # Password recovery functionality
+│   │   │               │   │       ├── controller/   # Password reset controllers
+│   │   │               │   │       │   ├── dto/      # Password reset DTOs
+│   │   │               │   │       ├── exception/    # Password recovery exceptions
+│   │   │               │   │       └── service/      # Password recovery services
+│   │   │               │   │
+│   │   │               │   ├── registration/     # User registration system
+│   │   │               │   │   ├── controller/   # Registration controllers
+│   │   │               │   │   ├── dto/          # Registration data transfer objects
+│   │   │               │   │   ├── exception/    # Registration exceptions
+│   │   │               │   │   └── service/      # Registration services
+│   │   │               │   │
+│   │   │               │   ├── shared/           # Shared code for system modules
+│   │   │               │   │
+│   │   │               │   ├── token/            # Token management system
+│   │   │               │   │   ├── model/        # Token entity models
+│   │   │               │   │   ├── repository/   # Token repositories
+│   │   │               │   │   └── service/      # Token management services
+│   │   │               │   │
+│   │   │               │   └── transaction/      # Transaction processing system
+│   │   │               │       └── processing/   # Transaction execution engine
+│   │   │               │           ├── core/     # Core processing components
+│   │   │               │           ├── error/    # Error handling for transactions
+│   │   │               │           └── helpers/  # Helper classes for processing
 │   │   │               │
-│   │   │               ├── security/             # Security module
-│   │   │               │   ├── controller/       # Security controllers
-│   │   │               │   ├── exception/        # Security exceptions
-│   │   │               │   ├── model/            # Security models
-│   │   │               │   ├── repository/       # Security repositories
-│   │   │               │   └── service/          # Security services
-│   │   │               │
-│   │   │               ├── shared/               # Shared components
-│   │   │               │   ├── config/           # Application configuration
-│   │   │               │   ├── core/             # Core functionalities
-│   │   │               │   ├── dto/              # Common DTOs
-│   │   │               │   ├── infrastructure/   # Infrastructure components
-│   │   │               │   ├── util/             # Helper utilities
-│   │   │               │   ├── validation/       # General validation mechanisms
-│   │   │               │   └── web/              # Web components
-│   │   │               │
-│   │   │               ├── transaction/          # Transaction module
-│   │   │               │   ├── config/           # Transaction configuration
-│   │   │               │   ├── controller/       # Transaction controllers
-│   │   │               │   ├── exception/        # Transaction exceptions
-│   │   │               │   ├── model/            # Transaction models
-│   │   │               │   ├── repository/       # Transaction repositories
-│   │   │               │   ├── service/          # Transaction services
-│   │   │               │   └── validation/       # Transaction validation
-│   │   │               │
-│   │   │               └── user/                 # User module
-│   │   │                   ├── controller/       # User controllers
-│   │   │                   ├── exception/        # User exceptions
-│   │   │                   ├── model/            # User models
-│   │   │                   │   └── vo/           # Value Objects
-│   │   │                   ├── repository/       # User repositories
-│   │   │                   ├── service/          # User services
-│   │   │                   └── validation/       # User validation
+│   │   │               └── BankAppApplication.java  # Main Spring Boot application class
 │   │   │
 │   │   └── resources/                            # Application resources
-│   │       ├── static/                           # Static resources (CSS, JS, images)
-│   │       │   ├── css/                          # CSS styles
-│   │       │   ├── js/                           # JavaScript scripts
-│   │       │   └── favicon.ico                   # Page icon
-│   │       │
-│   │       ├── templates/                        # Thymeleaf templates
-│   │       ├── application.properties            # Main application configuration
-│   │       └── logback.xml                       # Logging configuration
-│   │
-│   └── test/
-│       ├── java/
+│   │       ├── db/                               # Database related resources
+│   │       │   └── migration/                    # Flyway database migrations
+│   │       ├── static/                           # Static web resources
+│   │       │   ├── css/                          # CSS stylesheets
+│   │       │   └── js/                           # JavaScript files
+│   │       ├── templates/                        # Thymeleaf HTML templates
+│   │       ├── application.yaml                  # Main application configuration
+│   │       └── logback-spring.xml                # Logging configuration
+│   │   
+│   └── test/                                     # Test code
+│       ├── java/                                
 │       │   └── info/
 │       │       └── mackiewicz/
-│       │           └── bankapp/                  # Unit tests
-│       │               ├── integration/          # Integration tests
-│       │               └── testutils/            # Test utils 
-│       │
+│       │           └── bankapp/                  # Test packages mirror main structure
+│       │               ├── core/                 # Tests for core domain objects
+│       │               ├── integration/          # Integration tests between components
+│       │               ├── system/               # Tests for system functionalities
+│       │               └── testutils/            # Testing utilities and helpers
+│       │     
 │       └── resources/                            # Test resources
-│           └── application-test.properties       # Test configuration
-│
-├── logs/                                         # Application logs directory
-│
-├── .env                                          # Environment variables
-├── Dockerfile                                    # Docker configuration
-├── fly.toml                                      # Fly.io deployment configuration
-├── pom.xml                                       # Maven configuration
-└── README.md                                     # Project documentation
+│           └── application-test.yaml             # Test-specific configuration
+│  
+├── .github/                                      # GitHub configuration
+│   └── workflows/                                # GitHub Actions CI/CD workflows
+│       ├── ci.yml                                # Continuous Integration workflow
+│       └── ec2-deploy.yml                        # AWS EC2 deployment workflow
+│   
+├── wiki/                                         # Project documentation
+├── Dockerfile                                    # Docker configuration for containerization
+├── .env.example                                  # Example environment variables template
+├── pom.xml                                       # Maven project configuration
+├── README.md                                     # Project overview documentation
+└── directory-tree.md                             # Project structure documentation (this)
 ```
 
 ### How to run locally
@@ -136,7 +185,7 @@ BankApp/
    - Create a copy of the `.env.example` file and name it `.env`
 
    - Fill in the `.env` file with your credentials, use `.env.example`:
-   ```bash
+   ```dotenv
    # Application configuration
    PORT=8080   # port at which the application will run (default is 8080)
    SPRING_PROFILES_ACTIVE=dev  # active profile for the application (dev/prod)
@@ -284,38 +333,69 @@ The API documentation is available at the following URLs when the application is
 
 For detailed technical documentation, see the [API Documentation System](../../wiki/API-Documentation-System) page in the wiki.
 
-## What Needs to Be Done on the Frontend?
+## What Needs to Be Done?
 
-- **Web App for Managing Bank Accounts**: The current version needs UI/UX improvements and optimization.
-- **Mobile App for Managing Bank Accounts**: The same as the web app but optimized for mobile devices.
-- **Web/Mobile (Android/iOS) App Simulating an ATM/Cash Deposit Machine**: Enabling deposits and withdrawals in a simulated environment.
-- **???**: If you have a great idea, I’d love to hear it!
+### Frontend
 
-The scope of work depends on how many people get involved and how fast we progress.
+- **New UI/UX** – the project needs a fresh look and improved optimization (web + mobile).
+- **Modern frontend tech** – currently it's Thymeleaf, but I'd love to switch to something new (React, Angular, Svelte—whatever you like!).
+- **Mobile-first version** – fully responsive, working great on phones.
+- **Your ideas** – if you have a cool idea for a new feature, let’s discuss and give it a try!
 
-## What Needs to Be Done on the Backend?
+The actual scope depends on how many people get involved and how fast we progress. Every helping hand and fresh perspective is more than welcome!
 
-The backend is mostly complete but still requires improvements, refactoring of few modules and optimizations. I also have a few ideas for additional features, so if you have solid backend skills, there’s definitely work to be done!
+### Backend
 
-## Who Am I Looking For?
+- **Optimizations** – the backend works, but there’s always room for improvements (performance, code cleanliness, tests).
+- **Caching & rate limiting** – I want to implement effective caching and request limiting on the most important endpoints.
+- **New features** – open for discussion, if you have ideas!
+- **Security** – any advice and support in hardening the application are super valuable.
 
-- **Frontend Developers**: I need someone who is already comfortable with frontend development or really wants to master it! Basic HTML, CSS, and JS knowledge won’t be enough – experience with frameworks (React, Angular, or others) would be very useful. Also, the frontend will communicate with the backend via API, so if you’ve worked with APIs before or want to learn, this is a great opportunity!
-- **Backend Developers**: Strong Java skills are required. Spring is a plus, but not necessary. If you have experience with Hibernate and MySQL, that’s even better!
+### Beyond coding
 
-- People who can help wrap up the project within 1-2 weeks (or longer if the project expands).
+- **Testing, pentesting** – if you love to hunt bugs or want to practice securing applications, there’s plenty to do.
+- **Marketing/promotion** – want to practice promoting an IT project in your portfolio? Jump in!
+- **Anyone who wants to learn or check out teamwork in practice** – you are welcome!
 
-## What Do I Offer?
+---
 
-- Hands-on experience in a real project.
-- Collaboration in a friendly and supportive environment.
-- A great project you can add to your portfolio.
+## Who am I looking for?
 
-## Additional Information
+- **UI/UX Designers** – if you enjoy crafting modern, user-friendly interfaces, I’m looking for you!
+- **Frontend Developers** – if you’re comfortable with React, Angular, Svelte, or any modern framework, and you’re up to working with APIs, hop on board!
+- **Backend Developers (Java)** – our backend is Java-based, but any help with optimization or adding features is appreciated.
+- **Testers & Pentesters** – another pair of eyes to catch bugs is always valued.
+- **Marketing & Promotion** – if you want to try IT project promotion, help us get it out to the world!
+- **Senior/Experienced Java developers** – if you like architecture, patterns, mentoring, or security, your advice would be great.
+- **All positive enthusiasts** – if you simply want to try something new and build a real project in a friendly team, this is the place!
 
-The frontend and backend will communicate via API, so the frontend will be in a separate repository.
+---
 
-If you're interested, reach out to me on GitHub or email me at pawel@mackiewicz.info
+## Who is already on board?
 
-Looking forward to working with you!
+- **Project Manager** – keeps our work organized, helps divide tasks, and makes sure everything is running smoothly.
+- **Me (Pawel)** – junior Java developer, backend enthusiast, project initiator, always full of ideas and motivation.
+- **A few people for frontend and testing** – already supporting, contributing, and asking questions.
+
+---
+
+## What do I offer?
+
+- 100% remote work—when and as much as you want.
+- Experience working on a real app (not just tutorials).
+- A friendly, stress-free atmosphere—we learn and help each other.
+- A project you can confidently add to your portfolio and describe in your CV or LinkedIn.
+
+---
+
+## Want to join?
+
+Just drop me a message:  
+- **On GitHub**  
+- Or email: **bankapp@mackiewicz.info**
+
+Say a few words about yourself, what you do, what you’d like to work on in the project, or what you want to learn. We’ll figure the rest out together!
+
+Thanks for stopping by—see you soon!
 
 Pawel
