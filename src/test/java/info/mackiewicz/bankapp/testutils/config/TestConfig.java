@@ -3,7 +3,6 @@ package info.mackiewicz.bankapp.testutils.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
 import info.mackiewicz.bankapp.shared.util.LoggingInterceptor;
-import info.mackiewicz.bankapp.shared.web.response.RestResponseFactory;
 import info.mackiewicz.bankapp.system.error.handling.logger.ApiErrorLogger;
 import info.mackiewicz.bankapp.system.error.handling.mapping.ApiExceptionToErrorMapper;
 import info.mackiewicz.bankapp.system.error.handling.service.ValidationErrorProcessor;
@@ -31,12 +30,6 @@ public class TestConfig {
     @Bean
     public WebMvcConfig webMvcConfig(LoggingInterceptor loggingInterceptor) {
         return new WebMvcConfig(loggingInterceptor);
-    }
-
-    @Bean
-    @Primary
-    public RestResponseFactory restResponseBuilder() {
-        return new RestResponseFactory();
     }
 
     @Bean
