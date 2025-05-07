@@ -3,6 +3,7 @@ package info.mackiewicz.bankapp.presentation.dashboard.controller;
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.service.AccountService;
 import info.mackiewicz.bankapp.core.transaction.model.Transaction;
+import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.core.transaction.service.TransactionService;
 import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.presentation.dashboard.dto.InternalTransferRequest;
@@ -99,11 +100,17 @@ public class TransferController {
             
             log.debug("Creating transaction in service with amount: {}", request.getAmount());
             transactionService.registerTransaction(transaction);
-            
-            log.info("Successfully created internal transfer transaction with ID: {}", transaction.getId());
-            redirectAttributes.addFlashAttribute("transferSuccessMessage", "Internal bank transfer created successfully");
+
+
+            if (transaction.getType() == TransactionType.TRANSFER_OWN) {
+                transactionProcessingService.processTransactionById(transaction.getId());
+                log.debug("Processing transaction...");
+            }
+            String type = transaction.getType().getDisplayName();
+            log.info("Successfully created {} transaction with ID: {}", type, transaction.getId());
+            redirectAttributes.addFlashAttribute("transferSuccessMessage", String.format("%s created successfully", type));
         } catch (Exception e) {
-            log.error("Failed to process internal transfer: {} - {}", e.getClass().getSimpleName(), e.getMessage());
+            log.error("Failed to process transfer: {} - {}", e.getClass().getSimpleName(), e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/dashboard";
