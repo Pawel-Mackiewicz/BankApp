@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.testutils.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import info.mackiewicz.bankapp.shared.config.WebMvcConfig;
 import info.mackiewicz.bankapp.shared.util.LoggingInterceptor;
 import info.mackiewicz.bankapp.system.error.handling.logger.ApiErrorLogger;
 import info.mackiewicz.bankapp.system.error.handling.mapping.ApiExceptionToErrorMapper;
@@ -25,11 +24,6 @@ public class TestConfig {
     @Bean
     public LoggingInterceptor loggingInterceptor() {
         return new LoggingInterceptor();
-    }
-
-    @Bean
-    public WebMvcConfig webMvcConfig(LoggingInterceptor loggingInterceptor) {
-        return new WebMvcConfig(loggingInterceptor);
     }
 
     @Bean
@@ -73,17 +67,4 @@ public class TestConfig {
     public EmailTemplateProvider emailTemplateProvider() {
         return Mockito.mock(EmailTemplateProvider.class);
     }
-
-    @Bean
-    @Primary
-    public RestTemplateBuilder restTemplateBuilder() {
-        return new RestTemplateBuilder();
-    }
-
-    @Bean
-    @Primary
-    public RestClient.Builder restClientBuilder() {
-        return RestClient.builder();
-    }
-
 }

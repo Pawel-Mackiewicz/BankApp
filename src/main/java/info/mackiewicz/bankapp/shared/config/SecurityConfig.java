@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.shared.config;
 
-import info.mackiewicz.bankapp.core.user.service.AdminUserService;
 import info.mackiewicz.bankapp.shared.service.CustomUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +15,6 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -26,23 +22,15 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
-    private final AdminUserService adminUserService;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService,
-            AdminUserService adminUserService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
-        this.adminUserService = adminUserService;
         log.info("Initializing SecurityConfig...");
     }
 
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
-    }
-
-    @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
     }
 
     // Security chain for settings API endpoints (najwyższy priorytet)
@@ -68,7 +56,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Security chain for admin API endpoints (średni priorytet)
     @Bean
     @Order(2)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -79,8 +66,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/password/**").permitAll()
-                        .requestMatchers("/api/registration/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(basic -> basic
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
@@ -91,47 +77,6 @@ public class SecurityConfig {
                             response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"" +
                                     authException.getMessage() + "\"}");
                         }));
-
-        return http.build();
-    }
-
-    // Security chain for web endpoints (najniższy priorytet)
-    @Bean
-    @Order(3)
-    public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable) // Tymczasowo wyłączone dla debugowania
-                .userDetailsService(userDetailsService)
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/public/**", "/login", "/css/**", "/js/**", "/images/**", "/register",
-                                "/password-reset/**", "/favicon.ico")
-                        .permitAll()
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml")
-                        .permitAll()
-                        .requestMatchers("/dashboard/**").authenticated()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/dashboard", true)
-                        .failureUrl("/login?error")
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .addLogoutHandler(new SecurityContextLogoutHandler())
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID"))
-                .sessionManagement(sessions -> sessions
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true)
-                        .sessionRegistry(sessionRegistry())
-                        .expiredUrl("/login?expired"))
-                .exceptionHandling(e -> e
-                        .authenticationEntryPoint(
-                                (request, response, authException) -> response.sendRedirect("/login")));
 
         return http.build();
     }

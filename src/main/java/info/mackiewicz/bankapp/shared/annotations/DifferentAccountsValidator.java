@@ -1,7 +1,6 @@
 package info.mackiewicz.bankapp.shared.annotations;
 
 import info.mackiewicz.bankapp.core.account.exception.UnsupportedValidationTypeException;
-import info.mackiewicz.bankapp.presentation.dashboard.dto.WebTransferRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
@@ -41,21 +40,22 @@ public class DifferentAccountsValidator implements ConstraintValidator<Different
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         log.debug("Validating account difference for: {}", value);
-        switch (value) {
-            case WebTransferRequest webTransferRequest -> {
-                log.debug("Validating WebTransferRequest: {}", webTransferRequest);
-                return validateTransfer(webTransferRequest.getSourceIban(),
-                webTransferRequest.getRecipientIban());
-            }
-            case null -> {
-                log.debug("Validation skipped - value is null");
-                return true; // Let @NotNull handle null validation
-            }
-            default -> {
-                throw new UnsupportedValidationTypeException(
-                        "Invalid transfer request type: " + value.getClass().getName());
-            }
-        }
+//        switch (value) {
+//            case WebTransferRequest webTransferRequest -> {
+//                log.debug("Validating WebTransferRequest: {}", webTransferRequest);
+//                return validateTransfer(webTransferRequest.getSourceIban(),
+//                webTransferRequest.getRecipientIban());
+//            }
+//            case null -> {
+//                log.debug("Validation skipped - value is null");
+//                return true; // Let @NotNull handle null validation
+//            }
+//            default -> {
+//                throw new UnsupportedValidationTypeException(
+//                        "Invalid transfer request type: " + value.getClass().getName());
+//            }
+//        }
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     private boolean validateTransfer(String sourceIban, String recipientIban) {

@@ -2,10 +2,10 @@ package info.mackiewicz.bankapp.integration.registration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.mackiewicz.bankapp.system.notification.email.EmailService;
-import info.mackiewicz.bankapp.system.registration.dto.demo.DemoRegistrationRequest;
-import info.mackiewicz.bankapp.system.registration.dto.RegistrationRequest;
-import info.mackiewicz.bankapp.system.registration.dto.RegistrationResponse;
-import info.mackiewicz.bankapp.system.registration.service.BonusGrantingService;
+import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.DemoRegistrationRequest;
+import info.mackiewicz.bankapp.presentation.auth.registration.dto.RegistrationRequest;
+import info.mackiewicz.bankapp.presentation.auth.registration.dto.RegistrationResponse;
+import info.mackiewicz.bankapp.presentation.auth.registration.service.BonusGrantingService;
 import info.mackiewicz.bankapp.testutils.TestRequestFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,8 +38,8 @@ class RegistrationControllerIntegrationTest {
     private static final String TEST_EMAIL = "jan.kowalski@example.com";
     private static final String TEST_FIRSTNAME = "Jan";
     private static final String TEST_LASTNAME = "Kowalski";
-    private static final String REGISTRATION_ENDPOINT = "/api/registration/regular";
-    private static final String DEMO_REGISTRATION_ENDPOINT = "/api/registration/demo";
+    private static final String REGISTRATION_ENDPOINT = "/api/public/registration/regular";
+    private static final String DEMO_REGISTRATION_ENDPOINT = "/api/public/registration/demo";
     private static final String DATE_OF_BIRTH_FIELD = "dateOfBirth";
     private static final String FIRSTNAME_FIELD = "firstname";
     private static final String PESEL_FIELD = "pesel";
