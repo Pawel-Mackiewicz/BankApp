@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.system.error.handling.dto.interfaces;
 
-import java.time.LocalDateTime;
-
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import org.springframework.http.HttpStatus;
+
+import java.time.LocalDateTime;
 
 /**
  * Defines the contract for API error responses in the application.

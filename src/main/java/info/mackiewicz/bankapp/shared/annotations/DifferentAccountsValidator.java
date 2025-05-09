@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.shared.annotations;
 
-import info.mackiewicz.bankapp.core.account.exception.UnsupportedValidationTypeException;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;

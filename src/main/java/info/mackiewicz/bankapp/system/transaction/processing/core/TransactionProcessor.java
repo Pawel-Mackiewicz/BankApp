@@ -11,11 +11,11 @@ import info.mackiewicz.bankapp.core.transaction.exception.TransactionValidationE
 import info.mackiewicz.bankapp.core.transaction.model.Transaction;
 import info.mackiewicz.bankapp.core.transaction.model.TransactionStatus;
 import info.mackiewicz.bankapp.shared.util.LoggingService;
-import info.mackiewicz.bankapp.system.transaction.processing.locking.AccountLockManager;
 import info.mackiewicz.bankapp.system.transaction.processing.core.execution.TransactionExecutor;
 import info.mackiewicz.bankapp.system.transaction.processing.core.execution.TransactionExecutorRegistry;
 import info.mackiewicz.bankapp.system.transaction.processing.error.TransactionErrorHandler;
 import info.mackiewicz.bankapp.system.transaction.processing.helpers.TransactionStatusManager;
+import info.mackiewicz.bankapp.system.transaction.processing.locking.AccountLockManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

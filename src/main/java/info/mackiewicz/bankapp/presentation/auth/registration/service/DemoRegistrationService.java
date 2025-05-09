@@ -1,9 +1,9 @@
 package info.mackiewicz.bankapp.presentation.auth.registration.service;
 
 import info.mackiewicz.bankapp.core.user.exception.DuplicatedEmailException;
-import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.dto.RegistrationResponse;
+import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.RegistrationRequestFactory;
 import info.mackiewicz.bankapp.presentation.auth.registration.exception.DemoRegistrationException;
 import lombok.RequiredArgsConstructor;

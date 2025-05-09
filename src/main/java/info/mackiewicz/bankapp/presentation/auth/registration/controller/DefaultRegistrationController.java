@@ -1,8 +1,8 @@
 package info.mackiewicz.bankapp.presentation.auth.registration.controller;
 
-import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.dto.RegistrationResponse;
+import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.service.DemoRegistrationService;
 import info.mackiewicz.bankapp.presentation.auth.registration.service.RegistrationService;
 import jakarta.validation.Valid;

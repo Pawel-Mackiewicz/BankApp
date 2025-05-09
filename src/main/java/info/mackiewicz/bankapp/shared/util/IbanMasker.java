@@ -1,8 +1,7 @@
 package info.mackiewicz.bankapp.shared.util;
 
-import org.iban4j.Iban;
-
 import lombok.experimental.UtilityClass;
+import org.iban4j.Iban;
 
 @UtilityClass
 public class IbanMasker {
