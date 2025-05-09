@@ -1,11 +1,11 @@
 package info.mackiewicz.bankapp.integration.registration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import info.mackiewicz.bankapp.system.notification.email.EmailService;
-import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.dto.RegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.dto.RegistrationResponse;
+import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.service.BonusGrantingService;
+import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.testutils.TestRequestFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,7 +1,7 @@
 package info.mackiewicz.bankapp.testutils;
 
-import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.DemoRegistrationRequest;
 import info.mackiewicz.bankapp.presentation.auth.registration.dto.RegistrationRequest;
+import info.mackiewicz.bankapp.presentation.auth.registration.dto.demo.DemoRegistrationRequest;
 
 import java.time.LocalDate;
 import java.util.Random;

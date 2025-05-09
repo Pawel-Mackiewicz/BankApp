@@ -2,12 +2,12 @@ package info.mackiewicz.bankapp.integration;
 
 import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.core.user.repository.UserRepository;
-import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.presentation.auth.recovery.password.controller.dto.PasswordChangeForm;
 import info.mackiewicz.bankapp.presentation.auth.recovery.password.exception.ExpiredTokenException;
 import info.mackiewicz.bankapp.presentation.auth.recovery.password.exception.UsedTokenException;
 import info.mackiewicz.bankapp.presentation.auth.recovery.password.service.PasswordResetService;
 import info.mackiewicz.bankapp.presentation.auth.recovery.password.service.PasswordResetTokenService;
+import info.mackiewicz.bankapp.system.notification.email.EmailService;
 import info.mackiewicz.bankapp.system.token.model.PasswordResetToken;
 import info.mackiewicz.bankapp.system.token.repository.PasswordResetTokenRepository;
 import info.mackiewicz.bankapp.system.token.service.TokenOperationsService;
