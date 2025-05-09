@@ -36,7 +36,7 @@ public class SettingsService {
      * Updates the user settings for the authenticated user.
      *
      * @param user        The authenticated user
-     * @param settingsDTO The new settings to be applied
+     * @param request The new settings to be applied
      * @throws UserNotFoundException if the user does not exist
      * @throws InvalidPasswordException   if the current password is incorrect
      * @throws PasswordsMismatchException if the new password and confirmation do
