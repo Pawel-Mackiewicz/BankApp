@@ -2,9 +2,11 @@ package info.mackiewicz.bankapp.presentation.dashboard.settings.controller;
 
 import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.core.user.model.interfaces.PersonalInfo;
+import info.mackiewicz.bankapp.presentation.dashboard.main.controller.ApiDashboardControllerInterface;
 import info.mackiewicz.bankapp.presentation.dashboard.settings.dto.ChangePasswordRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.settings.dto.ChangeUsernameRequest;
 import info.mackiewicz.bankapp.presentation.dashboard.settings.dto.UserSettingsDTO;
+import info.mackiewicz.bankapp.shared.config.ApiConstants;
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,7 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * the methods via
  * the @AuthenticationPrincipal annotation in the controller implementation.
  */
-@SecurityRequirement(name = "cookieAuth")
+@SecurityRequirement(name = ApiConstants.BASIC_AUTH_SCHEME_NAME)
 @RequestMapping("/api/settings")
 public interface SettingsRestControllerInterface {
 

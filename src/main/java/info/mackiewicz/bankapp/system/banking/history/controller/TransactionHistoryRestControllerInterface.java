@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.history.controller;
 
 import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.shared.config.ApiConstants;
 import info.mackiewicz.bankapp.system.banking.history.controller.dto.TransactionFilterRequest;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
@@ -32,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Spring Security will automatically provide the authenticated user object to the methods via
  * the @AuthenticationPrincipal annotation in the controller implementation.
  */
-@SecurityRequirement(name = "cookieAuth")
+@SecurityRequirement(name = ApiConstants.BASIC_AUTH_SCHEME_NAME)
 @Tag(name = "Transaction History", description = "Operations for managing and exporting banking transaction history")
 @RequestMapping("/api/banking/history")
 public interface TransactionHistoryRestControllerInterface {

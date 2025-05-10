@@ -21,7 +21,7 @@ public class OpenAPIConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        final String securitySchemeName = "basicAuth";
+        final String securitySchemeName = ApiConstants.BASIC_AUTH_SCHEME_NAME;
 
         return new OpenAPI()
                 .info(new Info()

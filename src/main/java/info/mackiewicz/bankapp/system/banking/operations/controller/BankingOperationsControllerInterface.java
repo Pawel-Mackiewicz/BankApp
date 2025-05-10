@@ -1,6 +1,7 @@
 package info.mackiewicz.bankapp.system.banking.operations.controller;
 
 import info.mackiewicz.bankapp.core.user.model.interfaces.UserDetailsWithId;
+import info.mackiewicz.bankapp.shared.config.ApiConstants;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.EmailTransferRequest;
 import info.mackiewicz.bankapp.system.banking.operations.controller.dto.IbanTransferRequest;
 import info.mackiewicz.bankapp.system.banking.shared.dto.TransactionResponse;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Provides contract for money transfers, withdrawals and deposits.
  */
 @Tag(name = "Banking Operations", description = "API for performing banking operations like transfers, withdrawals and deposits")
-@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = ApiConstants.BASIC_AUTH_SCHEME_NAME)
 @RequestMapping("/api/banking")
 public interface BankingOperationsControllerInterface {
 

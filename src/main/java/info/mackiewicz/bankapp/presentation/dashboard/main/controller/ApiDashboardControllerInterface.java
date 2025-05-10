@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.presentation.dashboard.main.controller;
 
 import info.mackiewicz.bankapp.core.user.model.User;
 import info.mackiewicz.bankapp.presentation.dashboard.main.controller.dto.WorkingBalanceResponse;
+import info.mackiewicz.bankapp.shared.config.ApiConstants;
 import info.mackiewicz.bankapp.system.error.handling.dto.BaseApiError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Provides contract for account information and user dashboard operations.
  */
 @Tag(name = "User Dashboard", description = "API for managing user dashboard information such as balance")
-@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = ApiConstants.BASIC_AUTH_SCHEME_NAME)
 @RequestMapping("/api/dashboard")
 public interface ApiDashboardControllerInterface {
 
