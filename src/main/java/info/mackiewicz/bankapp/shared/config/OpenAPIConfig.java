@@ -26,7 +26,7 @@ public class OpenAPIConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Bank App API Documentation")
-                        .version("0.4.5")
+                        .version("0.4.9")
                         .description("API documentation for the Bank App project.")
                         .contact(new Contact()
                                 .name("Pawel Mackiewicz")
