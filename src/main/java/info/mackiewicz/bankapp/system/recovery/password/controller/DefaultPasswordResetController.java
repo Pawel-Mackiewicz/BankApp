@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/password")
+@RequestMapping("/api/public/password")
 public class DefaultPasswordResetController implements PasswordResetController {
 
     private final PasswordResetService passwordResetService;

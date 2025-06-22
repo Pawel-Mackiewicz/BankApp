@@ -12,9 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * PasswordResetController defines the endpoints for managing password reset functionality.
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * - Completing the password reset by submitting a token and new password.
  */
 @Tag(name = "Password Reset")
-@RequestMapping("/api/public/password")
 public interface PasswordResetController {
 
     @Operation(
@@ -68,8 +65,7 @@ public interface PasswordResetController {
                     description = "Internal Error"
             )
     })
-    @PostMapping("/reset-request")
-    public ResponseEntity<Void> requestReset(@Valid @RequestBody PasswordResetRequest request);
+    ResponseEntity<Void> requestReset(@Valid @RequestBody PasswordResetRequest request);
 
     @Operation(
             summary = "Complete the password reset process",
@@ -103,6 +99,5 @@ public interface PasswordResetController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = BaseApiError.class))
             )
     })
-    @PostMapping("/reset-complete")
     ResponseEntity<Void> completeReset(@Valid @RequestBody PasswordChangeForm request);
 }
