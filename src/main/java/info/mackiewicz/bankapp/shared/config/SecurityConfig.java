@@ -1,6 +1,5 @@
 package info.mackiewicz.bankapp.shared.config;
 
-import info.mackiewicz.bankapp.core.user.service.AdminUserService;
 import info.mackiewicz.bankapp.shared.service.CustomUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -26,12 +25,9 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
-    private final AdminUserService adminUserService;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService,
-            AdminUserService adminUserService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
-        this.adminUserService = adminUserService;
         log.info("Initializing SecurityConfig...");
     }
 
@@ -79,8 +75,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/password/**").permitAll()
-                        .requestMatchers("/api/registration/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(basic -> basic
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/api/registration")
+@RequestMapping("/api/public/registration")
 @Tag(name = "Registration", description = "API for user registration")
 public interface RegistrationController {
 
