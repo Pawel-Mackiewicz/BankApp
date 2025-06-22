@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * - Completing the password reset by submitting a token and new password.
  */
 @Tag(name = "Password Reset")
-@RequestMapping("/api/password")
+@RequestMapping("/api/public/password")
 public interface PasswordResetController {
 
     @Operation(
