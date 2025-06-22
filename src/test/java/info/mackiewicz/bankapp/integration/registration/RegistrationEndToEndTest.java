@@ -53,7 +53,7 @@ class RegistrationEndToEndTest {
     private static final String TEST_FIRSTNAME = "Jan";
     private static final String TEST_LASTNAME = "Kowalski";
     private static final String TEST_FULLNAME = "Jan Kowalski";
-    private static final String REGISTRATION_ENDPOINT = "/api/registration/regular";
+    private static final String REGISTRATION_ENDPOINT = "/api/public/registration/regular";
 
     @Value("${bankapp.registration.WelcomeBonusAmount:1000}")
     private BigDecimal welcomeBonusAmount;
