@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import info.mackiewicz.bankapp.core.transaction.model.Transaction;
 import info.mackiewicz.bankapp.shared.annotations.ValidIban;
+import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +50,7 @@ public abstract class TransactionRequest {
     @NotNull(message = "Amount cannot be null")
     private BigDecimal amount;
 
+    @Pattern(regexp = ValidationConstants.TRANSFER_TITLE_PATTERN, message = "Title contains invalid characters")
     @Schema(description = "Title of the transaction")
     @NotBlank(message = "Title cannot be blank")
     private String title;

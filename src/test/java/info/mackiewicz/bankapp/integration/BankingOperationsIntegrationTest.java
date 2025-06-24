@@ -431,4 +431,48 @@ public class BankingOperationsIntegrationTest {
         // Checking that the transaction was not saved in the database
         checkTransactionNotSavedInDB();
     }
+
+    @Test
+    @DisplayName("Should return BAD_REQUEST when transaction title with invalid characters")
+    void ibanTransfer_withInvalidTransactionTitle_shouldReturnBadRequest() throws Exception {
+        // Preparing transfer request with invalid title
+        IbanTransferRequest request = new IbanTransferRequest();
+        request.setSourceIban(sourceAccount.getIban());
+        request.setRecipientIban(destinationAccount.getIban());
+        request.setAmount(DEFAULT_TRANSFER_VALUE);
+        request.setTitle("Invalid$Title^<>"); // Invalid characters in title
+
+        // Executing the test
+        mockMvc.perform(post(BANKING_TRANSFER_IBAN_ENDPOINT)
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUser))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+
+        // Checking that account balances have not changed
+        checkBalancesNotChanged();
+
+        // Checking that the transaction was not saved in the database
+        checkTransactionNotSavedInDB();
+    }
+
+    @Test
+    @DisplayName("Should successfully transfer funds with valid special characters in title")
+    void ibanTransfer_withValidSpecialCharactersInTitle_shouldSucceed() throws Exception {
+        IbanTransferRequest request = new IbanTransferRequest();
+        request.setSourceIban(sourceAccount.getIban());
+        request.setRecipientIban(destinationAccount.getIban());
+        request.setAmount(DEFAULT_TRANSFER_VALUE);
+        request.setTitle("Payment for Order #123 - 50% discount!"); // Valid special chars
+
+        mockMvc.perform(post(BANKING_TRANSFER_IBAN_ENDPOINT)
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUser))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+
+    }
 }
