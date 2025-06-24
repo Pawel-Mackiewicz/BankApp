@@ -2,6 +2,7 @@ package info.mackiewicz.bankapp.core.transaction.validation;
 
 import info.mackiewicz.bankapp.core.account.model.Account;
 import info.mackiewicz.bankapp.core.account.model.TestAccountBuilder;
+import info.mackiewicz.bankapp.core.transaction.exception.InsufficientFundsException;
 import info.mackiewicz.bankapp.core.transaction.exception.TransactionAccountConflictException;
 import info.mackiewicz.bankapp.core.transaction.exception.TransactionValidationException;
 import info.mackiewicz.bankapp.core.transaction.model.Transaction;
@@ -37,6 +38,7 @@ class DefaultTransactionValidatorTest {
         transaction.setAmount(BigDecimal.TEN);
         transaction.setSourceAccount(sourceAccount);
         transaction.setDestinationAccount(destinationAccount);
+        transaction.setTitle("Valid Title"); // Properly formatted title
 
         // When & Then
         assertDoesNotThrow(() -> validator.validate(transaction));
@@ -48,6 +50,7 @@ class DefaultTransactionValidatorTest {
         transaction.setType(TransactionType.DEPOSIT);
         transaction.setAmount(BigDecimal.TEN);
         transaction.setDestinationAccount(destinationAccount);
+        transaction.setTitle("Valid Title"); // Properly formatted title
 
         // When & Then
         assertDoesNotThrow(() -> validator.validate(transaction));
@@ -59,6 +62,7 @@ class DefaultTransactionValidatorTest {
         transaction.setType(TransactionType.WITHDRAWAL);
         transaction.setAmount(BigDecimal.TEN);
         transaction.setSourceAccount(sourceAccount);
+        transaction.setTitle("Valid Title"); // Properly formatted title
 
         // When & Then
         assertDoesNotThrow(() -> validator.validate(transaction));
@@ -105,6 +109,48 @@ class DefaultTransactionValidatorTest {
     }
 
     @Test
+    void validate_WithInsufficientFunds_ShouldThrowException() {
+        // Given
+        transaction.setType(TransactionType.WITHDRAWAL);
+        transaction.setAmount(BigDecimal.valueOf(10000));
+        transaction.setSourceAccount(sourceAccount);
+        transaction.setTitle("Valid Title"); // Properly formatted title
+
+        // When & Then
+        assertThrows(InsufficientFundsException.class,
+                () -> validator.validate(transaction),
+                "Insufficient funds for transaction");
+    }
+
+    @Test
+    void validate_WithInvalidTitle_ShouldThrowException() {
+        // Given
+        transaction.setType(TransactionType.TRANSFER_INTERNAL);
+        transaction.setAmount(BigDecimal.TEN);
+        transaction.setSourceAccount(sourceAccount);
+        transaction.setDestinationAccount(destinationAccount);
+        transaction.setTitle("Invalid#<>Title!"); // Contains invalid characters
+
+        // When & Then
+        assertThrows(TransactionValidationException.class,
+                () -> validator.validate(transaction),
+                "Transaction title contains invalid characters");
+    }
+
+    @Test
+    void validate_WithValidTitle_ShouldNotThrowException() {
+        // Given
+        transaction.setType(TransactionType.TRANSFER_INTERNAL);
+        transaction.setAmount(BigDecimal.TEN);
+        transaction.setSourceAccount(sourceAccount);
+        transaction.setDestinationAccount(destinationAccount);
+        transaction.setTitle("Valid Title"); // Properly formatted title
+
+        // When & Then
+        assertDoesNotThrow(() -> validator.validate(transaction));
+    }
+
+    @Test
     void validate_TransferWithNullSourceAccount_ShouldThrowException() {
         // Given
         transaction.setType(TransactionType.TRANSFER_INTERNAL);
@@ -112,7 +158,7 @@ class DefaultTransactionValidatorTest {
         transaction.setDestinationAccount(destinationAccount);
 
         // When & Then
-        assertThrows(TransactionValidationException.class, 
+        assertThrows(TransactionValidationException.class,
             () -> validator.validate(transaction),
             "Transfer transaction must have a source account");
     }
@@ -125,7 +171,7 @@ class DefaultTransactionValidatorTest {
         transaction.setSourceAccount(sourceAccount);
 
         // When & Then
-        assertThrows(TransactionValidationException.class, 
+        assertThrows(TransactionValidationException.class,
             () -> validator.validate(transaction),
             "Transfer transaction must have a destination account");
     }
@@ -139,7 +185,7 @@ class DefaultTransactionValidatorTest {
         transaction.setDestinationAccount(sourceAccount);
 
         // When & Then
-        assertThrows(TransactionAccountConflictException.class, 
+        assertThrows(TransactionAccountConflictException.class,
             () -> validator.validate(transaction),
             "Source and destination accounts cannot be the same");
     }
@@ -158,6 +204,7 @@ class DefaultTransactionValidatorTest {
       
         transaction.setSourceAccount(sourceAccount);
         transaction.setDestinationAccount(destinationAccount);
+        transaction.setTitle("Valid Title"); // Properly formatted title
 
         // When & Then
         assertDoesNotThrow(() -> validator.validate(transaction));
@@ -170,6 +217,7 @@ class DefaultTransactionValidatorTest {
         transaction.setAmount(BigDecimal.TEN);
         transaction.setSourceAccount(sourceAccount);
         transaction.setDestinationAccount(destinationAccount);
+        transaction.setTitle("Valid Title"); // Properly formatted title
 
         // When
         boolean result = validator.isValid(transaction);

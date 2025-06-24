@@ -7,6 +7,7 @@ import info.mackiewicz.bankapp.core.transaction.model.Transaction;
 import info.mackiewicz.bankapp.core.transaction.model.TransactionType;
 import info.mackiewicz.bankapp.core.transaction.model.TransactionTypeCategory;
 import info.mackiewicz.bankapp.core.user.model.User;
+import info.mackiewicz.bankapp.shared.validation.ValidationConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,13 @@ public class DefaultTransactionValidator implements TransactionValidator {
         validateAccounts(transaction);
         validateSufficientFunds(transaction);
         validateSameOwnerForOwnTransfer(transaction);
+        validateTitle(transaction);
+    }
+
+    private void validateTitle(Transaction transaction) {
+        if (!transaction.getTitle().matches(ValidationConstants.TRANSFER_TITLE_PATTERN)) {
+            throw new TransactionValidationException("Transaction title contains invalid characters");
+        }
     }
 
     private void validateSufficientFunds(Transaction transaction) {
