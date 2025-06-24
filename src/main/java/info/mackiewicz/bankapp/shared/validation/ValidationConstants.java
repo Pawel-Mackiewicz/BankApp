@@ -36,7 +36,7 @@ public final class ValidationConstants {
     /**
      * A regular expression pattern used to validate the format of a transfer title.
      * This pattern ensures the title consists of letters, digits, and specific
-     * allowable special characters including .,/?@!#&()- as well as spaces.
+     * allowable special characters including .,/?@!%#&()- as well as spaces.
      */
     public static final String TRANSFER_TITLE_PATTERN = "^[\\p{L}0-9.,/?@!%#&()\\-\\s]+$";
 
