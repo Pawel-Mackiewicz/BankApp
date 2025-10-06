@@ -2,25 +2,89 @@
 
 ## About
 
-**BankApp** is a modern, modular, multi-layered banking application built with Java and inspired by Domain-Driven Design principles. Initially started as a multitasking and learning experiment, the project has evolved into a comprehensive showcase of best practices in back-end architecture and clean code.
+**BankApp** is a fully functional, production-ready banking application built from the ground up since December 2024. Designed as a comprehensive showcase of modern backend architecture, it demonstrates advanced patterns in concurrent transaction processing, data integrity, and clean code principles in a real-world financial systems context.
+
+**The Core Challenge:**
+How do you prevent race conditions when multiple requests attempt to modify the same account balance simultaneously? BankApp solves this through pessimistic locking with Spring Data JPA, ensuring transaction isolation and data consistency even under high concurrency.
 
 **Current State:**
-- The back-end is largely complete (outstanding tasks: securing endpoints, implementing caching).
-- The front-end is functional but slated for a major upgrade (moving from Thymeleaf to a modern JavaScript framework).
-- Collaboration and contributions are highly welcome!
+- Backend is feature-complete and production-ready
+- Comprehensive test coverage targeting concurrency scenarios and double-spend prevention
+- Fully automated CI/CD pipeline with GitHub Actions
+- Ready for frontend integration and microservices transition
+- Live and running on AWS infrastructure
+
+---
+
+## Key Features
+
+### 🏗️ **Thoughtful Architecture**
+- Modular design with clear domain separation
+- Built with proven design patterns and DDD principles
+- Scalable foundation ready for microservices migration
+
+### 🔒 **Secure Transaction Processing**
+- Pessimistic locking prevents race conditions in balance modifications
+- Full transaction validation and audit trail
+- Transaction history filtering and export capabilities
+- Comprehensive JUnit tests validating concurrency scenarios
+
+### 👤 **User Management**
+- Validated user registration flow
+- Secure password reset via SHA-256 one-time tokens
+- Welcome bonus for new accounts
+
+### 📧 **Email Notification System**
+- HTML template-based emails for key user actions
+- Powered by Resend API
+
+### 🔌 **Modern REST API**
+- Full OpenAPI/Swagger documentation
+- Clean, integration-ready endpoints
+
+### ✅ **Quality & Stability**
+- Extensive unit and integration test suite
+- Focus on edge cases and race condition prevention
+
+---
+
+## Tech Stack
+
+**Backend:**
+- Java 21
+- Spring Boot
+- Spring Data JPA (with pessimistic locking)
+- MySQL
+- JUnit & Mockito
+- Maven
+
+**Frontend:**
+- HTML, CSS, JavaScript
+- Thymeleaf (planned upgrade to React/Vue/Angular)
+
+**Infrastructure & DevOps:**
+- AWS EC2 (compute)
+- AWS RDS (PostgreSQL database)
+- Docker & DockerHub
+- GitHub Actions (CI/CD automation)
+- Linux
 
 ---
 
 ## Project Details
 
-- **Name:** BankApp
-- **Purpose:** To demonstrate advanced software architecture, modular design, and portfolio-ready coding skills in a real-world banking application context.
-- **Tech Stack:**
-    - **Back-end:** Java, Spring, Hibernate, MySQL, Redis, JUnit, Maven
-    - **Front-end:** HTML, CSS, JavaScript, Thymeleaf (planned: React/Vue/Angular upgrade)
-    - **Dev Tools / Infrastructure:** Git, Docker, AWS EC2/RDS, DockerHub, Linux
+- **Purpose:** Demonstrate advanced software architecture, concurrent transaction handling, and production-ready coding practices in a financial application context
 - **Live Demo:** [bankapp.mackiewicz.info](http://bankapp.mackiewicz.info)
 - **Repository:** [github.com/Pawel-Mackiewicz/BankApp](https://github.com/Pawel-Mackiewicz/BankApp.git)
+
+---
+
+## What's Next
+
+- Securing remaining endpoints
+- Implementing Redis caching layer
+- Frontend framework upgrade
+- **Contributions welcome!**
 
 ---
 
@@ -373,7 +437,7 @@ The actual scope depends on how many people get involved and how fast we progres
 
 ---
 
-### Who am I looking for?
+### Who are We looking for?
 
 - **UI/UX Designers** – if you enjoy crafting modern, user-friendly interfaces, I’m looking for you!
 - **Frontend Developers** – if you’re comfortable with React, Angular, Svelte, or any modern framework, and you’re up to working with APIs, hop on board!
