@@ -379,33 +379,15 @@ The actual scope depends on how many people get involved and how fast we progres
 - **Frontend Developers** – if you’re comfortable with React, Angular, Svelte, or any modern framework, and you’re up to working with APIs, hop on board!
 - **Backend Developers (Java)** – our backend is Java-based, but any help with optimization or adding features is appreciated.
 - **Testers & Pentesters** – another pair of eyes to catch bugs is always valued.
-- **Marketing & Promotion** – if you want to try IT project promotion, help us get it out to the world!
 - **Senior/Experienced Java developers** – if you like architecture, patterns, mentoring, or security, your advice would be great.
 - **All positive enthusiasts** – if you simply want to try something new and build a real project in a friendly team, this is the place!
 
 ---
 
-### Who is already on board?
-
-- **Project Manager** – keeps our work organized, helps divide tasks, and makes sure everything is running smoothly.
-- **Me (Pawel)** – junior Java developer, backend enthusiast, project initiator, always full of ideas and motivation.
-- **A few people for frontend and testing** – already involved and getting ready to kick off the project with us!
----
-
-### What do I offer?
-
-- 100% remote work—when and as much as you want.
-- Experience working on a real app (not just tutorials).
-- A friendly, stress-free atmosphere—we learn and help each other.
-- A project you can confidently add to your portfolio and describe in your CV or LinkedIn.
-
----
-
 ### Want to join?
 
-Just drop me a message:  
-- **On GitHub**  
-- Or email: [bankapp@mackiewicz.info](mailto:bankapp@mackiewicz.info)
+Just drop me an email:  
+- [bankapp@mackiewicz.info](mailto:bankapp@mackiewicz.info)
 
 Say a few words about yourself, what you do, what you’d like to work on in the project, or what you want to learn. We’ll figure the rest out together!
 
