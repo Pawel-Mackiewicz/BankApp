@@ -39,3 +39,4 @@ jobs:
           script: |
             cd bankapp
             docker compose up -d --pull always
+          command_timeout: '30m'
